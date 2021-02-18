@@ -1,0 +1,165 @@
+
+body {
+  padding: 0px;
+  margin: 0px;
+}
+
+.blue{
+	color: #5357d2;
+}
+.white{
+	color: #FFFFFF !important;
+}
+
+.bg-light{
+	background-color: #F3F5FE;
+}
+
+.blue-bg{
+	background-color: #5F72E7;
+}
+
+.top-bar-div{
+	padding: 20px;
+}
+.top-bar1{
+	background-color: #50D4EA;
+	border-radius: 30px;
+}
+.topbar-h6{
+	margin-top: 10px;
+}
+.dropdown-menu{
+	background-color: #50D4EA;
+	border: none;
+	width: 410.6%;
+	border-radius: 30px;
+	margin-top: -10px;
+}
+.dropdown-item{
+	color: white;
+	text-align: center;
+}
+
+
+
+.modal{
+	margin-top: 10%;
+}
+
+
+
+.custom-dropdown{
+	background-color: none;
+	color: #50D4EA;
+	border: none;
+	border-radius: 100%;
+}
+.fa-circle{
+	color: white;
+}
+.fa-bars, .fa-ellipsis-v{
+	color: #50D4EA !important;
+}
+
+
+
+.big-btn-blue{
+	background-color: #5F72E7;
+	color: #fff;
+	font-weight: bold;
+	padding: 15px 0px;
+    border-radius: 30px;
+    border: none;
+}
+.big-btn-white{
+	background-color: #FFF;
+	color: #5F72E7;
+	font-weight: bold;
+	padding: 15px 0px;
+    border-radius: 30px;
+    border: none;
+}
+
+
+.modal-body, .modal-content{
+	border-radius: 40px;
+}
+
+.page-link{
+	background-color: transparent !important;
+	border: none !important;
+	margin: 0px 10px;
+	padding: 0px;
+}
+.page-link > .fa{
+	color: #5357d2 !important;
+}
+.fa-angle-right, .fa-angle-left{
+	font-size: 30px !important;
+    margin: -6px 0px;
+}
+
+
+.main-heading{
+	padding: 10px;
+}
+
+
+
+.blue-box{
+	border-radius: 40px;
+}
+
+.red-logo{
+	height: 150px;
+}
+
+.round-icon{
+	padding: 20px;
+	width: 70px;
+	height: 70px;
+	background-color: #F3F5FE;
+	border-radius: 100%;
+}
+
+.blue-custom-input{
+	background: transparent;
+}
+
+.blue-custom-input::placeholder {
+  color: white;
+}
+
+.transparent-custom-input{
+	border-top: 1px solid #5357d2;
+	border-bottom: none;
+	border-radius: 10px;
+}
+.transparent-custom-input::placeholder {
+  color: #5357d2;
+  opacity: 0.5;
+}
+
+@media only screen and (max-width: 600px) {
+
+}
+
+
+/*  custom css  */
+
+
+
+
+
+@media (min-width: 768px) {
+  
+}
+
+.centered {
+	position: fixed; /* or absolute */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 10;
+  }

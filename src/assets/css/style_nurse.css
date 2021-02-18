@@ -1,0 +1,171 @@
+
+body {
+  background-color: #F5FAFE;
+  padding: 0px;
+  margin: 0px;
+}
+
+.black{
+	color: #000;
+}
+
+.container{
+	padding: 30px 10px;
+}
+
+
+.bg-img{
+	background-image: url("../../assets/img/lake-in-forest.jpg");
+	background-size: cover;
+	background-position: center;
+	
+}
+.top-bar{
+	padding: 40px;
+	background-color: #8DBCE0;
+
+}
+.custom-dropdown .fa{
+	color: #FFF !important;
+	font-size: 30px;
+}
+.dropdown-menu{
+	//background-color: #50D4EA;
+	border: none;
+	//border-radius: 30px;
+}
+.dropdown-item{
+	color: black;
+	text-align: center;
+}
+
+
+
+
+
+.jumbotron{
+	background-color: #FFF;
+	box-shadow: -5px 5px 10px 5px #BFBFBF;
+	border-radius: 15px;
+}
+
+.form-group input, .form-group  select{
+	border: none;
+	border-bottom: 2px solid grey;
+	border-radius: 0px;
+}
+.form-group label{
+	font-size: 20px;
+	color: grey;
+}
+
+.display-4{
+	font-weight: bold;
+}
+
+.btn-lg{
+	background-color: #8EBCE0;
+	border: none;
+	padding: 30px 0px;
+}
+
+.form-group > input::placeholder{
+	color: #000;
+}
+
+.form-group textarea{
+	border: 1px solid #0069D9;
+}
+
+.btn-group button{
+	background-color: #FFF;
+	color:  #8DBCE0;
+}	
+
+.btn-primary {
+    color: #fff;
+    background-color: #8DBCE0;
+   
+}
+
+hr{
+	border-top: 1px solid #007bff;
+}
+
+
+.myHeading{
+	color: #8DBCE0;
+
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+
+    background: url(../../assets/img/calendar.png) no-repeat;
+ 
+}
+.myDanger{
+	background-color:#DA4453;
+}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+	background-color: #8DBCE0;
+ }
+
+.np-btn{
+	padding: 15px 20px;
+	border-radius: 100%;
+	background-color: #8EBCE0;
+	text-align: center;
+	color: #FFF;
+}
+.np-btn{
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 18px;
+  text-align: center;
+  font-size: 25px;
+}
+.np-btn:hover {
+  background-color: #ddd;
+  text-decoration: none; 
+}
+
+.previous {
+  background-color: #8EBCE0;
+  color: white;
+  border: none;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+.headingSpan{
+	font-size: 15px;
+	font-weight: bold;
+
+}
+
+.textSpan{
+	font-size: 15px;
+
+}
+
+.customRow{
+	color:white;
+	background-color: #8EBCE0;
+
+}
+@media only screen and (max-width: 600px) {
+
+}
+
+
+/*  custom css  */
+
+
+
+
+
+@media (min-width: 768px) {
+  
+}
