@@ -206,7 +206,7 @@ Current Drugs
         {/* input */}
         <input
           type="number"
-          id="drugs1_monday"
+          id="drugs1_monday"  min="0"
           className="form-control mb-4 transparent-custom-input"
          
          onChange={(e)=>this.setState({q1_ans_monday:e.target.value})}
@@ -221,6 +221,7 @@ Current Drugs
         <input
           type="number"
           id="drugs1_tuesday"
+          min="0"
           className="form-control mb-4 transparent-custom-input"
         
       onChange={(e)=>this.setState({q1_ans_tuesday:e.target.value})}
@@ -235,6 +236,7 @@ Current Drugs
         <input
           type="number"
           id="drugs1_wednesday"
+          min="0"
           className="form-control mb-4 transparent-custom-input"
            onChange={(e)=>this.setState({q1_ans_wednesday:e.target.value})}
         />
@@ -248,6 +250,7 @@ Current Drugs
         <input
           type="number"
           id="drugs1_thursday"
+          min="0"
           className="form-control mb-4 transparent-custom-input"
          
           onChange={(e)=>this.setState({q1_ans_thursday:e.target.value})}
@@ -265,6 +268,7 @@ Current Drugs
         <input
           type="number"
           id="drugs1_friday"
+          min="0"
           className="form-control mb-4 transparent-custom-input"
            onChange={(e)=>this.setState({q1_ans_friday:e.target.value})}
         />
@@ -278,6 +282,7 @@ Current Drugs
         <input
           type="number"
           id="drugs1_saturday"
+          min="0"
           className="form-control mb-4 transparent-custom-input"
        onChange={(e)=>this.setState({q1_ans_saturday:e.target.value})}
         />
@@ -291,6 +296,7 @@ Current Drugs
         <input
           type="number"
           id="drugs1_sunday"
+          min="0"
           className="form-control mb-4 transparent-custom-input"
           onChange={(e)=>this.setState({q1_ans_sunday:e.target.value})}
         />
@@ -325,6 +331,7 @@ Current Drugs
           type="number"
           id="acenocoumarol1_monday"
           className="form-control mb-4 transparent-custom-input"
+          min="0"
          
          onChange={(e)=>this.setState({q2_ans_monday:e.target.value})}
         />
@@ -339,6 +346,7 @@ Current Drugs
           type="number"
           id="acenocoumarol1_tuesday"
           className="form-control mb-4 transparent-custom-input"
+          min="0"
         
       onChange={(e)=>this.setState({q2_ans_tuesday:e.target.value})}
         />
@@ -354,6 +362,7 @@ Current Drugs
           id="acenocoumarol1_wednesday"
           className="form-control mb-4 transparent-custom-input"
            onChange={(e)=>this.setState({q2_ans_wednesday:e.target.value})}
+           min="0"
         />
                <div className="text-danger"> {this.state.error11!=='' ? this.state.error11: ''}</div>
       </div>
@@ -366,6 +375,7 @@ Current Drugs
           type="number"
           id="acenocoumarol1_thursday"
           className="form-control mb-4 transparent-custom-input"
+          min="0"
          
           onChange={(e)=>this.setState({q2_ans_thursday:e.target.value})}
         />
@@ -381,6 +391,7 @@ Current Drugs
         {/* input */}
         <input
           type="number"
+          min="0"
           id="acenocoumarol1_friday"
           className="form-control mb-4 transparent-custom-input"
            onChange={(e)=>this.setState({q2_ans_friday:e.target.value})}
@@ -397,6 +408,7 @@ Current Drugs
           id="acenocoumarol1_saturday"
           className="form-control mb-4 transparent-custom-input"
        onChange={(e)=>this.setState({q2_ans_saturday:e.target.value})}
+       min="0"
         />
              <div className="text-danger"> {this.state.error14!=='' ? this.state.error14: ''}</div>  
       </div>
@@ -410,6 +422,7 @@ Current Drugs
           id="acenocoumarol1_sunday"
           className="form-control mb-4 transparent-custom-input"
           onChange={(e)=>this.setState({q2_ans_sunday:e.target.value})}
+          min="0"
         />
         <div className="text-danger"> {this.state.error15!=='' ? this.state.error15: ''}</div>
       </div>

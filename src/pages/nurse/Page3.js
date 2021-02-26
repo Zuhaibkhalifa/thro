@@ -429,15 +429,15 @@ return (
  <div className="row">
       <div className="col-12">
         <div className="form-group">
-          <label htmlFor="usr">Anticoagulation Information </label>
+        <h4>Anticoagulation Information </h4>
           <div
-style={{
-  backgroundColor: "#8ebce0", paddingLeft: 20, paddingTop: 5, paddingBottom: 10
-}}
+          
+style={{ backgroundColor: "#8ebce0", paddingLeft: 20, paddingTop: 5, paddingBottom: 10}}
 >
 
-<h5 style={{ color: "white" }}>Current Dosing / Who Monitors / What Lab They Use</h5>
-
+<h5 style={{ color: "white" }}> What Lab They Use  { this.state.lab_location_for_inr_test !== null ? <span className="text-right" style={{ color: "green" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ this.state.lab_location_for_inr_test} </span> : ''}<br/>
+  </h5>
+<h5 style={{ color: "white" }} className="text-center">Current Dosing </h5>
 </div>
 <div className="table-responsive">
       <table className="table table-striped text-center">
@@ -466,12 +466,6 @@ style={{
   <td>{ this.state.edoxabon_dosage_time }</td>
 </tr> : ''}
    
-
-{ this.state.lab_location_for_inr_test !== null ? <tr className="customRow"> <td></td>
-  <td> Lab Location</td>
-  <td>{ this.state.lab_location_for_inr_test }</td>
-</tr> : ''}
-
     </tbody>
       </table>
 

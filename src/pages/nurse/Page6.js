@@ -6,7 +6,8 @@ import axios from 'axios';
 import $ from 'jquery';
 import { server } from '../../utils/functions';
 import ReactSpinner from 'react-bootstrap-spinner'
-
+import { Button,Modal } from 'react-bootstrap'
+import Logo from '../../assets/img/3.png';
  
 let data;
 class Page6 extends React.Component {
@@ -16,12 +17,12 @@ class Page6 extends React.Component {
       element: (message, className) => <div className="text-danger">{message}</div>
     });
      console.log(this.validator);
-    this.state = { email: '',loader:''
+    this.state = { email: '',loader:'',showHide:''
   };
     
     this.submitForm = this.submitForm.bind(this);
-
-
+    this.handleModalShowHide = this.handleModalShowHide.bind(this);
+    
     const headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -47,7 +48,10 @@ class Page6 extends React.Component {
 
 }
 
+handleModalShowHide() {
+  this.setState({ showHide: !this.state.showHide })
 
+}
 
 submitForm() {
 
@@ -71,6 +75,39 @@ return (
 {this.state.loader===1?
 <div className="centered"><ReactSpinner type="border" color="blue" size="5"  /></div> :''
   }
+
+<Modal show={this.state.showHide} >
+            
+            <Modal.Body className="blue-bg">       <div className="row">
+      <div className="col-6 offset-3">
+        <img
+          src={Logo}
+          className="img-fluid"
+          style={{ height: 200 }}
+        />
+      </div>
+    </div>   <p className="white">
+    Thank you for completing the Bridging Form, Please keep a copy of the Medication Schedule for your records.
+    </p>
+
+            <div className="row">
+      <div className="col-6">
+      
+      </div>
+      <div className="col-6">
+        <button
+          type="button"
+          className="btn btn-secondary btn-block big-btn-white"
+          data-dismiss="modal"
+          onClick={this.handleModalShowHide} >
+          OK
+        </button>
+      </div>
+    </div>
+            </Modal.Body>
+     
+        </Modal>
+
 <div className="container">
 <h2 className="text-center myHeading">Dosage Schedule</h2>
 <h3 className="text-center myHeading">(Drug names)</h3>
@@ -205,13 +242,15 @@ Back
       </div>
 
       <div className="col-4">
-     
+      <button onClick={this.submitForm} className="btn btn-primary btn-block">
+Print
+</button>
       
      </div>
    
     <div className="col-4">
-    <button onClick={this.submitForm} className="btn btn-primary btn-block">
-Print
+    <button onClick={this.handleModalShowHide}  className="btn btn-primary btn-block">
+Next
 </button>
       </div>
     </div>

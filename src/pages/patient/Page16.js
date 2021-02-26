@@ -132,7 +132,7 @@ return (
               </div>
             </div>   <p className="white">
 
-              Thnak you for filling out the bridiging clinic patient
+              Thank you for filling out the bridging  clinic patient
               application. Please pass the tablet to the nurse.
             </p>
      
@@ -201,9 +201,9 @@ return (
       </div>
      
       <br />
-          <label className="blue" htmlFor="friday">
-            Not Sure
-            </label>
+      <p className="blue">
+        <b>Note Sure</b>
+      </p>
        
         
        

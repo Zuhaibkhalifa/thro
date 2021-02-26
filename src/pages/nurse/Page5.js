@@ -168,7 +168,7 @@ return (
     <h3 >Bridging Summary</h3>
     <br />
     <br />
-    <h4>Who is completing this from?</h4>
+    <h4>Who is completing this form?</h4>
     <div className="row">
       <div className="col-6">
         <div className="custom-control custom-radio">
@@ -376,8 +376,8 @@ return (
 Risk / Benefits explained
 </label>
 </div>
+{this.validator.message('', this.state.explained, 'required')}
 <br /> <br />
-
     <div className="row">
       <div className="col-6">
       <h4>Administration</h4>

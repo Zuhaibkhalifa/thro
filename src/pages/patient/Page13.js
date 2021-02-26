@@ -385,6 +385,7 @@ return (
             className="form-control mb-4 transparent-custom-input"
             name="whenDate"
             id="whenDate"
+            max=""
             value={this.state.q7_ans_option} 
             onChange={(e)=>this.setState({q7_ans_option:e.target.value})}
           />
@@ -508,25 +509,22 @@ componentDidMount(){
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
     var min;
-     if(dd<10){
-            dd='0'+dd
-        } 
-        if(mm<10){
-            mm='0'+mm
-        } 
+     if(dd<10){  dd='0'+dd;  } 
+        if(mm<10){ mm='0'+mm } 
     
     today = yyyy+'-'+mm+'-'+dd;
-    
-    
     document.getElementById("whenDate").setAttribute("max", today);
-    mm=mm-3;
-    var min = yyyy+'-'+mm+'-'+dd;
-    document.getElementById("whenDate").setAttribute("min", min);
-    
-      }); 	
+    var d = new Date();
+    console.log(d.toLocaleDateString());
+    d.setMonth(d.getMonth() - 3);
+    var min =d.toLocaleDateString();
+
+
+    document.getElementById("whenDate").setAttribute("min", '2020-12-01');
 
   
-  
+     }); 	
+
 
   }
 }
