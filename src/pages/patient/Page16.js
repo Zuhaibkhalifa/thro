@@ -192,6 +192,7 @@ return (
             id="procedure_date"
             className="form-control mb-4 transparent-custom-input"
             value={this.state.q2_ans} 
+            min="2021-03-02"
             onChange={(e)=>this.setState({q2_ans:e.target.value})}
           />
          <div className="text-danger"> {this.state.error2!=='' ? this.state.error2: ''}</div>

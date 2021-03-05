@@ -63,11 +63,14 @@ class Page1 extends React.Component {
 
      edoxabon:'',
      edoxabon_dosage:'',
-     edoxabon_dosage_time:''
+     edoxabon_dosage_time:'',
+     ulcer_in_stomach_or_bowel:'',
+     
   };
     
     this.submitForm = this.submitForm.bind(this);
-
+    this.getChads = this.getChads.bind(this);
+    
 
     const headers = {
       'Content-Type': 'application/json',
@@ -142,9 +145,42 @@ if(data !==undefined){
       edoxabon:data.edoxabon,
       edoxabon_dosage:data.edoxabon_dosage,
       edoxabon_dosage_time:data.edoxabon_dosage_time,
+      ulcer_in_stomach_or_bowel:data.ulcer_in_stomach_or_bowel,
+      cognitive_heart_failure:data.cognitive_heart_failure,
+      high_blood_pressure:data.high_blood_pressure,
+      diabetes:data.diabetes,
+      age:data.age,
+      age:data.stroke_or_mini_stroke
+      
+
+
+
       });
+
+      
         
         console.log(this.state);
+        
+  var score=0;
+  
+  if(this.state.cognitive_heart_failure !== null){
+    score=score+1;
+  }
+  if(this.state.high_blood_pressure !== null){
+    score=score+1;
+  }
+
+  if(this.state.diabetes !== null){
+    score=score+1;
+  }
+  if(this.state.age !== null && this.state.age > 74){
+    score++;
+  }
+
+  if(this.state.stroke_or_mini_stroke){
+    score=score+2;
+  }
+  this.setState({chads_score_and_distribution:score});
 
     
         console.log(this.state.had_transfusion_in_last_three_months);
@@ -161,6 +197,8 @@ if(data !==undefined){
     }
  
 }
+
+
 
 handleChange_procedure(value) {
   this.setState({ procedureSelected: value });
@@ -266,6 +304,7 @@ return (
         <div className="form-group">
           <label htmlFor="usr">Date of Procedure</label>
           <input type="date" 
+          min="2021-03-02"
           id="date_of_procedure"
           className="form-control"  defaultValue={this.state.date_of_procedure} onChange={(e)=>this.setState({date_of_procedure:e.target.value})}
       />
@@ -531,7 +570,7 @@ style={{
       <span className="white">  Transfusion in last 3 months</span>
       
 </div>
-<h6 className="text-center">{this.state.had_transfusion_in_last_three_months } at {this.state.had_transfusion_in_last_three_months_when }</h6>
+<h6 className="text-center">{this.state.had_transfusion_in_last_three_months }  {this.state.had_transfusion_in_last_three_months_when }</h6>
      </div>
    
     <div className="col-4">

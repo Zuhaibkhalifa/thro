@@ -147,7 +147,7 @@ submitForm() {
     this.setState({error5:''});
     this.setState({error4:''});
   } else if(document.getElementById("heart_valve3").checked === true){
-   alert('ss');
+   //alert('ss');
     console.log(this.state);
    this.page6(this.state);
   this.props.history.push('/User/Page7');
@@ -230,7 +230,7 @@ return (
             />
 
 <br />
-          &nbsp;&nbsp;&nbsp;&nbsp;   <label className="radio-inline blue">I dont Know</label>
+          &nbsp;&nbsp;&nbsp;&nbsp;   <label className="radio-inline blue">I don't Know</label>
             <input type="checkbox" name="optradio" className="pull-right" id="heart_valve3" 
             defaultValue="I dont Know"
              onChange={(e)=>this.setState({q3_ans:'I dont Know'})} onClick={ this.mainOption }
