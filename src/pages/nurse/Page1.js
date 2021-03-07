@@ -64,7 +64,7 @@ class Page1 extends React.Component {
      edoxabon:'',
      edoxabon_dosage:'',
      edoxabon_dosage_time:'',
-     ulcer_in_stomach_or_bowel:'',
+     ulcer_in_stomach_or_bowel:''
      
   };
     
