@@ -876,6 +876,14 @@ public function nursePage1LoadData() {
 
  $chk= DB::table('nurse_section_one')->where('user_id',Auth::user()->id)->select('*')->get();
 
+ 	 $chk= DB::table('nurse_section_one')
+    ->where('nurse_section_one.user_id',Auth::user()->id)
+      ->leftJoin('pat_section_seven', 'nurse_section_one.user_id', '=', 'pat_section_seven.user_id')
+        ->leftJoin('nurse_section_four', 'nurse_section_one.user_id', '=', 'nurse_section_four.user_id')
+            ->leftJoin('pat_section_two', 'nurse_section_one.user_id', '=', 'pat_section_two.user_id')
+       ->select('*')
+        ->get();
+
 
 return response()->json(['success' => $chk], 200);
 }
@@ -958,6 +966,11 @@ public function nursePage5LoadData() {
   'pat_section_eleven.effient_dosage',
   'pat_section_eleven.effient_dosage_time',
   'pat_section_eleven.not_using_drugs',
+'pat_section_thirteen.ulcer_in_stomach_or_bowel',
+  
+  'pat_section_thirteen.bleeding_requiring_treatment_last_three_months',
+
+
    'pat_section_thirteen.ulcer_in_stomach_or_bowel_last_three_months',
    'pat_section_thirteen.had_transfusion_in_last_three_months_when',
 DB::raw('DATE_FORMAT(pat_section_thirteen.had_transfusion_in_last_three_months_when, "%m-%d-%Y") as had_transfusion_in_last_three_months_when'),
