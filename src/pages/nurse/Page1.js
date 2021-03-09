@@ -50,27 +50,18 @@ class Page1 extends React.Component {
      had_transfusion_in_last_three_months_when:'',
      had_transfusion_in_last_three_months:'',
      liver_disease:'',
-     lab_location_for_inr_test:'',
-
-     pradaxa:'',
+     lab_location_for_inr_test:'', pradaxa:'',
      pradaxa_dosage:'',
      xarelto:'',
      xarelto_dosage:'',
      xarelto_dosage_time:'',
      eliquis:'',
      eliquis_dosage:'',
-     eliquis_dosage_time:'',
-
-     edoxabon:'',
-     edoxabon_dosage:'',
-     edoxabon_dosage_time:'',
-     ulcer_in_stomach_or_bowel:''
+     eliquis_dosage_time:'', edoxabon:'', edoxabon_dosage:'', edoxabon_dosage_time:'', ulcer_in_stomach_or_bowel:''
      
   };
     
     this.submitForm = this.submitForm.bind(this);
-    this.getChads = this.getChads.bind(this);
-    
 
     const headers = {
       'Content-Type': 'application/json',
