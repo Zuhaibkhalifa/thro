@@ -86,11 +86,11 @@ if(data !==undefined){
   $('#weight_selected1').val(data.weight_unit);
         $('#procedure').val(data.type_of_procedure);
         $('#date_of_procedure').val(data.date_of_procedure);
-   
+        $('#age').val(data.age);
+        console.log('Age '+data.age);
       
-       this.setState({procedure:data.type_of_procedure,
+       this.setState({age:data.age,procedure:data.type_of_procedure,
         date_of_procedure:data.date_of_procedure,
-        age:data.age,
         sex:data.gender,
         weight:data.weight,
         understanding:data.understanding,
@@ -150,7 +150,7 @@ if(data !==undefined){
 
       
         
-        console.log(this.state);
+        console.log('Age '+this.state.age);
         
   var score=0;
   
@@ -501,6 +501,9 @@ style={{
       <div className="col-6">
         <div className="form-group">
           <label htmlFor="usr">POC -INR </label>
+          <input type="text" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
+        id="poc_inr"
+      />
           <input type="text" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
         id="poc_inr"
       />

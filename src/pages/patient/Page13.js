@@ -292,12 +292,12 @@ return (
          <br />
 <label className="radio-inline blue">Yes</label>
         <input type="radio" name="ulcer_dosage_freq" id="threethree_freq1" className="pull-right" 
-            defaultChecked={this.state.q3_ans_option === "Not Sure"}  onChange={(e)=>this.setState({q3_ans_option:'Not Sure'})}
+            defaultChecked={this.state.q3_ans_option === "Yes"}  onChange={(e)=>this.setState({q3_ans_option:'Yes'})}
             />
         <br />
        <label className="radio-inline blue">No</label>
         <input type="radio" name="ulcer_dosage_freq" id="threethree_freq2" className="pull-right" 
-            defaultChecked={this.state.q3_ans_option === "Not Sure"}  onChange={(e)=>this.setState({q3_ans_option:'Not Sure'})}
+            defaultChecked={this.state.q3_ans_option === "No"}  onChange={(e)=>this.setState({q3_ans_option:'No'})}
             />
        
         <br />
