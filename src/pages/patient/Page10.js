@@ -94,19 +94,13 @@ submitForm() {
   } else  if(document.getElementById("acenocoumarol1").checked === true &&  $('#acenocoumarol1_sunday').val()==='') {
     this.setState({error15:'This field is required'});
  
-
-
-
-
-
-
     } else  if(document.getElementById("not_sure").checked === true) {
       this.page10();
       this.props.history.push('/User/Page11');
   
     } else {
       this.page10();
-      this.props.history.push('/User/Page12');
+      this.props.history.push('/User/Page11');
 }
 }
 

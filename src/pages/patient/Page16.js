@@ -192,7 +192,7 @@ return (
             id="procedure_date"
             className="form-control mb-4 transparent-custom-input"
             value={this.state.q2_ans} 
-            min="2021-03-02"
+            min="2021-03-16"
             onChange={(e)=>this.setState({q2_ans:e.target.value})}
           />
          <div className="text-danger"> {this.state.error2!=='' ? this.state.error2: ''}</div>
@@ -203,7 +203,7 @@ return (
      
       <br />
       <p className="blue">
-        <b>Note Sure</b>
+        <b>Not Sure</b>
       </p>
        
         
@@ -323,7 +323,7 @@ $(document).ready(function(){
   
   });
   var dtToday = new Date();
-      
+    
   var month = dtToday.getMonth() + 1;
   var day = dtToday.getDate();
   var year = dtToday.getFullYear();
@@ -333,8 +333,9 @@ $(document).ready(function(){
       day = '0' + day.toString();
   
   var maxDate = year + '-' + month + '-' + day;
-  //alert(maxDate);
+  alert(maxDate);
   $('#procedure_date').attr('max', maxDate);
 }
+
 }
 export default Page16;

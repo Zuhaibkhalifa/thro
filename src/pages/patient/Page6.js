@@ -262,7 +262,7 @@ return (
             />
 <br />
 
-            <label className="radio-inline blue">I dont Know</label>
+            <label className="radio-inline blue">I don't Know</label>
             <input type="checkbox" name="vte" className="pull-right" 
              onChange={(e)=>this.setState({q1_sub_ans4:'I dont Know'})} id="valve4"
              onClick={this.question2} 
@@ -305,7 +305,7 @@ return (
  
            </span>   
            <br />
-            <label className="radio-inline blue">I dont Know</label>
+            <label className="radio-inline blue">I don't Know</label>
             <input type="checkbox" name="location" className="pull-right" 
             defaultValue=""
               onClick={this.otherboxfunc} id="loc3"

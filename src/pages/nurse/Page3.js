@@ -534,9 +534,18 @@ style={{
       <div className="col-6">
         <div className="form-group">
           <label htmlFor="usr">POC -INR </label>
-          <input type="text" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
+          <div className="row">
+          <div className="col-6">
+          <input type="date" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
         id="poc_inr"
       />
+            </div>
+            <div className="col-6">
+            <input type="text" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
+        id="poc_inr"
+      />
+            </div>
+            </div>
              {this.validator.message('', this.state.poc_inr, 'required')}
          </div>
       </div>
@@ -544,9 +553,19 @@ style={{
       <div className="col-6">
         <div className="form-group">
           <label htmlFor="usr">POC - CREAT </label>
-          <input type="text" className="form-control"  defaultValue={this.state.poc_creat} onChange={(e)=>this.setState({poc_creat:e.target.value})}
+    
+        <div className="row">
+          <div className="col-6">
+          <input type="date" className="form-control"  defaultValue={this.state.poc_creat} onChange={(e)=>this.setState({poc_creat:e.target.value})}
      id="poc_creat"
      />
+            </div>
+            <div className="col-6">
+            <input type="text" className="form-control"  defaultValue={this.state.poc_creat} onChange={(e)=>this.setState({poc_creat:e.target.value})}
+     id="poc_creat"
+     />
+            </div>
+            </div>
       {this.validator.message('', this.state.poc_creat, 'required')}
          </div>
       </div>
@@ -558,8 +577,18 @@ style={{
       <div className="col-6">
         <div className="form-group">
           <label htmlFor="usr">Hb </label>
-          <input type="text" id="hb" className="form-control"  defaultValue={this.state.hb} onChange={(e)=>this.setState({hb:e.target.value})}
+
+          <div className="row">
+          <div className="col-6">
+          <input type="date" id="hb" className="form-control"  defaultValue={this.state.hb} onChange={(e)=>this.setState({hb:e.target.value})}
       />
+            </div>
+            <div className="col-6">
+            <input type="text" id="hb" className="form-control"  defaultValue={this.state.hb} onChange={(e)=>this.setState({hb:e.target.value})}
+      />
+            </div>
+            </div>
+       
        {this.validator.message('', this.state.hb, 'required')}
          </div>
       </div>
@@ -567,9 +596,21 @@ style={{
       <div className="col-6">
         <div className="form-group">
           <label htmlFor="usr">Plt </label>
-          <input type="text" className="form-control"  defaultValue={this.state.plt} onChange={(e)=>this.setState({plt:e.target.value})}
+
+          <div className="row">
+          <div className="col-6">
+          <input type="date" className="form-control"  defaultValue={this.state.plt} onChange={(e)=>this.setState({plt:e.target.value})}
       id="plt"
       />
+            </div>
+            <div className="col-6">
+            <input type="text" className="form-control"  defaultValue={this.state.plt} onChange={(e)=>this.setState({plt:e.target.value})}
+      id="plt"
+      />
+            </div>
+            </div>
+
+      
           {this.validator.message('', this.state.plt, 'required')}
          </div>
       </div>
