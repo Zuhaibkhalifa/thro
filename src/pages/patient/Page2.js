@@ -182,6 +182,7 @@ return (
             <option>KG</option>
           </select>
           {this.validator.message('unit_weight', this.state.weightSelected, 'required')}
+       
         </div>
       </div>
 

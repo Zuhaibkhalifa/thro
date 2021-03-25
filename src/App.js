@@ -16,6 +16,7 @@ import Page3 from './pages/patient/Page3';
 import Page4 from './pages/patient/Page4';
 import Page7 from './pages/patient/Page7';
 import Page8 from './pages/patient/Page8';
+import Page9 from './pages/patient/Page9';
 import Page5 from './pages/patient/Page5';
 import Page6 from './pages/patient/Page6';
 import Page10 from './pages/patient/Page10';
@@ -58,6 +59,7 @@ const  App= ()=>{
       <PrivateRoute  path="/User/Page6" component={Page6} />
       <PrivateRoute  path="/User/Page7" component={Page7} />
       <PrivateRoute  path="/User/Page8" component={Page8} />
+      <PrivateRoute  path="/User/Page9" component={Page9} />
       <PrivateRoute  path="/User/Page10" component={Page10} />
       <PrivateRoute  path="/User/Page11" component={Page11} />
       <PrivateRoute  path="/User/Page12" component={Page12} />

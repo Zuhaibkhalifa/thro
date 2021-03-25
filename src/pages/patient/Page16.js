@@ -23,9 +23,6 @@ class Page16 extends React.Component {
     
     this.submitForm = this.submitForm.bind(this);
     this.go_nurse = this.go_nurse.bind(this);
-    
-
-
     var element = document.getElementById("body");
     element.classList.add("blue-bg");
 
@@ -86,7 +83,7 @@ submitForm() {
 }
 
 go_nurse(){
-  alert('ss');
+ // alert('ss');
   this.props.history.push('/User/Section');
 }
 page16(){
@@ -163,13 +160,13 @@ return (
     {/* Default form login */}
     <form className="p-5" action="#!">
       <p className="blue">
-        <b>Please select the type of Procedure</b>
+        <b>Please enter the type of Procedure</b>
       </p>
       
       <div id="t1">
       <input
             type="text"
-            id="procedure_date"
+            id="procedure"
             className="form-control mb-4 transparent-custom-input"
             value={this.state.q1_ans} 
             onChange={(e)=>this.setState({q1_ans:e.target.value})}
@@ -192,7 +189,7 @@ return (
             id="procedure_date"
             className="form-control mb-4 transparent-custom-input"
             value={this.state.q2_ans} 
-            min="2021-03-16"
+           
             onChange={(e)=>this.setState({q2_ans:e.target.value})}
           />
          <div className="text-danger"> {this.state.error2!=='' ? this.state.error2: ''}</div>
@@ -333,7 +330,7 @@ $(document).ready(function(){
       day = '0' + day.toString();
   
   var maxDate = year + '-' + month + '-' + day;
-  alert(maxDate);
+  //alert(maxDate);
   $('#procedure_date').attr('max', maxDate);
 }
 

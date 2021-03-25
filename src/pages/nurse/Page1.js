@@ -22,10 +22,17 @@ class Page1 extends React.Component {
     weight: '', 
     indication_for_anticoagulation: '',
     chads_score_and_distribution: '',
-    poc_inr: '',
-    poc_creat: '', 
-    hb: '',
-    plt: '',
+    poc_inr_date: '',
+    poc_creat_date: '', 
+    hb_date: '',
+    plt_date: '',
+    poc_inr_text: '',
+    poc_creat_text: '', 
+    hb_text: '',
+    plt_text: '',
+
+
+
     details_on_recomemendation: '',
     understanding:'',
     completed_by: '',
@@ -99,11 +106,18 @@ if(data !==undefined){
         procedureSelected:data.gender,
       indication_for_anticoagulation:data.indication_for_anticoagulation,
       chads_score_and_distribution:data.chads_score_and_distribution,
-      poc_creat:data.poc_creat,
-      hb:data.hb,
-      plt:data.plt,
+
+      poc_creat_text:data.poc_creat_text,
+      poc_creat_date:data.poc_creat_date,
+      hb_text:data.hb_text,
+      hb_date:data.hb_date,
+      plt_text:data.plt_text,
+      plt_date:data.plt_date,
+      poc_inr_text:data.poc_inr_text,
+      poc_inr_date:data.poc_inr_date,
+
       details_on_recomemendation:data.details_on_recomemendation,
-      poc_inr:data.poc_inr,
+      
       weightSelected:data.weight_unit,
       aspirin:data.aspirin,
       aspirin_dosage:data.aspirin_dosage,
@@ -412,22 +426,22 @@ style={{ backgroundColor: "#8ebce0", paddingLeft: 20, paddingTop: 5, paddingBott
         { this.state.pradaxa !== null ? <tr style={{ color: "white" }}> <td>{ this.state.pradaxa } </td>
   <td>{ this.state.pradaxa_dosage }</td>
   <td></td>
-</tr> : ''}
+</tr> :''}
 
 { this.state.xarelto !== null ? <tr style={{ color: "white" }}> <td>{ this.state.xarelto } </td>
   <td>{ this.state.xarelto_dosage }</td>
   <td>{ this.state.xarelto_dosage_time }</td>
-</tr> : ''}
+</tr> :''}
 
 { this.state.eliquis !== null ? <tr style={{ color: "white" }}> <td>{ this.state.eliquis } </td>
   <td>{ this.state.eliquis_dosage }</td>
   <td>{ this.state.eliquis_dosage_time }</td>
-</tr> : ''}
+  </tr> :''}
 
 { this.state.edoxabon !== null ? <tr style={{ color: "white" }}> <td>{ this.state.edoxabon } </td>
   <td>{ this.state.edoxabon_dosage }</td>
   <td>{ this.state.edoxabon_dosage_time }</td>
-</tr> : ''}
+  </tr> :''}
    
 
 
@@ -504,15 +518,15 @@ style={{
         
       <div className="row">
       <div className="col-6">  
-<input type="date" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
+<input type="date" className="form-control" id="usr"  defaultValue={this.state.poc_inr_date} onChange={(e)=>this.setState({poc_inr_date:e.target.value})}
         id="poc_inr"
       /></div>
-      <div className="col-6">  <input type="text" className="form-control" id="usr"  defaultValue={this.state.poc_inr} onChange={(e)=>this.setState({poc_inr:e.target.value})}
+      <div className="col-6">  <input type="text" className="form-control" id="usr"  defaultValue={this.state.poc_inr_text} onChange={(e)=>this.setState({poc_inr_text:e.target.value})}
         id="poc_inr"
       /></div>
       </div>
          
-             {this.validator.message('', this.state.poc_inr, 'required')}
+             {this.validator.message('', this.state.poc_inr_text, 'required')}
          </div>
       </div>
 
@@ -523,35 +537,33 @@ style={{
 
 <div className="row">
       <div className="col-6">
-      <input type="date" className="form-control"  defaultValue={this.state.poc_creat} onChange={(e)=>this.setState({poc_creat:e.target.value})}
+      <input type="date" className="form-control"  defaultValue={this.state.poc_creat_date} onChange={(e)=>this.setState({poc_creat_date:e.target.value})}
      id="poc_creat"
      />
         </div>
         <div className="col-6">
-      <input type="text" className="form-control"  defaultValue={this.state.poc_creat} onChange={(e)=>this.setState({poc_creat:e.target.value})}
+      <input type="text" className="form-control"  defaultValue={this.state.poc_creat_text} onChange={(e)=>this.setState({poc_creat_text:e.target.value})}
      id="poc_creat"
      />
         </div>
 </div>
-      {this.validator.message('', this.state.poc_creat, 'required')}
+      
          </div>
       </div>
     
     </div>
-
-
-    <div className="row">
+ <div className="row">
       <div className="col-6">
         <div className="form-group">
           <label htmlFor="usr">Hb </label>
          
       <div className="row">
-      <div className="col-6"> <input type="date" id="hb" className="form-control"  defaultValue={this.state.hb} onChange={(e)=>this.setState({hb:e.target.value})}
+      <div className="col-6"> <input type="date" id="hb" className="form-control"  defaultValue={this.state.hb_date} onChange={(e)=>this.setState({hb_date:e.target.value})}
       /></div>
-      <div className="col-6"> <input type="text" id="hb" className="form-control"  defaultValue={this.state.hb} onChange={(e)=>this.setState({hb:e.target.value})}
+      <div className="col-6"> <input type="text" id="hb" className="form-control"  defaultValue={this.state.hb_text} onChange={(e)=>this.setState({hb_text:e.target.value})}
       /></div>
       </div>
-       {this.validator.message('', this.state.hb, 'required')}
+       {this.validator.message('', this.state.hb_text, 'required')}
          </div>
       </div>
 
@@ -561,15 +573,15 @@ style={{
        
 
 <div className="row">
-      <div className="col-6">    <input type="date" className="form-control"  defaultValue={this.state.plt} onChange={(e)=>this.setState({plt:e.target.value})}
+      <div className="col-6">    <input type="date" className="form-control"  defaultValue={this.state.plt_date} onChange={(e)=>this.setState({plt_date:e.target.value})}
       id="plt"
       /></div>
-      <div className="col-6">    <input type="text" className="form-control"  defaultValue={this.state.plt} onChange={(e)=>this.setState({plt:e.target.value})}
+      <div className="col-6">    <input type="text" className="form-control"  defaultValue={this.state.plt_text} onChange={(e)=>this.setState({plt_text:e.target.value})}
       id="plt"
       /></div>
       </div>
 
-          {this.validator.message('', this.state.plt, 'required')}
+          {this.validator.message('', this.state.plt_text, 'required')}
          </div>
       </div>
     

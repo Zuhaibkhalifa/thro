@@ -209,8 +209,6 @@ page11(){
    }
     
   }
-  
-
   server('patient/page11',param);
   //this.props.history.push('');
   }
@@ -280,7 +278,7 @@ return (
       <p className="blue">
         <b>Please choose if applicable</b>
       </p>
-      <p className="blue" style={{ fontSize: 10, marginTop: "-20px" }}>
+      <p className="blue" style={{ fontSize: 14, marginTop: "-20px" }}>
         SELECT UP TO 2
       </p>
       <div className="checkbox">
@@ -498,7 +496,7 @@ return (
       
       <div className="checkbox">
         <label className="blue">No, I am not on any of these medications</label>
-        <input type="checkbox"  className="pull-right goption"  onChange={(e)=>this.setState({q5_ans:e.target.value})}
+        <input type="checkbox"  className="pull-right"  onChange={(e)=>this.setState({q5_ans:e.target.value})}
      onClick={ this.no_med } name="main_opt5" 
           value="No, I am not on any of these medications"  
           id="no_med"
@@ -573,7 +571,11 @@ $('#prasugrel_dosage3').click(function() {
   $('#efffient_other').toggle(1000)
 });
  $('#no_med').click(function() {
+  $(".chk").prop("checked", false);
+  $("input[type='radio']").prop("checked", false);
   $(".chk").attr('disabled', !$("input[type='checkbox']").attr('disabled'));
+  $("input[type='radio']").attr('disabled', !$("input[type='radio']").attr('disabled'));
+
 });
 }
 

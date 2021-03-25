@@ -51,8 +51,6 @@ class Page7 extends React.Component {
     }
 }
 
-
-
 submitForm() {
   var chk;
   if(document.getElementById("dvt1").checked === false 
@@ -97,16 +95,11 @@ chk=1;
   }
 }
 
-valueChanged1(e)
-{
+valueChanged1(e){
 
   this.setState({q1_ans:e.target.value});
-
-
-    if(document.getElementById("optradio5").checked === true)  {
-      
-
-      document.getElementById("de").style.display = "block";
+if(document.getElementById("optradio5").checked === true)  {
+   document.getElementById("de").style.display = "block";
     } else {
       document.getElementById("de").style.display = "none";
     }
@@ -183,12 +176,8 @@ return (
         Cognitive Heart Failure (ever)
       </label>
       <input type="checkbox" name="optradio" className="pull-right"
-              onClick={this.valueChanged1} id="mainoption1"
-              
-              onChange={(e)=>this.setState({q1_ans:'Yes'})}
-
-      
-      />
+       onClick={this.valueChanged1} id="mainoption1" value="Yes"
+              onChange={(e)=>this.setState({q1_ans:'Yes'})} />
    
       <br />
       <label className="radio-inline blue">
@@ -196,8 +185,7 @@ return (
       </label>
       <input type="checkbox" name="optradio" className="pull-right"
           onClick={this.valueChanged1} id="mainoption2"
-          onChange={(e)=>this.setState({q2_ans:'Yes'})} 
-      />
+          onChange={(e)=>this.setState({q2_ans:'Yes'})}  />
        <br />
       
       <label className="radio-inline blue">Diabetes</label>

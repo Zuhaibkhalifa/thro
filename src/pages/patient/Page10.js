@@ -206,6 +206,7 @@ Current Drugs
          onChange={(e)=>this.setState({q1_ans_monday:e.target.value})}
         />
           <div className="text-danger"> {this.state.error2!=='' ? this.state.error2: ''}</div>
+      
       </div>
       <div className="col-3">
         <label className="blue" htmlFor="tuesday">

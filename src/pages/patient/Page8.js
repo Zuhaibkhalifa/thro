@@ -151,7 +151,7 @@ page8(){
       eliquis:this.state.q3_ans,
       eliquis_dosage:this.state.q3_ans_dosage,
     }
-  } else if(document.getElementById("edoxabon_rdo").checked === true){
+  } else if(document.getElementById("edxo_rdo").checked === true){
     var param={
       edoxabon:this.state.q4_ans,
     edoxabon_dosage:this.state.q4_ans_dosage,
