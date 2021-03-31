@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.4
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Feb 18, 2021 at 10:20 AM
--- Server version: 5.6.49-cll-lve
--- PHP Version: 7.3.6
+-- Host: 127.0.0.1
+-- Generation Time: Mar 31, 2021 at 04:40 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -34,7 +33,7 @@ CREATE TABLE `failed_jobs` (
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -71,10 +70,14 @@ CREATE TABLE `nurse_section_five` (
   `date_of_procedure` date DEFAULT NULL COMMENT 'Date of Procedure',
   `indication_for_anticoagulation` varchar(200) DEFAULT NULL COMMENT 'Indication(s) for Anticoagulation',
   `chads_score_and_distribution` varchar(200) DEFAULT NULL COMMENT 'CHADS Score And Distribution',
-  `poc_inr` date DEFAULT NULL COMMENT 'POC -INR',
-  `poc_creat` date DEFAULT NULL COMMENT 'POC - CREAT',
-  `hb` varchar(100) DEFAULT NULL,
-  `plt` varchar(100) DEFAULT NULL,
+  `poc_inr_date` date DEFAULT NULL COMMENT 'POC - INR Date',
+  `poc_inr_text` varchar(1024) DEFAULT NULL COMMENT 'POC - INR Text',
+  `poc_creat_date` date DEFAULT NULL COMMENT 'POC - CREAT Date',
+  `poc_creat_text` varchar(1024) DEFAULT NULL COMMENT 'POC - CREAT - Text',
+  `hb_date` varchar(100) DEFAULT NULL COMMENT 'Hb - Date',
+  `hb_text` varchar(1024) DEFAULT NULL COMMENT 'Hb - Text',
+  `plt_date` varchar(100) DEFAULT NULL COMMENT 'Plt - Date',
+  `plt_text` varchar(1024) DEFAULT NULL COMMENT 'Plt - Text',
   `details_on_recomemendation` varchar(200) DEFAULT NULL,
   `user_id` int(10) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Final Report';
@@ -83,9 +86,10 @@ CREATE TABLE `nurse_section_five` (
 -- Dumping data for table `nurse_section_five`
 --
 
-INSERT INTO `nurse_section_five` (`sec_five_id`, `year`, `procedure`, `date_of_procedure`, `indication_for_anticoagulation`, `chads_score_and_distribution`, `poc_inr`, `poc_creat`, `hb`, `plt`, `details_on_recomemendation`, `user_id`) VALUES
-(67, NULL, NULL, NULL, 'sdgdfggcxvc', 'fgsdfgcvx gdfg', '2021-01-26', '2021-01-24', '2021-01-21', '2021-01-26', 'sdfgsgddfzcvxs f', 4),
-(69, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '21', 8);
+INSERT INTO `nurse_section_five` (`sec_five_id`, `year`, `procedure`, `date_of_procedure`, `indication_for_anticoagulation`, `chads_score_and_distribution`, `poc_inr_date`, `poc_inr_text`, `poc_creat_date`, `poc_creat_text`, `hb_date`, `hb_text`, `plt_date`, `plt_text`, `details_on_recomemendation`, `user_id`) VALUES
+(67, NULL, NULL, NULL, 'sdgdfggcxvc', 'fgsdfgcvx gdfg', '2021-01-26', NULL, '2021-01-24', NULL, '2021-01-21', '', '2021-01-26', '', 'sdfgsgddfzcvxs f', 4),
+(69, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, '', '21', 8),
+(71, NULL, 'Dev Test', '2021-02-12', 'Atrial Fibrillation of flutter,  Heart Valve Replacement,  Blood clot in heart,  Arterial Peripheral Thrombosis,', '5', '2021-03-10', 'text1', '2021-03-11', 'text2', '2021-03-12', 'text3', '2021-03-13', 'text4', NULL, 22);
 
 -- --------------------------------------------------------
 
@@ -190,7 +194,8 @@ CREATE TABLE `pat_section_eight` (
 INSERT INTO `pat_section_eight` (`sec_eight_id`, `pradaxa`, `pradaxa_dosage`, `xarelto`, `xarelto_dosage`, `xarelto_dosage_time`, `eliquis`, `eliquis_dosage`, `eliquis_dosage_time`, `edoxabon`, `edoxabon_dosage`, `edoxabon_dosage_time`, `user_id`) VALUES
 (26, 'Pradaxa (Dabigatran)', '75 mg twice dialy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13),
 (30, NULL, NULL, 'Xarelto (Rivaroxaban)', '15 mg once daily', 'sfDFsdfasdf', NULL, NULL, NULL, NULL, NULL, NULL, 4),
-(36, 'Pradaxa (Dabigatran)', '75 mg twice daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8);
+(36, 'Pradaxa (Dabigatran)', '75 mg twice daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8),
+(39, 'Pradaxa (Dabigatran)', '75 mg twice daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 22);
 
 -- --------------------------------------------------------
 
@@ -221,7 +226,8 @@ CREATE TABLE `pat_section_eleven` (
 --
 
 INSERT INTO `pat_section_eleven` (`sec_eleven_id`, `aspirin`, `aspirin_dosage`, `aspirin_dosage_time`, `plavix`, `plavix_dosage`, `plavix_dosage_time`, `brillinta`, `brillinta_dosage`, `brillinta_dosage_timie`, `effient_dosage`, `effient_dosage_time`, `effient`, `not_using_drugs`, `user_id`) VALUES
-(4, 'Aspirin (ASA)', 'asdasd', 'Once daily', 'Plavix (Clopidogrel)', 'asdasd', 'Twice daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4);
+(4, 'Aspirin (ASA)', 'asdasd', 'Once daily', 'Plavix (Clopidogrel)', 'asdasd', 'Twice daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4),
+(6, 'Aspirin (ASA)', NULL, 'Once daily', NULL, NULL, NULL, NULL, NULL, NULL, '5 mg', 'Twice daily', NULL, NULL, 22);
 
 -- --------------------------------------------------------
 
@@ -248,7 +254,8 @@ CREATE TABLE `pat_section_fifteen` (
 INSERT INTO `pat_section_fifteen` (`sec_fifteen_id`, `being_treated_cancer`, `cancer`, `radiation`, `radiation_ongoing`, `chemotherapy`, `chemotherapy_ongoing`, `chemotherapy_finished`, `user_id`) VALUES
 (9, 'Yes', 'dfssdsdgdsgfdsfg sdfg sdfh', 'Yes', 'Yes', 'Yes', NULL, 'Yes', 4),
 (7, 'Yes', 'CML', 'Yes', 'Yes', 'Yes', 'Yes', NULL, 13),
-(13, 'Yes', 'I do not know name', 'Yes', 'Yes', 'Yes', NULL, 'Yes', 8);
+(13, 'Yes', 'I do not know name', 'Yes', 'Yes', 'Yes', NULL, 'Yes', 8),
+(16, 'No', NULL, NULL, NULL, NULL, NULL, NULL, 22);
 
 -- --------------------------------------------------------
 
@@ -296,7 +303,11 @@ CREATE TABLE `pat_section_four` (
 INSERT INTO `pat_section_four` (`sec_four_id`, `venous_thromboelism`, `dvt`, `dvt_how_long_ago`, `pe`, `pe_dvt_how_long_ago`, `atrial_fibrillation_of_flutter`, `heart_valve_replacement`, `blood_clot_in_heart`, `arterial_peripheral_thrombosis`, `peripheral_arterial_disease`, `other`, `none`, `user_id`) VALUES
 (25, 'Yes', 'Yes', 'Between 1 and 3 months ago', NULL, NULL, 'Yes', 'Yes', 'Yes', 'Yes', 'Other', 'sdafsdf', NULL, 4),
 (30, 'Yes', 'Yes', 'Less than 1 month ago', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8),
-(20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', 13);
+(20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', 13),
+(31, NULL, NULL, NULL, NULL, NULL, 'Yes', 'Yes', 'Yes', 'Yes', NULL, NULL, NULL, 22),
+(32, NULL, NULL, NULL, NULL, NULL, 'Yes', 'Yes', 'Yes', NULL, NULL, NULL, NULL, 22),
+(33, 'Yes', NULL, NULL, NULL, NULL, 'Yes', 'Yes', 'Yes', NULL, NULL, NULL, NULL, 22),
+(34, NULL, NULL, NULL, NULL, NULL, 'Yes', 'Yes', 'Yes', NULL, NULL, NULL, NULL, 22);
 
 -- --------------------------------------------------------
 
@@ -318,7 +329,8 @@ CREATE TABLE `pat_section_fourteen` (
 INSERT INTO `pat_section_fourteen` (`sec_fourteen_id`, `cirrhosis_of_liver`, `antiphospholipid_antibody_syndrome`, `user_id`) VALUES
 (9, 'Yes', 'Yes', 4),
 (13, 'Yes', 'Yes', 8),
-(7, 'Yes', 'Yes', 13);
+(7, 'Yes', 'Yes', 13),
+(15, 'Yes', 'Yes', 22);
 
 -- --------------------------------------------------------
 
@@ -373,7 +385,8 @@ CREATE TABLE `pat_section_seven` (
 INSERT INTO `pat_section_seven` (`sec_seven_id`, `cognitive_heart_failure`, `high_blood_pressure`, `diabetes`, `mitral_stenosis`, `stroke_or_mini_stroke`, `stroke_how_long`, `not_sure`, `none_of_above`, `user_id`) VALUES
 (67, 'on', 'Yes', 'Yes', 'Yes', 'Yes', NULL, NULL, NULL, '4'),
 (63, 'on', NULL, NULL, NULL, 'Yes', NULL, NULL, 'None Of Above', '13'),
-(72, 'Yes', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '8');
+(72, 'Yes', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '8'),
+(78, 'Yes', 'Yes', 'Yes', NULL, 'Yes', NULL, NULL, NULL, '22');
 
 -- --------------------------------------------------------
 
@@ -404,7 +417,8 @@ CREATE TABLE `pat_section_six` (
 INSERT INTO `pat_section_six` (`sec_six_id`, `mechanical_heart_valve`, `tissue_heart_valve`, `mechanical_heart_valve_Is_the_valve_bileaflet`, `mechanical_heart_valve_Is_the_valve_ball_and_cage`, `mechanical_heart_valve_Is_the_valve_tilting_disc`, `mechanical_heart_valve_Is_the_valve_dont_know`, `location_aortic`, `location_mitral`, `location_other`, `location_dont_know`, `dont_know`, `user_id`) VALUES
 (71, 'Mechanical Heart valve', NULL, 'Bileaflet', NULL, NULL, NULL, 'Aortic', NULL, NULL, NULL, 'on', 8),
 (51, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'I dont Know', 13),
-(67, 'Mechanical Heart valve', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Other', NULL, NULL, 4);
+(67, 'Mechanical Heart valve', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Other', NULL, NULL, 4),
+(76, 'Mechanical Heart valve', 'Tissue Heart Valve', NULL, NULL, NULL, NULL, 'Aortic', NULL, NULL, NULL, 'on', 22);
 
 -- --------------------------------------------------------
 
@@ -427,7 +441,7 @@ INSERT INTO `pat_section_sixteen` (`sec_sixteen_id`, `type_of_procedure`, `date_
 (41, 'Populated from page16', '2021-02-19', 8),
 (33, NULL, '2021-01-01', 13),
 (37, 'xccfgfdgdfg', '2021-02-18', 4),
-(42, 'Not Sure', NULL, 22);
+(44, 'Dev Test', '2021-02-12', 22);
 
 -- --------------------------------------------------------
 
@@ -464,7 +478,8 @@ CREATE TABLE `pat_section_ten` (
 INSERT INTO `pat_section_ten` (`sec_ten_id`, `user_id`, `coumadin`, `coumadin_monday`, `coumadin_tuesday`, `coumadin_wednesday`, `coumadin_thursday`, `coumadin_friday`, `coumadin_saturday`, `coumadin_sunday`, `sintrom`, `sintrom_monday`, `sintrom_tuesday`, `sintrom_wednesday`, `sintrom_thursday`, `sintrom_friday`, `sintrom_saturday`, `sintrom_sunday`, `not_sure`) VALUES
 (30, 4, 'Coumadin (Warfarin)', '1', '1', '1', NULL, '3', '4', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (14, 13, 'Coumadin (Warfarin)', '32', '132', '31', NULL, '31', '32', '13', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 8, 'Coumadin (Warfarin)', '-1', '-1', '-1', NULL, '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(32, 8, 'Coumadin (Warfarin)', '-1', '-1', '-1', NULL, '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(34, 22, 'Coumadin (Warfarin)', '10', '15', '20', NULL, '20', '15', '10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -479,7 +494,7 @@ CREATE TABLE `pat_section_thirteen` (
   `bleeding_from_stomach` varchar(50) DEFAULT NULL COMMENT 'Bleeding from the stomach or bowel',
   `bleeding_from_stomach_last_three_months` varchar(50) DEFAULT NULL,
   `ulcer_in_stomach_or_bowel` varchar(50) DEFAULT NULL,
-  `ulcer_in_stomach_or_bowel_last_three_months` text,
+  `ulcer_in_stomach_or_bowel_last_three_months` text DEFAULT NULL,
   `liver_disease` varchar(50) DEFAULT NULL,
   `kidney_disease` varchar(50) DEFAULT NULL,
   `not_sure` varchar(50) DEFAULT NULL,
@@ -495,7 +510,8 @@ CREATE TABLE `pat_section_thirteen` (
 INSERT INTO `pat_section_thirteen` (`sec_thirteen_id`, `bleeding_requiring_treatment`, `bleeding_requiring_treatment_last_three_months`, `bleeding_from_stomach`, `bleeding_from_stomach_last_three_months`, `ulcer_in_stomach_or_bowel`, `ulcer_in_stomach_or_bowel_last_three_months`, `liver_disease`, `kidney_disease`, `not_sure`, `had_transfusion_in_last_three_months`, `had_transfusion_in_last_three_months_when`, `user_id`) VALUES
 (14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', 'Yes', NULL, 8),
 (7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', 'Yes', NULL, 13),
-(9, 'Yes', 'Yes', 'Yes', 'Not Sure', 'Yes', 'Not Sure', 'Yes', 'Yes', NULL, 'Yes', '2021-01-13', 4);
+(9, 'Yes', 'Yes', 'Yes', 'Not Sure', 'Yes', 'Not Sure', 'Yes', 'Yes', NULL, 'Yes', '2021-01-13', 4),
+(16, 'Yes', NULL, 'Yes', 'Yes', 'Yes', 'No', 'Yes', 'Yes', NULL, 'Yes', '2021-01-08', 22);
 
 -- --------------------------------------------------------
 
@@ -516,7 +532,8 @@ CREATE TABLE `pat_section_three` (
 INSERT INTO `pat_section_three` (`sec_three_id`, `blood_clot_blood_thinner_interrupted`, `user_id`) VALUES
 (34, 'No', 4),
 (39, 'Yes', 8),
-(30, 'Yes', 13);
+(30, 'Yes', 13),
+(43, 'Yes', 22);
 
 -- --------------------------------------------------------
 
@@ -537,7 +554,8 @@ CREATE TABLE `pat_section_twelve` (
 INSERT INTO `pat_section_twelve` (`sec_twelve_id`, `lab_location_for_inr_test`, `user_id`) VALUES
 (20, 'Life Labs', 8),
 (13, 'dfg', 13),
-(15, 'Life Labs', 4);
+(15, 'Life Labs', 4),
+(22, 'Life Labs', 22);
 
 -- --------------------------------------------------------
 
@@ -561,9 +579,10 @@ CREATE TABLE `pat_section_two` (
 --
 
 INSERT INTO `pat_section_two` (`sec_two_id`, `age`, `weight`, `weight_unit`, `physicianName`, `gender`, `user_id`, `patient_id`) VALUES
-(30, '67', '4', 'Pound', 'dr.hgjhg', 'Female', 4, '12333'),
-(35, '36', '85', 'KG', 'Dr Chand', 'Male', 8, '12869'),
-(26, '36', '74', 'KG', 'Dr Kiran', 'Male', 13, '13536');
+(30, '67', '4', 'lbs', 'dr.hgjhg', 'Female', 4, '12333'),
+(35, '36', '85', 'Kg', 'Dr Chand', 'Male', 8, '12869'),
+(26, '36', '74', 'Kg', 'Dr Kiran', 'Male', 13, '13536'),
+(39, '55', '88', 'Kg', 'Ziya', 'Male', 22, '13500');
 
 -- --------------------------------------------------------
 
@@ -815,7 +834,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `nurse_section_five`
 --
 ALTER TABLE `nurse_section_five`
-  MODIFY `sec_five_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `sec_five_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `nurse_section_one`
@@ -833,19 +852,19 @@ ALTER TABLE `nurse_section_three`
 -- AUTO_INCREMENT for table `pat_section_eight`
 --
 ALTER TABLE `pat_section_eight`
-  MODIFY `sec_eight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `sec_eight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `pat_section_eleven`
 --
 ALTER TABLE `pat_section_eleven`
-  MODIFY `sec_eleven_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `sec_eleven_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pat_section_fifteen`
 --
 ALTER TABLE `pat_section_fifteen`
-  MODIFY `sec_fifteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `sec_fifteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `pat_section_five`
@@ -857,13 +876,13 @@ ALTER TABLE `pat_section_five`
 -- AUTO_INCREMENT for table `pat_section_four`
 --
 ALTER TABLE `pat_section_four`
-  MODIFY `sec_four_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `sec_four_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `pat_section_fourteen`
 --
 ALTER TABLE `pat_section_fourteen`
-  MODIFY `sec_fourteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `sec_fourteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `pat_section_one`
@@ -875,49 +894,49 @@ ALTER TABLE `pat_section_one`
 -- AUTO_INCREMENT for table `pat_section_seven`
 --
 ALTER TABLE `pat_section_seven`
-  MODIFY `sec_seven_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `sec_seven_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `pat_section_six`
 --
 ALTER TABLE `pat_section_six`
-  MODIFY `sec_six_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `sec_six_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `pat_section_sixteen`
 --
 ALTER TABLE `pat_section_sixteen`
-  MODIFY `sec_sixteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `sec_sixteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `pat_section_ten`
 --
 ALTER TABLE `pat_section_ten`
-  MODIFY `sec_ten_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `sec_ten_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `pat_section_thirteen`
 --
 ALTER TABLE `pat_section_thirteen`
-  MODIFY `sec_thirteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `sec_thirteen_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `pat_section_three`
 --
 ALTER TABLE `pat_section_three`
-  MODIFY `sec_three_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `sec_three_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `pat_section_twelve`
 --
 ALTER TABLE `pat_section_twelve`
-  MODIFY `sec_twelve_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `sec_twelve_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `pat_section_two`
 --
 ALTER TABLE `pat_section_two`
-  MODIFY `sec_two_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `sec_two_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `pat_sub_questions`
