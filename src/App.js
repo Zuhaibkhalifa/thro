@@ -38,8 +38,10 @@ import RecoverPasword from "./pages/RecoverPasword";
 
 // global Domain
 // so that when development it is easier to change domain to LocalHost
-export const domain = "http://127.0.0.1:8000";
-// export const domain = "http://thrombolink.com/server";
+// export const domain = "http://127.0.0.1:8000";
+export const domain = "http://thrombolink.com/server";
+
+//
 
 const App = () => {
    return (
@@ -49,11 +51,7 @@ const App = () => {
          <Route exact path="/Register" component={Register} />
          <Route exact path="/Forgotpassword" component={Forgotpassword} />
          <PrivateRoute exact path="/User/Section" component={Section} />
-         <Route
-            exact
-            path="/RecoverPasword/reset/:token"
-            component={RecoverPasword}
-         />
+         <Route exact path="/RecoverPasword/reset/:token" component={RecoverPasword} />
          // patient //
          <PrivateRoute path="/User/Page2" component={Page2} />
          <PrivateRoute path="/User/Page3" component={Page3} />
