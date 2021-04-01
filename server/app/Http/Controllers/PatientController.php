@@ -102,8 +102,8 @@ public function page4Post(Request $request)
 
  	$chk = DB::table('pat_section_four')->where('user_id',Auth::user()->id)->select('*')->get();
 
-	if (!$chk=='[]')
-		DB::table('pat_section_four')->where('user_id', Auth::user()->id)->delete();
+	if ($chk !='[]') {
+		DB::table('pat_section_four')->where('user_id', Auth::user()->id)->delete(); }
 	
 	$chk = DB::table('pat_section_four')->insert($data);
 
@@ -865,10 +865,10 @@ public function nursePage1LoadData() {
  	 $chk= DB::table('nurse_section_one')
     ->where('nurse_section_one.user_id',Auth::user()->id)
       ->leftJoin('pat_section_seven', 'nurse_section_one.user_id', '=', 'pat_section_seven.user_id')
-        ->leftJoin('nurse_section_four', 'nurse_section_one.user_id', '=', 'nurse_section_four.user_id')
-            ->leftJoin('pat_section_two', 'nurse_section_one.user_id', '=', 'pat_section_two.user_id')
-       ->select('*')
-        ->get();
+      ->leftJoin('nurse_section_five', 'nurse_section_one.user_id', '=', 'nurse_section_five.user_id')
+      ->leftJoin('pat_section_two', 'nurse_section_one.user_id', '=', 'pat_section_two.user_id')
+      ->select('*')
+      ->get();
 
 
 return response()->json(['success' => $chk], 200);
