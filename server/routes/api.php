@@ -35,6 +35,8 @@ Route::group(['namespace' => 'Auth'], function () {
 
 });
 
+//
+
 Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 
     Route::group(['namespace' => 'Profile'], function () {
@@ -45,19 +47,12 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 
     Route::put('profile/password', ['as' => 'profile', 'uses' => 'ProfileController@updatePassword']);
 
-
-
-  
-
   // Route::post('profile/page2', ['as' => 'page2', 'uses' => 'ProfileController@page2']);
 
    // Route::post('profile/page2','ProfileController@page2');
 
    });
 
-
-
- 
    Route::post('patient/page2','PatientController@page2');
    Route::post('patient/page3','PatientController@page3');
    Route::post('patient/page4Post','PatientController@page4Post');
@@ -101,20 +96,18 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 
 
 //========================nurse==================================
-Route::post('nurse/page1','PatientController@nurse1');
-       Route::post('nurse/page3','PatientController@nurse3');
+    Route::post('nurse/page1','PatientController@nurse1');
+    Route::post('nurse/page3','PatientController@nurse3');
+    Route::post('nurse/page5','PatientController@nurse5');
 
-      
-
-
-     Route::get('nurse/page3LoadData','PatientController@nursePage3LoadData');
+    Route::get('nurse/page3LoadData','PatientController@nursePage3LoadData');
     Route::get('nurse/page8','PatientController@nurse8');
-     Route::get('nurse/page1LoadData','PatientController@nursePage1LoadData');
-   Route::get('nurse/page5LoadData','PatientController@nursePage5LoadData');
-     Route::get('nurse/page6LoadData','PatientController@nursePage6LoadData');
-  Route::get('nurse/page8LoadData','PatientController@nursePage8LoadData');
-Route::get('nurse/page1LoadData','PatientController@nursePage1LoadData');
- Route::post('nurse/page5','PatientController@nurse5');
+    Route::get('nurse/page1LoadData','PatientController@nursePage1LoadData');
+    Route::get('nurse/page5LoadData','PatientController@nursePage5LoadData');
+    Route::get('nurse/page6LoadData','PatientController@nursePage6LoadData');
+    Route::get('nurse/page8LoadData','PatientController@nursePage8LoadData');
+    Route::get('nurse/page1LoadData','PatientController@nursePage1LoadData');
+
 });
 
  

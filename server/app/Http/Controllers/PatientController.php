@@ -43,97 +43,71 @@ class PatientController extends Controller
    
 
 public function page2(Request $request)
-        {
-         $data= array( 'age' => $request->age,  'gender' =>$request->gender,'weight_unit'=>$request->weightSelected, 
-         	'physicianName' =>$request->physicianName,'weight' =>$request->weight, 'patient_id'=>rand(10411,14400),
-             'user_id'=> Auth::user()->id  );
-$chk=Pat_section_two::where('user_id',Auth::user()->id)->get();
+{
+   $data = array( 'age' => $request->age,  'gender' =>$request->gender,
+					'weight_unit'=>$request->weightSelected, 'physicianName' =>$request->physicianName,
+					'weight' =>$request->weight, 'patient_id'=> rand(10411,14400),
+             	'user_id'=> Auth::user()->id  );
 
+	$chk = Pat_section_two::where('user_id', Auth::user()->id)->get();
 
+	if ($chk=='[]') {
+		$one = Pat_section_two::Create($data);
+	} 
+	else {
+		$one = Pat_section_two::where('user_id', Auth::user()->id)->delete();
+		$one = Pat_section_two::create($data);
+	}
 
-if ($chk=='[]') {
-
-
-
-$one = Pat_section_two::Create($data);
-
-} else {
-
-$one = Pat_section_two::where('user_id', Auth::user()->id)->delete();
-$one = Pat_section_two::create($data);
-
-}
-return response()->json(['success' => $chk], 200);
-        
+	return response()->json(['success' => $chk], 200);
 }
 
 
 public function page3(Request $request)
-        {
+{
          
-      $data= array( 'blood_clot_blood_thinner_interrupted' => $request->blood_clot_blood_thinner_interrupted,'user_id'=> Auth::user()->id);
+   $data= array( 'blood_clot_blood_thinner_interrupted' => $request->blood_clot_blood_thinner_interrupted,
+						'user_id'=> Auth::user()->id);
 
+	$chk=Pat_section_three::where('user_id',Auth::user()->id)->get();
 
-$chk=Pat_section_three::where('user_id',Auth::user()->id)->get();
+	if ($chk=='[]') {
+		$one = Pat_section_three::Create($data);
+	} 
+	else {
+		$one = Pat_section_three::where('user_id', Auth::user()->id)->delete();
+		$one = Pat_section_three::create($data);
+	}
 
-
-
-if ($chk=='[]') {
-
-
-
-$one = Pat_section_three::Create($data);
-
-} else {
-
-$one = Pat_section_three::where('user_id', Auth::user()->id)->delete();
-$one = Pat_section_three::create($data);
-
-}
-return response()->json(['success' => $chk], 200);
-        
+	return response()->json(['success' => $chk], 200);		
 }
 
-
+ 
 public function page4Post(Request $request)
-        {
-         
+{
   $data= array('user_id'=> Auth::user()->id,
-	'venous_thromboelism' => $request->venous_thromboelism,
-	'dvt' => $request->dvt,
-	'dvt_how_long_ago' => $request->dvt_how_long_ago,
-	'pe' => $request->pe,
-	'pe_dvt_how_long_ago' => $request->pe_dvt_how_long_ago,
-	'atrial_fibrillation_of_flutter' => $request->atrial_fibrillation_of_flutter,
-	'heart_valve_replacement' => $request->heart_valve_replacement,
-	'blood_clot_in_heart' => $request->blood_clot_in_heart,
-	'arterial_peripheral_thrombosis' => $request->arterial_peripheral_thrombosis,
-	'peripheral_arterial_disease' => $request->peripheral_arterial_disease,
-	'other' => $request->other,
-	'none' => $request->none
-);
+		'venous_thromboelism' => $request->venous_thromboelism,
+		'pe' => $request->pe,
+		'dvt' => $request->dvt,
+		'dvt_how_long_ago' => $request->dvt_how_long_ago,
+		'pe_dvt_how_long_ago' => $request->pe_dvt_how_long_ago,
+		'atrial_fibrillation_of_flutter' => $request->atrial_fibrillation_of_flutter,
+		'heart_valve_replacement' => $request->heart_valve_replacement,
+		'blood_clot_in_heart' => $request->blood_clot_in_heart,
+		'arterial_peripheral_thrombosis' => $request->arterial_peripheral_thrombosis,
+		'peripheral_arterial_disease' => $request->peripheral_arterial_disease,
+		'other' => $request->other,
+		'none' => $request->none
+	);
 
+ 	$chk = DB::table('pat_section_four')->where('user_id',Auth::user()->id)->select('*')->get();
 
- $chk= DB::table('pat_section_four')->where('user_id',Auth::user()->id)->select('*')->get();
+	if (!$chk=='[]')
+		DB::table('pat_section_four')->where('user_id', Auth::user()->id)->delete();
+	
+	$chk = DB::table('pat_section_four')->insert($data);
 
-
-
-
-if ($chk=='[]') {
-
-$chk=DB::table('pat_section_four')->insert($data);
-
-
-
-} else {
-
-DB::table('pat_section_four')->where('user_id', Auth::user()->id)->delete();
-$chk=DB::table('pat_section_four')->insert($data);
-
-}
-
-return response()->json(['success' => $chk], 200);
-        
+	return response()->json(['success' => $chk], 200);
 }
 
 
@@ -184,28 +158,30 @@ return response()->json(['success' => $chk], 200);
 
 
 public function page7(Request $request)
-        {
-         
-$data= array( 
-	'cognitive_heart_failure' => $request->cognitive_heart_failure,
-	'high_blood_pressure' => $request->high_blood_pressure,
-	'diabetes' => $request->diabetes,
-	'mitral_stenosis' => $request->mitral_stenosis,
-	'stroke_or_mini_stroke' => $request->stroke_or_mini_stroke,
-	'stroke_how_long' => $request->stroke_how_long,
-	'none_of_above' => $request->none_of_above,
-	'user_id'=> Auth::user()->id);
+ {
+	$data= array( 
+		'cognitive_heart_failure' => $request->cognitive_heart_failure,
+		'high_blood_pressure' => $request->high_blood_pressure,
+		'diabetes' => $request->diabetes,
+		'mitral_stenosis' => $request->mitral_stenosis,
+		'stroke_or_mini_stroke' => $request->stroke_or_mini_stroke,
+		'stroke_how_long' => $request->stroke_how_long,
+		'none_of_above' => $request->none_of_above,
+		'user_id'=> Auth::user()->id);
 
- $chk= DB::table('pat_section_seven')->where('user_id',Auth::user()->id)->select('*')->get();
+	$chk= DB::table('pat_section_seven')->where('user_id',Auth::user()->id)->select('*')->get();
 
-$chk=Pat_section_seven::where('user_id',Auth::user()->id)->get();
-if ($chk=='[]') {
-$one = Pat_section_seven::Create($data);
-} else {
-$one = Pat_section_seven::where('user_id', Auth::user()->id)->delete();
-$one = Pat_section_seven::Create($data);
-}
-return response()->json(['success' => $request->stroke_how_long], 200);
+	$chk=Pat_section_seven::where('user_id',Auth::user()->id)->get();
+
+	if ($chk=='[]') {
+		$one = Pat_section_seven::Create($data);
+	}
+	else {
+		$one = Pat_section_seven::where('user_id', Auth::user()->id)->delete();
+		$one = Pat_section_seven::Create($data);
+	}
+
+	return response()->json(['success' => $request->stroke_how_long], 200);
 }
 
 
@@ -713,62 +689,68 @@ return response()->json(['success' => $chk], 200);
 
 public function nurse5(Request $request)   {
          
-$nurse_five= array( 
-	'month_year' => $request->month_year,
-	'year' => $request->year,
-	'indication_for_anticoagulation' => $request->indication_for_anticoagulation,
-	'chads_score_and_distribution' => $request->chads_score_and_distribution,
-	'poc_creat' => $request->poc_creat,
-	'hb' => $request->hb,
-    'plt' => $request->plt,
-    'poc_inr' => $request->poc_inr,
-	'details_on_recomemendation' => $request->details_on_recomemendation,
-	'reviewed_by' => $request->reviewed_by,
-	'user_id'=> Auth::user()->id);
+	$nurse_five= array( 
+		'month_year' => $request->month_year,
+		'year' => $request->year,
 
-$pat_two= array( 
-	'age' => $request->age,
-	'gender' => $request->gender,
-	'weight' => $request->weight,
+		'procedure' => $request->procedure,
+		'date_of_procedure' => $request->date_of_procedure,
+		'indication_for_anticoagulation' => $request->indication_for_anticoagulation,
+		'chads_score_and_distribution' => $request->chads_score_and_distribution,
+		
+		'poc_inr_date' => $request->poc_inr_date,
+		'poc_inr_text' => $request->poc_inr_text,
+		'poc_creat_date' => $request->poc_creat_date,
+		'poc_creat_text' => $request->poc_creat_text,
+		'hb_date' => $request->hb_date,
+		'hb_text' => $request->hb_text,
+		'plt_date' => $request->plt_date,
+		'plt_text' => $request->plt_text,
+		
+		'details_on_recomemendation' => $request->details_on_recomemendation,
+		'reviewed_by' => $request->reviewed_by,
+		'user_id'=> Auth::user()->id);
 
-	'user_id'=> Auth::user()->id);
+	$pat_two= array( 
+		'age' => $request->age,
+		'gender' => $request->gender,
+		'weight' => $request->weight,
 
-$pat_sixteen= array( 
-	'type_of_procedure' => $request->procedure,
-	'date_of_procedure' => $request->date_of_procedure,
+		'user_id'=> Auth::user()->id);
 
-	'user_id'=> Auth::user()->id);
+	$pat_sixteen= array( 
+		'type_of_procedure' => $request->procedure,
+		'date_of_procedure' => $request->date_of_procedure,
 
-$nurse_three= array( 
-	'understanding' => $request->understanding,
-	'who_is_completing_this_form' => $request->who_is_completing_this_form,
+		'user_id'=> Auth::user()->id);
 
-	'user_id'=> Auth::user()->id);
+	$nurse_three= array( 
+		'understanding' => $request->understanding,
+		'who_is_completing_this_form' => $request->who_is_completing_this_form,
 
-$chk=Nurse_section_five::where('user_id',Auth::user()->id)->get();
+		'user_id'=> Auth::user()->id);
 
-
-
-if ($chk=='[]') {
+	$chk = Nurse_section_five::where('user_id', Auth::user()->id)->get();
 
 
 
-$one = Nurse_section_five::Create($nurse_five);
-$one = Pat_section_two::where('user_id', Auth::user()->id)->update($pat_two);
-$one = Pat_section_sixteen::where('user_id', Auth::user()->id)->update($pat_sixteen);
-$one = Nurse_section_three::where('user_id', Auth::user()->id)->update($nurse_three);
-return response()->json(['success' => $chk], 200);
-} else {
-
-$one = Nurse_section_five::where('user_id', Auth::user()->id)->delete();
-$one = Nurse_section_five::create($nurse_five);
-$one = Pat_section_two::where('user_id', Auth::user()->id)->update($pat_two);
-$one = Pat_section_sixteen::where('user_id', Auth::user()->id)->update($pat_sixteen);
-$one = Nurse_section_three::where('user_id', Auth::user()->id)->update($nurse_three);
-return response()->json(['success' => $chk], 200);
-}
-
-        
+	if ($chk=='[]') {
+		$one = Nurse_section_five::Create($nurse_five);
+		$one = Pat_section_two::where('user_id', Auth::user()->id)->update($pat_two);
+		$one = Pat_section_sixteen::where('user_id', Auth::user()->id)->update($pat_sixteen);
+		$one = Nurse_section_three::where('user_id', Auth::user()->id)->update($nurse_three);
+		
+		return response()->json(['success' => $chk], 200);
+	} 
+	else {
+		$one = Nurse_section_five::where('user_id', Auth::user()->id)->delete();
+		$one = Nurse_section_five::create($nurse_five);
+		$one = Pat_section_two::where('user_id', Auth::user()->id)->update($pat_two);
+		$one = Pat_section_sixteen::where('user_id', Auth::user()->id)->update($pat_sixteen);
+		$one = Nurse_section_three::where('user_id', Auth::user()->id)->update($nurse_three);
+		
+		return response()->json(['success' => $chk], 200);
+	}    
 }
 
 
@@ -778,12 +760,16 @@ $nurse_five= array(
 	'month_year' => $request->month_year,
 	'indication_for_anticoagulation' => $request->indication_for_anticoagulation,
 	'chads_score_and_distribution' => $request->chads_score_and_distribution,
-	'poc_creat' => $request->poc_creat,
-	'hb' => $request->hb,
-'poc_inr' => $request->poc_inr,
+	
+	'poc_inr_date' => $request->poc_inr_date,
+	'poc_inr_text' => $request->poc_inr_text,
+	'poc_creat_date' => $request->poc_creat_date,
+	'poc_creat_text' => $request->poc_creat_text,
+	'hb_date' => $request->hb_date,
+	'hb_text' => $request->hb_text,
+	'plt_date' => $request->plt_date,
+	'plt_text' => $request->plt_text,
 
-
-    'plt' => $request->plt,
 	'details_on_recomemendation' => $request->details_on_recomemendation,
 	'reviewed_by' => $request->reviewed_by,
 	'user_id'=> Auth::user()->id);
@@ -918,66 +904,81 @@ public function nursePage5LoadData() {
 //$chk=Pat_section_two::where('user_id',Auth::user()->id)->get();
 
 
-	 $chk= DB::table('pat_section_two')
-    ->where('pat_section_two.user_id',Auth::user()->id)
-    ->leftJoin('pat_section_sixteen', 'pat_section_two.user_id', '=', 'pat_section_sixteen.user_id')
-    ->leftJoin('nurse_section_three', 'pat_section_two.user_id', '=', 'nurse_section_three.user_id')
-    ->leftJoin('nurse_section_five', 'pat_section_two.user_id', '=', 'nurse_section_five.user_id')
-->leftJoin('pat_section_eleven', 'pat_section_two.user_id', '=', 'pat_section_eleven.user_id')
-->leftJoin('pat_section_ten', 'pat_section_two.user_id', '=', 'pat_section_ten.user_id')
-->leftJoin('pat_section_twelve', 'pat_section_two.user_id', '=', 'pat_section_twelve.user_id')    
-->leftJoin('pat_section_thirteen', 'pat_section_two.user_id', '=', 'pat_section_thirteen.user_id')  
-->leftJoin('pat_section_eight', 'pat_section_two.user_id', '=', 'pat_section_eight.user_id')  
+	$chk= DB::table('pat_section_two')
+   ->where('pat_section_two.user_id',Auth::user()->id)
+   ->leftJoin('pat_section_sixteen', 'pat_section_two.user_id', '=', 'pat_section_sixteen.user_id')
+   ->leftJoin('pat_section_seven', 'pat_section_two.user_id', '=', 'pat_section_seven.user_id')
+   ->leftJoin('nurse_section_three', 'pat_section_two.user_id', '=', 'nurse_section_three.user_id')
+   ->leftJoin('nurse_section_five', 'pat_section_two.user_id', '=', 'nurse_section_five.user_id')
+	->leftJoin('pat_section_eleven', 'pat_section_two.user_id', '=', 'pat_section_eleven.user_id')
+	->leftJoin('pat_section_ten', 'pat_section_two.user_id', '=', 'pat_section_ten.user_id')
+	->leftJoin('pat_section_twelve', 'pat_section_two.user_id', '=', 'pat_section_twelve.user_id')    
+	->leftJoin('pat_section_thirteen', 'pat_section_two.user_id', '=', 'pat_section_thirteen.user_id')  
+	->leftJoin('pat_section_eight', 'pat_section_two.user_id', '=', 'pat_section_eight.user_id')  
                    
-       ->select('nurse_section_five.poc_creat',
-'nurse_section_five.hb',
-'nurse_section_five.plt',
-'nurse_section_five.poc_inr',
-'nurse_section_five.details_on_recomemendation',
-'nurse_section_five.chads_score_and_distribution',
-'nurse_section_five.indication_for_anticoagulation',
-'nurse_section_five.date_of_procedure',
-'nurse_section_five.procedure',
-'nurse_section_five.year',
-'pat_section_two.gender',
-'pat_section_two.weight_unit',
-'pat_section_two.physicianName',
-'pat_section_two.patient_id',
-'pat_section_two.weight',
-'pat_section_two.weight_unit',
-'pat_section_two.age',
-'pat_section_sixteen.type_of_procedure',
-'pat_section_sixteen.date_of_procedure',
-'nurse_section_three.understanding',
-'nurse_section_three.administration',
-'nurse_section_three.lmwh',
-'nurse_section_three.patient_accompanied_by',
-'nurse_section_three.who_is_completing_this_form',
- 'pat_section_eleven.aspirin',
- 'pat_section_eleven.aspirin_dosage',
- 'pat_section_eleven.aspirin_dosage_time',
-  'pat_section_eleven.plavix',
-  'pat_section_eleven.plavix_dosage',
-  'pat_section_eleven.plavix_dosage_time',
-  'pat_section_eleven.brillinta',
-  'pat_section_eleven.brillinta_dosage',
-  'pat_section_eleven.brillinta_dosage_timie',
-  'pat_section_eleven.effient',
-  'pat_section_eleven.effient_dosage',
-  'pat_section_eleven.effient_dosage_time',
-  'pat_section_eleven.not_using_drugs',
-'pat_section_thirteen.ulcer_in_stomach_or_bowel',
-  
-  'pat_section_thirteen.bleeding_requiring_treatment_last_three_months',
+   ->select('nurse_section_five.poc_inr_date',
+	'nurse_section_five.poc_inr_text',
+	'nurse_section_five.poc_creat_date',
+	'nurse_section_five.poc_creat_text',
+	'nurse_section_five.hb_date',
+	'nurse_section_five.hb_text',
+	'nurse_section_five.plt_date',
+	'nurse_section_five.plt_text',
 
+	'nurse_section_five.details_on_recomemendation',
+	'nurse_section_five.chads_score_and_distribution',
+	'nurse_section_five.indication_for_anticoagulation',
+	'nurse_section_five.date_of_procedure',
+	'nurse_section_five.procedure',
+	'nurse_section_five.year',
 
-   'pat_section_thirteen.ulcer_in_stomach_or_bowel_last_three_months',
-   'pat_section_thirteen.had_transfusion_in_last_three_months_when',
-DB::raw('DATE_FORMAT(pat_section_thirteen.had_transfusion_in_last_three_months_when, "%m-%d-%Y") as had_transfusion_in_last_three_months_when'),
-'pat_section_thirteen.had_transfusion_in_last_three_months',
+	'pat_section_seven.cognitive_heart_failure',
+	'pat_section_seven.high_blood_pressure',
+	'pat_section_seven.diabetes',
+	'pat_section_seven.stroke_or_mini_stroke',
 
+	'pat_section_two.gender',
+	'pat_section_two.weight_unit',
+	'pat_section_two.physicianName',
+	'pat_section_two.patient_id',
+	'pat_section_two.weight',
+	'pat_section_two.weight_unit',
+	'pat_section_two.age',
+
+	'pat_section_sixteen.type_of_procedure',
+	'pat_section_sixteen.date_of_procedure',
+
+	'nurse_section_three.understanding',
+	'nurse_section_three.administration',
+	'nurse_section_three.lmwh',
+	'nurse_section_three.patient_accompanied_by',
+	'nurse_section_three.who_is_completing_this_form',
+
+	'pat_section_eleven.aspirin',
+	'pat_section_eleven.aspirin_dosage',
+	'pat_section_eleven.aspirin_dosage_time',
+	'pat_section_eleven.plavix',
+	'pat_section_eleven.plavix_dosage',
+	'pat_section_eleven.plavix_dosage_time',
+	'pat_section_eleven.brillinta',
+	'pat_section_eleven.brillinta_dosage',
+	'pat_section_eleven.brillinta_dosage_timie',
+	'pat_section_eleven.effient',
+	'pat_section_eleven.effient_dosage',
+	'pat_section_eleven.effient_dosage_time',
+	'pat_section_eleven.not_using_drugs',
+
+	'pat_section_thirteen.ulcer_in_stomach_or_bowel',
+	'pat_section_thirteen.bleeding_requiring_treatment_last_three_months',
+	'pat_section_thirteen.ulcer_in_stomach_or_bowel_last_three_months',
+	'pat_section_thirteen.had_transfusion_in_last_three_months_when',
+
+	DB::raw('DATE_FORMAT(pat_section_thirteen.had_transfusion_in_last_three_months_when, "%m-%d-%Y") as had_transfusion_in_last_three_months_when'),
+	'pat_section_thirteen.had_transfusion_in_last_three_months',
    'pat_section_thirteen.liver_disease',
- 'pat_section_twelve.lab_location_for_inr_test',
+
+ 	'pat_section_twelve.lab_location_for_inr_test',
+
    'pat_section_eight.pradaxa',
    'pat_section_eight.pradaxa_dosage',
    'pat_section_eight.xarelto',
@@ -989,9 +990,18 @@ DB::raw('DATE_FORMAT(pat_section_thirteen.had_transfusion_in_last_three_months_w
    'pat_section_eight.edoxabon',
    'pat_section_eight.edoxabon_dosage',
    'pat_section_eight.edoxabon_dosage_time'
+	)->get();
 
-)
-        ->get();
+	$data= DB::table('pat_section_four')
+   ->where('pat_section_four.user_id', Auth::user()->id)->get();
+
+	$indication_for_Anticoagulation='';
+	foreach ($data[0] as $key => $value) {
+		if ($value === 'Yes') 
+		$indication_for_Anticoagulation = $indication_for_Anticoagulation.$key.', ';
+	}
+
+	$chk['anticoagulation'] = $data[0];
 
 return response()->json(['success' => $chk], 200);
 }
