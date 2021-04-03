@@ -176,8 +176,7 @@ class Page1 extends React.Component {
                             cognitive_heart_failure: data.cognitive_heart_failure,
                             high_blood_pressure: data.high_blood_pressure,
                             diabetes: data.diabetes,
-                            age: data.age,
-                            age: data.stroke_or_mini_stroke,
+                            stroke_or_mini_stroke: data.stroke_or_mini_stroke,
                         });
 
                         this.set_anticoagulation(response.data.success['anticoagulation']);
@@ -245,6 +244,7 @@ class Page1 extends React.Component {
         if (D === 'Yes') score += 1;
         if (S2 === 'Yes') score += 2;
 
+        console.log(`CHADS score: C=${C}  H${H}  A${A}  D${D}  S2${S2}`);
         this.setState({ chads_score_and_distribution: score });
     }
 
