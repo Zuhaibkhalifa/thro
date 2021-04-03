@@ -58,34 +58,39 @@ class Page15 extends React.Component {
    }
 
    submitForm() {
+      const q1_yes = document.getElementById("yes").checked;
+      const cancer = $("#cancer").val() == "" ? true : false;
+      const radiation = document.getElementById("radaition").checked;
+      const chemo = document.getElementById("chemo").checked;
+
       if (!$("input[name='optradio']:checked").val()) {
          this.setState({ error0: "This field is required" });
-      } else if (document.getElementById("yes").checked === true && $("#cancer").val() == "") {
+      } else if (q1_yes && cancer) {
          this.setState({ error1: "This field is required" });
          this.setState({ error0: "" });
-      } else if (
-         document.getElementById("yes").checked === true &&
-         document.getElementById("radaition").checked === false
-      ) {
+      } else if (q1_yes && radiation === false) {
          this.setState({ error2: "This field is required" });
          this.setState({ error1: "" });
       } else if (
-         document.getElementById("radaition").checked === true &&
+         radiation === true &&
          document.getElementById("radiation_ongoing").checked === false
       ) {
          this.setState({ error3: "This field is required" });
          this.setState({ error1: "" });
          this.setState({ error2: "" });
-      } else if (
-         document.getElementById("chemo").checked === true &&
-         !$("input[name='chemotherapy_sub_opt']:checked").val()
-      ) {
+      } else if (q1_yes && chemo === false) {
          this.setState({ error4: "This field is required" });
          this.setState({ error3: "" });
          this.setState({ error2: "" });
          this.setState({ error1: "" });
+      } else if (chemo === true && !$("input[name='chemotherapy_sub_opt']:checked").val()) {
+         this.setState({ error5: "This field is required" });
+         this.setState({ error4: "" });
+         this.setState({ error3: "" });
+         this.setState({ error2: "" });
+         this.setState({ error1: "" });
       } else {
-         console.log(this.state);
+         console.log("Submit form - state: ", this.state);
          this.page15(this.state);
          this.props.history.push("/User/Page16");
       }
@@ -290,20 +295,20 @@ class Page15 extends React.Component {
          $("#radaition_opt").hide();
 
          $("#yes").click(function () {
-            $("#show_data").show(1000);
+            $("#show_data").show(500);
          });
 
          $("#no").click(function () {
-            $("#show_data").hide(1000);
+            $("#show_data").hide(500);
          });
 
          $("#radaition").click(function () {
-            $("#chemo_opt").hide(1000);
-            $("#radaition_opt").show(1000);
+            $("#chemo_opt").hide(300);
+            $("#radaition_opt").show(300);
          });
 
          $("#chemo").click(function () {
-            $("#chemo_opt").show(1000);
+            $("#chemo_opt").show(300);
             //	$('#radaition_opt').hide(1000);
          });
       });
