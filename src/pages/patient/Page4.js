@@ -148,7 +148,7 @@ class Page4 extends React.Component {
     }
 
     mainOption() {
-        this.setState({ q8_ans: 1 });
+        this.setState({ q8_ans: 'Yes' });
         if (document.getElementById('optradio8').checked === true) {
             document.getElementById('de').style.display = 'none';
             document.getElementById('vte').disabled = true;
@@ -217,6 +217,9 @@ class Page4 extends React.Component {
         document.getElementById('vte_option2').checked = false;
         document.getElementById('vte_option1').checked = false;
     }
+
+    //
+    //
 
     render() {
         return (
@@ -483,7 +486,7 @@ class Page4 extends React.Component {
                             name="optradio"
                             id="optradio8"
                             className="pull-right"
-                            onChange={(e) => this.setState({ q8_ans: 1, chkVal: 1 })}
+                            onChange={(e) => this.setState({ q8_ans: 'Yes', chkVal: 1 })}
                             onClick={this.mainOption}
                         />
                         <br />

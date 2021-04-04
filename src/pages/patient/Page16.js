@@ -314,7 +314,8 @@ class Page16 extends React.Component {
 
         var maxDate = year + '-' + month + '-' + day;
         //alert(maxDate);
-        $('#procedure_date').attr('max', maxDate);
+
+        $('#procedure_date').attr('min', maxDate);
     }
 }
 export default Page16;

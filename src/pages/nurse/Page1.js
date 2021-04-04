@@ -46,7 +46,7 @@ class Page1 extends React.Component {
             reviewed_by: '',
             loader: 1,
 
-            procedureSelected: '',
+            genderSelected: '',
             weightSelected: '',
             patient_id: '',
             aspirin: '',
@@ -81,8 +81,10 @@ class Page1 extends React.Component {
             ulcer_in_stomach_or_bowel: '',
         };
 
+        // Bind " this " ref of class to Methods
         this.submitForm = this.submitForm.bind(this);
 
+        //
         const headers = {
             'Content-Type': 'application/json',
             Accept: 'application/json',
@@ -122,7 +124,7 @@ class Page1 extends React.Component {
                             understanding: data.understanding,
                             completed_by: data.who_is_completing_this_form,
                             reviewed_by: data.reviewed_by,
-                            procedureSelected: data.gender,
+                            genderSelected: data.gender,
                             indication_for_anticoagulation: data.indication_for_anticoagulation,
                             chads_score_and_distribution: data.chads_score_and_distribution,
 
@@ -196,10 +198,10 @@ class Page1 extends React.Component {
         }
     }
 
-    // Pulled the data drom Patient/Page4 from server
-    // and then genereating the data over here,
-    // to display in  indication_for_anticoagulation field
     set_anticoagulation(data) {
+        // Pulled the data drom Patient/Page4 from server
+        // and then genereating the data over here,
+        // to display in  indication_for_anticoagulation field
         let anticoagulation = '';
 
         let anticoagulationMap = {
@@ -237,6 +239,7 @@ class Page1 extends React.Component {
             diabetes: D,
             stroke_or_mini_stroke: S2,
         } = this.state;
+        console.log(`CHADS score: C=${C}  H${H}  A${A}  D${D}  S2${S2}`);
 
         if (C === 'Yes') score += 1;
         if (H === 'Yes') score += 1;
@@ -244,7 +247,6 @@ class Page1 extends React.Component {
         if (D === 'Yes') score += 1;
         if (S2 === 'Yes') score += 2;
 
-        console.log(`CHADS score: C=${C}  H${H}  A${A}  D${D}  S2${S2}`);
         this.setState({ chads_score_and_distribution: score });
     }
 
@@ -276,8 +278,8 @@ class Page1 extends React.Component {
 
     //
 
-    handleChange_procedure(value) {
-        this.setState({ procedureSelected: value });
+    handleChange_gender(value) {
+        this.setState({ genderSelected: value });
     }
 
     submitForm() {
@@ -285,7 +287,6 @@ class Page1 extends React.Component {
             console.log('Nure page1 - submitForm - state: ', this.state);
             this.page5(this.state);
             this.props.history.push('/Nurse/Nurse2');
-            console.log(this.state);
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -299,7 +300,7 @@ class Page1 extends React.Component {
             procedure: this.state.procedure,
             date_of_procedure: this.state.date_of_procedure,
             age: this.state.age,
-            gender: this.state.procedureSelected,
+            gender: this.state.genderSelected,
             weight: this.state.weight,
             indication_for_anticoagulation: this.state.indication_for_anticoagulation,
             chads_score_and_distribution: this.state.chads_score_and_distribution,
@@ -312,7 +313,8 @@ class Page1 extends React.Component {
             who_is_completing_this_form: this.state.completed_by,
             reviewed_by: this.state.reviewed_by,
         };
-        console.log(param);
+
+        console.log('Nure Page1 - page5 func - param: ', param);
         server('nurse/page5', param);
     }
 
@@ -422,9 +424,9 @@ class Page1 extends React.Component {
                                     <select
                                         className="form-control"
                                         id="sex"
-                                        value={this.state.procedureSelected}
+                                        value={this.state.genderSelected}
                                         onChange={(event) =>
-                                            this.handleChange_procedure(event.target.value)
+                                            this.handleChange_gender(event.target.value)
                                         }
                                     >
                                         <option>Select Gender</option>
@@ -434,7 +436,7 @@ class Page1 extends React.Component {
                                     </select>
                                     {this.validator.message(
                                         '',
-                                        this.state.procedureSelected,
+                                        this.state.genderSelected,
                                         'required'
                                     )}
                                 </div>
@@ -467,8 +469,8 @@ class Page1 extends React.Component {
                                         }
                                     >
                                         <option>Select Unit</option>
-                                        <option>Pound</option>
-                                        <option>KG</option>
+                                        <option>lbs</option>
+                                        <option>Kg</option>
                                     </select>
                                     {this.validator.message(
                                         'unit_weight',
@@ -697,6 +699,7 @@ class Page1 extends React.Component {
                                 </div>
                             </div>
                         </div>
+
                         <h4>Recent Bloodwork</h4>
                         <div className="row">
                             <div className="col-6">
@@ -715,6 +718,11 @@ class Page1 extends React.Component {
                                                 }
                                                 id="poc_inr"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_inr_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
                                             {' '}
@@ -722,12 +730,17 @@ class Page1 extends React.Component {
                                                 type="text"
                                                 className="form-control"
                                                 id="usr"
-                                                defaultValue={this.state.poc_inr_text}
+                                                value={this.state.poc_inr_text}
                                                 onChange={(e) =>
                                                     this.setState({ poc_inr_text: e.target.value })
                                                 }
                                                 id="poc_inr"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_inr_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -750,12 +763,17 @@ class Page1 extends React.Component {
                                                 }
                                                 id="poc_creat"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_creat_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                defaultValue={this.state.poc_creat_text}
+                                                value={this.state.poc_creat_text}
                                                 onChange={(e) =>
                                                     this.setState({
                                                         poc_creat_text: e.target.value,
@@ -763,6 +781,11 @@ class Page1 extends React.Component {
                                                 }
                                                 id="poc_creat"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_creat_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -780,11 +803,16 @@ class Page1 extends React.Component {
                                                 type="date"
                                                 id="hb"
                                                 className="form-control"
-                                                defaultValue={this.state.hb_date}
+                                                value={this.state.hb_date}
                                                 onChange={(e) =>
                                                     this.setState({ hb_date: e.target.value })
                                                 }
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.hb_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
                                             <input
@@ -796,6 +824,11 @@ class Page1 extends React.Component {
                                                     this.setState({ hb_text: e.target.value })
                                                 }
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.hb_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -817,18 +850,28 @@ class Page1 extends React.Component {
                                                 }
                                                 id="plt"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.plt_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
                                             {' '}
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                defaultValue={this.state.plt_text}
+                                                value={this.state.plt_text}
                                                 onChange={(e) =>
                                                     this.setState({ plt_text: e.target.value })
                                                 }
                                                 id="plt"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.plt_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>

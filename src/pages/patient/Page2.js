@@ -33,7 +33,10 @@ class Page2 extends React.Component {
             loader: '',
         };
 
+        // Bind " this " ref to class to Methods/Functions
+        this.isNumber = this.isNumber.bind(this);
         this.submitForm = this.submitForm.bind(this);
+
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
@@ -103,6 +106,19 @@ class Page2 extends React.Component {
         console.log('Patient Page 2 - submit form - response: ', a);
     }
 
+    //
+    isNumber(e) {
+        const numberRegx = /^[0-9\b]+$/;
+        const { value, name } = e.target;
+
+        if (value === '' || numberRegx.test(value)) {
+            this.setState({ [name]: value });
+        }
+    }
+
+    //
+    //
+
     render() {
         return (
             <React.Fragment>
@@ -135,10 +151,11 @@ class Page2 extends React.Component {
                                     <input
                                         type="text"
                                         id="age"
+                                        name="age"
                                         className="form-control blue-custom-input"
                                         maxlengt="2"
-                                        defaultValue={this.state.age}
-                                        onChange={(e) => this.setState({ age: e.target.value })}
+                                        value={this.state.age}
+                                        onChange={(e) => this.isNumber(e)}
                                     />
                                     {this.validator.message('age', this.state.age, [
                                         'required',
@@ -151,11 +168,12 @@ class Page2 extends React.Component {
                                         <b>Weight</b>
                                     </label>
                                     <input
-                                        type="number"
+                                        type="text"
                                         id="weight"
-                                        min="1"
+                                        name="weight"
+                                        value={this.state.weight}
                                         className="form-control blue-custom-input"
-                                        onChange={(e) => this.setState({ weight: e.target.value })}
+                                        onChange={this.isNumber}
                                     />
 
                                     {this.validator.message(

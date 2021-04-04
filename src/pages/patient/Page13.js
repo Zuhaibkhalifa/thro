@@ -1,14 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from './Header';
-import SimpleReactValidator from 'simple-react-validator';
 import ReactSpinner from 'react-bootstrap-spinner';
+import SimpleReactValidator from 'simple-react-validator';
+
 import $ from 'jquery';
+import axios from 'axios';
+import Header from './Header';
+import moment from 'moment';
+
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
-
 import { domain } from '../../App';
+
+//
+
+//
+//
 
 class Page13 extends React.Component {
     constructor(props) {
@@ -30,9 +37,13 @@ class Page13 extends React.Component {
             q7_ans: '',
             q7_ans_option: '',
             loader: '',
+            transfusionDate: { minDate: '', maxDate: '' },
         };
 
+        // Bind " this " re of class to Methods
         this.submitForm = this.submitForm.bind(this);
+
+        //
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
@@ -41,6 +52,7 @@ class Page13 extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
+
         try {
             axios
                 .get(domain + '/api/patient/page13LoadData', {
@@ -55,6 +67,9 @@ class Page13 extends React.Component {
             this.setState({ loader: '' });
         }
     }
+
+    //
+    //
 
     toggleOptions2() {
         if (document.getElementById('optradio_not_sure_main').checked === true) {
@@ -181,12 +196,12 @@ class Page13 extends React.Component {
                 error6: 'This field is required',
             });
         } else {
-            console.log(this.state);
-            this.page13(this.state);
+            console.log('Page 13 - Submit - state: ', this.state);
+            this.page13();
             this.props.history.push('/User/Page14');
         }
     }
-    rdo;
+
     page13() {
         var param = {
             bleeding_requiring_treatment: this.state.q1_ans,
@@ -202,10 +217,18 @@ class Page13 extends React.Component {
             had_transfusion_in_last_three_months_when: this.state.q7_ans_option,
         };
 
+        console.log('Page 13 - page13 func - param: ', param);
         server('patient/page13', param);
         //this.props.history.push('');
     }
+
+    //
+    //
+    //
+
     render() {
+        const { minDate, maxDate } = this.state.transfusionDate;
+
         return (
             <React.Fragment>
                 <Header />
@@ -445,8 +468,8 @@ class Page13 extends React.Component {
                                 name="optradio"
                                 id="optradio_no"
                                 className="pull-right"
-                                value="Yes"
-                                onChange={(e) => this.setState({ q7_ans: 'Yes' })}
+                                value="No"
+                                onChange={(e) => this.setState({ q7_ans: 'No' })}
                             />
 
                             <br />
@@ -456,9 +479,9 @@ class Page13 extends React.Component {
                                 name="optradio"
                                 id="optradio_not_sure_main"
                                 className="pull-right"
-                                value="Yes"
+                                value="Not Sure"
                                 onClick={this.toggleOptions2}
-                                onChange={(e) => this.setState({ q7_ans: 'Yes' })}
+                                onChange={(e) => this.setState({ q7_ans: 'Not Sure' })}
                             />
 
                             {this.validator.message('Question', this.state.q7_ans, 'required')}
@@ -473,8 +496,9 @@ class Page13 extends React.Component {
                                         className="form-control mb-4 transparent-custom-input"
                                         name="whenDate"
                                         id="whenDate"
-                                        max=""
-                                        value={this.state.q7_ans_option}
+                                        min={moment().subtract(3, 'months').format('YYYY-MM-DD')}
+                                        max={moment().format('YYYY-MM-DD')}
+                                        // value={q7_ans_option}
                                         onChange={(e) =>
                                             this.setState({
                                                 q7_ans_option: e.target.value,
@@ -566,27 +590,6 @@ class Page13 extends React.Component {
                     $('#whr_date').hide(1000);
                 }
             });
-
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-            var yyyy = today.getFullYear();
-            var min;
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
-
-            today = yyyy + '-' + mm + '-' + dd;
-            document.getElementById('whenDate').setAttribute('max', today);
-            var d = new Date();
-            console.log(d.toLocaleDateString());
-            d.setMonth(d.getMonth() - 3);
-            var min = d.toLocaleDateString();
-
-            document.getElementById('whenDate').setAttribute('min', '2020-12-01');
         });
     }
 }
