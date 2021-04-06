@@ -31,6 +31,7 @@ class Page1 extends React.Component {
             weight: '',
             indication_for_anticoagulation: '',
             chads_score_and_distribution: '',
+
             poc_inr_date: '',
             poc_creat_date: '',
             hb_date: '',
@@ -304,10 +305,16 @@ class Page1 extends React.Component {
             weight: this.state.weight,
             indication_for_anticoagulation: this.state.indication_for_anticoagulation,
             chads_score_and_distribution: this.state.chads_score_and_distribution,
-            poc_creat: this.state.poc_creat,
-            hb: this.state.hb,
-            plt: this.state.plt,
-            poc_inr: this.state.poc_inr,
+
+            poc_creat_text: this.state.poc_creat_text,
+            poc_creat_date: this.state.poc_creat_date,
+            hb_text: this.state.hb_text,
+            hb_date: this.state.hb_date,
+            plt_text: this.state.plt_text,
+            plt_date: this.state.plt_date,
+            poc_inr_text: this.state.poc_inr_text,
+            poc_inr_date: this.state.poc_inr_date,
+
             details_on_recomemendation: this.state.details_on_recomemendation,
             understanding: this.state.understanding,
             who_is_completing_this_form: this.state.completed_by,
@@ -326,6 +333,11 @@ class Page1 extends React.Component {
         this.setState({ procedure: value });
         // this.setState({ weight: value });
     }
+
+    //
+    //
+    //
+
     render() {
         return (
             <React.Fragment>

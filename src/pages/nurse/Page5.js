@@ -17,13 +17,13 @@ let data;
 class Page5 extends React.Component {
     constructor(props) {
         super(props);
-
         document.getElementById('body').classList.remove('blue-bg');
 
         this.validator = new SimpleReactValidator({
             element: (message, className) => <div className="text-danger">{message}</div>,
         });
-        console.log(this.validator);
+        // console.log(this.validator);
+
         this.state = {
             who_is_completing_this_form: '',
             patient_accompanied_by: '',
@@ -35,23 +35,26 @@ class Page5 extends React.Component {
         };
 
         this.submitForm = this.submitForm.bind(this);
+        this.page3 = this.page3.bind(this);
 
         const headers = {
             'Content-Type': 'application/json',
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
+
         try {
             axios
                 .get(domain + '/api/nurse/page3LoadData', {
                     headers: headers,
                 })
                 .then((response) => {
-                    this.setState({ loader: '' });
-                    console.log(response);
-                    console.log(response.data.success[0]);
+                    console.log('Nurse page 5 - Response: ', response);
+                    console.log('Nurse page 5 - Response.data.success: ', response.data.success[0]);
+
                     data = response.data.success[0];
                     this.setState({ loader: '' });
+
                     if (data !== undefined) {
                         if (data.who_is_completing_this_form == 'MD') {
                             document.getElementById('who_is_completing_this_form1').checked = true;
@@ -100,33 +103,36 @@ class Page5 extends React.Component {
                         } else if (data.understanding == 'Poor') {
                             document.getElementById('understanding5').checked = true;
                         }
-
-                        this.state = {
-                            who_is_completing_this_form: data.who_is_completing_this_form,
-                            patient_accompanied_by: data.patient_accompanied_by,
-                            lmwh: data.lmwh,
-                            administration: data.administration,
-                            understanding: data.understanding,
-                            explained: data.explained,
-                        };
                     }
+
+                    this.state = {
+                        who_is_completing_this_form: data.who_is_completing_this_form,
+                        patient_accompanied_by: data.patient_accompanied_by,
+                        lmwh: data.lmwh,
+                        administration: data.administration,
+                        understanding: data.understanding,
+                        explained: data.explained,
+                    };
                 });
         } catch (error) {
-            this.setState({ loader: '' });
             console.error(error);
             this.setState({ loader: '' });
         }
     }
 
     submitForm() {
-        if (this.validator.allValid()) {
-            console.log(this.state);
-            this.page3(this.state);
-            this.props.history.push('/Nurse/Nurse6');
-        } else {
-            this.validator.showMessages();
+        console.log('Nurse page 5 - Before Val state: ', this.state);
 
+        if (this.validator.allValid()) {
+            console.log('Nurse page 5 - true state: ', this.state);
+            this.page3(this.state);
+            // this.props.history.push('/Nurse/Nurse6');
+        } else {
+            console.log('Nurse page 5 - false state: ', this.state);
+            this.validator.showMessages();
+            console.log('Nurse page 5 - false after showMessages state: ', this.state);
             this.forceUpdate();
+            console.log('Nurse page 5 - false after forceUpdate state: ', this.state);
         }
     }
 
@@ -139,8 +145,14 @@ class Page5 extends React.Component {
             understanding: this.state.understanding,
             explained: this.state.explained,
         };
+
+        console.log('Nurse page 5 - param: ', param);
         server('nurse/page3', param);
     }
+
+    //
+    //
+    //
 
     render() {
         return (
@@ -153,7 +165,7 @@ class Page5 extends React.Component {
                         </div>
                     ) : (
                         ''
-                    )}{' '}
+                    )}
                     {/* container */}
                     <div className="jumbotron">
                         <h3>Bridging Summary</h3>
@@ -410,7 +422,7 @@ class Page5 extends React.Component {
                         </div>
                         {this.validator.message('', this.state.lmwh, 'required')}
                         <br />
-                        <div className="custom-control custom-radio">
+                        {/* <div className="custom-control custom-radio">
                             <input
                                 type="radio"
                                 className="custom-control-input"
@@ -422,7 +434,7 @@ class Page5 extends React.Component {
                                     })
                                 }
                             />
-                        </div>
+                        </div> */}
                         <div className="custom-control custom-radio">
                             <input
                                 type="radio"
@@ -477,7 +489,6 @@ class Page5 extends React.Component {
                                         Family
                                     </label>
                                 </div>
-
                                 <div className="custom-control custom-radio">
                                     <input
                                         type="radio"
@@ -576,6 +587,9 @@ class Page5 extends React.Component {
             </React.Fragment>
         );
     }
-    componentDidMount() {}
+
+    componentDidMount() {
+        console.log('Nurse page 5 - Component did Mount - state: ', this.state);
+    }
 }
 export default Page5;

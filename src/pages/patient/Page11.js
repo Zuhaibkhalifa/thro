@@ -192,7 +192,7 @@ class Page11 extends React.Component {
             this.setState({ error10: '' });
             this.setState({ error11: 'This field is required' });
         } else {
-            console.log(this.state);
+            console.log('Patient page 11 - submit - state: ', this.state);
             this.page11(this.state);
             this.props.history.push('/User/Page12');
         }
@@ -204,7 +204,7 @@ class Page11 extends React.Component {
             var param = {};
             if (document.getElementById('medicien_1').checked === true) {
                 param.aspirin = this.state.q1_ans;
-                param.aspirin_dosage = this.state.drug2;
+                param.aspirin_dosage = this.state.drug1;
                 param.aspirin_dosage_time = this.state.frequency1;
             }
             if (document.getElementById('medicien_2').checked === true) {
@@ -225,8 +225,8 @@ class Page11 extends React.Component {
                 param.effient_dosage_time = this.state.frequency4;
             }
         }
-        const response = server('patient/page11', param);
-        console.log('Patient Page 11 - page11 func - response: ', response);
+        console.log('Patient page 11 - page11 - param: ', param);
+        server('patient/page11', param);
         //this.props.history.push('');
     }
     func() {
@@ -270,6 +270,11 @@ class Page11 extends React.Component {
             frequency2: '',
         });
     }
+
+    //
+    //
+    //
+
     render() {
         return (
             <React.Fragment>
@@ -513,7 +518,7 @@ class Page11 extends React.Component {
                                     name="brillinta_dosage_freq"
                                     id="brillinta_dosage_freq1"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ frequency3: '90 mg' })}
+                                    onChange={(e) => this.setState({ frequency3: 'Twice daily' })}
                                     onClick={this.brillinta_dosage_freq2}
                                 />
                                 <br />

@@ -1017,11 +1017,8 @@ return response()->json(['success' => 'Ok'], 200);
 }
 
 public function nursePage3LoadData() {
-
-
-
-$chk= DB::table('nurse_section_three')->where('user_id',Auth::user()->id)->select('*')->get();
-return response()->json(['success' => $chk], 200);
+	$chk= DB::table('nurse_section_three')->where('user_id',Auth::user()->id)->select('*')->get();
+	return response()->json(['success' => $chk], 200);
 }
 
 

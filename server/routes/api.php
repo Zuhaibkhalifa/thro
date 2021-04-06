@@ -101,8 +101,10 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 
 
 //========================nurse==================================
+
+
 Route::post('nurse/page1','PatientController@nurse1');
-       Route::post('nurse/page3','PatientController@nurse3');
+Route::post('nurse/page3','PatientController@nurse3');
 
       
 
