@@ -175,7 +175,7 @@ class Page3 extends React.Component {
                 });
         } catch (error) {
             this.setState({ loader: '' });
-            console.error(error);
+            console.error('Nurse page3 - error response: ', error);
         }
     }
 

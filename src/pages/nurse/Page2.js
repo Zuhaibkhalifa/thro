@@ -20,7 +20,8 @@ class Page2 extends React.Component {
         this.validator = new SimpleReactValidator({
             element: (message, className) => <div className="text-danger">{message}</div>,
         });
-        console.log(this.validator);
+        console.log('Nurse page2 - Constructor - validator: ', this.validator);
+
         this.state = {
             date: '',
             referred_by: '',
@@ -37,46 +38,49 @@ class Page2 extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
+
         try {
             axios
                 .get(domain + '/api/nurse/page1LoadData', {
                     headers: headers,
                 })
                 .then((response) => {
-                    this.setState({ loader: '' });
-                    console.log(response);
-                    console.log(response.data.success[0]);
+                    console.log('Nurse page2 - Constructor - Response: ', response);
+                    console.log(
+                        'Nurse page2 - Constructor - Response.data.success: ',
+                        response.data.success[0]
+                    );
+
                     data = response.data.success[0];
                     this.setState({ loader: '' });
-                    console.log(data);
+
                     if (data !== undefined) {
                         //   $('#procedure').val(data.procedure1);
                         $('#date').val(data.date);
-                        $('#referred_by').val(data.referred_by);
+                        $('#referred_by').val(data.physicianName);
                         $('#procedure').val(data.procedure1);
 
                         this.setState({
                             date: data.date,
-                            referred_by: data.referred_by,
+                            referred_by: data.physicianName,
                             procedureSelected: data.procedure1,
                             cabg: data.cabg,
                         });
                     }
                 });
         } catch (error) {
-            this.setState({ loader: '' });
             console.error(error);
             this.setState({ loader: '' });
         }
     }
 
+    //
     submitForm() {
         console.log(this.state);
         if (this.validator.allValid()) {
-            this.props.history.push('/Nurse/Nurse3');
-            //  alert('You submitted the form and stuff!');
-            console.log(this.state);
+            console.log('Nurse page2 - submit - state: ', this.state);
             this.page1(this.state);
+            this.props.history.push('/Nurse/Nurse3');
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -93,12 +97,16 @@ class Page2 extends React.Component {
         var param = {
             date: this.state.date,
             procedure: this.state.procedureSelected,
-            referred_by: this.state.referred_by,
+            referred_by: this.state.physicianName,
             cabg: this.state.cabg,
         };
         console.log(param);
         server('nurse/page1', param);
     }
+
+    //
+    //
+    //
 
     render() {
         return (
@@ -158,7 +166,9 @@ class Page2 extends React.Component {
                                     this.handleChange_procedure(event.target.value)
                                 }
                             >
-                                <option>Please select</option>
+                                <option disabled selected hidden>
+                                    Please select
+                                </option>
                                 <option>Endoscopy</option>
                                 <option>Colonoscopy</option>
                                 <option>Bronchoscopy</option>
@@ -213,15 +223,16 @@ class Page2 extends React.Component {
             </React.Fragment>
         );
     }
+
     componentDidMount() {
         $('#cabg_div').hide();
 
         $('#procedure').change(function () {
             var txt = $('#procedure').val();
             if (txt === 'CABG') {
-                $('#cabg_div').show();
+                $('#cabg_div').show(500);
             } else {
-                $('#cabg_div').hide();
+                $('#cabg_div').hide(500);
             }
         });
     }

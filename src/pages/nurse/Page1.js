@@ -194,7 +194,7 @@ class Page1 extends React.Component {
                 });
         } catch (error) {
             this.setState({ loader: '' });
-            console.error(error);
+            console.error('Nurse page1 - error response: ', error);
             this.setState({ loader: '' });
         }
     }
