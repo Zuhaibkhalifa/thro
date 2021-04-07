@@ -859,17 +859,13 @@ return response()->json(['success' => $chk], 200);
 public function nursePage1LoadData() {
 //$chk=Pat_section_two::where('user_id',Auth::user()->id)->get();
 
+//  $chk= DB::table('nurse_section_one')->where('user_id',Auth::user()->id)->select('*')->get();
 
- $chk= DB::table('nurse_section_one')->where('user_id',Auth::user()->id)->select('*')->get();
-
- 	 $chk= DB::table('nurse_section_one')
-    ->where('nurse_section_one.user_id',Auth::user()->id)
-      ->leftJoin('pat_section_seven', 'nurse_section_one.user_id', '=', 'pat_section_seven.user_id')
+ 	$chk = DB::table('nurse_section_one')->where('nurse_section_one.user_id',Auth::user()->id)
       ->leftJoin('nurse_section_five', 'nurse_section_one.user_id', '=', 'nurse_section_five.user_id')
       ->leftJoin('pat_section_two', 'nurse_section_one.user_id', '=', 'pat_section_two.user_id')
       ->select('*')
       ->get();
-
 
 return response()->json(['success' => $chk], 200);
 }
@@ -1017,11 +1013,8 @@ return response()->json(['success' => 'Ok'], 200);
 }
 
 public function nursePage3LoadData() {
-
-
-
-$chk= DB::table('nurse_section_three')->where('user_id',Auth::user()->id)->select('*')->get();
-return response()->json(['success' => $chk], 200);
+	$chk= DB::table('nurse_section_three')->where('user_id',Auth::user()->id)->select('*')->get();
+	return response()->json(['success' => $chk], 200);
 }
 
 

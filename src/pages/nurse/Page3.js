@@ -19,8 +19,7 @@ class Page3 extends React.Component {
         this.validator = new SimpleReactValidator({
             element: (message, className) => <div className="text-danger">{message}</div>,
         });
-
-        console.log(this.validator);
+        // console.log(this.validator);
 
         this.state = {
             month_year: '',
@@ -31,10 +30,16 @@ class Page3 extends React.Component {
             weight: '',
             indication_for_anticoagulation: '',
             chads_score_and_distribution: '',
-            poc_inr: '',
-            poc_creat: '',
-            hb: '',
-            plt: '',
+
+            poc_inr_date: '',
+            poc_creat_date: '',
+            hb_date: '',
+            plt_date: '',
+            poc_inr_text: '',
+            poc_creat_text: '',
+            hb_text: '',
+            plt_text: '',
+
             details_on_recomemendation: '',
             understanding: '',
             completed_by: '',
@@ -85,18 +90,19 @@ class Page3 extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
+
         try {
             axios
                 .get(domain + '/api/nurse/page5LoadData', {
                     headers: headers,
                 })
                 .then((response) => {
-                    this.setState({ loader: '' });
-                    console.log(response);
-                    console.log(response.data.success[0]);
+                    console.log('Nurse page 3 - reponse: ', response);
+                    console.log('Nurse page 3 - reponse.data.success: ', response.data.success[0]);
                     data = response.data.success[0];
+
                     this.setState({ loader: '' });
-                    //  console.log(data);
+
                     if (data !== undefined) {
                         $('#patient_id').val(data.patient_id);
                         $('#weight_selected1').val(data.weight_unit);
@@ -115,11 +121,17 @@ class Page3 extends React.Component {
                             procedureSelected: data.gender,
                             indication_for_anticoagulation: data.indication_for_anticoagulation,
                             chads_score_and_distribution: data.chads_score_and_distribution,
-                            poc_creat: data.poc_creat,
-                            hb: data.hb,
-                            plt: data.plt,
+
+                            poc_creat_text: data.poc_creat_text,
+                            poc_creat_date: data.poc_creat_date,
+                            hb_text: data.hb_text,
+                            hb_date: data.hb_date,
+                            plt_text: data.plt_text,
+                            plt_date: data.plt_date,
+                            poc_inr_text: data.poc_inr_text,
+                            poc_inr_date: data.poc_inr_date,
+
                             details_on_recomemendation: data.details_on_recomemendation,
-                            poc_inr: data.poc_inr,
                             weightSelected: data.weight_unit,
                             aspirin: data.aspirin,
                             aspirin_dosage: data.aspirin_dosage,
@@ -157,15 +169,13 @@ class Page3 extends React.Component {
                             edoxabon_dosage_time: data.edoxabon_dosage_time,
                         });
 
-                        this.set_CHADS_score();
-                        console.log(this.state);
-                        console.log(this.state.had_transfusion_in_last_three_months);
+                        // this.set_CHADS_score();
+                        console.log('Nurse page 3 - state after reponse: ', this.state);
                     }
                 });
         } catch (error) {
             this.setState({ loader: '' });
-            console.error(error);
-            this.setState({ loader: '' });
+            console.error('Nurse page3 - error response: ', error);
         }
     }
 
@@ -194,16 +204,45 @@ class Page3 extends React.Component {
         this.setState({ chads_score_and_distribution: score });
     }
 
+    set_DynamicFlags() {
+        const {
+            liver_disease: liver,
+            had_transfusion_in_last_three_months: transfusion,
+            had_transfusion_in_last_three_months_when: transfusion_date,
+            ulcer_in_stomach_or_bowel_last_three_months: ulcer,
+        } = this.state;
+        let flags = [];
+
+        if (liver === 'Yes') flags.push('Liver Diseases');
+        if (transfusion === 'Yes') flags.push(`Transfusion did on ${transfusion_date}`);
+        if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
+
+        let displayFlags = flags.map((flag) => {
+            return (
+                <div className="col-4">
+                    <div className="alert myDanger" role="alert">
+                        <span className="white">{flag}</span>
+                    </div>
+                </div>
+            );
+        });
+
+        return displayFlags;
+    }
+
+    //
+    //
+
     handleChange_procedure(value) {
         this.setState({ procedureSelected: value });
     }
 
     submitForm() {
         if (this.validator.allValid()) {
-            this.props.history.push('/Nurse/Nurse4');
             //  alert('You submitted the form and stuff!');
             console.log(this.state);
             this.page5(this.state);
+            this.props.history.push('/Nurse/Nurse4');
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -221,16 +260,22 @@ class Page3 extends React.Component {
             weight: this.state.weight,
             indication_for_anticoagulation: this.state.indication_for_anticoagulation,
             chads_score_and_distribution: this.state.chads_score_and_distribution,
-            poc_creat: this.state.poc_creat,
-            hb: this.state.hb,
-            plt: this.state.plt,
-            poc_inr: this.state.poc_inr,
+
+            poc_creat_text: this.state.poc_creat_text,
+            poc_creat_date: this.state.poc_creat_date,
+            hb_text: this.state.hb_text,
+            hb_date: this.state.hb_date,
+            plt_text: this.state.plt_text,
+            plt_date: this.state.plt_date,
+            poc_inr_text: this.state.poc_inr_text,
+            poc_inr_date: this.state.poc_inr_date,
+
             details_on_recomemendation: this.state.details_on_recomemendation,
             understanding: this.state.understanding,
             who_is_completing_this_form: this.state.completed_by,
             reviewed_by: this.state.reviewed_by,
         };
-        console.log(param);
+        console.log('nurse page 3 - page5 - param: ', param);
         server('nurse/page5', param);
     }
 
@@ -244,6 +289,9 @@ class Page3 extends React.Component {
     }
 
     //
+    //
+    //
+
     render() {
         return (
             <React.Fragment>
@@ -517,8 +565,8 @@ class Page3 extends React.Component {
                                         }
                                     >
                                         <option>Select Unit</option>
-                                        <option>Pound</option>
-                                        <option>KG</option>
+                                        <option>lbs</option>
+                                        <option>Kg</option>
                                     </select>
                                     {this.validator.message(
                                         'unit_weight',
@@ -740,35 +788,48 @@ class Page3 extends React.Component {
                                 </div>
                             </div>
                         </div>
+
                         <h4>Recent Bloodwork</h4>
                         <div className="row">
                             <div className="col-6">
                                 <div className="form-group">
                                     <label htmlFor="usr">POC -INR </label>
+
                                     <div className="row">
                                         <div className="col-6">
                                             <input
                                                 type="date"
                                                 className="form-control"
                                                 id="usr"
-                                                defaultValue={this.state.poc_inr}
+                                                defaultValue={this.state.poc_inr_date}
                                                 onChange={(e) =>
-                                                    this.setState({ poc_inr: e.target.value })
+                                                    this.setState({ poc_inr_date: e.target.value })
                                                 }
                                                 id="poc_inr"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_inr_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
+                                            {' '}
                                             <input
                                                 type="text"
                                                 className="form-control"
                                                 id="usr"
-                                                defaultValue={this.state.poc_inr}
+                                                value={this.state.poc_inr_text}
                                                 onChange={(e) =>
-                                                    this.setState({ poc_inr: e.target.value })
+                                                    this.setState({ poc_inr_text: e.target.value })
                                                 }
                                                 id="poc_inr"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_inr_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -783,29 +844,42 @@ class Page3 extends React.Component {
                                             <input
                                                 type="date"
                                                 className="form-control"
-                                                defaultValue={this.state.poc_creat}
+                                                defaultValue={this.state.poc_creat_date}
                                                 onChange={(e) =>
-                                                    this.setState({ poc_creat: e.target.value })
+                                                    this.setState({
+                                                        poc_creat_date: e.target.value,
+                                                    })
                                                 }
                                                 id="poc_creat"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_creat_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                defaultValue={this.state.poc_creat}
+                                                value={this.state.poc_creat_text}
                                                 onChange={(e) =>
-                                                    this.setState({ poc_creat: e.target.value })
+                                                    this.setState({
+                                                        poc_creat_text: e.target.value,
+                                                    })
                                                 }
                                                 id="poc_creat"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.poc_creat_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-6">
                                 <div className="form-group">
@@ -813,26 +887,37 @@ class Page3 extends React.Component {
 
                                     <div className="row">
                                         <div className="col-6">
+                                            {' '}
                                             <input
                                                 type="date"
                                                 id="hb"
                                                 className="form-control"
-                                                defaultValue={this.state.hb}
+                                                value={this.state.hb_date}
                                                 onChange={(e) =>
-                                                    this.setState({ hb: e.target.value })
+                                                    this.setState({ hb_date: e.target.value })
                                                 }
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.hb_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
                                             <input
                                                 type="text"
                                                 id="hb"
                                                 className="form-control"
-                                                defaultValue={this.state.hb}
+                                                defaultValue={this.state.hb_text}
                                                 onChange={(e) =>
-                                                    this.setState({ hb: e.target.value })
+                                                    this.setState({ hb_text: e.target.value })
                                                 }
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.hb_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -844,26 +929,38 @@ class Page3 extends React.Component {
 
                                     <div className="row">
                                         <div className="col-6">
+                                            {' '}
                                             <input
                                                 type="date"
                                                 className="form-control"
-                                                defaultValue={this.state.plt}
+                                                defaultValue={this.state.plt_date}
                                                 onChange={(e) =>
-                                                    this.setState({ plt: e.target.value })
+                                                    this.setState({ plt_date: e.target.value })
                                                 }
                                                 id="plt"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.plt_date,
+                                                'required'
+                                            )}
                                         </div>
                                         <div className="col-6">
+                                            {' '}
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                defaultValue={this.state.plt}
+                                                value={this.state.plt_text}
                                                 onChange={(e) =>
-                                                    this.setState({ plt: e.target.value })
+                                                    this.setState({ plt_text: e.target.value })
                                                 }
                                                 id="plt"
                                             />
+                                            {this.validator.message(
+                                                '',
+                                                this.state.plt_text,
+                                                'required'
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -871,42 +968,8 @@ class Page3 extends React.Component {
                         </div>
 
                         <h4>Flags</h4>
+                        <div className="row">{this.set_DynamicFlags()}</div>
 
-                        <div className="row">
-                            {this.state.liver_disease !== '' ? (
-                                <div className="col-4">
-                                    <div className="alert myDanger" role="alert">
-                                        <span className="white"> Liver Dz</span>
-                                    </div>
-                                </div>
-                            ) : (
-                                'N/A'
-                            )}
-
-                            {this.state.had_transfusion_in_last_three_months !== '' ? (
-                                <div className="col-4">
-                                    <div className="alert myDanger" role="alert">
-                                        <span className="white">
-                                            {' '}
-                                            Transfusion in last 3 months <br />
-                                            {this.state.had_transfusion_in_last_three_months_when}
-                                        </span>
-                                    </div>
-                                </div>
-                            ) : (
-                                'N/A'
-                            )}
-
-                            {this.state.ulcer_in_stomach_or_bowel_last_three_months !== '' ? (
-                                <div className="col-4">
-                                    <div className="alert myDanger" role="alert">
-                                        <span className="white"> Ulcer within last 3 months</span>
-                                    </div>
-                                </div>
-                            ) : (
-                                'N/A'
-                            )}
-                        </div>
                         <br />
                         <h6>Aditional Information</h6>
                         <div className="row">
