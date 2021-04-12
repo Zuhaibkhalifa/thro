@@ -21,7 +21,6 @@ class Signin extends React.Component {
             islogged: '',
             loader: '',
         };
-
         this.submitForm = this.submitForm.bind(this);
     }
 
