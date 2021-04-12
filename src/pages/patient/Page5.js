@@ -96,16 +96,10 @@ class Page5 extends React.Component {
     submitForm() {
         if (!$("input[name='optradio']:checked").val()) {
             this.setState({ error1: 'This field is required' });
-        } else if (
-            document.getElementById('optradio1').checked === true &&
-            !$("input[name='dvt1']:checked").val()
-        ) {
+        } else if (document.getElementById('optradio1').checked === true && !$("input[name='dvt1']:checked").val()) {
             this.setState({ error1: '' });
             this.setState({ error2: 'This field is required' });
-        } else if (
-            document.getElementById('optradio2').checked === true &&
-            !$("input[name='pe']:checked").val()
-        ) {
+        } else if (document.getElementById('optradio2').checked === true && !$("input[name='pe']:checked").val()) {
             this.setState({ error1: '' });
             this.setState({ error2: '' });
             this.setState({ error3: 'This field is required' });
@@ -152,9 +146,7 @@ class Page5 extends React.Component {
                     ''
                 )}
                 <div>
-                    <h1 className="text-center white main-heading">
-                        Have you experienced any of the following
-                    </h1>
+                    <h1 className="text-center white main-heading">Have you experienced any of the following</h1>
                     <br />
                     <br />
                     <div className="bg-light blue-box">
@@ -199,9 +191,7 @@ class Page5 extends React.Component {
                                     }
                                 />
                                 <br />
-                                <label className="radio-inline blue">
-                                    Between 1 and 3 months ago
-                                </label>
+                                <label className="radio-inline blue">Between 1 and 3 months ago</label>
                                 <input
                                     type="radio"
                                     name="dvt1"
@@ -232,10 +222,7 @@ class Page5 extends React.Component {
                                     className="pull-right"
                                     onChange={(e) => this.setState({ q1_sub_q1_ans: 'Not Sure' })}
                                 />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error2 !== '' ? this.state.error2 : ''}
-                                </div>
+                                <div className="text-danger"> {this.state.error2 !== '' ? this.state.error2 : ''}</div>
                             </div>
 
                             <br />
@@ -270,9 +257,7 @@ class Page5 extends React.Component {
                                     }
                                 />
                                 <br />
-                                <label className="radio-inline blue">
-                                    Between 1 and 3 months ago
-                                </label>
+                                <label className="radio-inline blue">Between 1 and 3 months ago</label>
                                 <input
                                     type="radio"
                                     name="pe"
@@ -304,10 +289,7 @@ class Page5 extends React.Component {
                                     onChange={(e) => this.setState({ q1_sub_q2_ans: 'Not Sure' })}
                                 />
 
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error3 !== '' ? this.state.error3 : ''}
-                                </div>
+                                <div className="text-danger"> {this.state.error3 !== '' ? this.state.error3 : ''}</div>
                             </div>
                             <br />
                             <label className="radio-inline blue">Not Sure</label>
@@ -321,10 +303,7 @@ class Page5 extends React.Component {
                             />
                             <br />
 
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error1 !== '' ? this.state.error1 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error1 !== '' ? this.state.error1 : ''}</div>
                         </form>
                         {/* Default form login */}
                         <nav aria-label="Page navigation example">
