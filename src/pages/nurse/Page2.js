@@ -46,20 +46,12 @@ class Page2 extends React.Component {
                 })
                 .then((response) => {
                     console.log('Nurse page2 - Constructor - Response: ', response);
-                    console.log(
-                        'Nurse page2 - Constructor - Response.data.success: ',
-                        response.data.success[0]
-                    );
+                    console.log('Nurse page2 - Constructor - Response.data.success: ', response.data.success[0]);
 
                     data = response.data.success[0];
                     this.setState({ loader: '' });
 
                     if (data !== undefined) {
-                        //   $('#procedure').val(data.procedure1);
-                        $('#date').val(data.date);
-                        $('#referred_by').val(data.physicianName);
-                        $('#procedure').val(data.procedure1);
-
                         this.setState({
                             date: data.date,
                             referred_by: data.physicianName,
@@ -135,6 +127,7 @@ class Page2 extends React.Component {
                                         type="date"
                                         id="date"
                                         className="form-control"
+                                        value={this.state.date}
                                         onChange={(e) => this.setState({ date: e.target.value })}
                                     />
                                     {this.validator.message('', this.state.date, 'required')}
@@ -147,9 +140,8 @@ class Page2 extends React.Component {
                                         type="text"
                                         id="referred_by"
                                         className="form-control"
-                                        onChange={(e) =>
-                                            this.setState({ referred_by: e.target.value })
-                                        }
+                                        value={this.state.referred_by}
+                                        onChange={(e) => this.setState({ referred_by: e.target.value })}
                                     />
                                     {this.validator.message('', this.state.referred_by, 'required')}
                                 </div>
@@ -162,9 +154,7 @@ class Page2 extends React.Component {
                                 className="form-control"
                                 id="procedure"
                                 value={this.state.procedureSelected}
-                                onChange={(event) =>
-                                    this.handleChange_procedure(event.target.value)
-                                }
+                                onChange={(event) => this.handleChange_procedure(event.target.value)}
                             >
                                 <option disabled selected hidden>
                                     Please select
@@ -178,11 +168,7 @@ class Page2 extends React.Component {
                                 <option>Lead reposition</option>
                                 <option>CABG</option>
                             </select>
-                            {this.validator.message(
-                                'unit_procedure',
-                                this.state.procedureSelected,
-                                'required'
-                            )}
+                            {this.validator.message('unit_procedure', this.state.procedureSelected, 'required')}
                         </div>
                         <br />
                         <div className="form-group" id="cabg_div">
@@ -198,10 +184,7 @@ class Page2 extends React.Component {
                         <br /> <br />
                         <div className="row">
                             <div className="col-4">
-                                <Link
-                                    to="/Nurse/Nurse1"
-                                    className="btn btn-outline-primary  btn-block"
-                                >
+                                <Link to="/Nurse/Nurse1" className="btn btn-outline-primary  btn-block">
                                     Back
                                 </Link>
                             </div>
@@ -209,10 +192,7 @@ class Page2 extends React.Component {
                             <div className="col-4"></div>
 
                             <div className="col-4">
-                                <button
-                                    onClick={this.submitForm}
-                                    className="btn btn-primary btn-block"
-                                >
+                                <button onClick={this.submitForm} className="btn btn-primary btn-block">
                                     Forward
                                 </button>
                             </div>

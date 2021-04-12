@@ -64,8 +64,7 @@ public function page2(Request $request)
 
 
 public function page3(Request $request)
-{
-         
+{  
    $data= array( 'blood_clot_blood_thinner_interrupted' => $request->blood_clot_blood_thinner_interrupted,
 						'user_id'=> Auth::user()->id);
 
@@ -294,50 +293,37 @@ return response()->json(['success' => $chk], 200);
 
 
 public function page11(Request $request)
-        {
-         
-$data= array( 
-	'aspirin' => $request->aspirin,
-	'aspirin_dosage' => $request->aspirin_dosage,
-	'aspirin_dosage_time' => $request->aspirin_dosage_time,
-	'plavix' => $request->plavix,
-	'plavix_dosage' => $request->plavix_dosage,
-	'plavix_dosage_time' => $request->plavix_dosage_time,
+{
+	$data= array( 
+		'aspirin' => $request->aspirin,
+		'aspirin_dosage' => $request->aspirin_dosage,
+		'aspirin_dosage_time' => $request->aspirin_dosage_time,
 
-	'brillinta' => $request->brillinta,
+		'plavix' => $request->plavix,
+		'plavix_dosage' => $request->plavix_dosage,
+		'plavix_dosage_time' => $request->plavix_dosage_time,
 
+		'brillinta' => $request->brillinta,
+		'brillinta_dosage' => $request->brillinta_dosage,
+		'brillinta_dosage_timie' => $request->brillinta_dosage_timie,
 
-
-	'brillinta_dosage' => $request->brillinta_dosage,
-	'brillinta_dosage_timie' => $request->brillinta_dosage_timie,
-	'effient_dosage' => $request->effient_dosage,
-
-	'effient_dosage_time' => $request->effient_dosage_time,
-
+		'effient_dosage' => $request->effient_dosage,
+		'effient_dosage_time' => $request->effient_dosage_time,
 		'not_using_drugs' => $request->not_using_druhs,
 
-	'user_id'=> Auth::user()->id);
+		'user_id'=> Auth::user()->id
+	);
 
-$chk= DB::table('pat_section_eleven')->where('user_id',Auth::user()->id)->select('*')->get();
+	$chk= DB::table('pat_section_eleven')->where('user_id',Auth::user()->id)->select('*')->get();
 
+	if ($chk=='[]') {
+		$chk=DB::table('pat_section_eleven')->insert($data);
+	} else {
+		DB::table('pat_section_eleven')->where('user_id', Auth::user()->id)->delete();
+		$chk=DB::table('pat_section_eleven')->insert($data);
+	}
 
-
-
-
-if ($chk=='[]') {
-
-$chk=DB::table('pat_section_eleven')->insert($data);
-
-
-
-} else {
-
-DB::table('pat_section_eleven')->where('user_id', Auth::user()->id)->delete();
-$chk=DB::table('pat_section_eleven')->insert($data);
-
-}
-return response()->json(['success' => $chk], 200);
-        
+	return response()->json(['success' => $chk], 200);     
 }
 
 
@@ -574,12 +560,13 @@ return response()->json(['success' => $chk], 200);
 }
 
 public function page11LoadData() {
- $chk= DB::table('pat_section_eleven')->where('user_id',Auth::user()->id)->select('*')->get();
-if ($chk !=='[]') {
-return response()->json(['success' => 'not_found'], 200);
-} else {
-return response()->json(['success' => $chk], 200);
-}
+	$chk= DB::table('pat_section_eleven')->where('user_id',Auth::user()->id)->select('*')->get();
+	
+	if ($chk !=='[]') {
+		return response()->json(['success' => 'not_found'], 200);
+	} else {
+		return response()->json(['success' => $chk], 200);
+	}
 }
 
 public function page12LoadData() {
@@ -671,9 +658,10 @@ $data= array(
 	'patient_accompanied_by' => $request->patient_accompanied_by,
 	'lmwh' => $request->lmwh,
 	'administration' => $request->administration,
-		'explained' => $request->explained,
+	'explained' => $request->explained,
 	'understanding' => $request->understanding,
 	'user_id'=> Auth::user()->id);
+
 $chk=Nurse_section_three::where('user_id',Auth::user()->id)->get();
 if ($chk=='[]') {
 $one = Nurse_section_three::Create($data);
