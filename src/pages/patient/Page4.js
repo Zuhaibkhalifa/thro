@@ -48,6 +48,7 @@ class Page4 extends React.Component {
         this.mainOption = this.mainOption.bind(this);
         this.onRadioBtn1 = this.onRadioBtn1.bind(this);
         this.onRadioBtn2 = this.onRadioBtn2.bind(this);
+        this.no_errors = this.no_errors.bind(this);
 
         //
 
@@ -116,10 +117,13 @@ class Page4 extends React.Component {
             this.setState({ error3: '' });
             this.setState({ error4: '' });
             this.setState({ error5: 'This field is required' });
-        } else if (document.getElementById('hvr').checked === true) {
-            this.page4();
-            this.props.history.push('/User/Page6');
-        } else {
+        }
+        // else if (document.getElementById('hvr').checked === true) {
+        //     this.page4();
+        //     this.props.history.push('/User/Page6');
+        // }
+        else {
+            this.no_errors();
             console.log('Patient page 4 - SubmitForm - State: ', this.state);
             this.page4();
             this.props.history.push('/User/Page6');
@@ -128,18 +132,23 @@ class Page4 extends React.Component {
 
     page4() {
         var param = {
-            pe: this.state.q1_sub_q2_ans,
-            dvt: this.state.q1_sub_q1_ans,
-            none: this.state.q8_ans,
-            other: this.state.q7_sub_ans,
-            dvt_how_long_ago: this.state.q1_sub_q1_ans_inner1,
             venous_thromboelism: this.state.q1_ans,
+
+            dvt: this.state.q1_sub_q1_ans,
+            dvt_how_long_ago: this.state.q1_sub_q1_ans_inner1,
+
+            pe: this.state.q1_sub_q2_ans,
             pe_dvt_how_long_ago: this.state.q1_sub_q2_ans_inner2,
-            blood_clot_in_heart: this.state.q5_ans,
-            heart_valve_replacement: this.state.q4_ans,
-            peripheral_arterial_disease: this.state.q7_ans,
+
             atrial_fibrillation_of_flutter: this.state.q3_ans,
+            heart_valve_replacement: this.state.q4_ans,
+            blood_clot_in_heart: this.state.q5_ans,
             arterial_peripheral_thrombosis: this.state.q6_ans,
+
+            peripheral_arterial_disease: this.state.q7_ans,
+            other: this.state.q7_sub_ans,
+
+            none: this.state.q8_ans,
         };
 
         console.log('Patient Page 4 - Page4 Func: ', param);
@@ -218,6 +227,16 @@ class Page4 extends React.Component {
         document.getElementById('vte_option1').checked = false;
     }
 
+    no_errors() {
+        this.setState({
+            error1: '',
+            error2: '',
+            error3: '',
+            error4: '',
+            error5: '',
+        });
+    }
+
     //
     //
 
@@ -232,9 +251,7 @@ class Page4 extends React.Component {
                 ) : (
                     ''
                 )}
-                <h1 className="text-center white main-heading">
-                    Have you experienced any of the following
-                </h1>
+                <h1 className="text-center white main-heading">Have you experienced any of the following</h1>
                 <br />
                 <br />
                 <div className="bg-light blue-box">
@@ -283,9 +300,7 @@ class Page4 extends React.Component {
                                     }
                                 />
                                 <br />
-                                <label className="radio-inline blue">
-                                    Between 1 and 3 months ago
-                                </label>
+                                <label className="radio-inline blue">Between 1 and 3 months ago</label>
                                 <input
                                     type="radio"
                                     name="dvt_sub_opt"
@@ -320,10 +335,7 @@ class Page4 extends React.Component {
                                         })
                                     }
                                 />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error3 !== '' ? this.state.error3 : ''}
-                                </div>
+                                <div className="text-danger"> {this.state.error3 !== '' ? this.state.error3 : ''}</div>
                             </div>
 
                             <br />
@@ -334,7 +346,7 @@ class Page4 extends React.Component {
                                 name="pe_option"
                                 className="pull-right"
                                 onClick={this.onRadioBtn2}
-                                onChange={(e) => this.setState({ q1_sub_q2_ans: 1 })}
+                                onChange={(e) => this.setState({ q1_sub_q2_ans: 'Yes' })}
                             />
                         </div>
 
@@ -383,22 +395,14 @@ class Page4 extends React.Component {
                                 type="radio"
                                 name="pe_sub_option"
                                 className="pull-right"
-                                onChange={(e) =>
-                                    this.setState({ q1_sub_q2_ans_inner2: 'Not Sure' })
-                                }
+                                onChange={(e) => this.setState({ q1_sub_q2_ans_inner2: 'Not Sure' })}
                             />
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error4 !== '' ? this.state.error4 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error4 !== '' ? this.state.error4 : ''}</div>
                         </div>
 
                         <br />
 
-                        <div className="text-danger">
-                            {' '}
-                            {this.state.error2 !== '' ? this.state.error2 : ''}
-                        </div>
+                        <div className="text-danger"> {this.state.error2 !== '' ? this.state.error2 : ''}</div>
 
                         <label className="radio-inline blue">Atrial Fibrillation of flutter</label>
                         <input
@@ -462,9 +466,7 @@ class Page4 extends React.Component {
                             onChange={(e) => this.setState({ q7_ans: 'Other', chkVal: 1 })}
                         />
                         <div id="de">
-                            <label className="radio-inline blue">
-                                Reason for treatment with blood
-                            </label>
+                            <label className="radio-inline blue">Reason for treatment with blood</label>
                             <input
                                 type="text"
                                 id="reason"
@@ -473,10 +475,7 @@ class Page4 extends React.Component {
                                 defaultValue={this.state.q7_sub_ans}
                                 onChange={(e) => this.setState({ q7_sub_ans: e.target.value })}
                             />
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error5 !== '' ? this.state.error5 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error5 !== '' ? this.state.error5 : ''}</div>
                         </div>
 
                         <br />
@@ -495,10 +494,7 @@ class Page4 extends React.Component {
                         <div>
                             <br />
 
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error1 !== '' ? this.state.error1 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error1 !== '' ? this.state.error1 : ''}</div>
                         </div>
                     </form>
                     {/* Default form login */}

@@ -83,8 +83,8 @@ class Page6 extends React.Component {
                             </div>
                         </div>{' '}
                         <p className="white">
-                            Thank you for completing the Bridging Form, Please keep a copy of the
-                            Medication Schedule for your records.
+                            Thank you for completing the Bridging Form, Please keep a copy of the Medication Schedule
+                            for your records.
                         </p>
                         <div className="row">
                             <div className="col-6"></div>
@@ -219,34 +219,37 @@ class Page6 extends React.Component {
                                         <td>_ mg x _</td>
                                         <td />
                                     </tr>
+                                    <tr>
+                                        <th scope="row">T + 5</th>
+                                        <td>
+                                            8:00 AM
+                                            <br />
+                                            8:00 PM
+                                        </td>
+                                        <td>6:00 PM</td>
+                                        <td>1 needle</td>
+                                        <td>_ mg x _</td>
+                                        <td />
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <br /> <br />
                         <div className="row">
                             <div className="col-4">
-                                <Link
-                                    to="/Nurse/Nurse5"
-                                    className="btn btn-outline-primary  btn-block"
-                                >
+                                <Link to="/Nurse/Nurse5" className="btn btn-outline-primary  btn-block">
                                     Back
                                 </Link>
                             </div>
 
                             <div className="col-4">
-                                <button
-                                    onClick={this.submitForm}
-                                    className="btn btn-primary btn-block"
-                                >
+                                <button onClick={this.submitForm} className="btn btn-primary btn-block">
                                     Print
                                 </button>
                             </div>
 
                             <div className="col-4">
-                                <button
-                                    onClick={this.handleModalShowHide}
-                                    className="btn btn-primary btn-block"
-                                >
+                                <button onClick={this.handleModalShowHide} className="btn btn-primary btn-block">
                                     Next
                                 </button>
                             </div>

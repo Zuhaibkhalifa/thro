@@ -156,10 +156,8 @@ class Page1 extends React.Component {
                             not_using_drugs: data.not_using_drugs,
                             ulcer_in_stomach_or_bowel_last_three_months:
                                 data.ulcer_in_stomach_or_bowel_last_three_months,
-                            had_transfusion_in_last_three_months_when:
-                                data.had_transfusion_in_last_three_months_when,
-                            had_transfusion_in_last_three_months:
-                                data.had_transfusion_in_last_three_months,
+                            had_transfusion_in_last_three_months_when: data.had_transfusion_in_last_three_months_when,
+                            had_transfusion_in_last_three_months: data.had_transfusion_in_last_three_months,
 
                             liver_disease: data.liver_disease,
                             lab_location_for_inr_test: data.lab_location_for_inr_test,
@@ -384,9 +382,7 @@ class Page1 extends React.Component {
                                         id="text"
                                         className="form-control"
                                         defaultValue={this.state.procedure}
-                                        onChange={(e) =>
-                                            this.setState({ procedure: e.target.value })
-                                        }
+                                        onChange={(e) => this.setState({ procedure: e.target.value })}
                                     />
 
                                     {this.validator.message('', this.state.procedure, 'required')}
@@ -401,15 +397,9 @@ class Page1 extends React.Component {
                                         id="date_of_procedure"
                                         className="form-control"
                                         defaultValue={this.state.date_of_procedure}
-                                        onChange={(e) =>
-                                            this.setState({ date_of_procedure: e.target.value })
-                                        }
+                                        onChange={(e) => this.setState({ date_of_procedure: e.target.value })}
                                     />
-                                    {this.validator.message(
-                                        '',
-                                        this.state.date_of_procedure,
-                                        'required'
-                                    )}
+                                    {this.validator.message('', this.state.date_of_procedure, 'required')}
                                 </div>
                             </div>
                         </div>
@@ -437,20 +427,14 @@ class Page1 extends React.Component {
                                         className="form-control"
                                         id="sex"
                                         value={this.state.genderSelected}
-                                        onChange={(event) =>
-                                            this.handleChange_gender(event.target.value)
-                                        }
+                                        onChange={(event) => this.handleChange_gender(event.target.value)}
                                     >
                                         <option>Select Gender</option>
                                         <option>Male</option>
                                         <option>Female</option>
                                         <option>Other</option>
                                     </select>
-                                    {this.validator.message(
-                                        '',
-                                        this.state.genderSelected,
-                                        'required'
-                                    )}
+                                    {this.validator.message('', this.state.genderSelected, 'required')}
                                 </div>
                             </div>
                             <div className="col-2">
@@ -476,19 +460,13 @@ class Page1 extends React.Component {
                                         className="form-control"
                                         id="weight_selected1"
                                         value={this.state.weightSelected}
-                                        onChange={(event) =>
-                                            this.handleChange_weight(event.target.value)
-                                        }
+                                        onChange={(event) => this.handleChange_weight(event.target.value)}
                                     >
                                         <option>Select Unit</option>
                                         <option>lbs</option>
                                         <option>Kg</option>
                                     </select>
-                                    {this.validator.message(
-                                        'unit_weight',
-                                        this.state.weightSelected,
-                                        'required'
-                                    )}
+                                    {this.validator.message('unit_weight', this.state.weightSelected, 'required')}
                                 </div>
                             </div>
                         </div>
@@ -508,11 +486,7 @@ class Page1 extends React.Component {
                                         }
                                         id="indication_for_anticoagulation"
                                     />
-                                    {this.validator.message(
-                                        '',
-                                        this.state.indication_for_anticoagulation,
-                                        'required'
-                                    )}
+                                    {this.validator.message('', this.state.indication_for_anticoagulation, 'required')}
                                 </div>
                             </div>
                         </div>
@@ -532,15 +506,13 @@ class Page1 extends React.Component {
                                         }
                                         id="chads_score_and_distribution"
                                     />
-                                    {this.validator.message(
-                                        '',
-                                        this.state.chads_score_and_distribution,
-                                        'required'
-                                    )}
+                                    {this.validator.message('', this.state.chads_score_and_distribution, 'required')}
                                 </div>
                             </div>
                         </div>
 
+                        <br />
+                        <br />
                         <div className="row">
                             <div className="col-12">
                                 <div className="form-group">
@@ -557,10 +529,7 @@ class Page1 extends React.Component {
                                             {' '}
                                             What Lab They Use{' '}
                                             {this.state.lab_location_for_inr_test !== null ? (
-                                                <span
-                                                    className="text-right"
-                                                    style={{ color: 'green' }}
-                                                >
+                                                <span className="text-right" style={{ color: 'green' }}>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                     {this.state.lab_location_for_inr_test}{' '}
                                                 </span>
@@ -650,9 +619,7 @@ class Page1 extends React.Component {
                                                             {' '}
                                                             <td>{this.state.aspirin} </td>
                                                             <td>{this.state.aspirin_dosage}</td>
-                                                            <td>
-                                                                {this.state.aspirin_dosage_time}
-                                                            </td>
+                                                            <td>{this.state.aspirin_dosage_time}</td>
                                                         </tr>
                                                     ) : (
                                                         ''
@@ -662,9 +629,7 @@ class Page1 extends React.Component {
                                                             {' '}
                                                             <td>{this.state.brillinta} </td>
                                                             <td>{this.state.brillinta_dosage}</td>
-                                                            <td>
-                                                                {this.state.brillinta_dosage_timie}
-                                                            </td>
+                                                            <td>{this.state.brillinta_dosage_timie}</td>
                                                         </tr>
                                                     ) : (
                                                         ''
@@ -675,9 +640,7 @@ class Page1 extends React.Component {
                                                             {' '}
                                                             <td>{this.state.effient} </td>
                                                             <td>{this.state.effient_dosage}</td>
-                                                            <td>
-                                                                {this.state.effient_dosage_time}
-                                                            </td>
+                                                            <td>{this.state.effient_dosage_time}</td>
                                                         </tr>
                                                     ) : (
                                                         ''
@@ -712,6 +675,8 @@ class Page1 extends React.Component {
                             </div>
                         </div>
 
+                        <br />
+                        <br />
                         <h4>Recent Bloodwork</h4>
                         <div className="row">
                             <div className="col-6">
@@ -725,16 +690,10 @@ class Page1 extends React.Component {
                                                 className="form-control"
                                                 id="usr"
                                                 defaultValue={this.state.poc_inr_date}
-                                                onChange={(e) =>
-                                                    this.setState({ poc_inr_date: e.target.value })
-                                                }
+                                                onChange={(e) => this.setState({ poc_inr_date: e.target.value })}
                                                 id="poc_inr"
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.poc_inr_date,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.poc_inr_date, 'required')}
                                         </div>
                                         <div className="col-6">
                                             {' '}
@@ -743,16 +702,10 @@ class Page1 extends React.Component {
                                                 className="form-control"
                                                 id="usr"
                                                 value={this.state.poc_inr_text}
-                                                onChange={(e) =>
-                                                    this.setState({ poc_inr_text: e.target.value })
-                                                }
+                                                onChange={(e) => this.setState({ poc_inr_text: e.target.value })}
                                                 id="poc_inr"
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.poc_inr_text,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.poc_inr_text, 'required')}
                                         </div>
                                     </div>
                                 </div>
@@ -775,11 +728,7 @@ class Page1 extends React.Component {
                                                 }
                                                 id="poc_creat"
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.poc_creat_date,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.poc_creat_date, 'required')}
                                         </div>
                                         <div className="col-6">
                                             <input
@@ -793,11 +742,7 @@ class Page1 extends React.Component {
                                                 }
                                                 id="poc_creat"
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.poc_creat_text,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.poc_creat_text, 'required')}
                                         </div>
                                     </div>
                                 </div>
@@ -816,15 +761,9 @@ class Page1 extends React.Component {
                                                 id="hb"
                                                 className="form-control"
                                                 value={this.state.hb_date}
-                                                onChange={(e) =>
-                                                    this.setState({ hb_date: e.target.value })
-                                                }
+                                                onChange={(e) => this.setState({ hb_date: e.target.value })}
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.hb_date,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.hb_date, 'required')}
                                         </div>
                                         <div className="col-6">
                                             <input
@@ -832,15 +771,9 @@ class Page1 extends React.Component {
                                                 id="hb"
                                                 className="form-control"
                                                 defaultValue={this.state.hb_text}
-                                                onChange={(e) =>
-                                                    this.setState({ hb_text: e.target.value })
-                                                }
+                                                onChange={(e) => this.setState({ hb_text: e.target.value })}
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.hb_text,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.hb_text, 'required')}
                                         </div>
                                     </div>
                                 </div>
@@ -857,16 +790,10 @@ class Page1 extends React.Component {
                                                 type="date"
                                                 className="form-control"
                                                 defaultValue={this.state.plt_date}
-                                                onChange={(e) =>
-                                                    this.setState({ plt_date: e.target.value })
-                                                }
+                                                onChange={(e) => this.setState({ plt_date: e.target.value })}
                                                 id="plt"
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.plt_date,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.plt_date, 'required')}
                                         </div>
                                         <div className="col-6">
                                             {' '}
@@ -874,22 +801,18 @@ class Page1 extends React.Component {
                                                 type="text"
                                                 className="form-control"
                                                 value={this.state.plt_text}
-                                                onChange={(e) =>
-                                                    this.setState({ plt_text: e.target.value })
-                                                }
+                                                onChange={(e) => this.setState({ plt_text: e.target.value })}
                                                 id="plt"
                                             />
-                                            {this.validator.message(
-                                                '',
-                                                this.state.plt_text,
-                                                'required'
-                                            )}
+                                            {this.validator.message('', this.state.plt_text, 'required')}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        <br />
+                        <br />
                         <h4>Flags</h4>
                         <div className="row">{this.set_DynamicFlags()}</div>
 
@@ -898,10 +821,7 @@ class Page1 extends React.Component {
 
                         <div className="row">
                             <div className="col-4">
-                                <Link
-                                    to="/User/Section"
-                                    className="btn btn-outline-primary  btn-block"
-                                >
+                                <Link to="/User/Section" className="btn btn-outline-primary  btn-block">
                                     Back
                                 </Link>
                             </div>
@@ -909,10 +829,7 @@ class Page1 extends React.Component {
                             <div className="col-4"></div>
 
                             <div className="col-4">
-                                <button
-                                    onClick={this.submitForm}
-                                    className="btn btn-primary btn-block"
-                                >
+                                <button onClick={this.submitForm} className="btn btn-primary btn-block">
                                     Accept
                                 </button>
                             </div>

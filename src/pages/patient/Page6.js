@@ -37,6 +37,7 @@ class Page6 extends React.Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.otherboxfunc = this.otherboxfunc.bind(this);
+        this.no_error = this.no_error.bind(this);
 
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
@@ -64,18 +65,9 @@ class Page6 extends React.Component {
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                console.log(
-                    'Patient page6 - get Data - Error response.data: ',
-                    error.response.data
-                );
-                console.log(
-                    'Patient page6 - get Data - Error response.status: ',
-                    error.response.status
-                );
-                console.log(
-                    'Patient page6 - get Data - Error response.headers: ',
-                    error.response.headers
-                );
+                console.log('Patient page6 - get Data - Error response.data: ', error.response.data);
+                console.log('Patient page6 - get Data - Error response.status: ', error.response.status);
+                console.log('Patient page6 - get Data - Error response.headers: ', error.response.headers);
             } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -116,15 +108,15 @@ class Page6 extends React.Component {
     }
 
     mechanical() {
-        $('#mechanical').toggle(1000);
+        $('#mechanical').toggle(500);
     }
 
     otherboxfunc(e) {
         if (document.getElementById('other_opt').checked === true) {
-            $('#other_box').show(1000);
+            $('#other_box').show(500);
         } else {
-            $('#other_box').hide(1000);
-            this.setState({ q3_ans: e.target.value });
+            $('#other_box').hide(500);
+            // this.setState({ q3_ans: e.target.value });
         }
 
         if (document.getElementById('loc3').checked === true) {
@@ -149,10 +141,23 @@ class Page6 extends React.Component {
             this.setState({ error1: 'This field is required' });
             this.setState({ error2: '' });
             this.setState({ error3: '' });
-            this.setState({ error5: '' });
             this.setState({ error4: '' });
+            this.setState({ error5: '' });
+        } else if (
+            document.getElementById('heart_valve1').checked === true &&
+            document.getElementById('valve1').checked === false &&
+            document.getElementById('valve2').checked === false &&
+            document.getElementById('valve3').checked === false &&
+            document.getElementById('valve4').checked === false
+        ) {
+            this.setState({ error1: '' });
+            this.setState({ error2: '' });
+            this.setState({ error3: '' });
+            this.setState({ error4: 'This field is required' });
+            this.setState({ error5: '' });
         } else if (document.getElementById('heart_valve3').checked === true) {
-            //alert('ss');
+            this.no_error();
+            console.log('Patient page 6 - submit - state: ', this.state);
             this.page6(this.state);
             this.props.history.push('/User/Page7');
         } else if (
@@ -164,19 +169,30 @@ class Page6 extends React.Component {
             this.setState({ error2: 'This field is required' });
             this.setState({ error1: '' });
             this.setState({ error3: '' });
-        } else if (
-            document.getElementById('other_opt').checked === true &&
-            $('#other_text_box').val() === ''
-        ) {
-            this.setState({ error5: 'This field is required' });
+            this.setState({ error4: '' });
+            this.setState({ error5: '' });
+        } else if (document.getElementById('other_opt').checked === true && $('#other_text_box').val() === '') {
             this.setState({ error1: '' });
             this.setState({ error2: '' });
             this.setState({ error3: '' });
             this.setState({ error4: '' });
+            this.setState({ error5: 'This field is required' });
         } else {
+            this.no_error();
+            console.log('Patient page 6 - submit - state: ', this.state);
             this.page6(this.state);
             this.props.history.push('/User/Page7');
         }
+    }
+
+    no_error() {
+        this.setState({
+            error1: '',
+            error2: '',
+            error3: '',
+            error4: '',
+            error5: '',
+        });
     }
 
     //
@@ -195,7 +211,7 @@ class Page6 extends React.Component {
             location_dont_know: this.state.q4_sub_ans4,
         };
         console.log('Patient page6 - page6 func - param: ', param);
-        server('patient/page6Post', param);
+        // server('patient/page6Post', param);
         // this.props.history.push('');
     }
 
@@ -224,29 +240,22 @@ class Page6 extends React.Component {
                             <br />
                             <br />
                             <p className="blue">
-                                <b>
-                                    Please specify the type of heart Valve Replacement technique
-                                    that was used
-                                </b>
+                                <b>Please specify the type of heart Valve Replacement technique that was used</b>
                             </p>
                             <label className="radio-inline blue">
-                                <i className="fa fa-cog blue" aria-hidden="true" /> &nbsp;
-                                Mechanical Heart valve
+                                <i className="fa fa-cog blue" aria-hidden="true" /> &nbsp; Mechanical Heart valve
                             </label>
                             <input
                                 type="checkbox"
                                 name="optradio"
                                 className="pull-right"
                                 id="heart_valve1"
-                                onChange={(e) =>
-                                    this.setState({ q1_ans: 'Mechanical Heart valve' })
-                                }
+                                onChange={(e) => this.setState({ q1_ans: 'Mechanical Heart valve' })}
                                 onClick={this.mechanical}
                             />
                             <br />
                             <label className="radio-inline blue">
-                                <i className="fa fa-male blue" aria-hidden="true" /> &nbsp; Tissue
-                                Heart Valve
+                                <i className="fa fa-male blue" aria-hidden="true" /> &nbsp; Tissue Heart Valve
                             </label>
                             <input
                                 type="checkbox"
@@ -256,14 +265,13 @@ class Page6 extends React.Component {
                                 onChange={(e) => this.setState({ q2_ans: 'Tissue Heart Valve' })}
                             />
                             <br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;{' '}
-                            <label className="radio-inline blue">I don't Know</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp; <label className="radio-inline blue">I don't Know</label>
                             <input
                                 type="checkbox"
                                 name="optradio"
                                 className="pull-right"
                                 id="heart_valve3"
-                                defaultValue="I dont Know"
+                                value="I dont Know"
                                 onChange={(e) => this.setState({ q3_ans: 'I dont Know' })}
                                 onClick={this.mainOption}
                             />
@@ -288,9 +296,7 @@ class Page6 extends React.Component {
                                     type="checkbox"
                                     name="vte"
                                     className="pull-right"
-                                    onChange={(e) =>
-                                        this.setState({ q1_sub_ans2: 'Ball and Cage' })
-                                    }
+                                    onChange={(e) => this.setState({ q1_sub_ans2: 'Ball and Cage' })}
                                     id="valve2"
                                     onClick={this.question2}
                                 />
@@ -315,16 +321,10 @@ class Page6 extends React.Component {
                                     id="valve4"
                                     onClick={this.question2}
                                 />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error4 !== '' ? this.state.error4 : ''}
-                                </div>
+                                <div className="text-danger"> {this.state.error4 !== '' ? this.state.error4 : ''}</div>
                                 <br />
                             </div>
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error1 !== '' ? this.state.error1 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error1 !== '' ? this.state.error1 : ''}</div>
                             <br />
                             <br />
                             <p className="blue">
@@ -357,24 +357,16 @@ class Page6 extends React.Component {
                                 className="pull-right"
                                 id="other_opt"
                                 onClick={this.otherboxfunc}
-                                onChange={(e) => this.setState({ q4_sub_ans3: 'Other' })}
                             />
-                            <span id="other_box">
+                            <div id="other_box">
                                 <input
                                     type="text"
                                     className="form-control mb-4 transparent-custom-input"
-                                    placeholder="Other"
-                                    defaultValue=""
                                     id="other_text_box"
-                                    onChange={(e) =>
-                                        this.setState({ q4_sub_ans3_1: e.target.value })
-                                    }
+                                    onChange={(e) => this.setState({ q4_sub_ans3: e.target.value })}
                                 />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error5 !== '' ? this.state.error5 : ''}
-                                </div>
-                            </span>
+                                <div className="text-danger"> {this.state.error5 !== '' ? this.state.error5 : ''}</div>
+                            </div>
                             <br />
                             <label className="radio-inline blue">I don't Know</label>
                             <input
@@ -386,10 +378,7 @@ class Page6 extends React.Component {
                                 id="loc3"
                                 onChange={(e) => this.setState({ q4_sub_ans4: e.target.value })}
                             />
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error2 !== '' ? this.state.error2 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error2 !== '' ? this.state.error2 : ''}</div>
                             <br />
                         </form>
                         {/* Default form login */}
@@ -416,7 +405,7 @@ class Page6 extends React.Component {
     componentDidMount() {
         $(document).ready(function () {
             $('#other_box').hide();
-            $('#mechanical').hide(1000);
+            $('#mechanical').hide(500);
         });
     }
 }

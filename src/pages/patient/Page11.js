@@ -1,14 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from './Header';
-import SimpleReactValidator from 'simple-react-validator';
-import $ from 'jquery';
-import { goBack } from '../../utils/user';
-import { server } from '../../utils/functions';
-import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
+import SimpleReactValidator from 'simple-react-validator';
+
+import $ from 'jquery';
+import axios from 'axios';
+import Header from './Header';
 
 import { domain } from '../../App';
+import { goBack } from '../../utils/user';
+import { server } from '../../utils/functions';
+
+//
+//
 
 class Page11 extends React.Component {
     constructor(props) {
@@ -20,43 +24,63 @@ class Page11 extends React.Component {
 
         console.log('Patient page 11 - Constructor - validator: ', this.validator);
 
-        this.state = {
-            qChk: '',
-            q1_ans: '',
-            q2_ans: '',
-            q3_ans: '',
-            q4_ans: '',
-            q5_ans: '',
-            drug1: '',
-            drug2: '',
-            drug3: '',
-            drug4: '',
-            frequency1: '',
-            frequency2: '',
-            frequency3: '',
-            frequency4: '',
-            error1: '',
-            error2: '',
-            error3: '',
-            error4: '',
-            error5: '',
-            error6: '',
-            error7: '',
-            error8: '',
-            error9: '',
-            error8: '',
-            error10: '',
-            error11: '',
+        this.emptyState = {
+            q1: '',
+            q1_dosage: '',
+            q1_freq: '',
+
+            q2: '',
+            q2_dosage: '',
+            q2_freq: '',
+
+            q3: '',
+            q3_dosage: '',
+            q3_freq: '',
+
+            q4: '',
+            q4_dosage: '',
+            q4_freq: '',
+
+            q5: '',
+
             loader: '',
+
+            errors: {},
         };
 
-        this.submitForm = this.submitForm.bind(this);
-        this.chkOne = this.chkOne.bind(this);
-        this.chkTwo = this.chkTwo.bind(this);
-        this.chkThree = this.chkThree.bind(this);
-        this.chkFour = this.chkFour.bind(this);
-        this.no_med = this.no_med.bind(this);
+        this.state = {
+            q1: '',
+            q1_dosage: '',
+            q1_freq: '',
 
+            q2: '',
+            q2_dosage: '',
+            q2_freq: '',
+
+            q3: '',
+            q3_dosage: '',
+            q3_freq: '',
+
+            q4: '',
+            q4_dosage: '',
+            q4_freq: '',
+
+            q5: '',
+
+            loader: '',
+
+            errors: {},
+        };
+
+        // Binding "this" to functions
+        this.submitForm = this.submitForm.bind(this);
+        this.radioCustInputToggle = this.radioCustInputToggle.bind(this);
+        this.checkBoxToggle = this.checkBoxToggle.bind(this);
+        this.handleClickNoneCheckBox = this.handleClickNoneCheckBox.bind(this);
+        this.validate = this.validate.bind(this);
+        this.initialLoadPreSets = this.initialLoadPreSets.bind(this);
+
+        //
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
@@ -82,193 +106,240 @@ class Page11 extends React.Component {
         }
     }
 
-    aspirin_dose2() {
-        if (document.getElementById('aspirin_dose2').checked === true) {
-            $('#aspirin_dose_other').show(1000);
-        } else {
-            $('#aspirin_dose_other').hide(1000);
+    //
+
+    validate() {
+        let errors = {};
+        const questions = ['q1', 'q2', 'q3', 'q4'];
+
+        for (let i = 0; i < 4; i++) {
+            let Q = questions[i];
+
+            if (this.state[Q] === 'Yes') {
+                const qDosage = `${Q}_dosage`;
+                const qFreq = `${Q}_freq`;
+
+                if (this.state[qDosage] === '') errors[qDosage] = 'Dosage is required';
+                if (this.state[qFreq] === '') errors[qFreq] = 'Frequency is required';
+            }
         }
-    }
-    plavix_dose2() {
-        if (document.getElementById('plavix_dose2').checked === true) {
-            $('#plavix_dose_other').show(1000);
-        } else {
-            $('#plavix_dose_other').hide(1000);
-        }
-    }
-    brillinta_dosage_freq2() {
-        if (document.getElementById('brillinta_dosage_freq2').checked === true) {
-            $('#brillinta_dosage_other').show(1000);
-        } else {
-            $('#brillinta_dosage_other').hide(1000);
-        }
+
+        this.setState({ errors });
+        if ($.isEmptyObject(errors)) return true;
+        else return false;
     }
 
+    //
     submitForm() {
-        if (
-            document.getElementById('no_med').checked === false &&
-            document.getElementById('medicien_4').checked === false &&
-            document.getElementById('medicien_3').checked === false &&
-            document.getElementById('medicien_2').checked === false &&
-            document.getElementById('medicien_1').checked === false
-        ) {
-            this.setState({ error1: 'This field is required' });
-        } else if (
-            document.getElementById('medicien_1').checked === true &&
-            !$("input[name='aspirin_dose']:checked").val()
-        ) {
-            this.setState({ error1: '' });
-            this.setState({ error2: 'This field is required' });
-        } else if (
-            document.getElementById('aspirin_dose2').checked === true &&
-            $('#asprin_dosage_other111').val() === ''
-        ) {
-            this.setState({ error2: '' });
-            this.setState({ error3: 'This field is required' });
-        } else if (
-            document.getElementById('medicien_2').checked === true &&
-            !$("input[name='plavix_dose']:checked").val()
-        ) {
-            this.setState({ error3: '' });
-            this.setState({ error4: 'This field is required' });
-        } else if (
-            document.getElementById('plavix_dose2').checked === true &&
-            $('#plavix_dose_other_opt').val() === ''
-        ) {
-            this.setState({ error4: '' });
-            this.setState({ error5: 'This field is required' });
-        } else if (
-            document.getElementById('medicien_3').checked === true &&
-            !$("input[name='brillinta_dosage_mg']:checked").val()
-        ) {
-            this.setState({ error5: '' });
-            this.setState({ error6: 'This field is required' });
-        } else if (
-            $("input[name='brillinta_dosage_mg']:checked").val() &&
-            !$("input[name='brillinta_dosage_freq']:checked").val()
-        ) {
-            this.setState({ error6: '' });
-            this.setState({ error7: 'This field is required' });
-        } else if (
-            document.getElementById('brillinta_dosage_freq2').checked === true &&
-            $('#brillinta_dosage_freq2_opt').val() === ''
-        ) {
-            this.setState({ error7: '' });
-            this.setState({ error8: 'This field is required' });
-        } else if (
-            document.getElementById('medicien_4').checked === true &&
-            !$("input[name='prasugrel_dosage']:checked").val()
-        ) {
-            this.setState({ error8: '' });
-            this.setState({ error9: 'This field is required' });
-        } else if (
-            document.getElementById('prasugrel_dosage3').checked === true &&
-            $('#prasugrel_dosage3_opt').val() === ''
-        ) {
-            this.setState({ error1: '' });
-            this.setState({ error2: '' });
-            this.setState({ error3: '' });
-            this.setState({ error4: '' });
-            this.setState({ error5: '' });
-            this.setState({ error6: '' });
-            this.setState({ error7: '' });
-            this.setState({ error8: '' });
-            this.setState({ error9: '' });
-
-            this.setState({ error10: 'This field is required' });
-        } else if (
-            $("input[name='prasugrel_dosage']:checked").val() &&
-            !$("input[name='prasugrel_dosage_freq']:checked").val()
-        ) {
-            this.setState({ error1: '' });
-            this.setState({ error2: '' });
-            this.setState({ error3: '' });
-            this.setState({ error4: '' });
-            this.setState({ error5: '' });
-            this.setState({ error6: '' });
-            this.setState({ error7: '' });
-            this.setState({ error8: '' });
-            this.setState({ error9: '' });
-            this.setState({ error10: '' });
-            this.setState({ error11: 'This field is required' });
-        } else {
+        if (this.validate()) {
             console.log('Patient page 11 - submit - state: ', this.state);
-            this.page11(this.state);
+            this.page11();
             this.props.history.push('/User/Page12');
+        } else {
+            console.log('Patient page11 - submit - error: ', this.state);
         }
     }
+
     page11() {
-        if (document.getElementById('no_med').checked === true) {
-            var param = { not_using_drugs: this.state.q5_ans };
+        const state = this.state;
+
+        if (state.q5 === 'Yes') {
+            var param = { not_using_drugs: 'No, I am not on any of these medications' };
         } else {
             var param = {};
-            if (document.getElementById('medicien_1').checked === true) {
-                param.aspirin = this.state.q1_ans;
-                param.aspirin_dosage = this.state.drug1;
-                param.aspirin_dosage_time = this.state.frequency1;
+            if (state.q1 === 'Yes') {
+                param.aspirin = 'Aspirin (ASA)';
+                param.aspirin_dosage = this.state.q1_dosage + ' mg';
+                param.aspirin_dosage_time = this.state.q1_freq;
             }
-            if (document.getElementById('medicien_2').checked === true) {
-                param.plavix = this.state.q2_ans;
-                param.plavix_dosage = this.state.drug2;
-                param.plavix_dosage_time = this.state.frequency2;
+            if (state.q2 === 'Yes') {
+                param.plavix = 'Plavix (Clopidogrel)';
+                param.plavix_dosage = this.state.q2_dosage + ' mg';
+                param.plavix_dosage_time = this.state.q2_freq;
             }
-
-            if (document.getElementById('medicien_3').checked === true) {
-                param.brillinta = this.state.q3_ans;
-                param.brillinta_dosage = this.state.drug3;
-                param.brillinta_dosage_timie = this.state.frequency3;
+            if (state.q3 === 'Yes') {
+                param.brillinta = 'Brillinta (Ticagrelor)';
+                param.brillinta_dosage = this.state.q3_dosage + ' mg';
+                param.brillinta_dosage_timie = this.state.q3_freq;
             }
-
-            if (document.getElementById('medicien_4').checked === true) {
-                param.effient = this.state.q4_ans;
-                param.effient_dosage = this.state.drug4;
-                param.effient_dosage_time = this.state.frequency4;
+            if (state.q4 === 'Yes') {
+                param.effient = 'Effient (Prasugrel)';
+                param.effient_dosage = this.state.q4_dosage + ' mg';
+                param.effient_dosage_time = this.state.q4_freq;
             }
         }
+
         console.log('Patient page 11 - page11 - param: ', param);
         server('patient/page11', param);
-        //this.props.history.push('');
     }
-    func() {
-        document.getElementById('de').style.display = 'none';
-        if ($('.goption:checked').length > 2) {
-            this.checked = false;
-            alert('You can select only 2 medicien');
+
+    //
+
+    renderQuestionCheckBox(id, name, label) {
+        return (
+            <div className="checkbox">
+                <label className="blue h5" style={{ fontSize: 18, fontWeight: 400 }}>
+                    {label}
+                </label>
+                <input
+                    type="checkbox"
+                    className="pull-right"
+                    id={id}
+                    name={name}
+                    value={label}
+                    checked={this.state[id] !== '' ? true : false}
+                    onClick={this.checkBoxToggle}
+                />
+            </div>
+        );
+    }
+
+    renderNoneCheckBox(id, name, label) {
+        return (
+            <div className="checkbox">
+                <label className="blue h5" style={{ fontSize: 18, fontWeight: 400 }}>
+                    {label}
+                </label>
+                <input
+                    type="checkbox"
+                    className="pull-right "
+                    id={id}
+                    name={name}
+                    value="none"
+                    checked={this.state[id] !== '' ? true : false}
+                    onClick={this.handleClickNoneCheckBox}
+                />
+            </div>
+        );
+    }
+
+    renderQuestionRadioOption(id, name, label, cType) {
+        // const stateField = cType === 'dosage' ? `${id}-dosage` : `${id}-freq`;
+        const label_ = cType === 'dosage' ? `${label} mg` : label;
+
+        return (
+            <React.Fragment>
+                <label className="radio-inline blue ml-lg-3">{label_}</label>
+                <input
+                    type="radio"
+                    className="pull-right"
+                    id={id}
+                    name={name}
+                    value={label}
+                    checked={label === this.state[name] ? true : false}
+                    onChange={(e) => this.setState({ [name]: e.target.value })}
+                    onClick={(e) => this.radioCustInputToggle(e)}
+                />
+                <br />
+            </React.Fragment>
+        );
+    }
+
+    renderQuestionRadioCustomOption(id, name, cType) {
+        const { errors } = this.state;
+        const inputLabel =
+            cType === 'dosage' ? 'Please specify dosage in mg' : 'Please specify frequency of drug usage';
+        const label_ = cType === 'dosage' ? 'Enter custom dosage' : 'Enter custom frequency';
+        const placeHolder_ = cType === 'dosage' ? 'Dosage (mg)' : 'Frequency';
+
+        return (
+            <React.Fragment>
+                <label className="radio-inline blue ml-lg-3">{label_}</label>
+                <input
+                    type="radio"
+                    className="pull-right"
+                    id={id}
+                    name={name}
+                    value="radioCustOption"
+                    onClick={(e) => this.radioCustInputToggle(e)}
+                />
+                <br />
+
+                <div className="row" id={`${id}-toggle`}>
+                    <div className="col-6  ml-lg-3">
+                        {/* input */}
+                        <p className="blue" style={{ fontSize: 15, fontWeight: 500, opacity: '0.75' }}>
+                            {inputLabel}
+                        </p>
+                        <input
+                            type="text"
+                            className="form-control mb-4 transparent-custom-input"
+                            id={`${id}-text`}
+                            placeholder={placeHolder_}
+                            onChange={(e) => this.setState({ [name]: e.target.value })}
+                        />
+                    </div>
+                </div>
+                <div className="text-danger mb-lg-3"> {!$.isEmptyObject(errors) && errors[name]}</div>
+            </React.Fragment>
+        );
+    }
+
+    //
+    //
+
+    radioCustInputToggle(e) {
+        const { id, value, name, checked } = e.target;
+        const custId = `${name}-cust`;
+        const toggleId = `${custId}-toggle`;
+
+        if (value === 'radioCustOption') {
+            $(`#${toggleId}`).show(500);
+            this.setState({ [name]: '' });
+        } else {
+            $(`#${toggleId}`).hide(500);
+            $(`#${custId}-text`).val('');
         }
     }
 
-    chkOne() {
-        this.setState({ q1_ans: 'Aspirin (ASA)' });
-        $('#one').toggle(1000);
-    }
-    chkTwo() {
-        this.setState({ q2_ans: 'Plavix (Clopidogrel)' });
-        $('#two').toggle(1000);
-    }
-    chkThree() {
-        this.setState({ q3_ans: 'Brillinta (Ticagrelor)' });
+    checkBoxToggle(e) {
+        const { id, checked } = e.target;
+        const toggleId = `${id}-toggle`;
+        const dosageState = `${id}_dosage`;
+        const freqState = `${id}_freq`;
 
-        $('#three').toggle(1000);
-    }
-    chkFour() {
-        this.setState({ q4_ans: 'Effient (Prasugrel)' });
-
-        $('#four').toggle(1000);
+        if (checked) {
+            $(`#${toggleId}`).show(500);
+            this.setState({ [id]: 'Yes' });
+        } else {
+            $(`#${toggleId}`).hide(500);
+            this.setState({ [id]: '', [dosageState]: '', [freqState]: '' });
+        }
     }
 
-    no_med() {
-        this.setState({
-            q1_ans: '',
-            q1_ans: '',
-            q2_ans: '',
-            q3_ans: '',
-            q4_ans: '',
-            q5_ans: '',
-            drug1: '',
-            drug2: '',
-            frequency1: '',
-            frequency2: '',
-        });
+    handleClickNoneCheckBox(e) {
+        const { id, checked } = e.target;
+        let state = { ...this.emptyState };
+
+        if (checked) {
+            state[id] = 'Yes';
+            this.initialLoadPreSets();
+            this.setState({ ...state });
+            $(`input[name=q]`).prop('disabled', true);
+        } else {
+            $(`input[name=q]`).prop('disabled', false);
+            this.setState({ ...state });
+        }
+    }
+
+    //
+    initialLoadPreSets() {
+        $('#q1-toggle').hide(400);
+        $('#q2-toggle').hide(400);
+        $('#q3-toggle').hide(400);
+        $('#q4-toggle').hide(400);
+
+        $(`#q1_dosage-cust-toggle`).hide(400);
+        $(`#q1_freq-cust-toggle`).hide(400);
+
+        $(`#q2_dosage-cust-toggle`).hide(400);
+        $(`#q2_freq-cust-toggle`).hide(400);
+
+        $(`#q3_dosage-cust-toggle`).hide(400);
+        $(`#q3_freq-cust-toggle`).hide(400);
+
+        $(`#q4_dosage-cust-toggle`).hide(400);
+        $(`#q4_freq-cust-toggle`).hide(400);
     }
 
     //
@@ -296,386 +367,65 @@ class Page11 extends React.Component {
                         {/* Default form login */}
                         <form className="p-5" action="#!" id="frm">
                             <p className="blue">
-                                <b>Please choose if applicable</b>
+                                <b className="h4">Please choose if applicable</b>
                             </p>
                             <p className="blue" style={{ fontSize: 14, marginTop: '-20px' }}>
-                                SELECT UP TO 2
+                                Select up to 2 Options
                             </p>
-                            <div className="checkbox">
-                                <label className="blue">Aspirin (ASA)</label>
-                                <input
-                                    type="checkbox"
-                                    className="pull-right goption chk"
-                                    name="main_opt1"
-                                    value="Aspirin (ASA)"
-                                    onChange={this.chkOne}
-                                    id="medicien_1"
-                                />
-                            </div>
-                            <div id="one">
-                                <label className="radio-inline blue">81 mg</label>
-                                <input
-                                    type="radio"
-                                    name="aspirin_dose"
-                                    id="aspirin_dose1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ drug1: '81 mg' })}
-                                    onClick={this.aspirin_dose2}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Other</label>
-                                <input
-                                    type="radio"
-                                    name="aspirin_dose"
-                                    id="aspirin_dose2"
-                                    className="pull-right"
-                                    onClick={this.aspirin_dose2}
-                                />
-                                <br />
 
-                                <div className="row" id="aspirin_dose_other">
-                                    <div className="col-6">
-                                        {/* input */}
-                                        <p className="blue" style={{ opacity: '0.5' }}>
-                                            <b>Please specify dosage and frequency of DRUG </b>
-                                        </p>
-                                        <input
-                                            type="number"
-                                            id="asprin_dosage_other111"
-                                            className="form-control mb-4 transparent-custom-input"
-                                            placeholder="Dose (mg)"
-                                            onChange={(e) =>
-                                                this.setState({ drug1: e.target.value })
-                                            }
-                                        />
-                                        <div className="text-danger">
-                                            {' '}
-                                            {this.state.error3 !== '' ? this.state.error3 : ''}
-                                        </div>
-                                    </div>
-                                    <div className="col-6">{/* input */}</div>
-                                </div>
-                                <label className="radio-inline blue">Once daily</label>
-                                <input
-                                    type="radio"
-                                    name="aspirin_dose_time"
-                                    id="aspirin_freq1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency1: 'Once daily' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Twice daily</label>
-                                <input
-                                    type="radio"
-                                    name="aspirin_dose_time"
-                                    id="aspirin_freq2"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency1: 'Twice daily' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Not Sure</label>
-                                <input
-                                    type="radio"
-                                    name="aspirin_dose_time"
-                                    id="aspirin_freq"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency1: 'Not Sure' })}
-                                />
-                                <br />
+                            {/*  */}
+                            {this.renderQuestionCheckBox('q1', 'q', 'Aspirin (ASA)')}
+                            <div id="q1-toggle" className="mb-xl-4">
+                                {this.renderQuestionRadioOption('q1_dosage-1', 'q1_dosage', '81', 'dosage')}
+                                {this.renderQuestionRadioCustomOption('q1_dosage-cust', 'q1_dosage', 'dosage')}
 
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error2 !== '' ? this.state.error2 : ''}
-                                </div>
+                                {this.renderQuestionRadioOption('q1_freq-1', 'q1_freq', 'Once Daily', 'freq')}
+                                {this.renderQuestionRadioOption('q1_freq-2', 'q1_freq', 'Twice daily', 'freq')}
+                                {this.renderQuestionRadioOption('q1_freq-3', 'q1_freq', 'Not sure', 'freq')}
+                                {this.renderQuestionRadioCustomOption('q1_freq-cust', 'q1_freq', 'freq')}
                             </div>
 
-                            <div className="checkbox">
-                                <label className="blue">Plavix (Clopidogrel)</label>
-                                <input
-                                    type="checkbox"
-                                    className="pull-right goption chk"
-                                    value="Plavix (Clopidogrel)"
-                                    onChange={this.chkTwo}
-                                    id="medicien_2"
-                                    name="main_opt2"
-                                />
-                            </div>
-                            <div id="two">
-                                <label className="radio-inline blue">75 mg</label>
-                                <input
-                                    type="radio"
-                                    name="plavix_dose"
-                                    id="plavix_dose1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ drug2: '75 mg' })}
-                                    onClick={this.plavix_dose2}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Other</label>
-                                <input
-                                    type="radio"
-                                    name="plavix_dose"
-                                    id="plavix_dose2"
-                                    className="pull-right"
-                                    onClick={this.plavix_dose2}
-                                />
-                                <br />
-                                <div className="row" id="plavix_dose_other">
-                                    <div className="col-6">
-                                        {/* input */}
-                                        <p className="blue" style={{ opacity: '0.5' }}>
-                                            <b>Please specify dosage and frequency of DRUG</b>
-                                        </p>
-                                        <input
-                                            type="text"
-                                            id="plavix_dose_other_opt"
-                                            className="form-control mb-4 transparent-custom-input"
-                                            placeholder="Dose (mg)"
-                                            onChange={(e) =>
-                                                this.setState({ drug2: e.target.value })
-                                            }
-                                        />
-                                        <div className="text-danger">
-                                            {' '}
-                                            {this.state.error5 !== '' ? this.state.error5 : ''}
-                                        </div>
-                                    </div>
-                                    <div className="col-6">{/* input */}</div>
-                                </div>
-                                <label className="radio-inline blue">Once daily</label>
-                                <input
-                                    type="radio"
-                                    name="plavix_dose_time"
-                                    id="Plavix_freq1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency2: 'Once daily' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Twice daily</label>
-                                <input
-                                    type="radio"
-                                    name="plavix_dose_time"
-                                    id="Plavix_freq2"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency2: 'Twice daily' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Not Sure</label>
-                                <input
-                                    type="radio"
-                                    name="plavix_dose_time"
-                                    id="Plavix_freq3"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency2: 'Not Sure' })}
-                                />
-                                <br />
+                            {/*  */}
+                            {this.renderQuestionCheckBox('q2', 'q', 'Plavix (Clopidogrel)')}
+                            <div id="q2-toggle" className="mb-xl-4">
+                                {this.renderQuestionRadioOption('q2_dosage-1', 'q2_dosage', '75', 'dosage')}
+                                {this.renderQuestionRadioCustomOption('q2_dosage-cust', 'q2_dosage', 'dosage')}
 
-                                <br />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error4 !== '' ? this.state.error4 : ''}
-                                </div>
-                            </div>
-                            <div className="checkbox">
-                                <label className="blue">Brillinta (Ticagrelor)</label>
-                                <input
-                                    type="checkbox"
-                                    className="pull-right goption chk"
-                                    value="Brillinta (Ticagrelor)"
-                                    onChange={this.chkThree}
-                                    id="medicien_3"
-                                    name="main_opt13"
-                                />
+                                {this.renderQuestionRadioOption('q2_freq-1', 'q2_freq', 'Once Daily', 'freq')}
+                                {this.renderQuestionRadioOption('q2_freq-2', 'q2_freq', 'Twice daily', 'freq')}
+                                {this.renderQuestionRadioOption('q2_freq-3', 'q2_freq', 'Not sure', 'freq')}
+                                {this.renderQuestionRadioCustomOption('q2_freq-cust', 'q2_freq', 'freq')}
                             </div>
 
-                            <div id="three">
-                                <label className="radio-inline blue">60 mg</label>
-                                <input
-                                    type="radio"
-                                    name="brillinta_dosage_mg"
-                                    id="brillinta_dosage_mg1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ drug3: '60 mg' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">90 mg</label>
-                                <input
-                                    type="radio"
-                                    name="brillinta_dosage_mg"
-                                    id="brillinta_dosage_m2"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ drug3: '90 mg' })}
-                                />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error6 !== '' ? this.state.error6 : ''}
-                                </div>
-                                <br />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
-                                <label className="radio-inline blue">Twice daily</label>
-                                <input
-                                    type="radio"
-                                    name="brillinta_dosage_freq"
-                                    id="brillinta_dosage_freq1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency3: 'Twice daily' })}
-                                    onClick={this.brillinta_dosage_freq2}
-                                />
-                                <br />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <label className="radio-inline blue">Other</label>
-                                <input
-                                    type="radio"
-                                    name="brillinta_dosage_freq"
-                                    id="brillinta_dosage_freq2"
-                                    className="pull-right"
-                                    onClick={this.brillinta_dosage_freq2}
-                                />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error7 !== '' ? this.state.error7 : ''}
-                                </div>
-                                <br />
-                                <div className="row" id="brillinta_dosage_other">
-                                    <div className="col-6">
-                                        <p className="blue" style={{ opacity: '0.5' }}>
-                                            <b>Please specify dosage and frequency of DRUG</b>
-                                        </p>
-                                        {/* input */}
-                                        <input
-                                            id="brillinta_dosage_freq2_opt"
-                                            type="text"
-                                            className="form-control mb-4 transparent-custom-input"
-                                            placeholder="Dose (mg)"
-                                            onChange={(e) =>
-                                                this.setState({
-                                                    frequency3: e.target.value,
-                                                })
-                                            }
-                                        />
-                                        <div className="text-danger">
-                                            {' '}
-                                            {this.state.error8 !== '' ? this.state.error8 : ''}
-                                        </div>
-                                    </div>
-                                    <div className="col-6"></div>
-                                </div>
-                            </div>
-                            <div className="checkbox">
-                                <label className="blue">Effient (Prasugrel)</label>
-                                <input
-                                    type="checkbox"
-                                    className="pull-right goption chk"
-                                    value="ffient (Prasugrel)<"
-                                    onChange={this.chkFour}
-                                    id="medicien_4"
-                                    name="main_opt14"
-                                />
-                            </div>
-                            <div id="four">
-                                <label className="radio-inline blue">5 mg</label>
-                                <input
-                                    type="radio"
-                                    name="prasugrel_dosage"
-                                    id="prasugrel_dosage1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ drug4: '5 mg' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">10 mg</label>
-                                <input
-                                    type="radio"
-                                    name="prasugrel_dosage"
-                                    id="prasugrel_dosage2"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ drug4: '10 mg' })}
-                                />
-                                <br />
-                                <label className="radio-inline blue">Other</label>
-                                <input
-                                    type="radio"
-                                    name="prasugrel_dosage"
-                                    id="prasugrel_dosage3"
-                                    className="pull-right"
-                                />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error9 !== '' ? this.state.error9 : ''}
-                                </div>
-                                <br />
-                                <span id="efffient_other">
-                                    <p className="blue" style={{ opacity: '0.5' }}>
-                                        <b>Please specify dosage and frequency of DRUG</b>
-                                    </p>
-                                    <input
-                                        type="text"
-                                        id="prasugrel_dosage3_opt"
-                                        className="form-control mb-4 transparent-custom-input"
-                                        placeholder="Dose (mg)"
-                                        onChange={(e) => this.setState({ drug4: e.target.value })}
-                                    />
-                                    <div className="text-danger">
-                                        {' '}
-                                        {this.state.error10 !== '' ? this.state.error10 : ''}
-                                    </div>
-                                </span>
-                                <br />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
-                                <label className="radio-inline blue">Twice daily</label>
-                                <input
-                                    type="radio"
-                                    name="prasugrel_dosage_freq"
-                                    id="prasugrel_dosage_freq1"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency4: 'Twice daily' })}
-                                />
-                                <br />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <label className="radio-inline blue">Other</label>
-                                <input
-                                    type="radio"
-                                    name="prasugrel_dosage_freq"
-                                    id="prasugrel_dosage_freq2"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ frequency4: 'Other' })}
-                                />
-                                <br />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error11 !== '' ? this.state.error11 : ''}
-                                </div>
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error5 !== '' ? this.state.error5 : ''}
-                                </div>
+                            {/*  */}
+                            {this.renderQuestionCheckBox('q3', 'q', 'Brillinta (Ticagrelor)')}
+                            <div id="q3-toggle" className="mb-xl-4">
+                                {this.renderQuestionRadioOption('q3_dosage-1', 'q3_dosage', '60', 'dosage')}
+                                {this.renderQuestionRadioOption('q3_dosage-1', 'q3_dosage', '90', 'dosage')}
+                                {this.renderQuestionRadioCustomOption('q3_dosage-cust', 'q3_dosage', 'dosage')}
+
+                                {this.renderQuestionRadioOption('q3_freq-1', 'q3_freq', 'Once Daily', 'freq')}
+                                {this.renderQuestionRadioOption('q3_freq-2', 'q3_freq', 'Twice daily', 'freq')}
+                                {this.renderQuestionRadioOption('q3_freq-3', 'q3_freq', 'Not sure', 'freq')}
+                                {this.renderQuestionRadioCustomOption('q3_freq-cust', 'q3_freq', 'freq')}
                             </div>
 
-                            <div className="checkbox">
-                                <label className="blue">
-                                    No, I am not on any of these medications
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    className="pull-right"
-                                    onChange={(e) => this.setState({ q5_ans: e.target.value })}
-                                    onClick={this.no_med}
-                                    name="main_opt5"
-                                    value="No, I am not on any of these medications"
-                                    id="no_med"
-                                />
+                            {/*  */}
+                            {this.renderQuestionCheckBox('q4', 'q', 'Effient (Prasugrel)')}
+                            <div id="q4-toggle" className="mb-xl-4">
+                                {this.renderQuestionRadioOption('q4_dosage-1', 'q4_dosage', '5', 'dosage')}
+                                {this.renderQuestionRadioOption('q4_dosage-1', 'q4_dosage', '10', 'dosage')}
+                                {this.renderQuestionRadioCustomOption('q4_dosage-cust', 'q4_dosage', 'dosage')}
+
+                                {this.renderQuestionRadioOption('q4_freq-1', 'q4_freq', 'Once Daily', 'freq')}
+                                {this.renderQuestionRadioOption('q4_freq-2', 'q4_freq', 'Twice daily', 'freq')}
+                                {this.renderQuestionRadioOption('q4_freq-3', 'q4_freq', 'Not sure', 'freq')}
+                                {this.renderQuestionRadioCustomOption('q4_freq-cust', 'q4_freq', 'freq')}
                             </div>
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error1 !== '' ? this.state.error1 : ''}
-                            </div>
-                            <br />
-                            <br />
-                            <div className="row">
-                                <div className="col-6">{/* input */}</div>
-                                <div className="col-6">{/* input */}</div>
-                            </div>
+
+                            {/*  */}
+                            {this.renderNoneCheckBox('q5', 'none', 'No, I am not on any of these medications')}
                         </form>
-                        {/* Default form login */}
                         <nav aria-label="Page navigation example">
                             <ul className="pagination justify-content-center">
                                 <li className="page-item">
@@ -698,36 +448,12 @@ class Page11 extends React.Component {
     }
 
     componentDidMount() {
-        $('#one').hide();
-        $('#two').hide();
-        $('#three').hide();
-        $('#four').hide();
-        $('#aspirin_dose_other').hide();
-        $('#plavix_dose_other').hide();
-        $('#brillinta_dosage_other').hide();
-        $('#efffient_other').hide();
+        this.initialLoadPreSets();
 
-        $('.goption').click(function () {
-            if ($('.goption:checked').length > 2) {
+        $('input[name=q]').click(function () {
+            if ($('input[name=q]:checked').length > 2) {
                 this.checked = false;
             }
-        });
-
-        $('#plavix_dose2').click(function () {
-            $('#plavix_dose_other').toggle(1000);
-        });
-
-        $('#brillinta_dosage_freq2').click(function () {
-            $('#brillinta_dosage_other').toggle(1000);
-        });
-        $('#prasugrel_dosage3').click(function () {
-            $('#efffient_other').toggle(1000);
-        });
-        $('#no_med').click(function () {
-            $('.chk').prop('checked', false);
-            $("input[type='radio']").prop('checked', false);
-            $('.chk').attr('disabled', !$("input[type='checkbox']").attr('disabled'));
-            $("input[type='radio']").attr('disabled', !$("input[type='radio']").attr('disabled'));
         });
     }
 }
