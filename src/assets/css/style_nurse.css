@@ -21,6 +21,7 @@ body {
     background-size: cover;
     background-position: center;
 }
+
 .top-bar {
     padding: 40px;
     background-color: #8dbce0;
@@ -29,11 +30,13 @@ body {
     color: #fff !important;
     font-size: 30px;
 }
+
 .dropdown-menu {
-    //background-color: #50D4EA;
+    /* background-color: #50D4EA; */
     border: none;
-    //border-radius: 30px;
+    /* border-radius: 30px; */
 }
+
 .dropdown-item {
     color: black;
     text-align: center;
@@ -43,6 +46,12 @@ body {
     background-color: #fff;
     box-shadow: -5px 5px 10px 5px #bfbfbf;
     border-radius: 15px;
+}
+
+@media (max-width: 770px) {
+    .jumbotron {
+        padding: 3rem 1.7rem;
+    }
 }
 
 .form-group input,

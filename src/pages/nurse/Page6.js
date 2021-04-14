@@ -112,128 +112,361 @@ class Page6 extends React.Component {
                         <br />
                         <br />
                         {/*-----------------------------------------------------------------------------------------------*/}
-                        <div className="table-responsive">
-                            <table className="table table-striped text-center">
-                                <thead>
-                                    <tr className="">
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Lovenox Time</th>
-                                        <th scope="col">Warfarin Time</th>
-                                        <th scope="col">Lovenox Dosage</th>
-                                        <th scope="col">Warfarin Dosage</th>
-                                        <th scope="col">Comment</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">T - 3</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>No warfarin</td>
-                                        <td>1 needle </td>
-                                        <td>Warfarin</td>
-                                        <td>Comment</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T - 2</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>No warfarin</td>
-                                        <td>1 needle</td>
-                                        <td />
-                                        <td>Comment</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T - 1</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>No warfarin</td>
-                                        <td>1 needle</td>
-                                        <td>Warfarin</td>
-                                        <td />
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            T / <i className="fa fa-calendar" aria-hidden="true" />
-                                        </th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>No warfarin</td>
-                                        <td>1 needle</td>
-                                        <td>_ mg x _</td>
-                                        <td />
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T + 1</th>
-                                        <td>No lovenox</td>
-                                        <td>6:00 PM</td>
-                                        <td />
-                                        <td>_ mg x _</td>
-                                        <td>Comment</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T + 2</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>6:00 PM</td>
-                                        <td>1 needle</td>
-                                        <td>_ mg x _</td>
-                                        <td />
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T + 3</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>6:00 PM</td>
-                                        <td>1 needle</td>
-                                        <td>_ mg x _</td>
-                                        <td>Comment</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T + 4</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>6:00 PM</td>
-                                        <td>1 needle</td>
-                                        <td>_ mg x _</td>
-                                        <td />
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">T + 5</th>
-                                        <td>
-                                            8:00 AM
-                                            <br />
-                                            8:00 PM
-                                        </td>
-                                        <td>6:00 PM</td>
-                                        <td>1 needle</td>
-                                        <td>_ mg x _</td>
-                                        <td />
-                                    </tr>
-                                </tbody>
-                            </table>
+                        {/* <div class="container-table100">
+                            <div class="wrap-table100">
+                                <div class="table100">
+                                    <table>
+                                        <thead>
+                                            <tr class="table100-head">
+                                                <th class="column1">Date</th>
+                                                <th class="column2">Lovenox Time</th>
+                                                <th class="column3">Lovenox Dosage</th>
+                                                <th class="column4">Warfarin Time</th>
+                                                <th class="column5">Warfarin Dosage</th>
+                                                <th class="column6">Comment</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td class="column1">T - 5</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">No warfarin</td>
+                                                <td class="column5">Warfarin</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T - 4</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">No warfarin</td>
+                                                <td class="column5">Warfarin</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="column1">T - 3</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">No warfarin</td>
+                                                <td class="column5">Warfarin</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T - 2</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">No warfarin</td>
+                                                <td class="column5">Warfarin</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T - 1</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">No warfarin</td>
+                                                <td class="column5">Warfarin</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="column1">T - 0</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">No warfarin</td>
+                                                <td class="column5">20 mg</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T + 1</td>
+                                                <td class="column2">No lovenox</td>
+                                                <td class="column3">--</td>
+                                                <td class="column4">6:00 PM</td>
+                                                <td class="column5">20 mg</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T + 2</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">6:00 PM</td>
+                                                <td class="column5">10 mg</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="column1">T + 3</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">6:00 PM</td>
+                                                <td class="column5">10 mg</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T + 4</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">6:00 PM</td>
+                                                <td class="column5">10 mg</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="column1">T + 5</td>
+                                                <td class="column2">8:00 AM - 8:00 PM</td>
+                                                <td class="column3">1 needle</td>
+                                                <td class="column4">6:00 PM</td>
+                                                <td class="column5">10 mg</td>
+                                                <td class="column6">Comment</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+                         */}
+                        <div class="container-table100">
+                            <div class="wrap-table100">
+                                <div class="table">
+                                    <div class="tableRow header">
+                                        <div class="cell">Date</div>
+                                        <div class="cell">Lovenox Time</div>
+                                        <div class="cell">Lovenox Dosage</div>
+                                        <div class="cell">Warfarin Time</div>
+                                        <div class="cell">Warfarin Dosage</div>
+                                        <div class="cell">Comment</div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T - 5
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            8:00 AM - 8:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            1 needle
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T - 4
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            8:00 AM - 8:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            1 needle
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T - 3
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            8:00 AM - 8:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            1 needle
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T - 2
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            8:00 AM - 8:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            1 needle
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T - 1
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            8:00 AM - 8:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            1 needle
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T - 0
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            8:00 AM - 8:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            1 needle
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            6:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            20 mg
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T + 1
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            6:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            20 mg
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T + 2
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            6:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            20 mg
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T + 3
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            6:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            10 mg
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T + 4
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            6:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            10 mg
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+
+                                    <div class="tableRow">
+                                        <div class="cell" data-title="Date">
+                                            T + 5
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Time">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Lovenox Dosage">
+                                            --
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Time">
+                                            6:00 PM
+                                        </div>
+                                        <div class="cell" data-title="Warfarin Dosage">
+                                            10 mg
+                                        </div>
+                                        <div class="cell" data-title="Comment">
+                                            Comment
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/*-----------------------------------------------------------------------------------------------*/}
                         <br /> <br />
                         <div className="row">
                             <div className="col-4">

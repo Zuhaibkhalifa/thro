@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+
 import App from './App';
+
+import '../node_modules/jquery/dist/jquery.js';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/font-awesome/css/font-awesome.min.css';
+
 import './assets/css/style_user.css';
 import './assets/css/style_nurse.css';
-import '../node_modules/font-awesome/css/font-awesome.min.css';
-import '../node_modules/jquery/dist/jquery.js';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import './assets/css/medicationTable.css';
+
+//
 
 ReactDOM.render(
     //  <HashRouter basename='/thrombo/'>
