@@ -70,10 +70,7 @@ class Page16 extends React.Component {
     submitForm() {
         if (document.getElementById('notsure').checked === false && $('#procedure').val() === '') {
             this.setState({ error1: 'This field is required' });
-        } else if (
-            document.getElementById('notsure').checked === false &&
-            $('#procedure_date').val() === ''
-        ) {
+        } else if (document.getElementById('notsure').checked === false && $('#procedure_date').val() === '') {
             this.setState({ error1: '' });
             this.setState({ error2: 'This field is required' });
         } else {
@@ -126,8 +123,8 @@ class Page16 extends React.Component {
                             </div>
                         </div>{' '}
                         <p className="white">
-                            Thank you for filling out the bridging clinic patient application.
-                            Please pass the tablet to the nurse.
+                            Thank you for filling out the bridging clinic patient application. Please pass the tablet to
+                            the nurse.
                         </p>
                         <div className="row">
                             <div className="col-6"></div>
@@ -165,10 +162,7 @@ class Page16 extends React.Component {
                                     value={this.state.q1_ans}
                                     onChange={(e) => this.setState({ q1_ans: e.target.value })}
                                 />
-                                <div className="text-danger">
-                                    {' '}
-                                    {this.state.error1 !== '' ? this.state.error1 : ''}
-                                </div>
+                                <div className="text-danger"> {this.state.error1 !== '' ? this.state.error1 : ''}</div>
                                 <br />
                                 <div className="row">
                                     <div className="col-12">
@@ -181,9 +175,7 @@ class Page16 extends React.Component {
                                             id="procedure_date"
                                             className="form-control mb-4 transparent-custom-input"
                                             value={this.state.q2_ans}
-                                            onChange={(e) =>
-                                                this.setState({ q2_ans: e.target.value })
-                                            }
+                                            onChange={(e) => this.setState({ q2_ans: e.target.value })}
                                         />
                                         <div className="text-danger">
                                             {' '}
@@ -218,11 +210,9 @@ class Page16 extends React.Component {
                                     </button>
                                 </li>
                                 <li className="page-item">
-                                    <li className="page-item">
-                                        <button className="page-link" onClick={this.submitForm}>
-                                            Finish
-                                        </button>
-                                    </li>
+                                    <button className="page-link" onClick={this.submitForm}>
+                                        Finish
+                                    </button>
                                 </li>
                             </ul>
                         </nav>
@@ -249,17 +239,13 @@ class Page16 extends React.Component {
                                     <div className="modal-body blue-bg">
                                         <div className="row">
                                             <div className="col-6 offset-3">
-                                                <img
-                                                    src="img/3.png"
-                                                    className="img-fluid"
-                                                    style={{ height: 200 }}
-                                                />
+                                                <img src="img/3.png" className="img-fluid" style={{ height: 200 }} />
                                             </div>
                                         </div>
                                         <br />
                                         <p className="white">
-                                            Thanks. you for filling out the bridiging clinic patient
-                                            application. Please pass the tablet to the nurse.
+                                            Thanks. you for filling out the bridiging clinic patient application. Please
+                                            pass the tablet to the nurse.
                                         </p>
                                         <br />
                                         <br />

@@ -69,6 +69,7 @@ class Page2 extends React.Component {
     //
     submitForm() {
         console.log(this.state);
+
         if (this.validator.allValid()) {
             console.log('Nurse page2 - submit - state: ', this.state);
             this.page1(this.state);
@@ -154,11 +155,9 @@ class Page2 extends React.Component {
                                 className="form-control"
                                 id="procedure"
                                 value={this.state.procedureSelected}
-                                onChange={(event) => this.handleChange_procedure(event.target.value)}
+                                onChange={(e) => this.setState({ procedureSelected: e.target.value })}
                             >
-                                <option disabled selected hidden>
-                                    Please select
-                                </option>
+                                <option>Please select</option>
                                 <option>Endoscopy</option>
                                 <option>Colonoscopy</option>
                                 <option>Bronchoscopy</option>

@@ -148,23 +148,23 @@ class Page11 extends React.Component {
         } else {
             var param = {};
             if (state.q1 === 'Yes') {
-                param.aspirin = this.state.q1;
-                param.aspirin_dosage = this.state.q1_dosage;
+                param.aspirin = 'Aspirin (ASA)';
+                param.aspirin_dosage = this.state.q1_dosage + ' mg';
                 param.aspirin_dosage_time = this.state.q1_freq;
             }
             if (state.q2 === 'Yes') {
-                param.plavix = this.state.q2;
-                param.plavix_dosage = this.state.q2_dosage;
+                param.plavix = 'Plavix (Clopidogrel)';
+                param.plavix_dosage = this.state.q2_dosage + ' mg';
                 param.plavix_dosage_time = this.state.q2_freq;
             }
-            if (state.q2 === 'Yes') {
-                param.brillinta = this.state.q3;
-                param.brillinta_dosage = this.state.q3_dosage;
+            if (state.q3 === 'Yes') {
+                param.brillinta = 'Brillinta (Ticagrelor)';
+                param.brillinta_dosage = this.state.q3_dosage + ' mg';
                 param.brillinta_dosage_timie = this.state.q3_freq;
             }
             if (state.q4 === 'Yes') {
-                param.effient = this.state.q4;
-                param.effient_dosage = this.state.q4_dosage;
+                param.effient = 'Effient (Prasugrel)';
+                param.effient_dosage = this.state.q4_dosage + ' mg';
                 param.effient_dosage_time = this.state.q4_freq;
             }
         }
@@ -256,7 +256,7 @@ class Page11 extends React.Component {
                 <br />
 
                 <div className="row" id={`${id}-toggle`}>
-                    <div className="col-6">
+                    <div className="col-6  ml-lg-3">
                         {/* input */}
                         <p className="blue" style={{ fontSize: 15, fontWeight: 500, opacity: '0.75' }}>
                             {inputLabel}
