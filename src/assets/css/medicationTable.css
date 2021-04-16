@@ -13,7 +13,7 @@
 
 /*//////////////////////////////////////////////////////////////////
   [ RESTYLE TAG ]*/
-* {
+/* * {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -25,7 +25,7 @@ html {
     font-family: sans-serif;
 }
 
-/* ------------------------------------ */
+------------------------------------
 a {
     margin: 0px;
     transition: all 0.4s;
@@ -42,7 +42,7 @@ a:hover {
     text-decoration: none;
 }
 
-/* ------------------------------------ */
+------------------------------------
 h1,
 h2,
 h3,
@@ -62,7 +62,7 @@ li {
     list-style-type: none;
 }
 
-/* ------------------------------------ */
+------------------------------------
 input {
     display: block;
     outline: none;
@@ -79,7 +79,7 @@ input:focus {
     border-color: transparent !important;
 }
 
-/* ------------------------------------ */
+------------------------------------
 button {
     outline: none !important;
     border: none;
@@ -92,7 +92,7 @@ button:hover {
 
 iframe {
     border: none !important;
-}
+} */
 
 /*//////////////////////////////////////////////////////////////////
   [ Table ]*/
@@ -111,10 +111,11 @@ iframe {
     display: -moz-box;
     display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     flex-wrap: wrap;
     padding: 10px 7px;
+    margin-top: -70px;
 }
 
 .wrap-table100 {
