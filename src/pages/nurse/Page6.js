@@ -11,6 +11,7 @@ import { server } from '../../utils/functions';
 import { Button, Modal } from 'react-bootstrap';
 import Logo from '../../assets/img/3.png';
 import { domain } from '../../App';
+import indicationAlgo from '../../helper/thromboAlgo';
 
 //
 
@@ -32,6 +33,7 @@ class Page6 extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
+
         try {
             axios
                 .get(domain + '/api/nurse/page8LoadData', {
@@ -46,6 +48,8 @@ class Page6 extends React.Component {
             console.error(error);
             this.setState({ loader: '' });
         }
+
+        indicationAlgo();
     }
 
     handleModalShowHide() {
