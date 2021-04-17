@@ -914,7 +914,6 @@ class PatientController extends Controller
 		'pat_section_two.physicianName',
 		'pat_section_two.patient_id',
 		'pat_section_two.weight',
-		'pat_section_two.weight_unit',
 		'pat_section_two.age',
 
 		'pat_section_sixteen.type_of_procedure',
@@ -1001,12 +1000,16 @@ class PatientController extends Controller
 
 		$chk = DB::table('pat_section_six')->where('pat_section_six.user_id',Auth::user()->id)
 			->leftJoin('pat_section_four', 'pat_section_six.user_id', '=', 'pat_section_four.user_id')
+			->leftJoin('pat_section_two', 'pat_section_six.user_id', '=', 'pat_section_two.user_id')
 			->leftJoin('nurse_section_five', 'pat_section_six.user_id', '=', 'nurse_section_five.user_id')
 			->leftJoin('pat_section_seven', 'pat_section_six.user_id', '=', 'pat_section_seven.user_id')
 			->leftJoin('pat_section_sixteen', 'pat_section_six.user_id', '=', 'pat_section_sixteen.user_id')
 			->leftJoin('pat_section_fourteen', 'pat_section_six.user_id', '=', 'pat_section_fourteen.user_id')
+			->leftJoin('pat_section_thirteen', 'pat_section_six.user_id', '=', 'pat_section_thirteen.user_id')
 			->select(
 				'nurse_section_five.chads_score_and_distribution',
+				'nurse_section_five.poc_inr_text',
+				'nurse_section_five.poc_creat_text',
 
 				'pat_section_sixteen.date_of_procedure',
 
@@ -1023,6 +1026,11 @@ class PatientController extends Controller
 				'pat_section_six.location_aortic',
 				'pat_section_six.location_mitral',
 
+				'pat_section_two.age',
+				'pat_section_two.weight',
+				'pat_section_two.weight_unit',
+				'pat_section_two.gender',
+
 				'pat_section_four.venous_thromboelism',
 				'pat_section_four.dvt',
 				'pat_section_four.dvt_how_long_ago',
@@ -1030,7 +1038,12 @@ class PatientController extends Controller
 				'pat_section_four.pe_dvt_how_long_ago',
 				'pat_section_four.atrial_fibrillation_of_flutter',
 
-				'pat_section_fourteen.antiphospholipid_antibody_syndrome'
+				'pat_section_fourteen.antiphospholipid_antibody_syndrome',
+
+				'pat_section_thirteen.bleeding_requiring_treatment',
+				'pat_section_thirteen.bleeding_requiring_treatment_last_three_months',
+				'pat_section_thirteen.bleeding_from_stomach',
+				'pat_section_thirteen.bleeding_from_stomach_last_three_months'
 			)
 			->get();
 
