@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SimpleReactValidator from 'simple-react-validator';
-import axios from 'axios';
-import { login, isLogin } from '../utils/user';
 import ReactSpinner from 'react-bootstrap-spinner';
+import SimpleReactValidator from 'simple-react-validator';
+
+import axios from 'axios';
 import { domain } from '../App';
+import { isLogin } from '../utils/user';
+
+//
 
 class Register extends React.Component {
     constructor(props) {
@@ -138,11 +141,7 @@ class Register extends React.Component {
                         />
                         <p className="text-left">
                             {' '}
-                            {this.validator.message(
-                                'password',
-                                this.state.password,
-                                'required|min:6'
-                            )}{' '}
+                            {this.validator.message('password', this.state.password, 'required|min:6')}{' '}
                         </p>
 
                         <input

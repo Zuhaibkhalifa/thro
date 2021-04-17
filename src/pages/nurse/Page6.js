@@ -3,15 +3,14 @@ import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
-import $ from 'jquery';
 import axios from 'axios';
 
 import Header from './NurseHeader';
 import { server } from '../../utils/functions';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import Logo from '../../assets/img/3.png';
 import { domain } from '../../App';
-import indicationAlgo from '../../helper/thromboAlgo';
+import thromboAlgo from '../../helper/thromboAlgo';
 
 //
 
@@ -22,6 +21,7 @@ class Page6 extends React.Component {
         this.validator = new SimpleReactValidator({
             element: (message, className) => <div className="text-danger">{message}</div>,
         });
+
         console.log(this.validator);
         this.state = { email: '', loader: '', showHide: '' };
 
@@ -49,7 +49,7 @@ class Page6 extends React.Component {
             this.setState({ loader: '' });
         }
 
-        indicationAlgo();
+        thromboAlgo();
     }
 
     handleModalShowHide() {

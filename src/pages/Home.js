@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import signinImg from '.././assets/img/1.png';
+
+import { isLogin } from '../utils/user';
+
 import logo from '.././assets/img/logo.png';
-import { login, isLogin } from '../utils/user';
+import signinImg from '.././assets/img/1.png';
+
+//
 
 class Home extends React.Component {
     constructor(props) {
