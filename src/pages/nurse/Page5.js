@@ -9,6 +9,7 @@ import axios from 'axios';
 
 import { server } from '../../utils/functions';
 import { domain } from '../../App';
+import procedures from '../../helper/procedures';
 
 //
 
@@ -84,6 +85,7 @@ class Page3 extends React.Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.set_CHADS_score = this.set_CHADS_score.bind(this);
+        this.handle_procedure = this.handle_procedure.bind(this);
 
         const headers = {
             'Content-Type': 'application/json',
@@ -283,7 +285,6 @@ class Page3 extends React.Component {
     }
     handle_procedure(value) {
         this.setState({ procedure: value });
-        // this.setState({ weight: value });
     }
 
     //
@@ -328,128 +329,7 @@ class Page3 extends React.Component {
                         <br />
                         <div className="row">
                             <div className="col-6">
-                                <div className="form-group">
-                                    <label htmlFor="usr">Procedure </label>
-                                    <select
-                                        id="procedure"
-                                        className="custom-select"
-                                        value={this.state.q1_ans}
-                                        onChange={(event) => this.handle_procedure(event.target.value)}
-                                    >
-                                        <option value="Select Surgery">Select Surgery</option>
-                                        <optgroup label="Neurosurgery/Spine">
-                                            <option value="Neuraxial procedure (high)">
-                                                Neuraxial procedure (high)
-                                            </option>
-                                            <option value="Neurosurgery or Spinal Surgery (high)">
-                                                Neurosurgery or Spinal Surgery (high)
-                                            </option>
-                                        </optgroup>
-
-                                        <optgroup label="GI/abdominal">
-                                            <option value="Abdominal surgery (mod)">Abdominal surgery (mod)</option>
-                                            <option value="Gastroscopy or colonoscopy without biopsy (mod)">
-                                                Gastroscopy or colonoscopy without biopsy (mod)
-                                            </option>
-                                            <option value="Gastroscopy or colonoscopy with biopsy (low)">
-                                                Gastroscopy or colonoscopy with biopsy (low)
-                                            </option>
-                                            <option value="Intestinal anastomosis (high)">
-                                                Intestinal anastomosis (high)
-                                            </option>
-                                            <option value="Extensive cancer surgery (e.g. liver/pancreas) (high)">
-                                                Extensive cancer surgery (e.g. liver/pancreas) (high)
-                                            </option>
-                                        </optgroup>
-
-                                        <optgroup label="Lung/Thoracic (non-cardiac)">
-                                            <option value="Lung resection (high)">Lung resection (high)</option>
-                                            <option value="Other intrathoracic surgery (mod)">
-                                                Other intrathoracic surgery (mod)
-                                            </option>
-                                        </optgroup>
-                                        <optgroup label="Orthopedic">
-                                            <option value="Major orthopedic surgery (high">
-                                                Major orthopedic surgery (high
-                                            </option>
-                                            <option value="Other orthopedic surgery (mod)">
-                                                Other orthopedic surgery (mod)
-                                            </option>
-                                        </optgroup>
-
-                                        <optgroup label="Eye">
-                                            <option value="Cataract surgery (low)">Cataract surgery (low)</option>
-                                            <option value="Non-cataract ophthalmological surgery (mod)">
-                                                Non-cataract ophthalmological surgery (mod)
-                                            </option>
-                                        </optgroup>
-
-                                        <optgroup label="Dental">
-                                            <option value="Complex dental procedure (e.g. multiple tooth extractions) (mod)">
-                                                Complex dental procedure (e.g. multiple tooth extractions) (mod)
-                                            </option>
-                                            <option value="Dental other than multiple tooth extractions or maxillofacial surgery (low)">
-                                                Dental other than multiple tooth extractions or maxillofacial surgery
-                                                (low)
-                                            </option>
-                                        </optgroup>
-                                        <optgroup label="Plastic surgery">
-                                            <option value="Reconstructive plastic surgery (high)">
-                                                Reconstructive plastic surgery (high)
-                                            </option>
-                                            <option value="Other plastic surgery">Other plastic surgery</option>
-                                        </optgroup>
-                                        <optgroup label="Cardiac or vascular">
-                                            <option value="Cardiac surgery (high)">Cardiac surgery (high)</option>
-                                            <option value="Coronary angiography (low)">
-                                                Coronary angiography (low)
-                                            </option>
-                                            <option value="Permanent pacemaker or ICD placement (if patient is on apixaban, edoxaban, rivaroxaban, or dabigatran – mod, if on any other drugs - low)">
-                                                Permanent pacemaker or ICD placement (if patient is on apixaban,
-                                                edoxaban, rivaroxaban, or dabigatran – mod, if on any other drugs - low)
-                                            </option>
-                                            <option value="Major vascular surgery (aortic aneurysm repair, aortofemoral bypass) (high)">
-                                                Major vascular surgery (aortic aneurysm repair, aortofemoral bypass)
-                                                (high)
-                                            </option>
-                                            <option value="Other vascular surgery (mod)">
-                                                Other vascular surgery (mod)
-                                            </option>
-                                        </optgroup>
-
-                                        <optgroup label="Needle biopsy">
-                                            <option value="Kidney biopsy (high)">Kidney biopsy (high)</option>
-                                            <option value="Prostate biopsy (high)">Prostate biopsy (high)</option>
-                                            <option value="Cervical cone biopsy (high)">
-                                                Cervical cone biopsy (high)
-                                            </option>
-                                            <option value="Pericardiocentesis (high)">Pericardiocentesis (high)</option>
-                                            <option value="Colonic polypectomy (high)">
-                                                Colonic polypectomy (high)
-                                            </option>
-                                            <option value="Bone marrow biopsy (mod)">Bone marrow biopsy (mod)</option>
-                                            <option value="Lymph node biopsy (mod)">Lymph node biopsy (mod)</option>
-                                            <option value="Low-risk procedures (e.g. thoracentesis, paracentesis, arthrocentesis) (low)">
-                                                Low-risk procedures (e.g. thoracentesis, paracentesis, arthrocentesis)
-                                                (low)
-                                            </option>
-                                        </optgroup>
-
-                                        <optgroup label="Urological">
-                                            <option value="Urological surgery (high)">Urological surgery (high)</option>
-                                        </optgroup>
-                                        <optgroup label="Urological">
-                                            <option value="Other general surgery (e.g. breast) (mod)">
-                                                Other general surgery (e.g. breast) (mod)
-                                            </option>
-                                            <option value="Extensive cancer surgery (high)">
-                                                Extensive cancer surgery (high)
-                                            </option>
-                                        </optgroup>
-                                    </select>
-
-                                    {this.validator.message('', this.state.procedure, 'required')}
-                                </div>
+                                {procedures(this.state.procedure, this.handle_procedure, this.validator)}
                             </div>
                             <div className="col-6">
                                 <div className="form-group">
@@ -767,7 +647,7 @@ class Page3 extends React.Component {
 
                             <div className="col-6">
                                 <div className="form-group">
-                                    <label htmlFor="usr">POC - CREAT </label>
+                                    <label htmlFor="usr">POC - Creatinine </label>
 
                                     <div className="row">
                                         <div className="col-6">
@@ -805,7 +685,7 @@ class Page3 extends React.Component {
                         <div className="row">
                             <div className="col-6">
                                 <div className="form-group">
-                                    <label htmlFor="usr">Hb </label>
+                                    <label htmlFor="usr">High Blood Pressure</label>
 
                                     <div className="row">
                                         <div className="col-6">
@@ -835,7 +715,7 @@ class Page3 extends React.Component {
 
                             <div className="col-6">
                                 <div className="form-group">
-                                    <label htmlFor="usr">Plt </label>
+                                    <label htmlFor="usr">Platelet</label>
 
                                     <div className="row">
                                         <div className="col-6">

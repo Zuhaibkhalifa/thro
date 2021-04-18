@@ -9,6 +9,7 @@ import Header from './NurseHeader';
 
 import { server } from '../../utils/functions';
 import { domain } from '../../App';
+import procedures from './../../helper/procedures';
 
 //
 
@@ -84,6 +85,7 @@ class Page1 extends React.Component {
 
         // Bind " this " ref of class to Methods
         this.submitForm = this.submitForm.bind(this);
+        this.handle_procedure = this.handle_procedure.bind(this);
 
         //
         const headers = {
@@ -375,18 +377,7 @@ class Page1 extends React.Component {
                         <br />
                         <div className="row">
                             <div className="col-6">
-                                <div className="form-group">
-                                    <label htmlFor="usr">Procedure </label>
-                                    <input
-                                        type="text"
-                                        id="text"
-                                        className="form-control"
-                                        defaultValue={this.state.procedure}
-                                        onChange={(e) => this.setState({ procedure: e.target.value })}
-                                    />
-
-                                    {this.validator.message('', this.state.procedure, 'required')}
-                                </div>
+                                {procedures(this.state.procedure, this.handle_procedure, this.validator)}
                             </div>
                             <div className="col-6">
                                 <div className="form-group">
@@ -713,7 +704,7 @@ class Page1 extends React.Component {
 
                             <div className="col-6">
                                 <div className="form-group">
-                                    <label htmlFor="usr">POC - CREAT </label>
+                                    <label htmlFor="usr">POC - Creatinine</label>
 
                                     <div className="row">
                                         <div className="col-6">
@@ -751,7 +742,7 @@ class Page1 extends React.Component {
                         <div className="row">
                             <div className="col-6">
                                 <div className="form-group">
-                                    <label htmlFor="usr">Hb </label>
+                                    <label htmlFor="usr">High Blood Pressure</label>
 
                                     <div className="row">
                                         <div className="col-6">
@@ -781,7 +772,7 @@ class Page1 extends React.Component {
 
                             <div className="col-6">
                                 <div className="form-group">
-                                    <label htmlFor="usr">Plt </label>
+                                    <label htmlFor="usr">Platelet</label>
 
                                     <div className="row">
                                         <div className="col-6">

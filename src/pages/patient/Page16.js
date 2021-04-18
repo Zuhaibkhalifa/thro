@@ -13,6 +13,7 @@ import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
 
 import { domain } from '../../App';
+import procedures from '../../helper/procedures';
 
 //
 
@@ -33,6 +34,8 @@ class Page16 extends React.Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.go_nurse = this.go_nurse.bind(this);
+        this.handle_procedure = this.handle_procedure.bind(this);
+
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
@@ -67,15 +70,26 @@ class Page16 extends React.Component {
         this.setState({ showHide: !this.state.showHide });
         this.props.history.push('/User/Section');
     }
+
+    //
     submitForm() {
-        if (document.getElementById('notsure').checked === false && $('#procedure').val() === '') {
-            this.setState({ error1: 'This field is required' });
+        let errors = {
+            error1: '',
+            error2: '',
+            error3: '',
+        };
+
+        if (document.getElementById('notsure').checked === false && this.state.q1_ans == '') {
+            errors.error1 = 'This field is required';
+            this.setState({ ...errors });
+            console.log('Patient 16 - submit - state: ', this.state);
         } else if (document.getElementById('notsure').checked === false && $('#procedure_date').val() === '') {
-            this.setState({ error1: '' });
-            this.setState({ error2: 'This field is required' });
+            errors.error2 = 'This field is required';
+            this.setState({ ...errors });
+            console.log('Patient 16 - submit - state: ', this.state);
         } else {
-            this.setState({ error1: '', error2: '' });
-            console.log(this.state);
+            this.setState({ ...errors });
+            console.log('Patient 16 - submit - state: ', this.state);
             this.page16(this.state);
 
             this.handleModalShowHide();
@@ -99,9 +113,16 @@ class Page16 extends React.Component {
         }
 
         console.log(param);
-        server('patient/page16', param);
+        // server('patient/page16', param);
         //this.props.history.push('');
     }
+    handle_procedure(value) {
+        this.setState({ q1_ans: value });
+        // this.setState({ weight: value });
+    }
+
+    //
+    //
 
     render() {
         return (
@@ -141,6 +162,7 @@ class Page16 extends React.Component {
                         </div>
                     </Modal.Body>
                 </Modal>
+
                 <div>
                     <h1 className="text-center white main-heading">Surgery</h1>
                     <br />
@@ -155,15 +177,115 @@ class Page16 extends React.Component {
                             </p>
 
                             <div id="t1">
-                                <input
-                                    type="text"
+                                {/* {procedures(this.state.q1_ans, this.handle_procedure, null, false)} */}
+                                <select
                                     id="procedure"
-                                    className="form-control mb-4 transparent-custom-input"
+                                    className="custom-select transparent-custom-input"
                                     value={this.state.q1_ans}
-                                    onChange={(e) => this.setState({ q1_ans: e.target.value })}
-                                />
+                                    onChange={(e) => this.handleProcedure(e.target.value)}
+                                >
+                                    <option value="Select Surgery">Select Surgery</option>
+                                    <optgroup label="Neurosurgery/Spine">
+                                        <option value="Neuraxial procedure (high)">Neuraxial procedure (high)</option>
+                                        <option value="Neurosurgery or Spinal Surgery (high)">
+                                            Neurosurgery or Spinal Surgery (high)
+                                        </option>
+                                    </optgroup>
+
+                                    <optgroup label="GI/abdominal">
+                                        <option value="Abdominal surgery (mod)">Abdominal surgery (mod)</option>
+                                        <option value="Gastroscopy or colonoscopy without biopsy (mod)">
+                                            Gastroscopy or colonoscopy without biopsy (mod)
+                                        </option>
+                                        <option value="Gastroscopy or colonoscopy with biopsy (low)">
+                                            Gastroscopy or colonoscopy with biopsy (low)
+                                        </option>
+                                        <option value="Intestinal anastomosis (high)">
+                                            Intestinal anastomosis (high)
+                                        </option>
+                                        <option value="Extensive cancer surgery (e.g. liver/pancreas) (high)">
+                                            Extensive cancer surgery (e.g. liver/pancreas) (high)
+                                        </option>
+                                    </optgroup>
+
+                                    <optgroup label="Lung/Thoracic (non-cardiac)">
+                                        <option value="Lung resection (high)">Lung resection (high)</option>
+                                        <option value="Other intrathoracic surgery (mod)">
+                                            Other intrathoracic surgery (mod)
+                                        </option>
+                                    </optgroup>
+                                    <optgroup label="Orthopedic">
+                                        <option value="Major orthopedic surgery (high">
+                                            Major orthopedic surgery (high
+                                        </option>
+                                        <option value="Other orthopedic surgery (mod)">
+                                            Other orthopedic surgery (mod)
+                                        </option>
+                                    </optgroup>
+
+                                    <optgroup label="Eye">
+                                        <option value="Cataract surgery (low)">Cataract surgery (low)</option>
+                                        <option value="Non-cataract ophthalmological surgery (mod)">
+                                            Non-cataract ophthalmological surgery (mod)
+                                        </option>
+                                    </optgroup>
+
+                                    <optgroup label="Dental">
+                                        <option value="Complex dental procedure (e.g. multiple tooth extractions) (mod)">
+                                            Complex dental procedure (e.g. multiple tooth extractions) (mod)
+                                        </option>
+                                        <option value="Dental other than multiple tooth extractions or maxillofacial surgery (low)">
+                                            Dental other than multiple tooth extractions or maxillofacial surgery (low)
+                                        </option>
+                                    </optgroup>
+                                    <optgroup label="Plastic surgery">
+                                        <option value="Reconstructive plastic surgery (high)">
+                                            Reconstructive plastic surgery (high)
+                                        </option>
+                                        <option value="Other plastic surgery">Other plastic surgery</option>
+                                    </optgroup>
+                                    <optgroup label="Cardiac or vascular">
+                                        <option value="Cardiac surgery (high)">Cardiac surgery (high)</option>
+                                        <option value="Coronary angiography (low)">Coronary angiography (low)</option>
+                                        <option value="Permanent pacemaker or ICD placement (if patient is on apixaban, edoxaban, rivaroxaban, or dabigatran – mod, if on any other drugs - low)">
+                                            Permanent pacemaker or ICD placement (if patient is on apixaban, edoxaban,
+                                            rivaroxaban, or dabigatran – mod, if on any other drugs - low)
+                                        </option>
+                                        <option value="Major vascular surgery (aortic aneurysm repair, aortofemoral bypass) (high)">
+                                            Major vascular surgery (aortic aneurysm repair, aortofemoral bypass) (high)
+                                        </option>
+                                        <option value="Other vascular surgery (mod)">
+                                            Other vascular surgery (mod)
+                                        </option>
+                                    </optgroup>
+
+                                    <optgroup label="Needle biopsy">
+                                        <option value="Kidney biopsy (high)">Kidney biopsy (high)</option>
+                                        <option value="Prostate biopsy (high)">Prostate biopsy (high)</option>
+                                        <option value="Cervical cone biopsy (high)">Cervical cone biopsy (high)</option>
+                                        <option value="Pericardiocentesis (high)">Pericardiocentesis (high)</option>
+                                        <option value="Colonic polypectomy (high)">Colonic polypectomy (high)</option>
+                                        <option value="Bone marrow biopsy (mod)">Bone marrow biopsy (mod)</option>
+                                        <option value="Lymph node biopsy (mod)">Lymph node biopsy (mod)</option>
+                                        <option value="Low-risk procedures (e.g. thoracentesis, paracentesis, arthrocentesis) (low)">
+                                            Low-risk procedures (e.g. thoracentesis, paracentesis, arthrocentesis) (low)
+                                        </option>
+                                    </optgroup>
+
+                                    <optgroup label="Urological">
+                                        <option value="Urological surgery (high)">Urological surgery (high)</option>
+                                        <option value="Other general surgery (e.g. breast) (mod)">
+                                            Other general surgery (e.g. breast) (mod)
+                                        </option>
+                                        <option value="Extensive cancer surgery (high)">
+                                            Extensive cancer surgery (high)
+                                        </option>
+                                    </optgroup>
+                                </select>
+
                                 <div className="text-danger"> {this.state.error1 !== '' ? this.state.error1 : ''}</div>
                                 <br />
+
                                 <div className="row">
                                     <div className="col-12">
                                         <p className="blue">
@@ -173,7 +295,7 @@ class Page16 extends React.Component {
                                         <input
                                             type="date"
                                             id="procedure_date"
-                                            className="form-control mb-4 transparent-custom-input"
+                                            className="form-control mb-2 transparent-custom-input"
                                             value={this.state.q2_ans}
                                             onChange={(e) => this.setState({ q2_ans: e.target.value })}
                                         />

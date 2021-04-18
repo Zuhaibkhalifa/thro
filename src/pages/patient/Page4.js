@@ -140,12 +140,12 @@ class Page4 extends React.Component {
             pe: this.state.q1_sub_q2_ans,
             pe_dvt_how_long_ago: this.state.q1_sub_q2_ans_inner2,
 
-            atrial_fibrillation_of_flutter: this.state.q3_ans,
-            heart_valve_replacement: this.state.q4_ans,
-            blood_clot_in_heart: this.state.q5_ans,
-            arterial_peripheral_thrombosis: this.state.q6_ans,
+            atrial_fibrillation_of_flutter: this.state.q2_ans,
+            heart_valve_replacement: this.state.q3_ans,
+            blood_clot_in_heart: this.state.q4_ans,
+            arterial_peripheral_thrombosis: this.state.q5_ans,
 
-            peripheral_arterial_disease: this.state.q7_ans,
+            peripheral_arterial_disease: this.state.q6_ans,
             other: this.state.q7_sub_ans,
 
             none: this.state.q8_ans,

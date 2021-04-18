@@ -11,7 +11,7 @@ export default async function thromboAlgo() {
     let algoData;
     let indicators = {
         indicationRisk: indicationBleedingRiskAlgo(),
-        patientBleedingRisk: patientBleedingRisk(),
+        patientBleedingRisk: patientBleedingRiskAlgo(),
         surgeryBleedingRisk: '',
         CrCl: CrCl(),
     };
@@ -44,6 +44,8 @@ export default async function thromboAlgo() {
 
     // Indication bleeding risk
     function indicationBleedingRiskAlgo() {
+        console.log('indicationAlgo Called!!! - res: ', res);
+
         const mapIndicationData = () => {
             let variables = {};
 
@@ -88,6 +90,7 @@ export default async function thromboAlgo() {
             return variables;
         };
         const indicationAlgo = (d) => {
+            console.log('indicationBleedingRiskAlgo - Algo Data: ', algoData);
             // Standard risk indication (0)
             if (d.Bileaflet_mech_aortic_valve && d.CHADS == 0 && !d.AF) return 0;
             else if (d.AF && d.CHADS < 5 && !d.Stroke_lt_1 && !d.Mitral) return 0;
@@ -103,13 +106,12 @@ export default async function thromboAlgo() {
             else if (d.VTE && (d.VTE_dvt_lt_1 || d.VTE_dvt_btwn_1_3 || d.VTE_pe_lt_1 || d.VTE_pe_btwn_1_3)) return 1;
         };
 
-        console.log('indicationAlgo Called!!!');
         algoData = { ...mapIndicationData(), ...algoData };
         return indicationAlgo(algoData);
     }
 
     //
-    function patientBleedingRisk() {
+    function patientBleedingRiskAlgo() {
         const mapPatientData = () => {
             let variables = {};
 
@@ -146,6 +148,11 @@ export default async function thromboAlgo() {
         algoData = { ...mapPatientData(), ...algoData };
         return patientAlgo(algoData);
     }
+
+    //
+    function surgeryBleedingRiskAlgo() {}
+
+    //
 
     // weight shoould be in kg
     function CrCl(
