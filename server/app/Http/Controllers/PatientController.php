@@ -33,6 +33,8 @@ use \App\Nurse_section_five;
 use \App\Nurse_section_one;
 use \App\Nurse_section_three;
 
+use \App\MedicationJsonData;
+
 
 
 
@@ -798,36 +800,26 @@ class PatientController extends Controller
 
 
 	public function nurse8(Request $request)
-	{
-				
-	$data= array( 
-		'who_is_completing_this_form' => $request->who_is_completing_this_form,
-		'patient_accompanied_by' => $request->patient_accompanied_by,
-		'lmwh' => $request->lmwh,
-		'administration' => $request->administration,
-		'understanding' => $request->understanding,
-		'user_id'=> Auth::user()->id);
+	{	
+		$data = array( 
+			'who_is_completing_this_form' => $request->who_is_completing_this_form,
+			'patient_accompanied_by' => $request->patient_accompanied_by,
+			'lmwh' => $request->lmwh,
+			'administration' => $request->administration,
+			'understanding' => $request->understanding,
+			'user_id'=> Auth::user()->id
+		);
 
+		$chk=Nurse_section_three::where('user_id',Auth::user()->id)->get();
 
+		if ($chk=='[]') {
+			$one = Nurse_section_three::Create($data);
+		} else {
+			$one = Nurse_section_three::where('user_id', Auth::user()->id)->delete();
+			$one = Nurse_section_three::create($data);
+		}
 
-	$chk=Nurse_section_three::where('user_id',Auth::user()->id)->get();
-
-
-
-	if ($chk=='[]') {
-
-
-
-	$one = Nurse_section_three::Create($data);
-
-	} else {
-
-	$one = Nurse_section_three::where('user_id', Auth::user()->id)->delete();
-	$one = Nurse_section_three::create($data);
-
-	}
-	return response()->json(['success' => $chk], 200);
-			
+		return response()->json(['success' => $chk], 200);		
 	}
 
 	//==========================================Nurse section Load data===============================================\
@@ -1010,6 +1002,7 @@ class PatientController extends Controller
 				'nurse_section_five.chads_score_and_distribution',
 				'nurse_section_five.poc_inr_text',
 				'nurse_section_five.poc_creat_text',
+				'nurse_section_five.procedure',
 
 				'pat_section_sixteen.date_of_procedure',
 
@@ -1054,7 +1047,81 @@ class PatientController extends Controller
 		}
 	}
 
+	public function medicationDrugDetails() {
 
+		$chk = DB::table('pat_section_eight')->where('pat_section_eight.user_id', Auth::user()->id)
+			->leftJoin('pat_section_ten', 'pat_section_eight.user_id', '=', 'pat_section_ten.user_id')
+			->select(
+				'pat_section_eight.pradaxa',
+				'pat_section_eight.pradaxa_dosage',
+				'pat_section_eight.Xarelto',
+				'pat_section_eight.xarelto_dosage',
+				'pat_section_eight.xarelto_dosage_time',
+				'pat_section_eight.eliquis',
+				'pat_section_eight.eliquis_dosage',
+				'pat_section_eight.eliquis_dosage_time',
+				'pat_section_eight.edoxabon',
+				'pat_section_eight.edoxabon_dosage',
+				'pat_section_eight.edoxabon_dosage_time',
+
+				'pat_section_ten.coumadin',
+				'pat_section_ten.coumadin_monday',
+				'pat_section_ten.coumadin_tuesday',
+				'pat_section_ten.coumadin_wednesday',
+				'pat_section_ten.coumadin_thursday',
+				'pat_section_ten.coumadin_friday',
+				'pat_section_ten.coumadin_saturday',
+				'pat_section_ten.coumadin_sunday',
+				'pat_section_ten.sintrom',
+				'pat_section_ten.sintrom_monday',
+				'pat_section_ten.sintrom_tuesday',
+				'pat_section_ten.sintrom_wednesday',
+				'pat_section_ten.sintrom_thursday',
+				'pat_section_ten.sintrom_friday',
+				'pat_section_ten.sintrom_saturday',
+				'pat_section_ten.sintrom_sunday'
+			)
+			->get();
+
+		if ($chk == '[]') {
+			return response()->json(['success' => 'not_found'], 200);
+		} else {
+			return response()->json(['success' => $chk], 200);
+		}
+	}
+
+	
+	public function saveMedicationJsonData(Request $request) {
+		$data = array( 
+			'jsonTable' => $request->jsonTable,
+			'user_id'=> Auth::user()->id
+		);
+
+		$chk=MedicationJsonData::where('user_id', Auth::user()->id)->get();
+
+		if ($chk=='[]') {
+			$chk = MedicationJsonData::Create($data);
+		} else {
+			$chk = MedicationJsonData::where('user_id', Auth::user()->id)->delete();
+			$chk = MedicationJsonData::create($data);
+		}
+
+		return response()->json(['success' => $chk], 200);	
+	}
+
+	public function getMedicationJsonData() {
+		$chk = DB::table('medicationJsonData')->where('medicationJsonData.user_id', Auth::user()->id)
+			->select(
+				'medicationJsonData.jsonTable'
+			)
+			->get();
+
+		if ($chk == '[]') {
+			return response()->json(['success' => 'not_found'], 200);
+		} else {
+			return response()->json(['success' => $chk], 200);
+		}
+	}
 }
 
 

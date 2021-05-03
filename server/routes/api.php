@@ -116,6 +116,10 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
   Route::get('nurse/page8','PatientController@nurse8');
 
   Route::get('nurse/medicationAlgoDetails', 'PatientController@medicationAlgoDetails');
+  Route::get('nurse/medicationDrugDetails', 'PatientController@medicationDrugDetails');
+
+  Route::post('nurse/medicationJsonData', 'PatientController@saveMedicationJsonData');
+  Route::get('nurse/medicationJsonData', 'PatientController@getMedicationJsonData');
 
 });
 

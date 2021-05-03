@@ -384,7 +384,6 @@ class Page1 extends React.Component {
                                     <label htmlFor="usr">Date of Procedure</label>
                                     <input
                                         type="date"
-                                        min="2021-03-02"
                                         id="date_of_procedure"
                                         className="form-control"
                                         defaultValue={this.state.date_of_procedure}

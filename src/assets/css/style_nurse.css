@@ -161,3 +161,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 @media (min-width: 768px) {
 }
+
+.nurseColor {
+    color: #8dbce0;
+}
