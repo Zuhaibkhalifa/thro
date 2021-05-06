@@ -9,7 +9,7 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Notifications\UserVerifyNotification;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -36,17 +36,19 @@ class RegisterController extends Controller
 
         // Transform user data
         $data = new UserResource($user);
+        $origin = strval($_SERVER['HTTP_REFERER']);
+        $api_route = strval('api/auth/verify?email=');
+        $param_token = strval('&token=');
+        $verify_url = $origin.$api_route.$data['email'].$param_token.$token;
 
-        // Validate if user needs to verify their account
-     //   if(config('url.account_verify')){
-            // Email Verification
-            $user->notify(new UserVerifyNotification($token));
-
-    //        return response()->json(compact('data'));
-    //    }
-
-return response()->json(['message' => 'Account has been created. We sent you an email for account activation '], 200);
-      //  return response()->json(compact('token', 'data'));
-
+        $title = array('name'=>$data['name']);
+        $email = $data['email'];
+        Mail::send('mail', $title, function($message) use ($email, $verify_url) {
+            $message->to($email, 'Hello! Please click this link to verify the account.');
+            $message->subject($verify_url); 
+            $message->from('support@thrombolink.com','Thrombo Link');
+        });
+            
+        return response()->json(['message' => 'Account has been created. We sent you an email for account activation '], 200);
     }
 }

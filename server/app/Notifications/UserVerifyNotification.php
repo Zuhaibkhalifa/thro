@@ -42,7 +42,7 @@ class UserVerifyNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage) 
                     ->subject( 'Thrombo App Account Verification' )
                     ->line('Hello! Please click the button below to verify your email address.')
                     ->action('Notification Action', url("/api/auth/verify?email=". $notifiable->email . "&token=" . $this->token ))
