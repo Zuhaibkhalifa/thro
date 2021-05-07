@@ -78,15 +78,8 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 
    Route::get('patient/page2LoadData','PatientController@page2LoadData');
    Route::get('patient/page3LoadData','PatientController@page3LoadData');
-
    Route::get('patient/page4LoadData','PatientController@page4LoadData');
-
-
-
    Route::get('patient/page5LoadData','PatientController@page5LoadData');
-
-
-
    Route::get('patient/page6LoadData','PatientController@page6LoadData');
    Route::get('patient/page7LoadData','PatientController@page7LoadData');
    Route::get('patient/page8LoadData','PatientController@page8LoadData');

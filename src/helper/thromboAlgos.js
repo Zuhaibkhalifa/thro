@@ -11,7 +11,7 @@ export default async function thromboAlgo() {
    const res = await getAlgoData();
    let algoData;
    let indicators = {
-      indicationRisk: indicationBleedingRiskAlgo(),
+      indicationRisk: indicationRiskAlgo(),
       patientBleedingRisk: patientBleedingRiskAlgo(),
       surgeryBleedingRisk: surgeryBleedingRiskAlgo(),
       CrCl: CrCl(),
@@ -44,7 +44,7 @@ export default async function thromboAlgo() {
    }
 
    // Indication bleeding risk
-   function indicationBleedingRiskAlgo() {
+   function indicationRiskAlgo() {
       console.log('indicationAlgo Called!!!');
 
       const mapIndicationData = () => {
@@ -91,7 +91,7 @@ export default async function thromboAlgo() {
          // Standard risk indication (0)
          if (d.Bileaflet_mech_aortic_valve && d.CHADS == 0 && !d.AF) return 0;
          else if (d.AF && d.CHADS < 5 && !d.Stroke_lt_1 && !d.Mitral) return 0;
-         else if (d.VTE && d.VTE_dvt_gt_3 && d.VTE_pe_gt_3) return 0;
+         else if (d.VTE && (d.VTE_dvt_gt_3 || d.VTE_pe_gt_3)) return 0;
 
          // High-risk indication (1)
          if (d.Antiphospholipid) return 1;
@@ -101,6 +101,9 @@ export default async function thromboAlgo() {
          else if (d.AF && (d.Stroke_lt_1 || d.Stroke_btwn_1_3)) return 1;
          else if (d.Mech_heart && d.Arotic_loc && (d.CHADS > 0 || d.AF)) return 1;
          else if (d.VTE && (d.VTE_dvt_lt_1 || d.VTE_dvt_btwn_1_3 || d.VTE_pe_lt_1 || d.VTE_pe_btwn_1_3)) return 1;
+
+         // Fall back to Standard Risk if any of the Conditios doesn't match
+         return 0;
       };
 
       algoData = { ...mapIndicationData(), ...algoData };
@@ -136,7 +139,7 @@ export default async function thromboAlgo() {
 
          // High risk of bleeding (1)
          // DISPLAY FALG:
-         if (d.POC_INR > 3.5 && d.CrCl < 30 && hadRecentBleeding) return 1;
+         if (d.POC_INR > 3.5 || d.CrCl < 30 || hadRecentBleeding) return 1;
 
          return 0;
       };

@@ -1,8 +1,29 @@
 import _ from 'lodash';
+import React from 'react';
+
+function renderTable(table, onDateChange, editable = false) {
+   if (table == 'none') return <div style={{ fontSize: 18, textAlign: 'center' }}>No Drug was selected!</div>;
+
+   return (
+      <React.Fragment>
+         {renderNote(table)}
+         <div class="container-table100 mt-2">
+            <div class="wrap-table100">
+               <div class="table">
+                  {renderTableHeader(table)}
+                  {renderTableBody(table, onDateChange, editable)}
+               </div>
+            </div>
+         </div>
+      </React.Fragment>
+   );
+}
 
 function renderTableHeader(table) {
+   if (table == 'none') return null;
+
    return (
-      <div class="tableRow header">
+      <div key="header" class="tableRow header">
          {table.header.map((val, idx) => {
             return <div class="cell">{capitalizeFirstLetter(val)}</div>;
          })}
@@ -11,6 +32,8 @@ function renderTableHeader(table) {
 }
 
 function renderTableBody(table, onChange, editable = false) {
+   if (table == 'none') return null;
+
    const date = ['d_5', 'd_4', 'd_3', 'd_2', 'd_1', 'd', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6'];
 
    const body = table.data.map((row, rowIdx) => {
@@ -28,12 +51,13 @@ function renderTableBody(table, onChange, editable = false) {
 }
 
 function renderNote(table) {
-   if (_.isEmpty(table.note)) {
+   console.log('>>>  RenderNote - table: ', table);
+   if (table == 'none' || _.isEmpty(table.note)) {
       return null;
    }
 
    return (
-      <div className="pl-2">
+      <div key="notes" className="pl-2">
          <div className="nurseColor h5" style={{ marginBottom: '.2rem' }}>
             Note:
          </div>
@@ -84,6 +108,7 @@ function capitalizeFirstLetter(string) {
 }
 
 export default {
+   renderTable,
    renderTableHeader,
    renderTableBody,
    renderNote,

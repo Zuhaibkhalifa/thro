@@ -8,12 +8,12 @@ import { domain } from '../App';
 export default async function thromboMedicationAlgo(indicators) {
    // indicators = {
    //    indicationRisk: 1,
-   //    patientBleedingRisk: 1,
-   //    surgeryBleedingRisk: 1,
+   //    patientBleedingRisk: 0,
+   //    surgeryBleedingRisk: 2,
    //    CrCl: 37.46,
    // };
    // const testCase = {
-   //    warfain: true,
+   //    warfain: false,
    //    dabigatran: false,
    //    apixaban: false,
 
@@ -25,15 +25,30 @@ export default async function thromboMedicationAlgo(indicators) {
    //    edoxaban: false,
    //    edoxaban_freq: 'once',
    //    edoxaban_dosage_time: 'am',
+
+   //    lmwh: true,
+   //    lmwh_drug: 'dalteparin',
+   //    lmwh_dosage: 15,
+   //    lmwh_freq: 'once',
+   //    // lmwh_dalteparin: false,
+   //    // lmwh_dalteparin_dosage: 0,
+   //    // lmwh_dalteparin_freq: 'once',
+   //    // lmwh_enoxaparin: false,
+   //    // lmwh_enoxaparin_dosage: 0,
+   //    // lmwh_enoxaparin_freq: 'once',
+   //    // lmwh_tinzaparin: false,
+   //    // lmwh_tinzaparin_dosage: 0,
+   //    // lmwh_tinzaparin_freq: 'once',
    // };
 
    const data = await getDrugData();
 
    console.log('thromboMedicationAlgo - indicators: ', indicators);
-   console.log('thromboMedicationAlgo - data: ', data);
+   // console.log('thromboMedicationAlgo - data: ', data);
 
    const algodata = mapMedicationData(data);
    // const algodata = testCase;
+   console.log('thromboMedicationAlgo - algodata: ', algodata);
 
    const tableData = detectCase(algodata);
    console.log('thromboMedicationAlgo - detectCase - table: ', tableData);
@@ -63,30 +78,53 @@ export default async function thromboMedicationAlgo(indicators) {
    function mapMedicationData(d) {
       let data = {};
 
-      data['warfain'] = d.coumadin != '' ? true : false;
+      data['warfain'] = d.coumadin != null ? true : false;
 
-      // data['lmwh'] = d.coumadin != '' ? true : false;
+      data['dabigatran'] = d.pradaxa != null ? true : false;
 
-      data['dabigatran'] = d.pradaxa != '' ? true : false;
+      data['apixaban'] = d.eliquis != null ? true : false;
 
-      data['apixaban'] = d.eliquis != '' ? true : false;
-
-      data['rivaroxaban'] = d.Xarelto != '' ? true : false;
+      data['rivaroxaban'] = d.Xarelto != null ? true : false;
       data['rivaroxaban_dosage'] = checkAndGetDosage(d.xarelto_dosage, ['10', '15', '20']);
       data['rivaroxaban_freq'] = checkAndGetDosage(d.xarelto_dosage, ['once', 'twice']);
       data['rivaroxaban_dosage_time'] = checkAndGetDosage(d.xarelto_dosage_time, ['am', 'pm']);
 
-      data['edoxaban'] = d.edoxaban != '' ? true : false;
+      data['edoxaban'] = d.edoxaban != null ? true : false;
       data['edoxabon_freq'] = checkAndGetDosage(d.xarelto_dosage, ['once']);
       data['edoxaban_dosage_time'] = checkAndGetDosage(d.xarelto_dosage_time, ['am', 'pm']);
+
+      data['lmwh'] = d.dalteparin != null || d.enoxaparin != null || d.tinzaparin != null ? true : false;
+      data['lmwh_drug'] =
+         d.dalteparin != null
+            ? 'dalteparin'
+            : d.enoxaparin != null
+            ? 'enoxaparin'
+            : d.tinzaparin != null
+            ? 'tinzaparin'
+            : null;
+
+      data[`lmwh_dosage`] = d[`${data['lmwh_drug']}_dosage`] != null ? d[`${data['lmwh_drug']}_dosage`] : 'none';
+      data[`lmwh_freq`] = checkAndGetDosage(d[`${data['lmwh_drug']}_freq`], ['once', 'twice']);
+
+      // data['lmwh_dalteparin'] = d.dalteparin != null ? true : false;
+      // data['lmwh_dalteparin_dosage'] = d.dalteparin_dosage != null ? d.dalteparin_dosage : 'none';
+      // data['lmwh_dalteparin_freq'] = checkAndGetDosage(d.dalteparin_freq, ['once', 'twice']);
+
+      // data['lmwh_enoxaparin'] = d.enoxaparin != null ? true : false;
+      // data['lmwh_enoxaparin_dosage'] = d.enoxaparin_dosage != null ? d.enoxaparin_dosage : 'none';
+      // data['lmwh_enoxaparin_freq'] = checkAndGetDosage(d.enoxaparin_freq, ['once', 'twice']);
+
+      // data['lmwh_tinzaparin'] = d.tinzaparin != null ? true : false;
+      // data['lmwh_tinzaparin_dosage'] = d.tinzaparin_dosage != null ? d.tinzaparin_dosage : 'none';
+      // data['lmwh_tinzaparin_freq'] = checkAndGetDosage(d.tinzaparin_freq, ['once', 'twice']);
 
       return data;
    }
 
    function detectCase(d) {
       if (d.warfain) return Warfain(indicators);
-      // if (d.lmwh) return
-      // if (d.lmwh) return
+      else if (d.lmwh && d.lmwh_freq == 'twice') return LMWH_twice(indicators);
+      else if (d.lmwh && d.lmwh_freq == 'once') return LMWH_once(indicators);
       else if (d.dabigatran) return Dabigatran(indicators);
       else if (d.apixaban) return Apixaban(indicators);
       else if (
@@ -100,10 +138,15 @@ export default async function thromboMedicationAlgo(indicators) {
       else if (d.rivaroxaban && d.rivaroxaban_freq == 'twice' && d.rivaroxaban_dosage == '15')
          return Rivaroxaban_15_twice(indicators);
       else if (d.edoxaban && d.edoxaban_freq == 'once') return Edoxaban(indicators);
+
+      return 'none';
    }
 
    //
+   //
+
    function Warfain(indicators) {
+      console.log('>>   CASE Warfain');
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
       let table = {
          header: ['date', 'warfain', 'lab'],
@@ -244,7 +287,124 @@ export default async function thromboMedicationAlgo(indicators) {
       }
    }
 
+   function LMWH_twice(indicators) {
+      console.log('>>   CASE LMWH_twice');
+      const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
+      let table = {
+         header: ['date', 'lmwh'],
+         data: [
+            { d_5: 'D-5', lmwh: 'Am Pm' },
+            { d_4: 'D-4', lmwh: 'Am Pm' },
+            { d_3: 'D-3', lmwh: 'Am Pm' },
+            { d_2: 'D-2', lmwh: 'Am Pm' },
+            { d_1: 'D-1', lmwh: 'Am Only' },
+            { d: 'D', lmwh: '' },
+            { d1: 'D1', lmwh: 'Pm Only' },
+            { d2: 'D2', lmwh: 'Am Pm' },
+            { d3: 'D3', lmwh: 'Am Pm' },
+            { d4: 'D4', lmwh: 'Am Pm' },
+            { d5: 'D5', lmwh: 'Am Pm' },
+         ],
+         note: {},
+      };
+
+      // Case a.1
+      if (PBR == 0 && SBR == 2 && CrCl >= 50) return table;
+
+      // Case a.2    FLAG
+      if (PBR == 1 && SBR == 2 && CrCl >= 50) return table;
+
+      // Case a.3
+      if (PBR == 0 && SBR == 1 && CrCl >= 50) return modifyData(table, [6], 'lmwh', '');
+
+      // Case a.4    FLAG
+      if (PBR == 1 && SBR == 1 && CrCl >= 50) return modifyData(table, [6], 'lmwh', '');
+
+      // Case b.1
+      if (PBR == 0 && SBR == 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'lmwh', '');
+
+      // Case b.2    FLAG
+      if (PBR == 1 && SBR == 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'lmwh', '');
+
+      // Case b.3
+      if (PBR == 0 && SBR == 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'lmwh', '');
+
+      // Case b.4    FLAG
+      if (PBR == 1 && SBR == 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'lmwh', '');
+
+      // Case c.1    FLAG
+      if (CrCl < 30) {
+         table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'lmwh', '');
+         table = addNote(
+            table,
+            'Plan',
+            'Relative contraindication to LMWH with CrCl <30. Periprocedural management plan should be individualized for this patient. And blank schedule appears'
+         );
+
+         return table;
+      }
+   }
+
+   function LMWH_once(indicators) {
+      console.log('>>   CASE LMWH_once');
+      const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
+      let table = {
+         header: ['date', 'lmwh'],
+         data: [
+            { d_5: 'D-5', lmwh: 'Yes' },
+            { d_4: 'D-4', lmwh: 'Yes' },
+            { d_3: 'D-3', lmwh: 'Yes' },
+            { d_2: 'D-2', lmwh: 'Yes' },
+            { d_1: 'D-1', lmwh: 'Half dose in am' },
+            { d: 'D', lmwh: '' },
+            { d1: 'D1', lmwh: 'Half dose in pm' },
+            { d2: 'D2', lmwh: 'Yes' },
+            { d3: 'D3', lmwh: 'Yes' },
+            { d4: 'D4', lmwh: 'Yes' },
+            { d5: 'D5', lmwh: 'Yes' },
+         ],
+         note: {},
+      };
+
+      // Case a.1
+      if (PBR == 0 && SBR == 2 && CrCl >= 50) return table;
+
+      // Case a.2    FLAG
+      if (PBR == 1 && SBR == 2 && CrCl >= 50) return table;
+
+      // Case a.3
+      if (PBR == 0 && SBR == 1 && CrCl >= 50) return modifyData(table, [6], 'lmwh', '');
+
+      // Case a.4    FLAG
+      if (PBR == 1 && SBR == 1 && CrCl >= 50) return modifyData(table, [6], 'lmwh', '');
+
+      // Case b.1
+      if (PBR == 0 && SBR == 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'lmwh', '');
+
+      // Case b.2    FLAG
+      if (PBR == 1 && SBR == 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'lmwh', '');
+
+      // Case b.3
+      if (PBR == 0 && SBR == 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'lmwh', '');
+
+      // Case b.4    FLAG
+      if (PBR == 1 && SBR == 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'lmwh', '');
+
+      // Case c.1    FLAG
+      if (CrCl < 30) {
+         table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'lmwh', '');
+         table = addNote(
+            table,
+            'Plan',
+            'Relative contraindication to LMWH with CrCl <30. Periprocedural management plan should be individualized for this patient. And blank schedule appears'
+         );
+
+         return table;
+      }
+   }
+
    function Dabigatran(indicators) {
+      console.log('>>   CASE Dabigatran');
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
       let table = {
          header: ['date', 'dabigatran'],
@@ -300,6 +460,7 @@ export default async function thromboMedicationAlgo(indicators) {
    }
 
    function Apixaban(indicators) {
+      console.log('>>   CASE Apixaban');
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
       let table = {
          header: ['date', 'apixaban'],
@@ -340,6 +501,7 @@ export default async function thromboMedicationAlgo(indicators) {
    }
 
    function Rivaroxaban_20_or_15_once(indicators) {
+      console.log('>>   CASE Rivaroxaban_20_or_15_once');
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
       const { rivaroxaban_dosage_time: RDT } = algodata;
 
@@ -387,6 +549,7 @@ export default async function thromboMedicationAlgo(indicators) {
    }
 
    function Rivaroxaban_10_once(indicators) {
+      console.log('>>   CASE Rivaroxaban_10_once');
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
       const { rivaroxaban_dosage_time: RDT } = algodata;
 
@@ -434,6 +597,7 @@ export default async function thromboMedicationAlgo(indicators) {
    }
 
    function Rivaroxaban_15_twice(indicators) {
+      console.log('>>   CASE Rivaroxaban_15_twice');
       let table = {
          header: ['date', 'rivaroxaban'],
          data: [
@@ -457,6 +621,7 @@ export default async function thromboMedicationAlgo(indicators) {
    }
 
    function Edoxaban(indicators) {
+      console.log('>>   CASE Edoxaban');
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
       const { rivaroxaban_dosage_time: RDT } = algodata;
 

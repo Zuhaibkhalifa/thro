@@ -17,6 +17,7 @@ use \App\Pat_section_five;
 use \App\Pat_section_six;
 use \App\Pat_section_seven;
 use \App\Pat_section_eight;
+use \App\Pat_section_nine;
 
 
 use \App\Pat_section_ten;
@@ -176,50 +177,65 @@ class PatientController extends Controller
 
 
 	public function page8(Request $request)
-			{
-				
-				
-	$data= array( 
-		'pradaxa' => $request->pradaxa,
-		'pradaxa_dosage' => $request->pradaxa_dosage,
-		'xarelto' => $request->xarelto,
+	{
+		$data= array( 
+			'pradaxa' => $request->pradaxa,
+			'pradaxa_dosage' => $request->pradaxa_dosage,
 
+			'xarelto' => $request->xarelto,
+			'xarelto_dosage' => $request->xarelto_dosage,
+			'xarelto_dosage_time' => $request->xarelto_dosage_time,
 
-		'xarelto_dosage' => $request->xarelto_dosage,
-		'xarelto_dosage_time' => $request->xarelto_dosage_time,
-		'eliquis' => $request->eliquis,
+			'eliquis' => $request->eliquis,
+			'eliquis_dosage' => $request->eliquis_dosage,
+			'eliquis_dosage_time' => $request->eliquis_dosage_time,
 
-		'eliquis_dosage' => $request->eliquis_dosage,
+			'edoxabon' => $request->edoxabon,
+			'edoxabon_dosage' => $request->edoxabon_dosage,
+			'edoxabon_dosage_time' => $request->edoxabon_dosage_time,
 
+			'user_id'=> Auth::user()->id);
 
+		$chk= DB::table('pat_section_eight')->where('user_id',Auth::user()->id)->select('*')->get();
 
-		'eliquis_dosage_time' => $request->eliquis_dosage_time,
-		'edoxabon' => $request->edoxabon,
-		'edoxabon_dosage' => $request->edoxabon_dosage,
-
-		'edoxabon_dosage_time' => $request->edoxabon_dosage_time,
-
-
-		'user_id'=> Auth::user()->id);
-
-	$chk= DB::table('pat_section_eight')->where('user_id',Auth::user()->id)->select('*')->get();
-
-
-
-	if ($chk=='[]') {
-
-	$chk=DB::table('pat_section_eight')->insert($data);
-
-
-
-	} else {
-
-	DB::table('pat_section_eight')->where('user_id', Auth::user()->id)->delete();
-	$chk=DB::table('pat_section_eight')->insert($data);
-
+		if ($chk=='[]') {
+			$chk=DB::table('pat_section_eight')->insert($data);
+		} else {
+			DB::table('pat_section_eight')->where('user_id', Auth::user()->id)->delete();
+			$chk=DB::table('pat_section_eight')->insert($data);
+		}
+		return response()->json(['success' => $chk], 200);
 	}
-	return response()->json(['success' => $chk], 200);
-			
+
+	public function page9(Request $request)
+	{
+		$data= array( 
+			'dalteparin' => $request->dalteparin,
+			'dalteparin_dosage' => $request->dalteparin_dosage,
+			'dalteparin_freq' => $request->dalteparin_freq,
+
+			'enoxaparin' => $request->enoxaparin,
+			'enoxaparin_dosage' => $request->enoxaparin_dosage,
+			'enoxaparin_freq' => $request->enoxaparin_freq,
+
+			'tinzaparin' => $request->tinzaparin,
+			'tinzaparin_dosage' => $request->tinzaparin_dosage,
+			'tinzaparin_freq' => $request->tinzaparin_freq,
+
+			'none' => $request->none,
+			'user_id'=> Auth::user()->id
+		);
+
+		$chk = DB::table('pat_section_nine')->where('user_id',Auth::user()->id)->select('*')->get();
+
+		if ($chk == '[]') {
+			$chk = DB::table('pat_section_nine')->insert($data);
+		} else {
+			DB::table('pat_section_nine')->where('user_id', Auth::user()->id)->delete();
+			$chk = DB::table('pat_section_nine')->insert($data);
+		}
+
+		return response()->json(['success' => $chk], 200);
 	}
 
 
@@ -1051,6 +1067,7 @@ class PatientController extends Controller
 
 		$chk = DB::table('pat_section_eight')->where('pat_section_eight.user_id', Auth::user()->id)
 			->leftJoin('pat_section_ten', 'pat_section_eight.user_id', '=', 'pat_section_ten.user_id')
+			->leftJoin('pat_section_nine', 'pat_section_eight.user_id', '=', 'pat_section_nine.user_id')
 			->select(
 				'pat_section_eight.pradaxa',
 				'pat_section_eight.pradaxa_dosage',
@@ -1079,7 +1096,17 @@ class PatientController extends Controller
 				'pat_section_ten.sintrom_thursday',
 				'pat_section_ten.sintrom_friday',
 				'pat_section_ten.sintrom_saturday',
-				'pat_section_ten.sintrom_sunday'
+				'pat_section_ten.sintrom_sunday',
+
+				'pat_section_nine.dalteparin',
+				'pat_section_nine.dalteparin_dosage',
+				'pat_section_nine.dalteparin_freq',
+				'pat_section_nine.enoxaparin',
+				'pat_section_nine.enoxaparin_dosage',
+				'pat_section_nine.enoxaparin_freq',
+				'pat_section_nine.tinzaparin',
+				'pat_section_nine.tinzaparin_dosage',
+				'pat_section_nine.tinzaparin_freq'
 			)
 			->get();
 
