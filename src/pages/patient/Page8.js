@@ -81,8 +81,9 @@ class Page8 extends React.Component {
    }
 
    submitForm() {
+      console.log('Patient 8 - submit');
       if (!$("input[name='optradio']:checked").val()) {
-         this.setState({ error1: 'This field is required' });
+         this.setState({ error1: 'This field is required!, Please select any one of the above options' });
       } else if (
          document.getElementById('pradaxa_rdo').checked === true &&
          !$("input[name='opt_pradaxa_dosage']:checked").val()
@@ -139,6 +140,7 @@ class Page8 extends React.Component {
 
          this.setState({ error9: 'This field is required' });
       } else if (
+         document.getElementById('edxo_rdo').checked === true &&
          document.getElementById('opt_edxo_dosage_other').checked === true &&
          $('#opt_edxo_dosage_other_textbox').val() == ''
       ) {
@@ -153,7 +155,10 @@ class Page8 extends React.Component {
          });
 
          this.setState({ error10: 'This field is required' });
-      } else if (!$("input[name='opt_edxo_dosage_time']:checked").val()) {
+      } else if (
+         document.getElementById('edxo_rdo').checked === true &&
+         !$("input[name='opt_edxo_dosage_time']:checked").val()
+      ) {
          this.setState({
             error8: '',
             error7: '',
@@ -177,9 +182,10 @@ class Page8 extends React.Component {
 
    dynamicRouting() {
       const { q5_ans } = this.state;
+      console.log('Patient 8 - submit - dynamicRouting - q5: ', q5_ans);
 
       if (q5_ans != '') {
-         this.props.history.push('/User/Page10');
+         this.props.history.push('/User/Page9');
       } else {
          this.props.history.push('/User/Page11');
       }
@@ -211,7 +217,7 @@ class Page8 extends React.Component {
          };
       }
 
-      console.log(param);
+      console.log('Patient 8 - page8 - param: ', param);
       server('patient/page8', param);
       // this.props.history.push('');
    }

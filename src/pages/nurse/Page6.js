@@ -68,6 +68,12 @@ class Page6 extends React.Component {
                headers: headers,
             })
             .then((response) => {
+               console.log('Nurse6 - res: ', response);
+               if (response.data.success == 'not_found') {
+                  this.setState({ table: 'none' });
+                  return;
+               }
+
                data = JSON.parse(response.data.success[0].jsonTable);
                console.log('NURSE 6 - Response: ', data);
                this.setState({ loader: '' });
@@ -167,16 +173,7 @@ class Page6 extends React.Component {
                <br />
 
                <div className="jumbotron" style={{ paddingTop: '2.25rem' }}>
-                  {mapToView.renderNote(table)}
-
-                  <div class="container-table100 mt-2">
-                     <div class="wrap-table100">
-                        <div class="table">
-                           {mapToView.renderTableHeader(table)}
-                           {mapToView.renderTableBody(table, this.onDateChange, false)}
-                        </div>
-                     </div>
-                  </div>
+                  {mapToView.renderTable(table, false)}
 
                   <br />
                   <br />

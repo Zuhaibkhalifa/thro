@@ -71,6 +71,8 @@ class Page4 extends React.Component {
    }
 
    page8() {
+      if (this.state.table == 'none') return;
+
       const data = { jsonTable: JSON.stringify({ ...this.state.table }) };
       console.log('>>> JSON data: ', data);
       server('nurse/medicationJsonData', data);
@@ -119,16 +121,10 @@ class Page4 extends React.Component {
                <br />
 
                <div className="jumbotron" style={{ paddingTop: '2.25rem' }}>
-                  {mapToView.renderNote(table)}
-                  <div class="container-table100 mt-2">
-                     <div class="wrap-table100">
-                        <div class="table">
-                           {mapToView.renderTableHeader(table)}
-                           {mapToView.renderTableBody(table, this.onDateChange, true)}
-                        </div>
-                     </div>
-                  </div>
-                  <br /> <br />
+                  {mapToView.renderTable(table, this.onDateChange, true)}
+
+                  <br />
+                  <br />
                   <div className="row">
                      <div className="col-4">
                         <Link to="/Nurse/Nurse3" className="btn btn-outline-primary  btn-block">
