@@ -42,7 +42,6 @@ import RecoverPasword from './pages/RecoverPasword';
 // export const domain = "http://127.0.0.1:8000";
 
 // export const domain = 'http://127.0.0.1:8000';
-// >>>>>>> 954c2cbbbbff3a0ac962904e2a2cde7fb22aa882
 // export const domain = 'https://thrombolink-dev.herokuapp.com';
 
 export const domain = 'http://thrombolink.com/server';
