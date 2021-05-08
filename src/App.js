@@ -37,15 +37,7 @@ import Nurse6 from './pages/nurse/Page6';
 import RecoverPasword from './pages/RecoverPasword';
 
 // global Domain
-// so that when development it is easier to change domain to LocalHost
-
-// export const domain = "http://127.0.0.1:8000";
-
-// export const domain = 'http://127.0.0.1:8000';
-// export const domain = 'https://thrombolink-dev.herokuapp.com';
-
-export const domain = 'http://thrombolink.com/server';
-
+export const domain = 'https://thrombolink-server.herokuapp.com';
 //
 
 const App = () => {
