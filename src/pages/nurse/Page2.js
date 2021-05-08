@@ -154,7 +154,7 @@ class Page2 extends React.Component {
                             <select
                                 className="form-control"
                                 id="procedure"
-                                value={this.state.procedureSelected}
+                                value={this.state.procedureSelected ? this.state.procedureSelected : 'Please select'}
                                 onChange={(e) => this.setState({ procedureSelected: e.target.value })}
                             >
                                 <option>Please select</option>

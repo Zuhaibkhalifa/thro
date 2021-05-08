@@ -1,20 +1,13 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-
-import SimpleReactValidator from 'simple-react-validator';
-import axios from 'axios';
-import { login, isLogin } from '../utils/user';
-import { isAdminLogin, Adminlogin } from '../utils/admin';
+import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
-import { domain } from '../App';
+import SimpleReactValidator from 'simple-react-validator';
 
-/*
-const headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization' : 'Bearer ' + this.props.match.params.token
-}
-*/
+import axios from 'axios';
+import { domain } from '../App';
+import { isLogin } from '../utils/user';
+
+//
 
 class Forgotpassword extends React.Component {
     constructor(props) {

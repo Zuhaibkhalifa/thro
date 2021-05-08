@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-
-import SimpleReactValidator from 'simple-react-validator';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
+import SimpleReactValidator from 'simple-react-validator';
+
+import axios from 'axios';
 import { domain } from '../App';
+
+//
 
 class RecoverPasword extends React.Component {
     constructor(props) {
@@ -125,15 +127,9 @@ class RecoverPasword extends React.Component {
                             placeholder="Confirm Password"
                             type="password"
                             value={this.state.password_confirmation}
-                            onChange={(e) =>
-                                this.setState({ password_confirmation: e.target.value })
-                            }
+                            onChange={(e) => this.setState({ password_confirmation: e.target.value })}
                         />
-                        {this.validator.message(
-                            'confirmPassword',
-                            this.state.password_confirmation,
-                            'required|min:6'
-                        )}
+                        {this.validator.message('confirmPassword', this.state.password_confirmation, 'required|min:6')}
 
                         <div className="text-white">{this.state.errorMsg}</div>
 

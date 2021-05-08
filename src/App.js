@@ -38,50 +38,52 @@ import RecoverPasword from './pages/RecoverPasword';
 
 // global Domain
 // so that when development it is easier to change domain to LocalHost
-export const domain = "http://127.0.0.1:8000";
+
+// export const domain = "http://127.0.0.1:8000";
+
+// export const domain = 'http://127.0.0.1:8000';
+// >>>>>>> 954c2cbbbbff3a0ac962904e2a2cde7fb22aa882
 // export const domain = 'https://thrombolink-dev.herokuapp.com';
 
-//export const domain = 'http://thrombolink.com/server';
-
-// export const domain = 'https://thrombolink-dev.herokuapp.com';
+export const domain = 'http://thrombolink.com/server';
 
 //
 
 const App = () => {
-    return (
-        <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/Signin" component={Signin} />
-            <Route exact path="/Register" component={Register} />
-            <Route exact path="/Forgotpassword" component={Forgotpassword} />
-            <PrivateRoute exact path="/User/Section" component={Section} />
-            <Route exact path="/RecoverPasword/reset/:token" component={RecoverPasword} />
-            // patient //
-            <PrivateRoute path="/User/Page2" component={Page2} />
-            <PrivateRoute path="/User/Page3" component={Page3} />
-            <PrivateRoute path="/User/Page4" component={Page4} />
-            <PrivateRoute path="/User/Page5" component={Page5} />
-            <PrivateRoute path="/User/Page6" component={Page6} />
-            <PrivateRoute path="/User/Page7" component={Page7} />
-            <PrivateRoute path="/User/Page8" component={Page8} />
-            <PrivateRoute path="/User/Page9" component={Page9} />
-            <PrivateRoute path="/User/Page10" component={Page10} />
-            <PrivateRoute path="/User/Page11" component={Page11} />
-            <PrivateRoute path="/User/Page12" component={Page12} />
-            <PrivateRoute path="/User/Page13" component={Page13} />
-            <PrivateRoute path="/User/Page14" component={Page14} />
-            <PrivateRoute path="/User/Page15" component={Page15} />
-            <PrivateRoute path="/User/Page16" component={Page16} />
-            // Nurse //
-            <PrivateRoute path="/Nurse/Nurse1" component={Nurse1} />
-            <PrivateRoute path="/Nurse/Nurse2" component={Nurse2} />
-            <PrivateRoute path="/Nurse/Nurse3" component={Nurse3} />
-            <PrivateRoute path="/Nurse/Nurse4" component={Nurse4} />
-            <PrivateRoute path="/Nurse/Nurse5" component={Nurse5} />
-            <PrivateRoute path="/Nurse/Nurse6" component={Nurse6} />
-            <Route component={Error} />
-        </Switch>
-    );
+   return (
+      <Switch>
+         <Route exact path="/" component={Home} />
+         <Route exact path="/Signin" component={Signin} />
+         <Route exact path="/Register" component={Register} />
+         <Route exact path="/Forgotpassword" component={Forgotpassword} />
+         <PrivateRoute exact path="/User/Section" component={Section} />
+         <Route exact path="/RecoverPasword/reset/:token" component={RecoverPasword} />
+         // patient //
+         <PrivateRoute path="/User/Page2" component={Page2} />
+         <PrivateRoute path="/User/Page3" component={Page3} />
+         <PrivateRoute path="/User/Page4" component={Page4} />
+         <PrivateRoute path="/User/Page5" component={Page5} />
+         <PrivateRoute path="/User/Page6" component={Page6} />
+         <PrivateRoute path="/User/Page7" component={Page7} />
+         <PrivateRoute path="/User/Page8" component={Page8} />
+         <PrivateRoute path="/User/Page9" component={Page9} />
+         <PrivateRoute path="/User/Page10" component={Page10} />
+         <PrivateRoute path="/User/Page11" component={Page11} />
+         <PrivateRoute path="/User/Page12" component={Page12} />
+         <PrivateRoute path="/User/Page13" component={Page13} />
+         <PrivateRoute path="/User/Page14" component={Page14} />
+         <PrivateRoute path="/User/Page15" component={Page15} />
+         <PrivateRoute path="/User/Page16" component={Page16} />
+         // Nurse //
+         <PrivateRoute path="/Nurse/Nurse1" component={Nurse1} />
+         <PrivateRoute path="/Nurse/Nurse2" component={Nurse2} />
+         <PrivateRoute path="/Nurse/Nurse3" component={Nurse3} />
+         <PrivateRoute path="/Nurse/Nurse4" component={Nurse4} />
+         <PrivateRoute path="/Nurse/Nurse5" component={Nurse5} />
+         <PrivateRoute path="/Nurse/Nurse6" component={Nurse6} />
+         <Route component={Error} />
+      </Switch>
+   );
 };
 
 export default App;

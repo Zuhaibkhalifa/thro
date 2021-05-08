@@ -211,7 +211,7 @@ class Page6 extends React.Component {
             location_dont_know: this.state.q4_sub_ans4,
         };
         console.log('Patient page6 - page6 func - param: ', param);
-        // server('patient/page6Post', param);
+        server('patient/page6Post', param);
         // this.props.history.push('');
     }
 

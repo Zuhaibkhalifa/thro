@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { logout } from '../utils/user';
+
 import PatientImg from '.././assets/img/421342314.png';
 import NurseImg from '.././assets/img/123124.png';
-import { logout } from '../utils/user';
+
+//
 
 class Section extends React.Component {
     constructor(props) {
@@ -17,6 +21,8 @@ class Section extends React.Component {
 
         this.props.history.push('/');
     }
+
+    //
 
     render() {
         return (

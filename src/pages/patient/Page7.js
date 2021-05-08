@@ -120,9 +120,7 @@ class Page7 extends React.Component {
         const { id, value, checked } = e.target;
 
         const updatedValue = this.state[id] === '' ? value : '';
-        this.setState({ [id]: updatedValue }, () =>
-            console.log('handle Change - AFTER state: ', this.state)
-        );
+        this.setState({ [id]: updatedValue });
 
         this.q5_ans_smartToggle(id, checked);
     }
@@ -199,10 +197,7 @@ class Page7 extends React.Component {
                     {/* Default form login */}
                     <form className="p-5" action="#!">
                         <p className="blue">
-                            <b>
-                                Please Indicate if you have ever been diagnosed with any of the
-                                following
-                            </b>
+                            <b>Please Indicate if you have ever been diagnosed with any of the following</b>
                         </p>
                         <label className="radio-inline blue">Cognitive Heart Failure (ever)</label>
                         <input
@@ -302,10 +297,7 @@ class Page7 extends React.Component {
                                 className="pull-right"
                                 onChange={this.handleRadioChange}
                             />
-                            <div className="text-danger">
-                                {' '}
-                                {this.state.error2 !== '' ? this.state.error2 : ''}
-                            </div>
+                            <div className="text-danger"> {this.state.error2 !== '' ? this.state.error2 : ''}</div>
                         </div>
 
                         <label className="radio-inline blue">None Of Above</label>
@@ -317,10 +309,7 @@ class Page7 extends React.Component {
                             className="pull-right"
                             onClick={handleChangeNone}
                         />
-                        <div className="text-danger">
-                            {' '}
-                            {this.state.error1 !== '' ? this.state.error1 : ''}
-                        </div>
+                        <div className="text-danger"> {this.state.error1 !== '' ? this.state.error1 : ''}</div>
                     </form>
                     {/* Default form login */}
                     <nav aria-label="Page navigation example">

@@ -6,6 +6,8 @@ import { login, isLogin } from '../utils/user';
 import ReactSpinner from 'react-bootstrap-spinner';
 import { domain } from '../App';
 
+//
+
 class Signin extends React.Component {
     constructor(props) {
         super(props);
@@ -127,11 +129,7 @@ class Signin extends React.Component {
 
                         <p className="text-left">
                             {' '}
-                            {this.validator.message(
-                                'password',
-                                this.state.password,
-                                'required|min:6'
-                            )}
+                            {this.validator.message('password', this.state.password, 'required|min:6')}
                         </p>
 
                         <div className="text-white text-left">{this.state.errorMsg}</div>

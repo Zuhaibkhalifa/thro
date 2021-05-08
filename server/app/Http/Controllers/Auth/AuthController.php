@@ -14,14 +14,13 @@ class AuthController extends Controller
 {
     /**
      * Login
-     *  
+     * 
      * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
     public function login(LoginRequest $request)
     {
-        echo("Hello world");
         // Get User by email
         $user = User::where('email', $request->email)->first();
 

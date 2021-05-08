@@ -6,15 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pat_section_six extends Model
 {
-    
-
-
-       protected $fillable = [
-
+    protected $fillable = [
       'sec_six_id',  
       'mechanical_heart_valve',
-       'tissue_heart_valve',
-        'dont_know', 
+      'tissue_heart_valve',
+      'dont_know', 
       'mechanical_heart_valve_Is_the_valve_bileaflet',
       'mechanical_heart_valve_Is_the_valve_ball_and_cage',
       'mechanical_heart_valve_Is_the_valve_tilting_disc',
@@ -23,8 +19,7 @@ class Pat_section_six extends Model
       'location_mitral',
       'location_other',
       'location_dont_know',
-
-      , 'user_id'
+      'user_id'
     ];
 
 public $timestamps = false;
