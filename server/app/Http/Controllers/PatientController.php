@@ -196,15 +196,17 @@ class PatientController extends Controller
 
 			'user_id'=> Auth::user()->id);
 
-		$chk= DB::table('pat_section_eight')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t8= DB::table('pat_section_eight')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t9= DB::table('pat_section_nine')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t10= DB::table('pat_section_ten')->where('user_id',Auth::user()->id)->select('*')->get();
+		
+		if ($t8 != '[]') {DB::table('pat_section_eight')->where('user_id', Auth::user()->id)->delete();}
+		if ($t9 != '[]') {DB::table('pat_section_nine')->where('user_id', Auth::user()->id)->delete();}
+		if ($t10 != '[]') {DB::table('pat_section_ten')->where('user_id', Auth::user()->id)->delete();}
 
-		if ($chk=='[]') {
-			$chk=DB::table('pat_section_eight')->insert($data);
-		} else {
-			DB::table('pat_section_eight')->where('user_id', Auth::user()->id)->delete();
-			$chk=DB::table('pat_section_eight')->insert($data);
-		}
-		return response()->json(['success' => $chk], 200);
+		$t8=DB::table('pat_section_eight')->insert($data);
+
+		return response()->json(['success' => $t8], 200);
 	}
 
 	public function page9(Request $request)
@@ -226,73 +228,58 @@ class PatientController extends Controller
 			'user_id'=> Auth::user()->id
 		);
 
-		$chk = DB::table('pat_section_nine')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t8= DB::table('pat_section_eight')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t9= DB::table('pat_section_nine')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t10= DB::table('pat_section_ten')->where('user_id',Auth::user()->id)->select('*')->get();
+		
+		if ($t8 != '[]') {DB::table('pat_section_eight')->where('user_id', Auth::user()->id)->delete();}
+		if ($t9 != '[]') {DB::table('pat_section_nine')->where('user_id', Auth::user()->id)->delete();}
+		if ($t10 != '[]') {DB::table('pat_section_ten')->where('user_id', Auth::user()->id)->delete();}
 
-		if ($chk == '[]') {
-			$chk = DB::table('pat_section_nine')->insert($data);
-		} else {
-			DB::table('pat_section_nine')->where('user_id', Auth::user()->id)->delete();
-			$chk = DB::table('pat_section_nine')->insert($data);
-		}
+		$t9 = DB::table('pat_section_nine')->insert($data);
 
-		return response()->json(['success' => $chk], 200);
+		return response()->json(['success' => $t9], 200);
 	}
 
 
 
 	public function page10(Request $request)
-			{
+	{
 				
-	$data= array( 
-		'coumadin' => $request->coumadin,
-		'coumadin_monday' => $request->coumadin_monday,
-		'coumadin_tuesday' => $request->coumadin_tuesday,
+		$data= array( 
+			'coumadin' => $request->coumadin,
+			'coumadin_monday' => $request->coumadin_monday,
+			'coumadin_tuesday' => $request->coumadin_tuesday,
+			'coumadin_wednesday' => $request->coumadin_wednesday,
+			'coumadin_thursday' => $request->coumadin_thursday,
+			'coumadin_friday' => $request->coumadin_friday,
+			'coumadin_saturday' => $request->coumadin_saturday,
+			'coumadin_sunday' => $request->coumadin_sunday,
 
-
-		'coumadin_wednesday' => $request->coumadin_wednesday,
-		'coumadin_thursday' => $request->coumadin_thursday,
-		'coumadin_friday' => $request->coumadin_friday,
-
-		'coumadin_saturday' => $request->coumadin_saturday,
-
-
-
-		'coumadin_sunday' => $request->coumadin_sunday,
-		'sintrom' => $request->sintrom,
-		'sintrom_monday' => $request->sintrom_monday,
-
-		'sintrom_tuesday' => $request->sintrom_tuesday,
-
+			'sintrom' => $request->sintrom,
+			'sintrom_monday' => $request->sintrom_monday,
+			'sintrom_tuesday' => $request->sintrom_tuesday,
 			'sintrom_wednesday' => $request->sintrom_wednesday,
-		'sintrom_thursday' => $request->sintrom_thursday,
+			'sintrom_thursday' => $request->sintrom_thursday,
+			'sintrom_friday' => $request->sintrom_friday,
+			'sintrom_saturday' => $request->sintrom_saturday,
 
-		'sintrom_friday' => $request->sintrom_friday,
-
-
-		'sintrom_saturday' => $request->sintrom_saturday,
-	'not_sure' => $request->not_sure,
-
-		'user_id'=> Auth::user()->id);
+			'not_sure' => $request->not_sure,
+			'user_id'=> Auth::user()->id
+		);
 
 
-	$chk= DB::table('pat_section_ten')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t8= DB::table('pat_section_eight')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t9= DB::table('pat_section_nine')->where('user_id',Auth::user()->id)->select('*')->get();
+		$t10= DB::table('pat_section_ten')->where('user_id',Auth::user()->id)->select('*')->get();
 
+		if ($t8 != '[]') {DB::table('pat_section_eight')->where('user_id', Auth::user()->id)->delete();}
+		if ($t9 != '[]') {DB::table('pat_section_nine')->where('user_id', Auth::user()->id)->delete();}
+		if ($t10 != '[]') {DB::table('pat_section_ten')->where('user_id', Auth::user()->id)->delete();}
 
+		$t10=DB::table('pat_section_ten')->insert($data);
 
-	if ($chk=='[]') {
-
-	$chk=DB::table('pat_section_ten')->insert($data);
-
-
-
-	} else {
-
-	DB::table('pat_section_ten')->where('user_id', Auth::user()->id)->delete();
-	$chk=DB::table('pat_section_ten')->insert($data);
-
-	}
-	return response()->json(['success' => $chk], 200);
-			
+		return response()->json(['success' => $t10], 200);
 	}
 
 
@@ -313,8 +300,10 @@ class PatientController extends Controller
 			'brillinta_dosage' => $request->brillinta_dosage,
 			'brillinta_dosage_timie' => $request->brillinta_dosage_timie,
 
+			'effient' => $request->effient,
 			'effient_dosage' => $request->effient_dosage,
 			'effient_dosage_time' => $request->effient_dosage_time,
+
 			'not_using_drugs' => $request->not_using_druhs,
 
 			'user_id'=> Auth::user()->id

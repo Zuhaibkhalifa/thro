@@ -152,7 +152,7 @@ class Page9 extends React.Component {
          this.setState({ ...errors });
          console.log('Patient 9 - submit - state: ', this.state);
          this.page9(this.state);
-         // this.dynamicRouting();
+         this.dynamicRouting();
       }
    }
 

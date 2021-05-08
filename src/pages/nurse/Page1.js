@@ -604,7 +604,7 @@ class Page1 extends React.Component {
                                             <table className="table table-striped text-center">
                                                 <thead></thead>
                                                 <tbody>
-                                                    {this.aspirin !== null ? (
+                                                    {this.state.aspirin !== null ? (
                                                         <tr style={{ color: 'white' }}>
                                                             {' '}
                                                             <td>{this.state.aspirin} </td>

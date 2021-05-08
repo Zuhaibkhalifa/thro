@@ -120,7 +120,7 @@ class Page7 extends React.Component {
         const { id, value, checked } = e.target;
 
         const updatedValue = this.state[id] === '' ? value : '';
-        this.setState({ [id]: updatedValue }, () => console.log('handle Change - AFTER state: ', this.state));
+        this.setState({ [id]: updatedValue });
 
         this.q5_ans_smartToggle(id, checked);
     }
