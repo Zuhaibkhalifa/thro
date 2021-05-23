@@ -168,7 +168,7 @@ class Register extends React.Component {
                                 type="checkbox"
                                 id="defaultLoginFormPassword"
                                 onChange={(e) => this.setState({ user_role: e.target.checked ? 'Nurse' : 'Patient' })}
-                            /> Are you from the healcare department?
+                            /> Are you from the healthcare department?
                         </p> 
                         
                         <br />
