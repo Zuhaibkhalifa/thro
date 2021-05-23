@@ -49,14 +49,19 @@ class Signin extends React.Component {
                 password: param.password,
             })
             .then((response) => {
-                console.log(response);
+                console.log(response.data); 
                 this.setState({ loader: '' });
                 this.setState({ errorMsg: response.data.error });
 
                 if (response.data.hasOwnProperty('token')) {
                     // admin login
-                    login(response.data.token);
-                    this.props.history.push('/User/Section');
+                    login(response.data.token); 
+                    let serv_data = response.data.data;
+                    if(serv_data.user_role == 'Patient') {
+                        this.props.history.push('/User/Page2');
+                    } else {
+                        this.props.history.push('/Nurse/Nurse1');
+                    }
                 }
 
                 /*

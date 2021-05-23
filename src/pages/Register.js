@@ -21,6 +21,7 @@ class Register extends React.Component {
             password: '',
             name: '',
             confirmPassword: '',
+            user_role: 'Patient',
             errorMsg: '',
             loader: '',
         };
@@ -49,6 +50,7 @@ class Register extends React.Component {
                 name: param.name,
                 password: param.password,
                 password_confirmation: param.confirmPassword,
+                user_role: param.user_role
             })
             .then(
                 (response) => {
@@ -160,6 +162,15 @@ class Register extends React.Component {
                             `required|in:${this.state.password}`,
                             { messages: { in: 'Passwords need to match!' } }
                         )}
+
+                        <p style={{ color:"white" }}>
+                            <input 
+                                type="checkbox"
+                                id="defaultLoginFormPassword"
+                                onChange={(e) => this.setState({ user_role: e.target.checked ? 'Nurse' : 'Patient' })}
+                            /> Are you from the healcare department?
+                        </p> 
+                        
                         <br />
                         <div className="text-white text-left">{this.state.errorMsg}</div>
                         {/* Sign in button */}

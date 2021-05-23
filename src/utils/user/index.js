@@ -1,7 +1,7 @@
 const TOKEN_KEY = 'token';
 
 export const login = (id) => {
-    console.log('Token ID: ' + id);
+    // console.log('Token ID: ' + id);
     localStorage.setItem(TOKEN_KEY, id);
     //  window.location="./User/dashboard";
 };

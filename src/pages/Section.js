@@ -33,7 +33,7 @@ class Section extends React.Component {
                     {' '}
                     {/* col */}
                     <h1 className="blue">Are you a patient or a healthcare provider?</h1>
-                    <br />
+                    <br /> 
                     <br />
                     <div className="row">
                         <div className="col-6">

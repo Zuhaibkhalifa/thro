@@ -37,7 +37,9 @@ import Nurse6 from './pages/nurse/Page6';
 import RecoverPasword from './pages/RecoverPasword';
 
 // global Domain
-export const domain = 'https://thrombolink-server.herokuapp.com';
+// export const domain = 'https://thrombolink-server.herokuapp.com';
+
+export const domain = 'http://localhost:8000';
 //
 
 const App = () => {

@@ -96,7 +96,7 @@ class Page1 extends React.Component {
 
         try {
             axios
-                .get(domain + '/api/nurse/page5LoadData', {
+                .get(domain + '/api/nurse/page6LoadData', { // originally was page5LoadData
                     headers: headers,
                 })
                 .then((response) => {
@@ -190,7 +190,12 @@ class Page1 extends React.Component {
                             'had_transfusion_in_last_three_months ?? : ',
                             this.state.had_transfusion_in_last_three_months
                         );
+                    } else {
+                        this.setState({ loader: '' });
                     }
+                }, (error) => {
+                    this.setState({ loader: '' });
+                    console.log(error);
                 });
         } catch (error) {
             this.setState({ loader: '' });
@@ -811,7 +816,7 @@ class Page1 extends React.Component {
 
                         <div className="row">
                             <div className="col-4">
-                                <Link to="/User/Section" className="btn btn-outline-primary  btn-block">
+                                <Link to="/Nurse/Nurse1" className="btn btn-outline-primary  btn-block">
                                     Back
                                 </Link>
                             </div>

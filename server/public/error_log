@@ -1,1 +1,0 @@
-[13-Nov-2020 12:40:59 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.2.5". You are running 5.6.40. in /home/g7m4jkf5c2wd/public_html/thrombolink.com/server/vendor/composer/platform_check.php on line 25
