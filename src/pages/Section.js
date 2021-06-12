@@ -35,6 +35,7 @@ class Section extends React.Component {
             console.log(response);
             this.setState({ user_role: response.data.user_role, loading: 0 });
         });
+        console.log(this.state);
     }
     
     render() {
@@ -50,16 +51,16 @@ class Section extends React.Component {
                     <br /> 
                     <br />
                     <div className="row">
-                        { (this.state.user_role == 'Patient') ? 
+                        { (this.state.user_role == 'Nurse') ? 
                             <div style={{ paddingLeft: "45px" }} className="col-6">
-                                <Link to="/User/Page2">
-                                    <img className="img-fluid" src={PatientImg} alt="Patients" />
+                                <Link to="/Nurse/patient_search">
+                                    <img className="img-fluid" src={NurseImg} alt="Nurse" />
                                 </Link>
                             </div>
                             : 
                             <div style={{ paddingLeft: "45px" }} className="col-6">
-                                <Link to="/Nurse/patient_search">
-                                    <img className="img-fluid" src={NurseImg} alt="Nurse" />
+                                <Link to="/User/Page2">
+                                    <img className="img-fluid" src={PatientImg} alt="Patients" />
                                 </Link>
                             </div>
                         }
