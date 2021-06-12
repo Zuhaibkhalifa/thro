@@ -33,7 +33,7 @@ class Section extends React.Component {
         };
         axios.get(domain + '/api/profile', { headers:headers }).then((response) => {
             console.log(response);
-            this.setState({ user_role: response.data.user_role, loading: 0 });
+            this.setState({ user_role: response.data.data.user_role, loading: 0 });
         });
         console.log(this.state);
     }
