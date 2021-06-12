@@ -6,12 +6,13 @@ import axios from 'axios';
 import PatientImg from '.././assets/img/421342314.png';
 import NurseImg from '.././assets/img/123124.png';
 import { domain } from '../App';
+import ReactSpinner from 'react-bootstrap-spinner';
 //
 
 class Section extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { user_role: "" };
+        this.state = { user_role: "", loading: 1 };
         this.go_away = this.go_away.bind(this);
         document.getElementById('body').classList.remove('blue-bg');
     }
@@ -32,15 +33,16 @@ class Section extends React.Component {
         };
         axios.get(domain + '/api/profile', { headers:headers }).then((response) => {
             console.log(response);
-            this.setState({ user_role: response.data.user_role });
+            this.setState({ user_role: response.data.user_role, loading: 0 });
         });
     }
-
+    
     render() {
         return (
             <div>
                 <br />
                 <br />
+                { (this.state.loading == 0) ? 
                 <div className="col-md-10 offset-md-1 text-center bg-light">
                     {' '}
                     {/* col */}
@@ -67,9 +69,12 @@ class Section extends React.Component {
                     <Link to="" className="blue" onClick={this.go_away}>
                         <i className="fa fa-long-arrow-left" aria-hidden="true" /> &nbsp; Logout
                     </Link>
-                </div>{' '}
-                {/* //col */}
-            </div>
+                </div>
+                : 
+                    <div className="centered">
+                    <ReactSpinner type="border" color="blue" size="5" />
+                </div> }
+            </div> 
         );
     }
 }
