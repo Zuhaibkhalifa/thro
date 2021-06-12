@@ -26,7 +26,8 @@ import Page13 from './pages/patient/Page13';
 import Page14 from './pages/patient/Page14';
 import Page15 from './pages/patient/Page15';
 import Page16 from './pages/patient/Page16';
-// Nurse //
+// Nurse // 
+import NurseSearch from './pages/nurse/NurseSearch';
 import Nurse1 from './pages/nurse/Page1';
 import Nurse2 from './pages/nurse/Page2';
 import Nurse3 from './pages/nurse/Page3';
