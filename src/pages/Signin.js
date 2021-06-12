@@ -46,7 +46,7 @@ class Signin extends React.Component {
         axios
             .post(domain + '/api/auth/login', {
                 email: param.email,
-                password: param.password,
+                password: param.password, 
             })
             .then((response) => {
                 console.log(response.data); 
@@ -57,10 +57,8 @@ class Signin extends React.Component {
                     // admin login
                     login(response.data.token); 
                     let serv_data = response.data.data;
-                    if(serv_data.user_role == 'Patient') {
-                        this.props.history.push('/User/Page2');
-                    } else {
-                        this.props.history.push('/Nurse/patient_search');
+                    if(serv_data.user_role) {
+                        this.props.history.push('/User/Section');
                     }
                 }
 

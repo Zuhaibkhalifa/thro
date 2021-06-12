@@ -2,16 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { logout } from '../utils/user';
-
+import axios from 'axios';
 import PatientImg from '.././assets/img/421342314.png';
 import NurseImg from '.././assets/img/123124.png';
-
+import { domain } from '../App';
 //
 
 class Section extends React.Component {
     constructor(props) {
         super(props);
-
+        this.state = { user_role: "" };
         this.go_away = this.go_away.bind(this);
         document.getElementById('body').classList.remove('blue-bg');
     }
@@ -24,6 +24,18 @@ class Section extends React.Component {
 
     //
 
+    componentDidMount() {
+        const headers = {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+        };
+        axios.get(domain + '/api/profile', { headers:headers }).then((response) => {
+            console.log(response);
+            this.setState({ user_role: response.data.user_role });
+        });
+    }
+
     render() {
         return (
             <div>
@@ -32,21 +44,23 @@ class Section extends React.Component {
                 <div className="col-md-10 offset-md-1 text-center bg-light">
                     {' '}
                     {/* col */}
-                    <h1 className="blue">Are you a patient or a healthcare provider?</h1>
+                    <h1 className="blue">Please click the below link and continue. </h1>
                     <br /> 
                     <br />
                     <div className="row">
-                        <div className="col-6">
-                            <Link to="/User/Page2">
-                                <img className="img-fluid" src={PatientImg} alt="Patients" />
-                            </Link>
-                        </div>
-
-                        <div className="col-6">
-                            <Link to="/Nurse/Nurse1">
-                                <img className="img-fluid" src={NurseImg} alt="Nurse" />
-                            </Link>
-                        </div>
+                        { (this.state.user_role == 'Patient') ? 
+                            <div style={{ paddingLeft: "45px" }} className="col-6">
+                                <Link to="/User/Page2">
+                                    <img className="img-fluid" src={PatientImg} alt="Patients" />
+                                </Link>
+                            </div>
+                            : 
+                            <div style={{ paddingLeft: "45px" }} className="col-6">
+                                <Link to="/Nurse/patient_search">
+                                    <img className="img-fluid" src={NurseImg} alt="Nurse" />
+                                </Link>
+                            </div>
+                        }
                     </div>
                     <br />
                     <br />

@@ -67,8 +67,8 @@ const col = [
   
 
 class NurseSearch extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { 
             loader: 0,
             patientCount: 150,
@@ -99,19 +99,13 @@ class NurseSearch extends React.Component {
                         email: data.email,
                         name: data.name,
                         nurse: "Clauie",
-                        action: <button className="btn btn-info" onClick={this.redirect}>get info</button>
+                        action: <button className="btn btn-info"><Link style={{ color: 'white', textDecoration: "none" }} to="/Nurse/Nurse1">get info</Link></button>
                     });
                 }
             });
             this.setState({ testData:patientData });
         });
     };
-
-    redirect() {
-        this.props.history.push('/Nurse/Nurse1');
-    }
-
-    
     render() {
         return (
             <React.Fragment>
