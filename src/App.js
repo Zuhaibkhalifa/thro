@@ -69,6 +69,7 @@ const App = () => {
          <PrivateRoute path="/User/Page15" component={Page15} />
          <PrivateRoute path="/User/Page16" component={Page16} />
          // Nurse //
+         <PrivateRoute path="/Nurse/patient_search" component={NurseSearch} />
          <PrivateRoute path="/Nurse/Nurse1" component={Nurse1} />
          <PrivateRoute path="/Nurse/Nurse2" component={Nurse2} />
          <PrivateRoute path="/Nurse/Nurse3" component={Nurse3} />

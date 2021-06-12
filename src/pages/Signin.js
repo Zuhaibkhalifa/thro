@@ -60,7 +60,7 @@ class Signin extends React.Component {
                     if(serv_data.user_role == 'Patient') {
                         this.props.history.push('/User/Page2');
                     } else {
-                        this.props.history.push('/Nurse/Nurse1');
+                        this.props.history.push('/Nurse/patient_search');
                     }
                 }
 
