@@ -95,8 +95,10 @@ class Page1 extends React.Component {
         };
 
         try {
+            let patient_id = this.props.location.state.patient_id;
+            console.log(patient_id);
             axios
-                .get(domain + '/api/nurse/page6LoadData', { // originally was page5LoadData
+                .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, { // originally was page5LoadData
                     headers: headers,
                 })
                 .then((response) => {

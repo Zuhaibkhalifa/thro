@@ -57,7 +57,7 @@ const col = [
     "email": "test@test.com",
     "name": "Test User",
     "nurse": "Claurie",
-    "action": <button className="btn btn-info">get info</button>
+    "action":  <button className="btn btn-info">get info</button>
   }];
    
    const options = {
@@ -70,7 +70,7 @@ class NurseSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            loader: 0,
+            loader: 1,
             patientCount: 150,
             ineligiblePatients: 12,
             activePatients: 85,
@@ -88,36 +88,34 @@ class NurseSearch extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
-        console.log('fetching data....');
         axios.get(domain + '/api/auth/users', { headers:headers }).then((response) => {
             let servData = response.data;
             let patientData = [];
             servData.forEach( data => {
-                if(data.user_role != "Admin") {
+                if(data.user_role != "Admin" && data.user_role != "Nurse") {
                     patientData.push({
                         patient_id: data.id,
                         email: data.email,
                         name: data.name,
                         nurse: "Clauie",
-                        action: <button className="btn btn-info"><Link style={{ color: 'white', textDecoration: "none" }} to="/Nurse/Nurse1">get info</Link></button>
+                        action: <button className="btn btn-info"><Link style={{ color:"white", textDecoration:"none" }} to={{ pathname:'/Nurse/Nurse1', state:{ patient_id:data.id } }}>get info</Link></button>
                     });
                 }
             });
-            this.setState({ testData:patientData });
+            this.setState({ testData:patientData, loader: 0 });
         });
     };
+
     render() {
         return (
             <React.Fragment>
                 <Header heading="Search Patient" />
-                {this.state.loader === 1 ? (
-                    <div className="centered">
-                        <ReactSpinner type="border" color="blue" size="5" />
-                    </div>
-                ) : (
-                    '' 
-                )}
                 <div className="container">
+                  {this.state.loader === 1 ? (
+                          <div className="centered">
+                              <ReactSpinner type="border" color="blue" size="5" />
+                          </div>
+                    ) : (
                     <div className="container-fluid">
                         <br /><br />
                         {/*---------------------------------------------------------------------------------*/}
@@ -142,15 +140,16 @@ class NurseSearch extends React.Component {
                         <div className="row">
                             <div className="col-sm-12">
                                 <MUIDataTable
-                                    title={"Patient List"}
-                                    data={this.state.testData}
-                                    columns={col}
-                                    options={options}
-                                />
+                                  title={"Patient List"}
+                                  data={this.state.testData}
+                                  columns={col}
+                                  options={options}
+                              />
                             </div>
                         </div>
                         <br />
                     </div>
+                  )}
                 </div>
             </React.Fragment>
         );

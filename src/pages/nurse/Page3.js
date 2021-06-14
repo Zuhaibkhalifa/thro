@@ -62,12 +62,12 @@ class Page5 extends React.Component {
                     this.setState({ loader: '' });
 
                     this.setState({
-                        who: data.who_is_completing_this_form,
-                        accompanied: data.patient_accompanied_by,
-                        lmwh: data.lmwh,
-                        admin: data.administration,
-                        understand: data.understanding,
-                        explained: data.explained,
+                        who:  data ? data.who_is_completing_this_form : "undefined",
+                        accompanied: data ? data.patient_accompanied_by : "undefined",
+                        lmwh: data ? data.lmwh : "undefined",
+                        admin: data ? data.administration : "undefined",
+                        understand: data ? data.understanding : "undefined",
+                        explained: data ? data.explained : "undefined",
                     });
                 });
         } catch (error) {
