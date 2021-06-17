@@ -227,6 +227,7 @@ class Page1 extends React.Component {
 
         for (var key in data) {
             if (data[key] === 'Yes') anticoagulation += anticoagulationMap[key] + ',  ';
+            if (key === 'other') anticoagulation += data[key] + ',  ';
         }
 
         this.setState({ indication_for_anticoagulation: anticoagulation });
