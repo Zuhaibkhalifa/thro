@@ -113,7 +113,8 @@ class Page16 extends React.Component {
       }
 
       console.log(param);
-      server('patient/page16', param);
+      let patient_id = this.props.location.state.patient_id;
+      server(`patient/page16/:${patient_id}`, param);
       //this.props.history.push('');
    }
    handle_procedure(value) {
