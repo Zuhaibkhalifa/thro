@@ -113,7 +113,7 @@ class Page16 extends React.Component {
       }
 
       console.log(param);
-      // server('patient/page16', param);
+      server('patient/page16', param);
       //this.props.history.push('');
    }
    handle_procedure(value) {
