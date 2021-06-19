@@ -47,13 +47,18 @@ class RecoverPasword extends React.Component {
 
     signin(param) {
         const headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json', 
             Accept: 'application/json',
             Authorization: 'Bearer ' + this.props.match.params.token,
         };
         this.setState({ loader: 1 });
         axios
-            .post(domain + '/api/auth/reset', param)
+            .post(domain + '/api/auth/reset', {
+                "token": this.props.match.params.token,
+                "email": this.state.email,
+                "password": this.state.password,
+                "password_confirmation": this.state.password_confirmation
+            }, { headers:headers })
             .then((response) => {
                 console.log(response);
                 this.setState({ loader: '' });
