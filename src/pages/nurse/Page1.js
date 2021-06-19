@@ -95,7 +95,15 @@ class Page1 extends React.Component {
         };
 
         try {
-            let patient_id = this.props.location.state.patient_id;
+            let patient_id = "";
+            if(localStorage.getItem('patient_id') == ("" || null)) {
+                localStorage.setItem('patient_id', this.props.location.state.patient_id);
+                patient_id = localStorage.getItem('patient_id');
+            } else {
+                patient_id = (localStorage.getItem('patient_id') !== this.props.location.state.patient_id) ? localStorage.setItem('patient_id', this.props.location.state.patient_id) : localStorage.getItem('patient_id');
+                console.log(patient_id);
+                patient_id = localStorage.getItem('patient_id');
+            }
             console.log(patient_id);
             axios
                 .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, { // originally was page5LoadData
@@ -118,7 +126,6 @@ class Page1 extends React.Component {
                         $('#procedure').val(data.type_of_procedure);
                         $('#date_of_procedure').val(data.date_of_procedure);
                         $('#age').val(data.age);
-                        console.log('Age ' + data.age);
 
                         this.setState({
                             age: data.age,
@@ -184,7 +191,7 @@ class Page1 extends React.Component {
                             stroke_or_mini_stroke: data.stroke_or_mini_stroke,
                         });
 
-                        this.set_anticoagulation(response.data.success['anticoagulation']);
+                        this.set_anticoagulation(response.data.success.anticoagulation);
 
                         this.set_CHADS_score();
 
@@ -330,7 +337,8 @@ class Page1 extends React.Component {
         };
 
         console.log('Nure Page1 - page5 func - param: ', param);
-        server('nurse/page5', param);
+        let patient_id = localStorage.getItem('patient_id');
+        server(`nurse/page5/:${patient_id}`, param);
     }
 
     handleChange_weight(value) {
@@ -819,7 +827,7 @@ class Page1 extends React.Component {
 
                         <div className="row">
                             <div className="col-4">
-                                <Link to="/Nurse/Nurse1" className="btn btn-outline-primary  btn-block">
+                                <Link to="/Nurse/patient_search" className="btn btn-outline-primary  btn-block">
                                     Back
                                 </Link>
                             </div>

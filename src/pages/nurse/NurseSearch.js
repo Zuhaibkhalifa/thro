@@ -19,8 +19,8 @@ const col = [
       }
     },
     {
-      name: "email",
-      label: "Email",
+      name: "user_id",
+      label: "User Id",
       options: {
         filter: true,
         sort: true
@@ -29,6 +29,30 @@ const col = [
     {
       name: "name",
       label: "Patient Name",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+    {
+      name: "email",
+      label: "Email",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+    {
+      name: "age",
+      label: "Age",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+    {
+      name: "weight",
+      label: "Weight",
       options: {
         filter: true,
         sort: true
@@ -54,8 +78,12 @@ const col = [
   
   let demoData = [{
     "patient_id": "1250",
-    "email": "test@test.com",
+    "user_id": "34",
     "name": "Test User",
+    "email": "test@test.com",
+    "age": "22",
+    "weight": "65kg",
+    "sex": "male",
     "nurse": "Claurie",
     "action":  <button className="btn btn-info">get info</button>
   }];
@@ -88,17 +116,25 @@ class NurseSearch extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
-        axios.get(domain + '/api/auth/users', { headers:headers }).then((response) => {
+        axios.get(domain + '/api/users', { headers:headers }).then((response) => {
             let servData = response.data;
             let patientData = [];
+            console.log(response);
             servData.forEach( data => {
                 if(data.user_role != "Admin" && data.user_role != "Nurse") {
+                  let weight = data.weight+data.weight_unit;
+                  let patient_id = data.id;
+                  let button = (data.patient_id == null) ? (<button className="btn btn-info" disabled={true}><Link style={{ color:"white", textDecoration:"none", pointerEvents: 'none' }} to={{ pathname:'/Nurse/Nurse1', state:{ patient_id:patient_id } }}>get info</Link></button>) : (<button className="btn btn-info"><Link style={{ color:"white", textDecoration:"none" }} to={{ pathname:'/Nurse/Nurse1', state:{ patient_id:patient_id } }}>get info</Link></button>);
                     patientData.push({
-                        patient_id: data.id,
-                        email: data.email,
-                        name: data.name,
-                        nurse: "Clauie",
-                        action: <button className="btn btn-info"><Link style={{ color:"white", textDecoration:"none" }} to={{ pathname:'/Nurse/Nurse1', state:{ patient_id:data.id } }}>get info</Link></button>
+                        patient_id: data.patient_id ? data.patient_id : "Profile Not Completed",
+                        user_id: data.id ? data.id : "Profile Not Completed",
+                        name: data.name ? data.name : "Profile Not Completed",
+                        email: data.email ? data.email : "Profile Not Completed",
+                        age: data.age ? data.age : "Profile Not Completed",
+                        weight: weight ? weight : "Profile Not Completed",
+                        sex: data.gender ? data.gender : "Profile Not Completed",
+                        nurse: data.physicianName ? data.physicianName : "Profile Not Completed",
+                        action: button
                     });
                 }
             });
