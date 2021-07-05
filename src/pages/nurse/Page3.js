@@ -94,6 +94,7 @@ class Page5 extends React.Component {
             administration: this.state.admin,
             understanding: this.state.understand,
             explained: this.state.explained,
+            patient_id: localStorage.getItem('patient_id')
         };
 
         console.log('Nurse page 5 - param: ', param);

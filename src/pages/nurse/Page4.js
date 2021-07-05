@@ -37,13 +37,15 @@ class Page4 extends React.Component {
          Authorization: 'Bearer ' + localStorage.getItem('token'),
       };
       try {
+         let patient_id = localStorage.getItem('patient_id');
          axios
-            .get(domain + '/api/nurse/page8LoadData', {
+            .get(domain + `/api/nurse/page8LoadData/:${patient_id}`, {
                headers: headers,
             })
             .then((response) => {
                console.log(response.data.success[0]);
                data = response.data.success[0];
+               console.log("response is here: ", response);
                this.setState({ loader: '' });
             });
       } catch (error) {
@@ -52,9 +54,10 @@ class Page4 extends React.Component {
       }
    }
 
-   async componentDidMount() {
+   async getDatafromAlgo() {
       const inidcators = await thromboAlgos();
       const tableData = await thromboMedicationAlgo(inidcators);
+      console.log(inidcators);
       this.setState({ table: tableData });
    }
 

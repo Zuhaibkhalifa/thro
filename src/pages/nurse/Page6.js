@@ -27,7 +27,8 @@ class Page6 extends React.Component {
       });
 
       console.log(this.validator);
-      this.state = { email: '', loader: '', showHide: '', table: { header: [], data: [], note: {} } };
+      this.state = { email: '', loader: '', showHide: '', table: { header: [], data: [], note: {} }
+      ,patient_id: localStorage.getItem('patient_id') };
 
       this.submitForm = this.submitForm.bind(this);
       this.handleModalShowHide = this.handleModalShowHide.bind(this);
@@ -91,7 +92,7 @@ class Page6 extends React.Component {
 
    submitForm() {
       // this.props.history.push('/Nurse/Nurse7');
-
+      this.page8(this.state);
       window.print();
    }
 

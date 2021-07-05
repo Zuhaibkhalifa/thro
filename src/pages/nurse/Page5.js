@@ -274,6 +274,7 @@ class Page3 extends React.Component {
             understanding: this.state.understanding,
             who_is_completing_this_form: this.state.completed_by,
             reviewed_by: this.state.reviewed_by,
+            patient_id: localStorage.getItem('patient_id')
         };
         console.log('nurse page 3 - page5 - param: ', param);
         server('nurse/page5', param);

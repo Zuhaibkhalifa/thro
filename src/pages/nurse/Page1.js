@@ -81,6 +81,8 @@ class Page1 extends React.Component {
             edoxabon_dosage: '',
             edoxabon_dosage_time: '',
             ulcer_in_stomach_or_bowel: '',
+            reffered_by: '',
+            patient_id: ''
         };
 
         // Bind " this " ref of class to Methods
@@ -99,12 +101,12 @@ class Page1 extends React.Component {
             if(localStorage.getItem('patient_id') == ("" || null)) {
                 localStorage.setItem('patient_id', this.props.location.state.patient_id);
                 patient_id = localStorage.getItem('patient_id');
+                this.setState({ patient_id:patient_id });
             } else {
                 patient_id = (localStorage.getItem('patient_id') !== this.props.location.state.patient_id) ? localStorage.setItem('patient_id', this.props.location.state.patient_id) : localStorage.getItem('patient_id');
-                console.log(patient_id);
                 patient_id = localStorage.getItem('patient_id');
+                this.setState({ patient_id:patient_id });
             }
-            console.log(patient_id);
             axios
                 .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, { // originally was page5LoadData
                     headers: headers,
@@ -206,6 +208,24 @@ class Page1 extends React.Component {
                     this.setState({ loader: '' });
                     console.log(error);
                 });
+
+                axios
+                .get(domain + '/api/nurse/page1LoadData', {
+                    headers: headers,
+                })
+                .then((response) => {
+                    console.log('Nurse page2 - Constructor - Response: ', response);
+                    console.log('Nurse page2 - Constructor - Response.data.success: ', response.data.success[0]);
+
+                    data = response.data.success[0];
+                    this.setState({ loader: '' });
+
+                    if (data !== undefined) {
+                        this.setState({
+                            referred_by: data.physicianName
+                        });
+                    }
+                });
         } catch (error) {
             this.setState({ loader: '' });
             console.error('Nurse page1 - error response: ', error);
@@ -302,7 +322,7 @@ class Page1 extends React.Component {
         if (this.validator.allValid()) {
             console.log('Nure page1 - submitForm - state: ', this.state);
             this.page5(this.state);
-            this.props.history.push('/Nurse/Nurse2');
+            this.props.history.push('/Nurse/Nurse3');
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -334,6 +354,7 @@ class Page1 extends React.Component {
             understanding: this.state.understanding,
             who_is_completing_this_form: this.state.completed_by,
             reviewed_by: this.state.reviewed_by,
+            patient_id: localStorage.getItem('patient_id')
         };
 
         console.log('Nure Page1 - page5 func - param: ', param);
@@ -704,7 +725,7 @@ class Page1 extends React.Component {
                                         <div className="col-6">
                                             {' '}
                                             <input
-                                                type="text"
+                                                type="number"
                                                 className="form-control"
                                                 id="usr"
                                                 value={this.state.poc_inr_text}
@@ -738,7 +759,7 @@ class Page1 extends React.Component {
                                         </div>
                                         <div className="col-6">
                                             <input
-                                                type="text"
+                                                type="number"
                                                 className="form-control"
                                                 value={this.state.poc_creat_text}
                                                 onChange={(e) =>
@@ -773,7 +794,7 @@ class Page1 extends React.Component {
                                         </div>
                                         <div className="col-6">
                                             <input
-                                                type="text"
+                                                type="number"
                                                 id="hb"
                                                 className="form-control"
                                                 defaultValue={this.state.hb_text}
@@ -804,7 +825,7 @@ class Page1 extends React.Component {
                                         <div className="col-6">
                                             {' '}
                                             <input
-                                                type="text"
+                                                type="number"
                                                 className="form-control"
                                                 value={this.state.plt_text}
                                                 onChange={(e) => this.setState({ plt_text: e.target.value })}
@@ -813,6 +834,19 @@ class Page1 extends React.Component {
                                             {this.validator.message('', this.state.plt_text, 'required')}
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <div className="form-group">
+                                    <label htmlFor="usr">Referred By</label>
+                                    <input
+                                        type="text"
+                                        id="referred_by"
+                                        className="form-control"
+                                        value={this.state.referred_by}
+                                        onChange={(e) => this.setState({ referred_by: e.target.value })}
+                                    />
+                                    {this.validator.message('', this.state.referred_by, 'required')}
                                 </div>
                             </div>
                         </div>
