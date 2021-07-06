@@ -8,7 +8,8 @@ import { domain } from '../App';
 
 export default async function thromboAlgo() {
    // Global variables
-   const res = await getAlgoData();
+   const response = await getAlgoData();
+   const res = response.data.success[0];
    let algoData;
    let indicators = {
       indicationRisk: indicationRiskAlgo(),
@@ -20,9 +21,8 @@ export default async function thromboAlgo() {
    console.log('Indicators: ', indicators);
 
    // Get all the data needed for Thrombo Algo
-   async function getAlgoData() {
+   function getAlgoData() {
       let res;
-
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -30,12 +30,13 @@ export default async function thromboAlgo() {
       };
 
       try {
-         res = await axios.get(domain + '/api/nurse/medicationAlgoDetails', {
+         let patient_id = localStorage.getItem('patient_id');
+         res = axios.get(domain + `/api/nurse/medicationAlgoDetails/:${patient_id}`, {
             headers: headers,
          });
 
-         console.log('ThromboAlgo data - response: ', res.data.success[0]);
-         return await res.data.success[0];
+         console.log('ThromboAlgo data - response: ', res);
+         return res;
 
          //
       } catch (error) {
@@ -46,7 +47,6 @@ export default async function thromboAlgo() {
    // Indication bleeding risk
    function indicationRiskAlgo() {
       console.log('indicationAlgo Called!!!');
-
       const mapIndicationData = () => {
          let variables = {};
 
@@ -155,6 +155,7 @@ export default async function thromboAlgo() {
       const surgeryAlgo = () => {
          let variables = {};
          const proc = res.procedure;
+         console.log(res);
 
          if (proc.search('high') != -1) return 1;
          if (proc.search('mod') != -1) return 2;

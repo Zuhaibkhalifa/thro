@@ -92,6 +92,7 @@ class Page2 extends React.Component {
             procedure: this.state.procedureSelected,
             referred_by: this.state.physicianName,
             cabg: this.state.cabg,
+            patient_id: localStorage.getItem('patient_id')
         };
         console.log(param);
         server('nurse/page1', param);

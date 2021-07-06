@@ -47,6 +47,7 @@ class Page4 extends React.Component {
                data = response.data.success[0];
                console.log("response is here: ", response);
                this.setState({ loader: '' });
+               this.getDatafromAlgo()
             });
       } catch (error) {
          console.error(error);
@@ -76,9 +77,12 @@ class Page4 extends React.Component {
    page8() {
       if (this.state.table == 'none') return;
 
-      const data = { jsonTable: JSON.stringify({ ...this.state.table }) };
+      const data = { 
+         jsonTable: JSON.stringify({ ...this.state.table }),
+         patient_id: localStorage.getItem('patient_id') 
+      };
       console.log('>>> JSON data: ', data);
-      server('nurse/medicationJsonData', data);
+      server(`nurse/medicationJsonData/:${data.patient_id}`, data);
    }
 
    onDateChange(e) {

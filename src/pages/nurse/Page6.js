@@ -64,8 +64,9 @@ class Page6 extends React.Component {
       };
 
       try {
+         let patient_id = localStorage.getItem('patient_id');
          axios
-            .get(domain + '/api/nurse/medicationJsonData', {
+            .get(domain + `/api/nurse/medicationJsonData/:${patient_id}`, {
                headers: headers,
             })
             .then((response) => {
@@ -154,14 +155,16 @@ class Page6 extends React.Component {
                   <div className="row">
                      <div className="col-6"></div>
                      <div className="col-6">
-                        <button
-                           type="button"
-                           className="btn btn-secondary btn-block big-btn-white"
-                           data-dismiss="modal"
-                           onClick={this.handleModalShowHide}
-                        >
-                           OK
-                        </button>
+                        <Link to="/">
+                           <button
+                              type="button"
+                              className="btn btn-secondary btn-block big-btn-white"
+                              data-dismiss="modal"
+                              onClick={this.handleModalShowHide}
+                           >
+                              OK
+                           </button>
+                        </Link>
                      </div>
                   </div>
                </Modal.Body>

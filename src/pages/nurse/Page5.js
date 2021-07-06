@@ -94,8 +94,9 @@ class Page3 extends React.Component {
         };
 
         try {
+            let patient_id = localStorage.getItem('patient_id');
             axios
-                .get(domain + '/api/nurse/page5LoadData', {
+                .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
                     headers: headers,
                 })
                 .then((response) => {
@@ -277,7 +278,7 @@ class Page3 extends React.Component {
             patient_id: localStorage.getItem('patient_id')
         };
         console.log('nurse page 3 - page5 - param: ', param);
-        server('nurse/page5', param);
+        server(`nurse/page5/:${param.patient_id}`, param);
     }
 
     handleChange_weight(value) {
@@ -552,7 +553,7 @@ class Page3 extends React.Component {
                                         <table className="table table-striped text-center">
                                             <thead></thead>
                                             <tbody>
-                                                {this.aspirin !== null ? (
+                                                {this.state.aspirin !== null ? (
                                                     <tr style={{ color: 'white' }}>
                                                         {' '}
                                                         <td>{this.state.aspirin} </td>
@@ -562,6 +563,7 @@ class Page3 extends React.Component {
                                                 ) : (
                                                     ''
                                                 )}
+
                                                 {this.state.brillinta !== null ? (
                                                     <tr style={{ color: 'white' }}>
                                                         {' '}
@@ -583,7 +585,6 @@ class Page3 extends React.Component {
                                                 ) : (
                                                     ''
                                                 )}
-
                                                 {this.state.plavix !== null ? (
                                                     <tr style={{ color: 'white' }}>
                                                         {' '}
@@ -594,7 +595,6 @@ class Page3 extends React.Component {
                                                 ) : (
                                                     ''
                                                 )}
-
                                                 {this.state.not_using_drugs === '' ? (
                                                     <tr style={{ color: 'white' }}>
                                                         {' '}

@@ -50,8 +50,9 @@ class Page5 extends React.Component {
         };
 
         try {
+            let patient_id = localStorage.getItem('patient_id');
             axios
-                .get(domain + '/api/nurse/page3LoadData', {
+                .get(domain + `/api/nurse/page3LoadData/:${patient_id}`, {
                     headers: headers,
                 })
                 .then((response) => {
@@ -98,7 +99,7 @@ class Page5 extends React.Component {
         };
 
         console.log('Nurse page 5 - param: ', param);
-        server('nurse/page3', param);
+        server(`nurse/page3/:${param.patient_id}`, param);
     }
 
     handleRadioChange(e) {

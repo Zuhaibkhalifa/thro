@@ -62,7 +62,8 @@ export default async function thromboMedicationAlgo(indicators) {
       };
 
       try {
-         const res = await axios.get(domain + '/api/nurse/medicationDrugDetails', {
+         let patient_id = localStorage.getItem('patient_id');
+         const res = await axios.get(domain + `/api/nurse/medicationDrugDetails/:${patient_id}`, {
             headers: headers,
          });
 
