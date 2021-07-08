@@ -81,15 +81,16 @@ class Page1 extends React.Component {
             edoxabon_dosage: '',
             edoxabon_dosage_time: '',
             ulcer_in_stomach_or_bowel: '',
-            reffered_by: '',
+            referred_by: '',
             patient_id: ''
         };
 
         // Bind " this " ref of class to Methods
         this.submitForm = this.submitForm.bind(this);
         this.handle_procedure = this.handle_procedure.bind(this);
+    }
 
-        //
+    componentDidMount() {
         const headers = {
             'Content-Type': 'application/json',
             Accept: 'application/json',
@@ -103,9 +104,15 @@ class Page1 extends React.Component {
                 patient_id = localStorage.getItem('patient_id');
                 this.setState({ patient_id:patient_id });
             } else {
-                patient_id = (localStorage.getItem('patient_id') !== this.props.location.state.patient_id) ? localStorage.setItem('patient_id', this.props.location.state.patient_id) : localStorage.getItem('patient_id');
-                patient_id = localStorage.getItem('patient_id');
-                this.setState({ patient_id:patient_id });
+                if(this.props.location.state !== undefined)
+                {
+                    patient_id = (localStorage.getItem('patient_id') !== this.props.location.state.patient_id) ? localStorage.setItem('patient_id', this.props.location.state.patient_id) : localStorage.getItem('patient_id');
+                    patient_id = localStorage.getItem('patient_id');
+                    this.setState({ patient_id:patient_id });
+                } else {
+                    patient_id = localStorage.getItem('patient_id');
+                    this.setState({ patient_id:patient_id });    
+                }
             }
             axios
                 .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, { // originally was page5LoadData
@@ -120,8 +127,6 @@ class Page1 extends React.Component {
                     );
                     data = response.data.success[0];
                     this.setState({ loader: '' });
-                    //  console.log(data);
-
                     if (data !== undefined) {
                         $('#patient_id').val(data.patient_id);
                         $('#weight_selected1').val(data.weight_unit);
@@ -210,7 +215,7 @@ class Page1 extends React.Component {
                 });
 
                 axios
-                .get(domain + '/api/nurse/page1LoadData', {
+                .get(domain + `/api/nurse/page1LoadData/:${patient_id}`, {
                     headers: headers,
                 })
                 .then((response) => {
@@ -254,7 +259,7 @@ class Page1 extends React.Component {
 
         for (var key in data) {
             if (data[key] === 'Yes') anticoagulation += anticoagulationMap[key] + ',  ';
-            if (key === 'other') anticoagulation += data[key] + ',  ';
+            if (key === 'other') anticoagulation += (data[key] === null) ? "" : (data[key] + ',  ');
         }
 
         this.setState({ indication_for_anticoagulation: anticoagulation });
@@ -354,7 +359,8 @@ class Page1 extends React.Component {
             understanding: this.state.understanding,
             who_is_completing_this_form: this.state.completed_by,
             reviewed_by: this.state.reviewed_by,
-            patient_id: localStorage.getItem('patient_id')
+            patient_id: localStorage.getItem('patient_id'),
+            referred_by: this.state.referred_by
         };
 
         console.log('Nure Page1 - page5 func - param: ', param);
@@ -408,6 +414,21 @@ class Page1 extends React.Component {
                                     className="form-control"
                                     defaultValue={this.state.patient_id}
                                     onChange={(e) => this.setState({ patient_id: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <br />
+                        <div className="row">
+                            <div className="col-6">
+                                <label htmlFor="usr">Patients procedure summary</label>
+                            </div>
+
+                            <div className="col-6 text-left">
+                                <textarea
+                                    type="text"
+                                    disabled
+                                    className="form-control"
+                                    defaultValue={this.state.procedure}
                                 />
                             </div>
                         </div>
@@ -881,6 +902,5 @@ class Page1 extends React.Component {
             </React.Fragment>
         );
     }
-    componentDidMount() {}
 }
 export default Page1;
