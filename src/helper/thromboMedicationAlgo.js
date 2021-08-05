@@ -654,7 +654,7 @@ export default async function thromboMedicationAlgo(indicators) {
 
    //
    function checkAndGetDosage(str, arr) {
-      if (str === null) return 'none';
+      if (str === null || str === undefined) return 'none';
       for (let i = 0; i < arr.length; i++) if (str.search(arr[i]) !== -1) return arr[i];
    }
 

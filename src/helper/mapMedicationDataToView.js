@@ -83,7 +83,7 @@ const renderBodyCell = function(key, val, rowIdx, data, onChange, editable = fal
 
    if (key === 'date' && rowIdx === 5 && editable) {
       return (
-         <div class="cell" data-title={capitalizeFirstLetter(key)}>
+         <div key={key} class="cell" data-title={capitalizeFirstLetter(key)}>
             <input
                type="date"
                id="date_of_procedure"

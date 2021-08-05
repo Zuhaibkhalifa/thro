@@ -465,12 +465,12 @@ class Page3 extends React.Component {
                                         }}
                                     >
                                         <h5 style={{ color: 'white' }}>
-                                            {' '}
-                                            What Lab They Use{' '}
+                                            
+                                            What Lab They Use
                                             {this.state.lab_location_for_inr_test !== null ? (
                                                 <span className="text-right" style={{ color: 'green' }}>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    {this.state.lab_location_for_inr_test}{' '}
+                                                    {this.state.lab_location_for_inr_test}
                                                 </span>
                                             ) : (
                                                 ''
@@ -478,7 +478,7 @@ class Page3 extends React.Component {
                                             <br />
                                         </h5>
                                         <h5 style={{ color: 'white' }} className="text-center">
-                                            Current Dosing{' '}
+                                            Current Dosing
                                         </h5>
                                     </div>
                                     <div className="table-responsive">
@@ -487,10 +487,8 @@ class Page3 extends React.Component {
                                             <tbody>
                                                 {this.state.pradaxa !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
                                                         <td>{this.state.pradaxa} </td>
                                                         <td>{this.state.pradaxa_dosage}</td>
-                                                        <td></td>
                                                     </tr>
                                                 ) : (
                                                     ''
@@ -498,7 +496,6 @@ class Page3 extends React.Component {
 
                                                 {this.state.xarelto !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
                                                         <td>{this.state.xarelto} </td>
                                                         <td>{this.state.xarelto_dosage}</td>
                                                         <td>{this.state.xarelto_dosage_time}</td>
@@ -509,7 +506,7 @@ class Page3 extends React.Component {
 
                                                 {this.state.eliquis !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
+                                                        
                                                         <td>{this.state.eliquis} </td>
                                                         <td>{this.state.eliquis_dosage}</td>
                                                         <td>{this.state.eliquis_dosage_time}</td>
@@ -520,7 +517,7 @@ class Page3 extends React.Component {
 
                                                 {this.state.edoxabon !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
+                                                        
                                                         <td>{this.state.edoxabon} </td>
                                                         <td>{this.state.edoxabon_dosage}</td>
                                                         <td>{this.state.edoxabon_dosage_time}</td>
@@ -555,7 +552,7 @@ class Page3 extends React.Component {
                                             <tbody>
                                                 {this.state.aspirin !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
+                                                        
                                                         <td>{this.state.aspirin} </td>
                                                         <td>{this.state.aspirin_dosage}</td>
                                                         <td>{this.state.aspirin_dosage_time}</td>
@@ -566,7 +563,7 @@ class Page3 extends React.Component {
 
                                                 {this.state.brillinta !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
+                                                        
                                                         <td>{this.state.brillinta} </td>
                                                         <td>{this.state.brillinta_dosage}</td>
                                                         <td>{this.state.brillinta_dosage_timie}</td>
@@ -577,7 +574,7 @@ class Page3 extends React.Component {
 
                                                 {this.state.effient !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
+                                                        
                                                         <td>{this.state.effient} </td>
                                                         <td>{this.state.effient_dosage}</td>
                                                         <td>{this.state.effient_dosage_time}</td>
@@ -587,7 +584,7 @@ class Page3 extends React.Component {
                                                 )}
                                                 {this.state.plavix !== null ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
+                                                        
                                                         <td>{this.state.plavix} </td>
                                                         <td>{this.state.plavix_dosage}</td>
                                                         <td>{this.state.plavix_dosage_time}</td>
@@ -597,8 +594,8 @@ class Page3 extends React.Component {
                                                 )}
                                                 {this.state.not_using_drugs === '' ? (
                                                     <tr style={{ color: 'white' }}>
-                                                        {' '}
-                                                        <td> N/A </td>
+                                                        
+                                                        <td>N/A</td>
                                                         <td>N/A</td>
                                                         <td>N/A</td>
                                                     </tr>
@@ -630,7 +627,7 @@ class Page3 extends React.Component {
                                             {this.validator.message('', this.state.poc_inr_date, 'required')}
                                         </div>
                                         <div className="col-6">
-                                            {' '}
+                                            
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -688,7 +685,7 @@ class Page3 extends React.Component {
 
                                     <div className="row">
                                         <div className="col-6">
-                                            {' '}
+                                            
                                             <input
                                                 type="date"
                                                 id="hb"
@@ -718,7 +715,7 @@ class Page3 extends React.Component {
 
                                     <div className="row">
                                         <div className="col-6">
-                                            {' '}
+                                            
                                             <input
                                                 type="date"
                                                 className="form-control"
@@ -729,7 +726,7 @@ class Page3 extends React.Component {
                                             {this.validator.message('', this.state.plt_date, 'required')}
                                         </div>
                                         <div className="col-6">
-                                            {' '}
+                                            
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -801,7 +798,7 @@ class Page3 extends React.Component {
                         <div className="row">
                             <div className="col-12">
                                 <span>
-                                    Reviewed By{' '}
+                                    Reviewed By
                                     <input
                                         type="text"
                                         id="reviewed_by"
