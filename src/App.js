@@ -1,8 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './helper/PrivateRoute';
-import PublicRoute from './helper/PublicRoute';
-import AdminRoute from './helper/AdminRoute';
 import Signin from './pages/Signin';
 import Register from './pages/Register';
 import Section from './pages/Section';
@@ -52,7 +50,7 @@ const App = () => {
          <Route exact path="/Forgotpassword" component={Forgotpassword} />
          <PrivateRoute exact path="/User/Section" component={Section} />
          <Route exact path="/RecoverPasword/reset/:token" component={RecoverPasword} />
-         // patient //
+         {/* // patient // */}
          <PrivateRoute path="/User/Page2" component={Page2} />
          <PrivateRoute path="/User/Page3" component={Page3} />
          <PrivateRoute path="/User/Page4" component={Page4} />
@@ -68,7 +66,7 @@ const App = () => {
          <PrivateRoute path="/User/Page14" component={Page14} />
          <PrivateRoute path="/User/Page15" component={Page15} />
          <PrivateRoute path="/User/Page16" component={Page16} />
-         // Nurse //
+         {/* // Nurse // */}
          <PrivateRoute path="/Nurse/patient_search" component={NurseSearch} />
          <PrivateRoute path="/Nurse/Nurse1" component={Nurse1} />
          <PrivateRoute path="/Nurse/Nurse2" component={Nurse2} />

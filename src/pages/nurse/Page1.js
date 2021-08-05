@@ -81,8 +81,7 @@ class Page1 extends React.Component {
             edoxabon_dosage: '',
             edoxabon_dosage_time: '',
             ulcer_in_stomach_or_bowel: '',
-            referred_by: '',
-            patient_id: ''
+            referred_by: ''
         };
 
         // Bind " this " ref of class to Methods
@@ -99,7 +98,7 @@ class Page1 extends React.Component {
 
         try {
             let patient_id = "";
-            if(localStorage.getItem('patient_id') == ("" || null)) {
+            if(localStorage.getItem('patient_id') === ("" || null)) {
                 localStorage.setItem('patient_id', this.props.location.state.patient_id);
                 patient_id = localStorage.getItem('patient_id');
                 this.setState({ patient_id:patient_id });
@@ -336,8 +335,8 @@ class Page1 extends React.Component {
         }
     }
 
-    page5(param) {
-        var param = {
+    page5(params) {
+        let param = {
             procedure: this.state.procedure,
             date_of_procedure: this.state.date_of_procedure,
             age: this.state.age,
@@ -363,7 +362,7 @@ class Page1 extends React.Component {
             referred_by: this.state.referred_by
         };
 
-        console.log('Nure Page1 - page5 func - param: ', param);
+        console.log('Nure Page1 - page5 func - param: ', params);
         let patient_id = localStorage.getItem('patient_id');
         server(`nurse/page5/:${patient_id}`, param);
     }
@@ -739,7 +738,6 @@ class Page1 extends React.Component {
                                                 id="usr"
                                                 defaultValue={this.state.poc_inr_date}
                                                 onChange={(e) => this.setState({ poc_inr_date: e.target.value })}
-                                                id="poc_inr"
                                             />
                                             {this.validator.message('', this.state.poc_inr_date, 'required')}
                                         </div>
@@ -751,7 +749,6 @@ class Page1 extends React.Component {
                                                 id="usr"
                                                 value={this.state.poc_inr_text}
                                                 onChange={(e) => this.setState({ poc_inr_text: e.target.value })}
-                                                id="poc_inr"
                                             />
                                             {this.validator.message('', this.state.poc_inr_text, 'required')}
                                         </div>

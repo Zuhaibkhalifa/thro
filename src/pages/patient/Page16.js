@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import SimpleReactValidator from 'simple-react-validator';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import ReactSpinner from 'react-bootstrap-spinner';
 
 import Header from './Header';
@@ -13,9 +12,6 @@ import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
 
 import { domain } from '../../App';
-import procedures from '../../helper/procedures';
-
-//
 
 class Page16 extends React.Component {
    constructor(props) {
@@ -79,7 +75,7 @@ class Page16 extends React.Component {
          error3: '',
       };
 
-      if (document.getElementById('notsure').checked === false && this.state.q1_ans == '') {
+      if (document.getElementById('notsure').checked === false && this.state.q1_ans === '') {
          errors.error1 = 'This field is required';
          this.setState({ ...errors });
          console.log('Patient 16 - submit - state: ', this.state);
@@ -101,12 +97,13 @@ class Page16 extends React.Component {
       this.props.history.push('/User/Section');
    }
    page16() {
+      let param = {};
       if (document.getElementById('notsure').checked === true) {
-         var param = {
+         param = {
             type_of_procedure: this.state.q1_ans,
          };
       } else {
-         var param = {
+         param = {
             type_of_procedure: this.state.q1_ans,
             date_of_procedure: this.state.q2_ans,
          };
@@ -140,7 +137,7 @@ class Page16 extends React.Component {
                   {' '}
                   <div className="row">
                      <div className="col-6 offset-3">
-                        <img src={Logo} className="img-fluid" style={{ height: 200 }} />
+                        <img src={Logo} className="img-fluid" alt="logo" style={{ height: 200 }} />
                      </div>
                   </div>{' '}
                   <p className="white">
@@ -265,7 +262,7 @@ class Page16 extends React.Component {
                            <div className="modal-body blue-bg">
                               <div className="row">
                                  <div className="col-6 offset-3">
-                                    <img src="img/3.png" className="img-fluid" style={{ height: 200 }} />
+                                    <img src="img/3.png" className="img-fluid" alt="sign" style={{ height: 200 }} />
                                  </div>
                               </div>
                               <br />

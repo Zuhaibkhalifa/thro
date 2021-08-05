@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -124,11 +123,11 @@ class Page8 extends React.Component {
          this.setState({ error4: '' });
          this.setState({ error5: '' });
          this.setState({ error6: 'This field is required' });
-      } else if ($("input[name='opt_xarelto_dosage_15mg_daily']:checked").val() && $('#bridging2').val() == '') {
+      } else if ($("input[name='opt_xarelto_dosage_15mg_daily']:checked").val() && $('#bridging2').val() === '') {
          this.setState({ error6: '' });
 
          this.setState({ error8: 'This field is required' });
-      } else if (document.getElementById('opt_eliquis_dosage').checked === true && $('#bridging4').val() == '') {
+      } else if (document.getElementById('opt_eliquis_dosage').checked === true && $('#bridging4').val() === '') {
          this.setState({
             error8: '',
             error7: '',
@@ -142,7 +141,7 @@ class Page8 extends React.Component {
       } else if (
          document.getElementById('edxo_rdo').checked === true &&
          document.getElementById('opt_edxo_dosage_other').checked === true &&
-         $('#opt_edxo_dosage_other_textbox').val() == ''
+         $('#opt_edxo_dosage_other_textbox').val() === ''
       ) {
          this.setState({
             error8: '',
@@ -184,7 +183,7 @@ class Page8 extends React.Component {
       const { q5_ans } = this.state;
       console.log('Patient 8 - submit - dynamicRouting - q5: ', q5_ans);
 
-      if (q5_ans != '') {
+      if (q5_ans !== '') {
          this.props.history.push('/User/Page9');
       } else {
          this.props.history.push('/User/Page11');
@@ -192,25 +191,26 @@ class Page8 extends React.Component {
    }
 
    page8() {
+      let param = {};
       if (document.getElementById('pradaxa_rdo').checked === true) {
-         var param = {
+         param = {
             pradaxa: this.state.q1_ans,
             pradaxa_dosage: this.state.q1_ans_dosage,
          };
       } else if (document.getElementById('xarelto_rdo').checked === true) {
-         var param = {
+         param = {
             xarelto: this.state.q2_ans,
             xarelto_dosage: this.state.q2_ans_dosage,
             xarelto_dosage_time: this.state.q2_ans_dosage_timing,
             // xarelto_dosage_time: this.state.q2_ans_dosage_meal_taken,
          };
       } else if (document.getElementById('eliquis_rdo').checked === true) {
-         var param = {
+         param = {
             eliquis: this.state.q3_ans,
             eliquis_dosage: this.state.q3_ans_dosage,
          };
       } else if (document.getElementById('edxo_rdo').checked === true) {
-         var param = {
+         param = {
             edoxabon: this.state.q4_ans,
             edoxabon_dosage: this.state.q4_ans_dosage,
             edoxabon_dosage_time: this.state.q4_ans_dosage_timing,

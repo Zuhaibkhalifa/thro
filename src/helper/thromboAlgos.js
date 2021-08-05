@@ -1,5 +1,4 @@
 import axios from 'axios';
-import _ from 'lodash';
 
 import { domain } from '../App';
 
@@ -55,41 +54,41 @@ export default async function thromboAlgo() {
 
          variables['CHADS'] = res.chads_score_and_distribution;
 
-         variables['AF'] = res.atrial_fibrillation_of_flutter == 'Yes' ? true : false;
+         variables['AF'] = res.atrial_fibrillation_of_flutter === 'Yes' ? true : false;
 
-         variables['Mitral'] = res.mitral_stenosis == 'Yes' ? true : false;
+         variables['Mitral'] = res.mitral_stenosis === 'Yes' ? true : false;
 
          variables['Stroke_lt_1'] =
-            res.stroke_or_mini_stroke == 'Yes' && res.stroke_how_long == 'Less than 1 month ago' ? true : false;
+            res.stroke_or_mini_stroke === 'Yes' && res.stroke_how_long === 'Less than 1 month ago' ? true : false;
          variables['Stroke_btwn_1_3'] =
-            res.stroke_or_mini_stroke == 'Yes' && res.stroke_how_long == 'Between 1 and 3 months ago' ? true : false;
+            res.stroke_or_mini_stroke === 'Yes' && res.stroke_how_long === 'Between 1 and 3 months ago' ? true : false;
          variables['Stroke_gt_3'] =
-            res.stroke_or_mini_stroke == 'Yes' && res.stroke_how_long == 'More than 3 months ago' ? true : false;
+            res.stroke_or_mini_stroke === 'Yes' && res.stroke_how_long === 'More than 3 months ago' ? true : false;
 
-         variables['VTE'] = res.venous_thromboelism == 'Yes' ? true : false;
-         variables['VTE_dvt_lt_1'] = res.dvt == 'Yes' && res.dvt_how_long_ago == 'Less than 1 month ago' ? true : false;
+         variables['VTE'] = res.venous_thromboelism === 'Yes' ? true : false;
+         variables['VTE_dvt_lt_1'] = res.dvt === 'Yes' && res.dvt_how_long_ago === 'Less than 1 month ago' ? true : false;
          variables['VTE_dvt_btwn_1_3'] =
-            res.dvt == 'Yes' && res.dvt_how_long_ago == 'Between 1 and 3 months ago' ? true : false;
+            res.dvt === 'Yes' && res.dvt_how_long_ago === 'Between 1 and 3 months ago' ? true : false;
          variables['VTE_dvt_gt_3'] =
-            res.dvt == 'Yes' && res.dvt_how_long_ago == 'More than 3 months ago' ? true : false;
+            res.dvt === 'Yes' && res.dvt_how_long_ago === 'More than 3 months ago' ? true : false;
          variables['VTE_pe_lt_1'] =
-            res.pe == 'Yes' && res.pe_dvt_how_long_ago == 'Less than 1 month ago' ? true : false;
+            res.pe === 'Yes' && res.pe_dvt_how_long_ago === 'Less than 1 month ago' ? true : false;
          variables['VTE_pe_btwn_1_3'] =
-            res.pe == 'Yes' && res.pe_dvt_how_long_ago == 'Between 1 and 3 months ago' ? true : false;
+            res.pe === 'Yes' && res.pe_dvt_how_long_ago === 'Between 1 and 3 months ago' ? true : false;
          variables['VTE_pe_gt_3'] =
-            res.pe == 'Yes' && res.pe_dvt_how_long_ago == 'More than 3 months ago' ? true : false;
+            res.pe === 'Yes' && res.pe_dvt_how_long_ago === 'More than 3 months ago' ? true : false;
 
-         variables['Mech_heart'] = res.mechanical_heart_valve == 'Yes' ? true : false;
-         variables['Mitral_loc'] = res.location_mitral == 'Mitral' ? true : false;
-         variables['Arotic_loc'] = res.location_aortic == 'Arotic' ? true : false;
+         variables['Mech_heart'] = res.mechanical_heart_valve === 'Yes' ? true : false;
+         variables['Mitral_loc'] = res.location_mitral === 'Mitral' ? true : false;
+         variables['Arotic_loc'] = res.location_aortic === 'Arotic' ? true : false;
 
-         variables['Antiphospholipid'] = res.antiphospholipid_antibody_syndrome == 'Yes' ? true : false;
+         variables['Antiphospholipid'] = res.antiphospholipid_antibody_syndrome === 'Yes' ? true : false;
 
          return variables;
       };
       const indicationAlgo = (d) => {
          // Standard risk indication (0)
-         if (d.Bileaflet_mech_aortic_valve && d.CHADS == 0 && !d.AF) return 0;
+         if (d.Bileaflet_mech_aortic_valve && d.CHADS === 0 && !d.AF) return 0;
          else if (d.AF && d.CHADS < 5 && !d.Stroke_lt_1 && !d.Mitral) return 0;
          else if (d.VTE && (d.VTE_dvt_gt_3 || d.VTE_pe_gt_3)) return 0;
 
@@ -126,10 +125,10 @@ export default async function thromboAlgo() {
          variables['POC_CREAT'] = res.poc_creat_text;
          variables['CrCl'] = round2Decimal(CrCl(res.age, res.weight, res.weight_unit, res.gender, res.poc_creat_text));
 
-         variables['Bleeding'] = res.bleeding_requiring_treatment == 'Yes' ? true : false;
-         variables['Bleeding_lt_3'] = res.bleeding_requiring_treatment_last_three_months == 'Yes' ? true : false;
-         variables['Bleeding_stomach'] = res.bleeding_from_stomach == 'Yes' ? true : false;
-         variables['Bleeding_stomach_lt_3'] = res.bleeding_from_stomach_last_three_months == 'Yes' ? true : false;
+         variables['Bleeding'] = res.bleeding_requiring_treatment === 'Yes' ? true : false;
+         variables['Bleeding_lt_3'] = res.bleeding_requiring_treatment_last_three_months === 'Yes' ? true : false;
+         variables['Bleeding_stomach'] = res.bleeding_from_stomach === 'Yes' ? true : false;
+         variables['Bleeding_stomach_lt_3'] = res.bleeding_from_stomach_last_three_months === 'Yes' ? true : false;
 
          return variables;
       };
@@ -153,13 +152,12 @@ export default async function thromboAlgo() {
       console.log('surgeryAlgo Called!!!');
 
       const surgeryAlgo = () => {
-         let variables = {};
          const proc = res.procedure;
          console.log(res);
 
-         if (proc.search('high') != -1) return 1;
-         if (proc.search('mod') != -1) return 2;
-         if (proc.search('low') != -1) return 3;
+         if (proc.search('high') !== -1) return 1;
+         if (proc.search('mod') !== -1) return 2;
+         if (proc.search('low') !== -1) return 3;
 
          return -1;
       };
@@ -177,8 +175,8 @@ export default async function thromboAlgo() {
       gender = res.gender,
       creat = res.poc_creat_text
    ) {
-      const multiplier = gender == 'Male' ? 1 : 0.85;
-      const weightKg = weightUnit == 'Kg' ? weight : weight / 2.205;
+      const multiplier = gender === 'Male' ? 1 : 0.85;
+      const weightKg = weightUnit === 'Kg' ? weight : weight / 2.205;
 
       let result = 1.2 * (140 - age) * weightKg;
       result = result / creat;

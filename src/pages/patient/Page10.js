@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 import { goBack } from '../../utils/user';
@@ -227,7 +226,6 @@ class Page10 extends React.Component {
                             className="pull-right"
                             value="Coumadin (Warfarin)"
                             onClick={(e) => this.setState({ q1_ans: 'Coumadin (Warfarin)' })}
-                            id="warfarin1"
                             onChange={this.warfarin}
                             id="drugs1"
                         />

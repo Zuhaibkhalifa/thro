@@ -108,7 +108,6 @@ class Signin extends React.Component {
                         <h1 className="mb-4 text-left white">Welcome back!</h1>
 
                         <input
-                            type="email"
                             id="defaultLoginFormEmail"
                             className="form-control mb-4 blue-custom-input"
                             placeholder="E-mail"

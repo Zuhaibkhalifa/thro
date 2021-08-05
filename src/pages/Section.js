@@ -43,7 +43,7 @@ class Section extends React.Component {
             <div>
                 <br />
                 <br />
-                { (this.state.loading == 0) ? 
+                { (this.state.loading === 0) ? 
                 <div className="col-md-10 offset-md-1 text-center bg-light">
                     {' '}
                     {/* col */}
@@ -51,7 +51,7 @@ class Section extends React.Component {
                     <br /> 
                     <br />
                     <div className="row">
-                        { (this.state.user_role == 'Nurse') ? 
+                        { (this.state.user_role === 'Nurse') ? 
                             <div style={{ paddingLeft: "45px" }} className="col-6">
                                 <Link to="/Nurse/patient_search">
                                     <img className="img-fluid" src={NurseImg} alt="Nurse" />

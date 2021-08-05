@@ -14,9 +14,6 @@ import thromboAlgos from '../../helper/thromboAlgos';
 import thromboMedicationAlgo from '../../helper/thromboMedicationAlgo';
 import mapToView from '../../helper/mapMedicationDataToView';
 
-//
-
-let data;
 class Page4 extends React.Component {
    constructor(props) {
       super(props);
@@ -44,7 +41,6 @@ class Page4 extends React.Component {
             })
             .then((response) => {
                console.log(response.data.success[0]);
-               data = response.data.success[0];
                console.log("response is here: ", response);
                this.setState({ loader: '' });
                this.getDatafromAlgo()
@@ -75,7 +71,7 @@ class Page4 extends React.Component {
    }
 
    page8() {
-      if (this.state.table == 'none') return;
+      if (this.state.table === 'none') return;
 
       const data = { 
          jsonTable: JSON.stringify({ ...this.state.table }),

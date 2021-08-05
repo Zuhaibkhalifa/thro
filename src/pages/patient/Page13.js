@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -139,7 +138,6 @@ class Page13 extends React.Component {
             this.setState({
                 error5: '',
                 error4: '',
-                error2: '',
                 error3: '',
                 error1: '',
                 error2: 'This field is required',
@@ -154,7 +152,6 @@ class Page13 extends React.Component {
                 error4: '',
                 error2: '',
                 error1: '',
-                error1: '',
                 error3: 'This field is required',
             });
         } else if (
@@ -164,7 +161,6 @@ class Page13 extends React.Component {
             document.getElementById('twotwo_freq3').checked === false
         ) {
             this.setState({
-                error4: '',
                 error2: '',
                 error3: '',
                 error1: '',
@@ -227,7 +223,6 @@ class Page13 extends React.Component {
     //
 
     render() {
-        const { minDate, maxDate } = this.state.transfusionDate;
 
         return (
             <React.Fragment>

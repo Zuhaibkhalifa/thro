@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
-import $ from 'jquery';
 import axios from 'axios';
 
 import Header from './NurseHeader';
@@ -87,8 +86,8 @@ class Page5 extends React.Component {
         }
     }
 
-    page3(param) {
-        var param = {
+    page3(params) {
+        let param = {
             who_is_completing_this_form: this.state.who,
             patient_accompanied_by: this.state.accompanied,
             lmwh: this.state.lmwh,
@@ -98,12 +97,12 @@ class Page5 extends React.Component {
             patient_id: localStorage.getItem('patient_id')
         };
 
-        console.log('Nurse page 5 - param: ', param);
+        console.log('Nurse page 5 - param: ', params);
         server(`nurse/page3/:${param.patient_id}`, param);
     }
 
     handleRadioChange(e) {
-        const { id, name, value, checked } = e.target;
+        const { name, value } = e.target;
         //   console.log(`handleChange - id=${id}  name=${name}  value=${value}  checked=${checked}  e=${e} `);
         this.setState({ [name]: value });
     }

@@ -16,7 +16,7 @@ class Forgotpassword extends React.Component {
             element: (message, className) => <div className="text-white">{message}</div>,
         });
         console.log(this.validator);
-        this.state = { email: '', errorMsg: '', loader: '', errorMsg: '' };
+        this.state = { email: '', errorMsg: '', loader: ''};
 
         this.submitForm = this.submitForm.bind(this);
     }
@@ -94,7 +94,6 @@ class Forgotpassword extends React.Component {
                             id="defaultLoginFormEmail"
                             className="form-control mb-4 blue-custom-input"
                             placeholder="E-mail"
-                            type="email"
                             value={this.state.email}
                             onChange={(e) => this.setState({ email: e.target.value })}
                         />

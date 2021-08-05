@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -142,11 +141,11 @@ class Page11 extends React.Component {
 
     page11() {
         const state = this.state;
-
+        let param = {};
         if (state.q5 === 'Yes') {
-            var param = { not_using_drugs: 'No, I am not on any of these medications' };
+            param = { not_using_drugs: 'No, I am not on any of these medications' };
         } else {
-            var param = {};
+            param = {};
             if (state.q1 === 'Yes') {
                 param.aspirin = 'Aspirin (ASA)';
                 param.aspirin_dosage = this.state.q1_dosage + ' mg';
@@ -279,7 +278,7 @@ class Page11 extends React.Component {
     //
 
     radioCustInputToggle(e) {
-        const { id, value, name, checked } = e.target;
+        const { value, name } = e.target;
         const custId = `${name}-cust`;
         const toggleId = `${custId}-toggle`;
 

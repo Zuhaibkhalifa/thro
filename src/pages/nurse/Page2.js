@@ -86,15 +86,15 @@ class Page2 extends React.Component {
         this.setState({ procedureSelected: value });
     }
 
-    page1(param) {
-        var param = {
+    page1(params) {
+        let param = {
             date: this.state.date,
             procedure: this.state.procedureSelected,
             referred_by: this.state.physicianName,
             cabg: this.state.cabg,
             patient_id: localStorage.getItem('patient_id')
         };
-        console.log(param);
+        console.log(params);
         server('nurse/page1', param);
     }
 

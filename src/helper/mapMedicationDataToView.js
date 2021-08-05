@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 
-function renderTable(table, onDateChange, editable = false) {
-   if (table == 'none') return <div style={{ fontSize: 18, textAlign: 'center' }}>No Drug was selected!</div>;
+const renderTable = function(table, onDateChange, editable = false) {
+   if (table === 'none') return <div style={{ fontSize: 18, textAlign: 'center' }}>No Drug was selected!</div>;
 
    return (
       <React.Fragment>
@@ -19,8 +19,8 @@ function renderTable(table, onDateChange, editable = false) {
    );
 }
 
-function renderTableHeader(table) {
-   if (table == 'none') return null;
+const renderTableHeader = function(table) {
+   if (table === 'none') return null;
 
    return (
       <div key="header" class="tableRow header">
@@ -31,8 +31,8 @@ function renderTableHeader(table) {
    );
 }
 
-function renderTableBody(table, onChange, editable = false) {
-   if (table == 'none') return null;
+const renderTableBody = function(table, onChange, editable = false) {
+   if (table === 'none') return null;
 
    const date = ['d_5', 'd_4', 'd_3', 'd_2', 'd_1', 'd', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6'];
 
@@ -40,7 +40,7 @@ function renderTableBody(table, onChange, editable = false) {
       return (
          <div key={rowIdx} class="tableRow">
             {table.header.map((attr) => {
-               const trueAttr = attr == 'date' ? date[rowIdx] : attr;
+               const trueAttr = attr === 'date' ? date[rowIdx] : attr;
                return renderBodyCell(attr, row[trueAttr], rowIdx, table.data, onChange, editable);
             })}
          </div>
@@ -50,9 +50,9 @@ function renderTableBody(table, onChange, editable = false) {
    return body;
 }
 
-function renderNote(table) {
+const renderNote = function(table) {
    console.log('>>>  RenderNote - table: ', table);
-   if (table == 'none' || _.isEmpty(table.note)) {
+   if (table === 'none' || _.isEmpty(table.note)) {
       return null;
    }
 
@@ -78,10 +78,10 @@ function renderNote(table) {
 }
 
 //
-function renderBodyCell(key, val, rowIdx, data, onChange, editable = false) {
+const renderBodyCell = function(key, val, rowIdx, data, onChange, editable = false) {
    const trueVal = val !== '' ? val : '--';
 
-   if (key == 'date' && rowIdx == 5 && editable) {
+   if (key === 'date' && rowIdx === 5 && editable) {
       return (
          <div class="cell" data-title={capitalizeFirstLetter(key)}>
             <input
@@ -103,13 +103,15 @@ function renderBodyCell(key, val, rowIdx, data, onChange, editable = false) {
 }
 
 //
-function capitalizeFirstLetter(string) {
+const capitalizeFirstLetter = function(string) {
    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export default {
+const modules = { 
    renderTable,
    renderTableHeader,
    renderTableBody,
    renderNote,
 };
+
+export default modules;

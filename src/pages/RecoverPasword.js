@@ -126,7 +126,6 @@ class RecoverPasword extends React.Component {
 
                         {/* Password */}
                         <input
-                            type="text"
                             id="defaultLoginFormPassword"
                             className="form-control mb-4 blue-custom-input"
                             placeholder="Confirm Password"

@@ -120,7 +120,6 @@ class Register extends React.Component {
 
                         {/* Password */}
                         <input
-                            type="text"
                             id="defaultLoginFormPassword"
                             className="form-control mb-4 blue-custom-input"
                             placeholder="Email"
@@ -133,7 +132,6 @@ class Register extends React.Component {
                             {this.validator.message('email', this.state.email, 'required|email')}
                         </p>
                         <input
-                            type="text"
                             id="defaultLoginFormPassword"
                             className="form-control mb-4 blue-custom-input"
                             placeholder="Password"
@@ -147,7 +145,6 @@ class Register extends React.Component {
                         </p>
 
                         <input
-                            type="text"
                             id="defaultLoginFormPassword"
                             className="form-control mb-4 blue-custom-input"
                             placeholder="Confirm Password"

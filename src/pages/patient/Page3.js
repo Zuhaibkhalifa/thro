@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 import axios from 'axios';
-import { server } from '../../utils/functions';
 import { goBack } from '../../utils/user';
 import ReactSpinner from 'react-bootstrap-spinner';
 import { domain } from '../../App';
@@ -71,7 +69,6 @@ class Page3 extends React.Component {
         };
 
         console.log('Patient Page 3 - page3 func - params: ', param);
-        const res = server('patient/page3', param);
     }
 
     inputChangedHandler(e) {

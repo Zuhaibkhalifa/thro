@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -177,8 +176,6 @@ class Page4 extends React.Component {
                 q6_ans: '',
                 q7_ans: '',
                 q8_ans: '',
-                q5_ans: '',
-
                 q1_sub_q1: '',
                 q1_sub_q2: '',
                 q1_sub_q1_ans: '',

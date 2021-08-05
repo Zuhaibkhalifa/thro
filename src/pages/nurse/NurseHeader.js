@@ -1,14 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import SimpleReactValidator from 'simple-react-validator';
-import axios from 'axios';
-
-import { domain } from '../../App';
 
 class NurseHeader extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
@@ -27,13 +19,13 @@ class NurseHeader extends React.Component {
                                 <i className="fa fa-bars" />
                             </button>
                             <div className="dropdown-menu" aria-labelledby="dropdown1">
-                                <a className="dropdown-item" href="#">
+                                <a className="dropdown-item" href="!#">
                                     Action
                                 </a>
-                                <a className="dropdown-item" href="#">
+                                <a className="dropdown-item" href="!#">
                                     Another action
                                 </a>
-                                <a className="dropdown-item" href="#">
+                                <a className="dropdown-item" href="!#">
                                     Something else here
                                 </a>
                             </div>
@@ -55,13 +47,13 @@ class NurseHeader extends React.Component {
                                 <i className="fa fa-ellipsis-v" />
                             </button>
                             <div className="dropdown-menu" aria-labelledby="dropdown2">
-                                <a className="dropdown-item" href="#">
+                                <a className="dropdown-item" href="!#">
                                     Action
                                 </a>
-                                <a className="dropdown-item" href="#">
+                                <a className="dropdown-item" href="!#">
                                     Another action
                                 </a>
-                                <a className="dropdown-item" href="#">
+                                <a className="dropdown-item" href="!#">
                                     Something else here
                                 </a>
                             </div>

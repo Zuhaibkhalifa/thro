@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import axios from 'axios';
 import Header from './NurseHeader';
 import MUIDataTable from "mui-datatables";
-import { server } from '../../utils/functions';
 import { domain } from '../../App';
-import procedures from './../../helper/procedures';
 
 
 const col = [
@@ -121,7 +119,7 @@ class NurseSearch extends React.Component {
             let patientData = [];
             console.log(response);
             servData.forEach( data => {
-                if(data.user_role != "Admin" && data.user_role != "Nurse") {
+                if(data.user_role !== "Admin" && data.user_role !== "Nurse") {
                   let weight = data.weight+data.weight_unit;
                   let patient_id = data.id;
                   let button = (data.patient_id == null) ? (<button className="btn btn-info" disabled={true}><Link style={{ color:"white", textDecoration:"none", pointerEvents: 'none' }} to={{ pathname:'/Nurse/Nurse1', state:{ patient_id:patient_id } }}>get info</Link></button>) : (<button className="btn btn-info"><Link style={{ color:"white", textDecoration:"none" }} to={{ pathname:'/Nurse/Nurse1', state:{ patient_id:patient_id } }}>get info</Link></button>);

@@ -1,9 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
-import { goBack } from '../../utils/user';
-import { Link } from 'react-router-dom';
-import { server, showLoader } from '../../utils/functions';
+import { server } from '../../utils/functions';
 import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
 import { domain } from '../../App';

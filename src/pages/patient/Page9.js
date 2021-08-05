@@ -1,15 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 import $ from 'jquery';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
 import _ from 'lodash';
-
-import { domain } from '../../App';
 
 class Page9 extends React.Component {
    constructor(props) {
@@ -46,25 +42,6 @@ class Page9 extends React.Component {
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
 
-      const headers = {
-         'Content-Type': 'application/json',
-         Accept: 'application/json',
-         Authorization: 'Bearer ' + localStorage.getItem('token'),
-      };
-      // try {
-      //    axios
-      //       .get(domain + '/api/patient/page11LoadData', {
-      //          headers: headers,
-      //       })
-      //       .then((response) => {
-      //          console.log(response);
-
-      //          this.setState({ loader: '' });
-      //       });
-      // } catch (error) {
-      //    console.error(error);
-      //    this.setState({ loader: '' });
-      // }
    }
 
    submitForm() {
@@ -102,7 +79,7 @@ class Page9 extends React.Component {
 
          if (
             document.getElementById('opt_dalteparin_dosage_other').checked === true &&
-            $('#opt_dalteparin_dosage_other_textbox').val() == ''
+            $('#opt_dalteparin_dosage_other_textbox').val() === ''
          )
             errors.error3 = "Text box can't be empty";
 
@@ -120,7 +97,7 @@ class Page9 extends React.Component {
 
          if (
             document.getElementById('opt_enoxaparin_dosage_other').checked === true &&
-            $('#opt_enoxaparin_dosage_other_textbox').val() == ''
+            $('#opt_enoxaparin_dosage_other_textbox').val() === ''
          )
             errors.error6 = "Text box can't be empty";
 
@@ -138,7 +115,7 @@ class Page9 extends React.Component {
 
          if (
             document.getElementById('opt_tinzaparin_dosage_other').checked === true &&
-            $('#opt_tinzaparin_dosage_other_textbox').val() == ''
+            $('#opt_tinzaparin_dosage_other_textbox').val() === ''
          )
             errors.error9 = "Text box can't be empty";
 
@@ -160,7 +137,7 @@ class Page9 extends React.Component {
       const { q4 } = this.state;
       console.log('Patient 8 - submit - dynamicRouting - q4: ', q4);
 
-      if (q4 != '') {
+      if (q4 !== '') {
          this.props.history.push('/User/Page10');
       } else {
          this.props.history.push('/User/Page11');
@@ -204,12 +181,12 @@ class Page9 extends React.Component {
       $("input[id='q4']:checked").prop('checked', false);
 
       ['q1', 'q2', 'q3'].map((q) => {
-         if (id == q) {
+         if (id === q) {
             this.setState({ [q]: 'Yes' });
-            $(`#${q}_content`).show(500);
+            return $(`#${q}_content`).show(500);
          } else {
             this.setState({ [q]: '' });
-            $(`#${q}_content`).hide(500);
+            return $(`#${q}_content`).hide(500);
          }
       });
    }
@@ -244,7 +221,7 @@ class Page9 extends React.Component {
 
       ['q1', 'q2', 'q3'].map((q) => {
          this.setState({ [q]: '' });
-         $(`#${q}_content`).hide(500);
+         return $(`#${q}_content`).hide(500);
       });
 
       $("input[name='main_opt1']:checked").prop('checked', false);
@@ -331,7 +308,7 @@ class Page9 extends React.Component {
                            name="opt_dalteparin_freq"
                            id="dalteparin_freq1"
                            className="pull-right"
-                           defaultChecked={this.state.q1_freq == 'once daily' ? true : false}
+                           defaultChecked={this.state.q1_freq === 'once daily' ? true : false}
                            onClick={(e) => this.setState({ q1_freq: 'once daily' })}
                         />
                         <br />
@@ -341,7 +318,7 @@ class Page9 extends React.Component {
                            name="opt_dalteparin_freq"
                            id="dalteparin_freq2"
                            className="pull-right"
-                           defaultChecked={this.state.q1_freq == 'twice daily' ? true : false}
+                           defaultChecked={this.state.q1_freq === 'twice daily' ? true : false}
                            onClick={(e) => this.setState({ q1_freq: 'twice daily' })}
                         />
 
@@ -403,7 +380,7 @@ class Page9 extends React.Component {
                            name="opt_enoxaparin_freq"
                            id="enoxaparin_freq1"
                            className="pull-right"
-                           defaultChecked={this.state.q2_freq == 'once daily' ? true : false}
+                           defaultChecked={this.state.q2_freq === 'once daily' ? true : false}
                            onClick={(e) => this.setState({ q2_freq: 'once daily' })}
                         />
                         <br />
@@ -413,7 +390,7 @@ class Page9 extends React.Component {
                            name="opt_enoxaparin_freq"
                            id="enoxaparin_freq2"
                            className="pull-right"
-                           defaultChecked={this.state.q2_freq == 'twice daily' ? true : false}
+                           defaultChecked={this.state.q2_freq === 'twice daily' ? true : false}
                            onClick={(e) => this.setState({ q2_freq: 'twice daily' })}
                         />
                         <br />
@@ -475,7 +452,7 @@ class Page9 extends React.Component {
                            name="opt_tinzaparin_freq"
                            id="tinzaparin_freq1"
                            className="pull-right"
-                           defaultChecked={this.state.q3_freq == 'once daily' ? true : false}
+                           defaultChecked={this.state.q3_freq === 'once daily' ? true : false}
                            onClick={(e) => this.setState({ q3_freq: 'once daily' })}
                         />
                         <br />
@@ -485,7 +462,7 @@ class Page9 extends React.Component {
                            name="opt_tinzaparin_freq"
                            id="tinzaparin_freq2"
                            className="pull-right"
-                           defaultChecked={this.state.q3_freq == 'twice daily' ? true : false}
+                           defaultChecked={this.state.q3_freq === 'twice daily' ? true : false}
                            onClick={(e) => this.setState({ q3_freq: 'twice daily' })}
                         />
                         <br />

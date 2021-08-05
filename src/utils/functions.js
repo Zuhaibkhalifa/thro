@@ -1,14 +1,11 @@
 import axios from 'axios';
-import { logout } from './user/index';
 import $ from 'jquery';
-import ReactSpinner from 'react-bootstrap-spinner';
 import { domain } from './../App';
 
 //
 
 export const server = (url, param) => {
     var token = localStorage.getItem('token');
-    var page;
 
     const headers = {
         'Content-Type': 'application/json',
@@ -48,7 +45,6 @@ export const server = (url, param) => {
 
 export const getServer = async (url) => {
     var token = localStorage.getItem('token');
-    var page;
     console.log(token);
 
     const headers = {

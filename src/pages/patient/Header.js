@@ -1,12 +1,5 @@
 import React from 'react';
 
-import SimpleReactValidator from 'simple-react-validator';
-import { goBack } from '../../utils/user';
-import { Link } from 'react-router-dom';
-import { server, showLoader } from '../../utils/functions';
-import axios from 'axios';
-import ReactSpinner from 'react-bootstrap-spinner';
-
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -40,13 +33,13 @@ class Header extends React.Component {
                                     </span>
                                 </button>
                                 <div className="dropdown-menu" aria-labelledby="dropdown1">
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="!#">
                                         Action
                                     </a>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="!#">
                                         Another action
                                     </a>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="!#">
                                         Something else here
                                     </a>
                                 </div>
@@ -72,13 +65,13 @@ class Header extends React.Component {
                                     </span>
                                 </button>
                                 <div className="dropdown-menu" aria-labelledby="dropdown2">
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="!#">
                                         Action
                                     </a>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="!#">
                                         Another action
                                     </a>
-                                    <a className="dropdown-item" href="#">
+                                    <a className="dropdown-item" href="!#">
                                         Something else here
                                     </a>
                                 </div>

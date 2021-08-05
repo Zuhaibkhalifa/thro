@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -156,8 +155,8 @@ class Page7 extends React.Component {
     }
 
     // Prepare Data to be sent to Server
-    page7(param) {
-        var param = {
+    page7(parms) {
+        let param = {
             cognitive_heart_failure: this.state.q1,
             high_blood_pressure: this.state.q2,
             diabetes: this.state.q3,
@@ -167,7 +166,7 @@ class Page7 extends React.Component {
             none_of_above: this.state.q6,
         };
 
-        console.log('Patient page7 - page7 func - param: ', param);
+        console.log('Patient page7 - page7 func - param: ', parms);
         server('patient/page7', param);
     }
 

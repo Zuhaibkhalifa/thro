@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactSpinner from 'react-bootstrap-spinner';
@@ -59,7 +58,7 @@ class Page15 extends React.Component {
 
     submitForm() {
         const q1_yes = document.getElementById('yes').checked;
-        const cancer = $('#cancer').val() == '' ? true : false;
+        const cancer = $('#cancer').val() === '' ? true : false;
         const radiation = document.getElementById('radaition').checked;
         const chemo = document.getElementById('chemo').checked;
 

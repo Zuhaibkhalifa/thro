@@ -12,8 +12,6 @@ import { Modal } from 'react-bootstrap';
 import Logo from '../../assets/img/3.png';
 import { domain } from '../../App';
 
-import thromboAlgos from '../../helper/thromboAlgos';
-import thromboMedicationAlgo from '../../helper/thromboMedicationAlgo';
 import mapToView from '../../helper/mapMedicationDataToView';
 
 //
@@ -71,7 +69,7 @@ class Page6 extends React.Component {
             })
             .then((response) => {
                console.log('Nurse6 - res: ', response);
-               if (response.data.success == 'not_found') {
+               if (response.data.success === 'not_found') {
                   this.setState({ table: 'none' });
                   return;
                }
@@ -145,7 +143,7 @@ class Page6 extends React.Component {
                   {' '}
                   <div className="row">
                      <div className="col-6 offset-3">
-                        <img src={Logo} className="img-fluid" style={{ height: 200 }} />
+                        <img src={Logo} alt="logo" className="img-fluid" style={{ height: 200 }} />
                      </div>
                   </div>{' '}
                   <p className="white">
