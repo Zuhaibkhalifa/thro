@@ -2,10 +2,10 @@ import axios from 'axios';
 import { domain } from '../App';
 
 export default async function thromboMedicationAlgo(indicators) {
+   console.log('thromboMedicationAlgo - indicators: ', indicators);
 
    const data = await getDrugData();
-
-   console.log('thromboMedicationAlgo - indicators: ', indicators);
+   console.log('thromboMedicationAlgo - getDrugData => data: ', data);
 
    const algodata = mapMedicationData(data);
    console.log('thromboMedicationAlgo - algodata: ', algodata);
@@ -246,6 +246,8 @@ export default async function thromboMedicationAlgo(indicators) {
 
          return table;
       }
+
+      return table;
    }
 
    function LMWH_twice(indicators) {
@@ -304,6 +306,8 @@ export default async function thromboMedicationAlgo(indicators) {
 
          return table;
       }
+
+      return table;
    }
 
    function LMWH_once(indicators) {
@@ -362,6 +366,8 @@ export default async function thromboMedicationAlgo(indicators) {
 
          return table;
       }
+
+      return table;
    }
 
    function Dabigatran(indicators) {
@@ -418,6 +424,8 @@ export default async function thromboMedicationAlgo(indicators) {
 
          return table;
       }
+
+      return table;
    }
 
    function Apixaban(indicators) {
@@ -459,6 +467,8 @@ export default async function thromboMedicationAlgo(indicators) {
 
          return table;
       }
+
+      return table;
    }
 
    function Rivaroxaban_20_or_15_once(indicators) {
@@ -507,6 +517,8 @@ export default async function thromboMedicationAlgo(indicators) {
       if (SBR === 1 && RDT === 'pm') {
          return modifyData(table, [3, 4, 5, 6], 'rivaroxaban', '');
       }
+
+      return table;
    }
 
    function Rivaroxaban_10_once(indicators) {
@@ -555,6 +567,8 @@ export default async function thromboMedicationAlgo(indicators) {
       if (SBR === 1 && RDT === 'pm') {
          return modifyData(table, [3, 4, 5, 6], 'rivaroxaban', '');
       }
+
+      return table;
    }
 
    function Rivaroxaban_15_twice(indicators) {
@@ -625,6 +639,8 @@ export default async function thromboMedicationAlgo(indicators) {
       if (SBR === 1 && RDT === 'pm') {
          return modifyData(table, [3, 4, 5, 6], 'edoxaban', '');
       }
+
+      return table;
    }
 
    //
@@ -639,7 +655,7 @@ export default async function thromboMedicationAlgo(indicators) {
    function addNewProp(table, prop, value) {
       table.header.splice(-1, 0, prop);
       table.data.map((d) => {
-         return d[prop] = value;
+         return (d[prop] = value);
       });
       return table;
    }
@@ -647,7 +663,7 @@ export default async function thromboMedicationAlgo(indicators) {
    //
    function modifyData(table, targets, prop, value) {
       targets.map((t) => {
-         return table.data[t][prop] = value;
+         return (table.data[t][prop] = value);
       });
       return table;
    }

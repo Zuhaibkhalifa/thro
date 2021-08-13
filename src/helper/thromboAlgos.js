@@ -8,6 +8,7 @@ import { domain } from '../App';
 export default async function thromboAlgo() {
    // Global variables
    const response = await getAlgoData();
+   console.log('thromboAlgo response: ', response);
    const res = response.data.success[0];
    let algoData;
    let indicators = {
@@ -66,7 +67,8 @@ export default async function thromboAlgo() {
             res.stroke_or_mini_stroke === 'Yes' && res.stroke_how_long === 'More than 3 months ago' ? true : false;
 
          variables['VTE'] = res.venous_thromboelism === 'Yes' ? true : false;
-         variables['VTE_dvt_lt_1'] = res.dvt === 'Yes' && res.dvt_how_long_ago === 'Less than 1 month ago' ? true : false;
+         variables['VTE_dvt_lt_1'] =
+            res.dvt === 'Yes' && res.dvt_how_long_ago === 'Less than 1 month ago' ? true : false;
          variables['VTE_dvt_btwn_1_3'] =
             res.dvt === 'Yes' && res.dvt_how_long_ago === 'Between 1 and 3 months ago' ? true : false;
          variables['VTE_dvt_gt_3'] =

@@ -41,9 +41,9 @@ class Page4 extends React.Component {
             })
             .then((response) => {
                console.log(response.data.success[0]);
-               console.log("response is here: ", response);
+               console.log('response is here: ', response);
                this.setState({ loader: '' });
-               this.getDatafromAlgo()
+               this.getDatafromAlgo();
             });
       } catch (error) {
          console.error(error);
@@ -54,7 +54,8 @@ class Page4 extends React.Component {
    async getDatafromAlgo() {
       const inidcators = await thromboAlgos();
       const tableData = await thromboMedicationAlgo(inidcators);
-      console.log(inidcators);
+      console.log('> Nurse Page 4 => inidcators: ', inidcators);
+      console.log('> Nurse Page 4 => tableData: ', tableData);
       this.setState({ table: tableData });
    }
 
@@ -73,9 +74,9 @@ class Page4 extends React.Component {
    page8() {
       if (this.state.table === 'none') return;
 
-      const data = { 
+      const data = {
          jsonTable: JSON.stringify({ ...this.state.table }),
-         patient_id: localStorage.getItem('patient_id') 
+         patient_id: localStorage.getItem('patient_id'),
       };
       console.log('>>> JSON data: ', data);
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);

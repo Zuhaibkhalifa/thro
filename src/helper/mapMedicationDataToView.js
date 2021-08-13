@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 
-const renderTable = function(table, onDateChange, editable = false) {
+const renderTable = function (table, onDateChange, editable = false) {
+   console.log('>>>  renderTable, table: ', table);
    if (table === 'none') return <div style={{ fontSize: 18, textAlign: 'center' }}>No Drug was selected!</div>;
 
    return (
@@ -17,9 +18,9 @@ const renderTable = function(table, onDateChange, editable = false) {
          </div>
       </React.Fragment>
    );
-}
+};
 
-const renderTableHeader = function(table) {
+const renderTableHeader = function (table) {
    if (table === 'none') return null;
 
    return (
@@ -29,9 +30,9 @@ const renderTableHeader = function(table) {
          })}
       </div>
    );
-}
+};
 
-const renderTableBody = function(table, onChange, editable = false) {
+const renderTableBody = function (table, onChange, editable = false) {
    if (table === 'none') return null;
 
    const date = ['d_5', 'd_4', 'd_3', 'd_2', 'd_1', 'd', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6'];
@@ -48,9 +49,9 @@ const renderTableBody = function(table, onChange, editable = false) {
    });
 
    return body;
-}
+};
 
-const renderNote = function(table) {
+const renderNote = function (table) {
    console.log('>>>  RenderNote - table: ', table);
    if (table === 'none' || _.isEmpty(table.note)) {
       return null;
@@ -75,10 +76,10 @@ const renderNote = function(table) {
          </ul>
       </div>
    );
-}
+};
 
 //
-const renderBodyCell = function(key, val, rowIdx, data, onChange, editable = false) {
+const renderBodyCell = function (key, val, rowIdx, data, onChange, editable = false) {
    const trueVal = val !== '' ? val : '--';
 
    if (key === 'date' && rowIdx === 5 && editable) {
@@ -100,14 +101,14 @@ const renderBodyCell = function(key, val, rowIdx, data, onChange, editable = fal
          {trueVal}
       </div>
    );
-}
+};
 
 //
-const capitalizeFirstLetter = function(string) {
+const capitalizeFirstLetter = function (string) {
    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
 
-const modules = { 
+const modules = {
    renderTable,
    renderTableHeader,
    renderTableBody,
