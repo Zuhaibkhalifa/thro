@@ -295,7 +295,7 @@ class Page1 extends React.Component {
          diabetes: D,
          stroke_or_mini_stroke: S2,
       } = this.state;
-      console.log(`CHADS score: C=${C}  H${H}  A${A}  D${D}  S2${S2}`);
+      console.log(`CHADS score: C=${C}  H=${H}  A=${A}  D=${D}  S2=${S2}`);
 
       if (C === 'Yes') score += 1;
       if (H === 'Yes') score += 1;
