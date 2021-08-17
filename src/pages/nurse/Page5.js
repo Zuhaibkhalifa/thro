@@ -17,10 +17,19 @@ let data;
 class Page3 extends React.Component {
    constructor(props) {
       super(props);
+
       this.validator = new SimpleReactValidator({
+         validators: {
+            not_select_default: {
+               // name the rule
+               message: 'Procedure must be selected.',
+               rule: (val, params, validator) => {
+                  return val === params[0] ? false : true;
+               },
+            },
+         },
          element: (message, className) => <div className="text-danger">{message}</div>,
       });
-      // console.log(this.validator);
 
       this.state = {
          month_year: '',
@@ -121,7 +130,7 @@ class Page3 extends React.Component {
                      understanding: data.understanding,
                      completed_by: data.who_is_completing_this_form,
                      reviewed_by: data.reviewed_by,
-                     procedureSelected: data.gender,
+                     genderSelected: data.gender,
                      indication_for_anticoagulation: data.indication_for_anticoagulation,
                      chads_score_and_distribution: data.chads_score_and_distribution,
 
@@ -179,6 +188,33 @@ class Page3 extends React.Component {
       }
    }
 
+   set_anticoagulation(data) {
+      // Pulled the data drom Patient/Page4 from server
+      // and then genereating the data over here,
+      // to display in  indication_for_anticoagulation field
+      let anticoagulation = '';
+
+      let anticoagulationMap = {
+         venous_thromboelism: 'Venous Thromboembolism (VTE)',
+         dvt: 'DVT',
+         pe: 'PE',
+         atrial_fibrillation_of_flutter: 'Atrial Fibrillation of flutter',
+         heart_valve_replacement: 'Heart Valve Replacement',
+         blood_clot_in_heart: 'Blood clot in heart',
+         arterial_peripheral_thrombosis: 'Arterial Peripheral Thrombosis',
+         peripheral_arterial_disease: 'Peripheral arterial Disease',
+         other: 'Some Other',
+         none: 'None',
+      };
+
+      for (var key in data) {
+         if (data[key] === 'Yes') anticoagulation += anticoagulationMap[key] + ',  ';
+         if (key === 'other') anticoagulation += data[key] === null ? '' : data[key] + ',  ';
+      }
+
+      this.setState({ indication_for_anticoagulation: anticoagulation });
+   }
+
    set_CHADS_score() {
       // CHADS2 Score = C + H + A + D + S2
       // C:    Patient Page #7     => (If "Cognitive Heart Failure (ever)" is selected then score is 1)
@@ -234,16 +270,20 @@ class Page3 extends React.Component {
    //
 
    handleChange_procedure(value) {
-      this.setState({ procedureSelected: value });
+      this.setState({ genderSelected: value });
    }
 
    submitForm() {
       if (this.validator.allValid()) {
          //  alert('You submitted the form and stuff!');
-         console.log(this.state);
-         this.page5(this.state);
-         this.props.history.push('/Nurse/Nurse6');
+         console.log('>>>  Nurse Page5: submitted:', this.state);
+         // this.page5(this.state);
+         // this.props.history.push('/Nurse/Nurse6');
       } else {
+         window.scroll({
+            top: 500,
+            behavior: 'smooth',
+         });
          this.validator.showMessages();
          // rerender to show messages for the first time
          // you can use the autoForceUpdate option to do this automatically`
@@ -276,7 +316,7 @@ class Page3 extends React.Component {
          reviewed_by: this.state.reviewed_by,
          patient_id: localStorage.getItem('patient_id'),
       };
-      console.log('nurse page 3 - page5 - param: ', params);
+      console.log('nurse page 5 - page5 - param: ', params);
       server(`nurse/page5/:${param.patient_id}`, param);
    }
 
@@ -330,7 +370,15 @@ class Page3 extends React.Component {
                   <br />
                   <div className="row">
                      <div className="col-6">
-                        {procedures(this.state.procedure, this.handle_procedure, this.validator)}
+                        {procedures(
+                           this.state.procedure,
+                           this.handle_procedure,
+                           this.validator.message(
+                              'procedure',
+                              this.state.procedure,
+                              'required|not_select_default:Select_Surgery'
+                           )
+                        )}
                      </div>
                      <div className="col-6">
                         <div className="form-group">
@@ -342,7 +390,7 @@ class Page3 extends React.Component {
                               defaultValue={this.state.date_of_procedure}
                               onChange={(e) => this.setState({ date_of_procedure: e.target.value })}
                            />
-                           {this.validator.message('', this.state.date_of_procedure, 'required')}
+                           {this.validator.message('procedure_date', this.state.date_of_procedure, 'required')}
                         </div>
                      </div>
                   </div>
@@ -358,7 +406,7 @@ class Page3 extends React.Component {
                               defaultValue={this.state.age}
                               onChange={(e) => this.setState({ age: e.target.value })}
                            />
-                           {this.validator.message('', this.state.age, 'required')}
+                           {this.validator.message('age', this.state.age, 'required')}
                         </div>
                      </div>
 
@@ -368,15 +416,19 @@ class Page3 extends React.Component {
                            <select
                               className="form-control"
                               id="sex"
-                              value={this.state.procedureSelected}
+                              value={this.state.genderSelected}
                               onChange={(event) => this.handleChange_procedure(event.target.value)}
                            >
-                              <option>Select Gender</option>
+                              <option value="Select_Gender">Select_Gender</option>
                               <option>Male</option>
                               <option>Female</option>
                               <option>Other</option>
                            </select>
-                           {this.validator.message('', this.state.procedureSelected, 'required')}
+                           {this.validator.message(
+                              'gender',
+                              this.state.genderSelected,
+                              'required|not_select_default:Select_Gender'
+                           )}
                         </div>
                      </div>
                      <div className="col-2">
@@ -389,7 +441,7 @@ class Page3 extends React.Component {
                               defaultValue={this.state.weight}
                               onChange={(e) => this.setState({ weight: e.target.value })}
                            />
-                           {this.validator.message('', this.state.weight, 'required')}
+                           {this.validator.message('weight', this.state.weight, 'required')}
                         </div>
                      </div>
 
@@ -426,7 +478,11 @@ class Page3 extends React.Component {
                               }
                               id="indication_for_anticoagulation"
                            />
-                           {this.validator.message('', this.state.indication_for_anticoagulation, 'required')}
+                           {this.validator.message(
+                              'anticoagulation',
+                              this.state.indication_for_anticoagulation,
+                              'required'
+                           )}
                         </div>
                      </div>
                   </div>
@@ -446,7 +502,7 @@ class Page3 extends React.Component {
                               }
                               id="chads_score_and_distribution"
                            />
-                           {this.validator.message('', this.state.chads_score_and_distribution, 'required')}
+                           {this.validator.message('chads_score', this.state.chads_score_and_distribution, 'required')}
                         </div>
                      </div>
                   </div>
@@ -617,7 +673,7 @@ class Page3 extends React.Component {
                                     defaultValue={this.state.poc_inr_date}
                                     onChange={(e) => this.setState({ poc_inr_date: e.target.value })}
                                  />
-                                 {this.validator.message('', this.state.poc_inr_date, 'required')}
+                                 {this.validator.message('poc_inr_date', this.state.poc_inr_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -627,7 +683,7 @@ class Page3 extends React.Component {
                                     value={this.state.poc_inr_text}
                                     onChange={(e) => this.setState({ poc_inr_text: e.target.value })}
                                  />
-                                 {this.validator.message('', this.state.poc_inr_text, 'required')}
+                                 {this.validator.message('poc_inr_text', this.state.poc_inr_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -650,7 +706,7 @@ class Page3 extends React.Component {
                                     }
                                     id="poc_creat"
                                  />
-                                 {this.validator.message('', this.state.poc_creat_date, 'required')}
+                                 {this.validator.message('poc_creat_date', this.state.poc_creat_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -664,7 +720,7 @@ class Page3 extends React.Component {
                                     }
                                     id="poc_creat"
                                  />
-                                 {this.validator.message('', this.state.poc_creat_text, 'required')}
+                                 {this.validator.message('poc_creat_text', this.state.poc_creat_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -684,7 +740,7 @@ class Page3 extends React.Component {
                                     value={this.state.hb_date}
                                     onChange={(e) => this.setState({ hb_date: e.target.value })}
                                  />
-                                 {this.validator.message('', this.state.hb_date, 'required')}
+                                 {this.validator.message('hb_date', this.state.hb_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -694,7 +750,7 @@ class Page3 extends React.Component {
                                     defaultValue={this.state.hb_text}
                                     onChange={(e) => this.setState({ hb_text: e.target.value })}
                                  />
-                                 {this.validator.message('', this.state.hb_text, 'required')}
+                                 {this.validator.message('hb_text', this.state.hb_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -713,7 +769,7 @@ class Page3 extends React.Component {
                                     onChange={(e) => this.setState({ plt_date: e.target.value })}
                                     id="plt"
                                  />
-                                 {this.validator.message('', this.state.plt_date, 'required')}
+                                 {this.validator.message('plt_date', this.state.plt_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -723,7 +779,7 @@ class Page3 extends React.Component {
                                     onChange={(e) => this.setState({ plt_text: e.target.value })}
                                     id="plt"
                                  />
-                                 {this.validator.message('', this.state.plt_text, 'required')}
+                                 {this.validator.message('plt_text', this.state.plt_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -750,7 +806,11 @@ class Page3 extends React.Component {
                               }
                               id="details_on_recomemendation"
                            />
-                           {this.validator.message('', this.state.details_on_recomemendation, 'required')}
+                           {this.validator.message(
+                              'details_on_recomemendation',
+                              this.state.details_on_recomemendation,
+                              'required'
+                           )}
                         </div>
                      </div>
                   </div>
@@ -796,7 +856,7 @@ class Page3 extends React.Component {
                               onChange={(e) => this.setState({ reviewed_by: e.target.value })}
                            />
                         </span>
-                        {this.validator.message('', this.state.reviewed_by, 'required')}
+                        {this.validator.message('reviewed_by', this.state.reviewed_by, 'required')}
                      </div>
                   </div>
 
