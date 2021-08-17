@@ -26,7 +26,11 @@ const renderTableHeader = function (table) {
    return (
       <div key="header" class="tableRow header">
          {table.header.map((val, idx) => {
-            return <div class="cell">{capitalizeFirstLetter(val)}</div>;
+            return (
+               <div key={idx} class="cell">
+                  {capitalizeFirstLetter(val)}
+               </div>
+            );
          })}
       </div>
    );

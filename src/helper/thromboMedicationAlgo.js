@@ -50,9 +50,9 @@ export default async function thromboMedicationAlgo(indicators) {
       data['rivaroxaban_freq'] = checkAndGetDosage(d.xarelto_dosage, ['once', 'twice']);
       data['rivaroxaban_dosage_time'] = checkAndGetDosage(d.xarelto_dosage_time, ['am', 'pm']);
 
-      data['edoxaban'] = d.edoxaban != null ? true : false;
-      data['edoxabon_freq'] = checkAndGetDosage(d.xarelto_dosage, ['once']);
-      data['edoxaban_dosage_time'] = checkAndGetDosage(d.xarelto_dosage_time, ['am', 'pm']);
+      data['edoxabon'] = d.edoxabon != null ? true : false;
+      data['edoxabon_freq'] = checkAndGetDosage(d.edoxabon_dosage, ['once']);
+      data['edoxabon_dosage_time'] = checkAndGetDosage(d.edoxabon_dosage_time, ['am', 'pm']);
 
       data['lmwh'] = d.dalteparin != null || d.enoxaparin != null || d.tinzaparin != null ? true : false;
       data['lmwh_drug'] =
@@ -98,7 +98,7 @@ export default async function thromboMedicationAlgo(indicators) {
          return Rivaroxaban_10_once(indicators);
       else if (d.rivaroxaban && d.rivaroxaban_freq === 'twice' && d.rivaroxaban_dosage === '15')
          return Rivaroxaban_15_twice(indicators);
-      else if (d.edoxaban && d.edoxaban_freq === 'once') return Edoxaban(indicators);
+      else if (d.edoxabon && d.edoxabon_freq === 'once') return Edoxaban(indicators);
 
       return 'none';
    }
@@ -601,19 +601,19 @@ export default async function thromboMedicationAlgo(indicators) {
       const { rivaroxaban_dosage_time: RDT } = algodata;
 
       let table = {
-         header: ['date', 'edoxaban'],
+         header: ['date', 'edoxabon'],
          data: [
-            { d_5: 'D-5', edoxaban: 'yes' },
-            { d_4: 'D-4', edoxaban: 'yes' },
-            { d_3: 'D-3', edoxaban: 'yes' },
-            { d_2: 'D-2', edoxaban: 'yes' },
-            { d_1: 'D-1', edoxaban: 'yes' },
-            { d: 'D', edoxaban: 'yes' },
-            { d1: 'D1', edoxaban: 'yes' },
-            { d2: 'D2', edoxaban: 'yes' },
-            { d3: 'D3', edoxaban: 'yes' },
-            { d4: 'D4', edoxaban: 'yes' },
-            { d5: 'D5', edoxaban: 'yes' },
+            { d_5: 'D-5', edoxabon: 'yes' },
+            { d_4: 'D-4', edoxabon: 'yes' },
+            { d_3: 'D-3', edoxabon: 'yes' },
+            { d_2: 'D-2', edoxabon: 'yes' },
+            { d_1: 'D-1', edoxabon: 'yes' },
+            { d: 'D', edoxabon: 'yes' },
+            { d1: 'D1', edoxabon: 'yes' },
+            { d2: 'D2', edoxabon: 'yes' },
+            { d3: 'D3', edoxabon: 'yes' },
+            { d4: 'D4', edoxabon: 'yes' },
+            { d5: 'D5', edoxabon: 'yes' },
          ],
          note: {},
       };
@@ -624,20 +624,20 @@ export default async function thromboMedicationAlgo(indicators) {
 
       // case b.1
       if (SBR === 2 && RDT === 'am') {
-         return modifyData(table, [4, 5, 6], 'edoxaban', '');
+         return modifyData(table, [4, 5, 6], 'edoxabon', '');
       }
       // case b.1
       if (SBR === 2 && RDT === 'pm') {
-         return modifyData(table, [4, 5], 'edoxaban', '');
+         return modifyData(table, [4, 5], 'edoxabon', '');
       }
 
       // case c.1
       if (SBR === 1 && RDT === 'am') {
-         return modifyData(table, [3, 4, 5, 6, 7], 'edoxaban', '');
+         return modifyData(table, [3, 4, 5, 6, 7], 'edoxabon', '');
       }
       // case c.1
       if (SBR === 1 && RDT === 'pm') {
-         return modifyData(table, [3, 4, 5, 6], 'edoxaban', '');
+         return modifyData(table, [3, 4, 5, 6], 'edoxabon', '');
       }
 
       return table;

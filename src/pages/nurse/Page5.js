@@ -277,8 +277,8 @@ class Page3 extends React.Component {
       if (this.validator.allValid()) {
          //  alert('You submitted the form and stuff!');
          console.log('>>>  Nurse Page5: submitted:', this.state);
-         // this.page5(this.state);
-         // this.props.history.push('/Nurse/Nurse6');
+         this.page5(this.state);
+         this.props.history.push('/Nurse/Nurse6');
       } else {
          window.scroll({
             top: 500,
