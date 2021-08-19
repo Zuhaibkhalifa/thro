@@ -22,9 +22,20 @@ class Page3 extends React.Component {
          validators: {
             not_select_default: {
                // name the rule
-               message: 'Procedure must be selected.',
+               message: 'Must be selected.',
                rule: (val, params, validator) => {
                   return val === params[0] ? false : true;
+               },
+            },
+            not_select_procedure: {
+               // name the rule
+               message: 'Procedure must be selected.',
+               rule: (val, params, validator) => {
+                  if (val.search('low') !== -1 || val.search('mod') !== -1 || val.search('high') !== -1) {
+                     return true;
+                  }
+
+                  return false;
                },
             },
          },
@@ -281,7 +292,7 @@ class Page3 extends React.Component {
          this.props.history.push('/Nurse/Nurse6');
       } else {
          window.scroll({
-            top: 500,
+            top: 400,
             behavior: 'smooth',
          });
          this.validator.showMessages();
@@ -373,11 +384,7 @@ class Page3 extends React.Component {
                         {procedures(
                            this.state.procedure,
                            this.handle_procedure,
-                           this.validator.message(
-                              'procedure',
-                              this.state.procedure,
-                              'required|not_select_default:Select_Surgery'
-                           )
+                           this.validator.message('procedure', this.state.procedure, 'required|not_select_procedure')
                         )}
                      </div>
                      <div className="col-6">

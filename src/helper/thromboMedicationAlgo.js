@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { domain } from '../App';
 
-export default async function thromboMedicationAlgo(indicators) {
-   console.log('thromboMedicationAlgo - indicators: ', indicators);
+export default async function thromboMedicationAlgo(__indicators) {
+   console.log('thromboMedicationAlgo - indicators: ', __indicators);
 
    const data = await getDrugData();
    console.log('thromboMedicationAlgo - getDrugData => data: ', data);
 
    const algodata = mapMedicationData(data);
    console.log('thromboMedicationAlgo - algodata: ', algodata);
+
+   const indicators = check_sugery_bleeding_risk_outlier(__indicators);
 
    const tableData = detectCase(algodata);
    console.log('thromboMedicationAlgo - detectCase - table: ', tableData);
@@ -80,6 +82,22 @@ export default async function thromboMedicationAlgo(indicators) {
       // data['lmwh_tinzaparin_freq'] = checkAndGetDosage(d.tinzaparin_freq, ['once', 'twice']);
 
       return data;
+   }
+
+   // if indicators.surgeryBleedingRisk is 0(Zero)
+   // Permanent pacemaker or ICD placement (if patient is on apixaban, edoxaban, rivaroxaban, or dabigatran – mod, if on any other drugs - low)
+   function check_sugery_bleeding_risk_outlier(_indicators, _algodata) {
+      const indicators = { ..._indicators };
+
+      if (indicators.surgeryBleedingRisk === 0) {
+         if (_algodata.apixaban || _algodata.edoxabon || _algodata.rivaroxaban || _algodata.dabigatran)
+            indicators.surgeryBleedingRisk = 2;
+         else {
+            indicators.surgeryBleedingRisk = 3;
+         }
+      }
+
+      return indicators;
    }
 
    function detectCase(d) {
