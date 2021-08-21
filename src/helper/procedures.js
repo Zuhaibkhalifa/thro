@@ -54,7 +54,7 @@ export default function procedures(procedure, handleProcedure, validation_messag
             </optgroup>
             <optgroup label="Plastic surgery">
                <option value="Reconstructive plastic surgery (high)">Reconstructive plastic surgery (high)</option>
-               <option value="Other plastic surgery (low)">Other plastic surgery</option>
+               <option value="Other plastic surgery (mod)">Other plastic surgery (mod)</option>
             </optgroup>
             <optgroup label="Cardiac or vascular">
                <option value="Cardiac surgery (high)">Cardiac surgery (high)</option>
