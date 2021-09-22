@@ -45,6 +45,18 @@ class Page1 extends React.Component {
       // console.log("Constructor - Validator: ", this.validator);
 
       this.state = {
+         anticogMedsDropdown: [
+            { "med_name": "Pradaxa (Dabigatran)", "dosage": ["75 mg twice daily", "110 mg twice daily", "150 mg twice daily"] },
+            { "med_name": "Xarelto (Rivaroxaban)", "dosage": ["15 mg twice daily", "15 mg once daily", "10 mg once daily", "20 mg once daily"] },
+            { "med_name": "Eliquis (Apixaban)", "dosage": ["5 mg twice daily", "2.5 mg twice daily"] },
+            { "med_name": "Edoxabon (Lixiana)", "dosage": ["60 mg once daily", "30 mg once daily", "15 mg once daily"] }
+         ],
+         antiplatMedsDropdown: [
+            { "med_name": "Aspirin (ASA)", "dosage": ["81 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
+            { "med_name": "Plavix (Clopidogrel)", "dosage": ["75 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
+            { "med_name": "Brillinta (Ticagrelor)", "dosage": ["60 mg", "90 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
+            { "med_name": "Effient (Prasugrel)", "dosage": ["5 mg", "10 mg"], "dosage_time": ["Once Daily", "Twice daily"] }
+         ],
          month_year: '',
          procedure: '',
          date_of_procedure: '',
@@ -103,11 +115,26 @@ class Page1 extends React.Component {
          edoxabon_dosage_time: '',
          ulcer_in_stomach_or_bowel: '',
          referred_by: '',
+         anticogMedDropDownValChanged: "",
+         anticogDosageDropDownValChanged: "",
+         antiplatMedDropDownValChanged: "",
+         antiplatDosageDropDownValChanged: "",
+         antiplatDosageTimeDropDownValChanged: ""
       };
 
       // Bind " this " ref of class to Methods
       this.submitForm = this.submitForm.bind(this);
       this.handle_procedure = this.handle_procedure.bind(this);
+      this.handle_anticog_med_dropdown_value = this.handle_anticog_med_dropdown_value.bind(this);
+      this.handle_anticog_dosage_dropdown_value = this.handle_anticog_dosage_dropdown_value.bind(this);
+      this.handle_antiplat_med_dropdown_value = this.handle_antiplat_med_dropdown_value.bind(this);
+      this.handle_antiplat_dosage_dropdown_value = this.handle_antiplat_dosage_dropdown_value.bind(this);
+      this.handle_antiplat_dosage_time_dropdown_value = this.handle_antiplat_dosage_time_dropdown_value.bind(this);
+      this.changeAnticogMedDropdownValue = this.changeAnticogMedDropdownValue.bind(this);
+      this.changeAnticogDosageDropdownValue = this.changeAnticogDosageDropdownValue.bind(this);
+      this.changeAntiplatMedDropdownValue = this.changeAntiplatMedDropdownValue.bind(this);
+      this.changeAntiplatDosageDropdownValue = this.changeAntiplatDosageDropdownValue.bind(this);
+      this.changeAntiplatDosageTimeDropdownValue = this.changeAntiplatDosageTimeDropdownValue.bind(this);
    }
 
    componentDidMount() {
@@ -221,15 +248,15 @@ class Page1 extends React.Component {
                         diabetes: data.diabetes,
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
                      });
+                     this.changeAnticogMedDropdownValue();
+                     this.changeAnticogDosageDropdownValue();
+                     this.changeAntiplatMedDropdownValue();
+                     this.changeAntiplatDosageDropdownValue();
+                     this.changeAntiplatDosageTimeDropdownValue();
 
                      this.set_anticoagulation(response.data.success.anticoagulation);
 
                      this.set_CHADS_score();
-
-                     console.log(
-                        'had_transfusion_in_last_three_months ?? : ',
-                        this.state.had_transfusion_in_last_three_months
-                     );
                   } else {
                      this.setState({ loader: '' });
                   }
@@ -241,7 +268,6 @@ class Page1 extends React.Component {
             );
       } catch (error) {
          this.setState({ loader: '' });
-         console.error('Nurse page1 - error response: ', error);
          this.setState({ loader: '' });
       }
    }
@@ -331,6 +357,87 @@ class Page1 extends React.Component {
       this.setState({ genderSelected: value });
    }
 
+   handle_anticog_med_dropdown_value(value) {
+      this.setState({ anticogMedDropDownValChanged: value });
+   }
+
+   handle_anticog_dosage_dropdown_value(value) {
+      this.setState({ anticogDosageDropDownValChanged: value });
+   }
+   
+   handle_antiplat_med_dropdown_value(value) {
+      this.setState({ antiplatMedDropDownValChanged: value });
+   }
+
+   handle_antiplat_dosage_dropdown_value(value) {
+      this.setState({ antiplatDosageDropDownValChanged: value });
+   }
+
+   handle_antiplat_dosage_time_dropdown_value(value) {
+      this.setState({ antiplatDosageTimeDropDownValChanged: value });
+   }
+
+   changeAnticogMedDropdownValue() {
+      if(this.state.pradaxa !== null) {
+         this.setState({ anticogMedDropDownValChanged: this.state.pradaxa });
+      } else if(this.state.xarelto !== null) {
+         this.setState({ anticogMedDropDownValChanged: this.state.xarelto });
+      } else if(this.state.eliquis !== null) {
+         this.setState({ anticogMedDropDownValChanged: this.state.eliquis });
+      } else if(this.state.edoxabon !== null) {
+         this.setState({ anticogMedDropDownValChanged: this.state.edoxabon });
+      }
+   }
+
+   changeAnticogDosageDropdownValue() {
+      if(this.state.pradaxa_dosage !== null) {
+         this.setState({ anticogDosageDropDownValChanged: this.state.pradaxa_dosage });
+      } else if(this.state.xarelto_dosage !== null) {
+         this.setState({ anticogDosageDropDownValChanged: this.state.xarelto_dosage });
+      } else if(this.state.eliquis_dosage !== null) {
+         this.setState({ anticogDosageDropDownValChanged: this.state.eliquis_dosage });
+      } else if(this.state.edoxabon_dosage !== null) {
+         this.setState({ anticogDosageDropDownValChanged: this.state.edoxabon_dosage });
+      }
+   }
+
+   changeAntiplatMedDropdownValue() {
+      if(this.state.aspirin !== null) {
+         this.setState({ antiplatMedDropDownValChanged: this.state.aspirin });
+      } else if(this.state.plavix !== null) {
+         this.setState({ antiplatMedDropDownValChanged: this.state.plavix });
+      } else if(this.state.brillinta !== null) {
+         this.setState({ antiplatMedDropDownValChanged: this.state.brillinta });
+      } else if(this.state.effient !== null) {
+         this.setState({ antiplatMedDropDownValChanged: this.state.effient });
+      }
+      console.log(this.state.antiplatMedDropDownValChanged);
+   }
+
+   changeAntiplatDosageDropdownValue() {
+      if(this.state.aspirin_dosage !== null) {
+         this.setState({ antiplatDosageDropDownValChanged: this.state.aspirin_dosage });
+      } else if(this.state.plavix_dosage !== null) {
+         this.setState({ antiplatDosageDropDownValChanged: this.state.plavix_dosage });
+      } else if(this.state.brillinta_dosage !== null) {
+         this.setState({ antiplatDosageDropDownValChanged: this.state.brillinta_dosage });
+      } else if(this.state.effient_dosage !== null) {
+         this.setState({ antiplatDosageDropDownValChanged: this.state.effient_dosage });
+      }
+   }
+
+   changeAntiplatDosageTimeDropdownValue() {
+      if(this.state.aspirin_dosage_time !== null) {
+         this.setState({ antiplatDosageTimeDropDownValChanged: this.state.aspirin_dosage_time });
+      } else if(this.state.plavix_dosage_time !== null) {
+         this.setState({ antiplatDosageTimeDropDownValChanged: this.state.plavix_dosage_time });
+      } else if(this.state.brillinta_dosage_timie !== null) {
+         this.setState({ antiplatDosageTimeDropDownValChanged: this.state.brillinta_dosage_timie });
+      } else if(this.state.effient_dosage_time !== null) {
+         this.setState({ antiplatDosageTimeDropDownValChanged: this.state.effient_dosage_time });
+      }
+   }
+
    submitForm() {
       if (this.validator.allValid()) {
          console.log('Nure page1 - submitForm - state: ', this.state);
@@ -374,8 +481,6 @@ class Page1 extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
          referred_by: this.state.referred_by,
       };
-
-      console.log('Nure Page1 - page5 func - param: ', params);
       let patient_id = localStorage.getItem('patient_id');
       server(`nurse/page5/:${patient_id}`, param);
    }
@@ -602,58 +707,36 @@ class Page1 extends React.Component {
                                  <br />
                               </h5>
                               <h5 style={{ color: 'white' }} className="text-center">
-                                 Current Dosing{' '}
+                                 Current Dosing
                               </h5>
                            </div>
                            <div className="table-responsive">
-                              <table className="table table-striped text-center">
-                                 <thead></thead>
-                                 <tbody>
-                                    {this.state.pradaxa !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          {' '}
-                                          <td>{this.state.pradaxa} </td>
-                                          <td>{this.state.pradaxa_dosage}</td>
-                                          <td></td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    {this.state.xarelto !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          {' '}
-                                          <td>{this.state.xarelto} </td>
-                                          <td>{this.state.xarelto_dosage}</td>
-                                          <td>{this.state.xarelto_dosage_time}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    {this.state.eliquis !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          {' '}
-                                          <td>{this.state.eliquis} </td>
-                                          <td>{this.state.eliquis_dosage}</td>
-                                          <td>{this.state.eliquis_dosage_time}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    {this.state.edoxabon !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          {' '}
-                                          <td>{this.state.edoxabon} </td>
-                                          <td>{this.state.edoxabon_dosage}</td>
-                                          <td>{this.state.edoxabon_dosage_time}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-                                 </tbody>
-                              </table>
+                              <div className="row" style={{ width: "100%" }}>
+                                 <div className="col s3">
+                                    <select className="form-control" onChange={(e) => this.handle_anticog_med_dropdown_value(e.target.value)}>
+                                       <option value={this.state.anticogMedDropDownValChanged}>{this.state.anticogMedDropDownValChanged}</option> 
+                                       {
+                                          this.state.anticogMedsDropdown.map((meds, index) => {
+                                             return meds.med_name !== this.state.anticogMedDropDownValChanged ? <option key={index} value={meds.med_name}>{meds.med_name}</option> : ""
+                                          }) 
+                                       }
+                                    </select>
+                                 </div>
+                                 <div className="col s3">
+                                    <select className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e.target.value)}>
+                                       <option value={this.state.anticogDosageDropDownValChanged}>{this.state.anticogDosageDropDownValChanged}</option>
+                                       {
+                                          this.state.anticogMedsDropdown.map((meds, mindex) => {
+                                             return meds.med_name === this.state.anticogMedDropDownValChanged ?
+                                                this.state.anticogMedsDropdown[mindex].dosage.map((dosage, index) => {
+                                                   return dosage !== this.state.anticogDosageDropDownValChanged ? <option key={index} value={dosage}>{dosage}</option> : ""
+                                                })
+                                             : ""
+                                          })
+                                       }
+                                    </select>
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -672,61 +755,47 @@ class Page1 extends React.Component {
                               }}
                            >
                               <h5 style={{ color: 'white' }}>Medical Dose / Frequency</h5>
-
-                              <div className="table-responsive">
-                                 <table className="table table-striped text-center">
-                                    <thead></thead>
-                                    <tbody>
-                                       {this.state.aspirin !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.aspirin} </td>
-                                             <td>{this.state.aspirin_dosage}</td>
-                                             <td>{this.state.aspirin_dosage_time}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-                                       {this.state.brillinta !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.brillinta} </td>
-                                             <td>{this.state.brillinta_dosage}</td>
-                                             <td>{this.state.brillinta_dosage_timie}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-
-                                       {this.state.effient !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.effient} </td>
-                                             <td>{this.state.effient_dosage}</td>
-                                             <td>{this.state.effient_dosage_time}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-
-                                       {this.state.plavix !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.plavix} </td>
-                                             <td>{this.state.plavix_dosage}</td>
-                                             <td>{this.state.plavix_dosage_time}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-
-                                       {this.state.not_using_drugs === '' ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td> N/A </td>
-                                             <td>N/A</td>
-                                             <td>N/A</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-                                    </tbody>
-                                 </table>
+                           </div>
+                           <div className="table-responsive">
+                              <div className="row" style={{ width: "100%" }}>
+                                 <div className="col s3">
+                                    <select className="form-control" onChange={(e) => this.handle_antiplat_med_dropdown_value(e.target.value)}>
+                                       <option value={this.state.antiplatMedDropDownValChanged}>{this.state.antiplatMedDropDownValChanged}</option> 
+                                       {
+                                          this.state.antiplatMedsDropdown.map((meds, index) => {
+                                             return meds.med_name !== this.state.antiplatMedDropDownValChanged ? <option key={index} value={meds.med_name}>{meds.med_name}</option> : ""
+                                          }) 
+                                       }
+                                    </select>
+                                 </div>
+                                 <div className="col s3">
+                                    <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e.target.value)}>
+                                       <option value={this.state.antiplatDosageDropDownValChanged}>{this.state.antiplatDosageDropDownValChanged}</option>
+                                       {
+                                          this.state.antiplatMedsDropdown.map((meds, mindex) => {
+                                             return meds.med_name === this.state.antiplatMedDropDownValChanged ?
+                                                this.state.antiplatMedsDropdown[mindex].dosage.map((dosage, index) => {
+                                                   return dosage !== this.state.antiplatDosageDropDownValChanged ? <option key={index} value={dosage}>{dosage}</option> : ""
+                                                })
+                                             : ""
+                                          })
+                                       }
+                                    </select>
+                                 </div>
+                                 <div className="col s3">
+                                    <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e.target.value)}>
+                                       <option value={this.state.antiplatDosageTimeDropDownValChanged}>{this.state.antiplatDosageTimeDropDownValChanged}</option>
+                                       {
+                                          this.state.antiplatMedsDropdown.map((meds, mindex) => {
+                                             return meds.med_name === this.state.antiplatMedDropDownValChanged ?
+                                                this.state.antiplatMedsDropdown[mindex].dosage_time.map((dosageTime, index) => {
+                                                   return dosageTime !== this.state.antiplatDosageTimeDropDownValChanged ? <option key={index} value={dosageTime}>{dosageTime}</option> : ""
+                                                })
+                                             : ""
+                                          })
+                                       }
+                                    </select>
+                                 </div>
                               </div>
                            </div>
                         </div>
