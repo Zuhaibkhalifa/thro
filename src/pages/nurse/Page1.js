@@ -707,7 +707,7 @@ class Page1 extends React.Component {
                                  <br />
                               </h5>
                               <h5 style={{ color: 'white' }} className="text-center">
-                                 Current Dosing
+                                 Current Dosing 
                               </h5>
                            </div>
                            <div className="table-responsive">
