@@ -57,6 +57,22 @@ class Page1 extends React.Component {
             { "med_name": "Brillinta (Ticagrelor)", "dosage": ["60 mg", "90 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
             { "med_name": "Effient (Prasugrel)", "dosage": ["5 mg", "10 mg"], "dosage_time": ["Once Daily", "Twice daily"] }
          ],
+         displayMedFlags: [
+            { "flag_name": "Blood clot while blood thinner interrupted" },
+            { "flag_name": "Liver Cirrhosis" },
+            { "flag_name": "Transfusion within last 3 months" },
+            { "flag_name": "Stroke or ministroke/TIA within last 3 months" },
+            { "flag_name": "Bleeding within past 3 months (patient page 13)" },
+            { "flag_name": "Requiring treatment in hospital OR from stomach or bowel" },
+            { "flag_name": "Ulcer within last 3 months" },
+            { "flag_name": "Currently undergoing Cancer therapy" },
+            { "flag_name": "Antiphospholipid antibody syndrome" },
+            { "flag_name": "Mitral stenosis" },
+            { "flag_name": "DVT or PE in the last 3 months" },
+            { "flag_name": "CHADS score > 4" },
+            { "flag_name": "CrCl <30" },
+         ],
+         
          month_year: '',
          procedure: '',
          date_of_procedure: '',
@@ -65,7 +81,11 @@ class Page1 extends React.Component {
          weight: '',
          indication_for_anticoagulation: '',
          chads_score_and_distribution: '',
-
+         
+         activeAnticogMeds: [],
+         activeAntiplatMeds: [],
+         dynamicFlags: [],
+         
          poc_inr_date: '',
          poc_creat_date: '',
          hb_date: '',
@@ -92,7 +112,7 @@ class Page1 extends React.Component {
          plavix_dosage_time: '',
          brillinta: '',
          brillinta_dosage: '',
-         brillinta_dosage_timie: '',
+         brillinta_dosage_time: '',
          effient: '',
          effient_dosage: '',
          effient_dosage_time: '',
@@ -135,6 +155,9 @@ class Page1 extends React.Component {
       this.changeAntiplatMedDropdownValue = this.changeAntiplatMedDropdownValue.bind(this);
       this.changeAntiplatDosageDropdownValue = this.changeAntiplatDosageDropdownValue.bind(this);
       this.changeAntiplatDosageTimeDropdownValue = this.changeAntiplatDosageTimeDropdownValue.bind(this);
+      this.handle_flags_change_value = this.handle_flags_change_value.bind(this);
+      this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
+      this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
    }
 
    componentDidMount() {
@@ -219,7 +242,7 @@ class Page1 extends React.Component {
                         plavix_dosage_time: data.plavix_dosage_time,
                         brillinta: data.brillinta,
                         brillinta_dosage: data.brillinta_dosage,
-                        brillinta_dosage_timie: data.brillinta_dosage_timie,
+                        brillinta_dosage_time: data.brillinta_dosage_time,
                         effient: data.effient,
                         effient_dosage: data.effient_dosage,
                         effient_dosage_time: data.effient_dosage_time,
@@ -253,10 +276,12 @@ class Page1 extends React.Component {
                      this.changeAntiplatMedDropdownValue();
                      this.changeAntiplatDosageDropdownValue();
                      this.changeAntiplatDosageTimeDropdownValue();
-
+                     this.fillactiveanticogmeds();
+                     this.fillactiveantiplatmeds();
+                     this.set_DynamicFlags();
                      this.set_anticoagulation(response.data.success.anticoagulation);
-
                      this.set_CHADS_score();
+
                   } else {
                      this.setState({ loader: '' });
                   }
@@ -270,6 +295,74 @@ class Page1 extends React.Component {
          this.setState({ loader: '' });
          this.setState({ loader: '' });
       }
+   }
+
+   fillactiveanticogmeds() {
+      let activeMeds = [];
+      if(this.state.pradaxa) {
+         activeMeds.push({
+            med_name: this.state.pradaxa,
+            med_dosage: this.state.pradaxa_dosage,
+            med_dosage_time: ""
+         });
+      } 
+      if(this.state.xarelto) {
+         activeMeds.push({
+            med_name: this.state.xarelto,
+            med_dosage: this.state.xarelto_dosage,
+            med_dosage_time: this.state.xarelto_dosage_time
+         });
+      } 
+      if(this.state.eliquis) {
+         activeMeds.push({
+            med_name: this.state.eliquis,
+            med_dosage: this.state.eliquis_dosage,
+            med_dosage_time: this.state.eliquis_dosage_time
+         });
+      }
+      if(this.state.edoxabon) {
+         activeMeds.push({
+            med_name: this.state.edoxabon,
+            med_dosage: this.state.edoxabon_dosage,
+            med_dosage_time: this.state.edoxabon_dosage_time
+         });
+      }
+      console.log(activeMeds);
+      this.setState({ activeAnticogMeds: activeMeds });
+   }
+
+   fillactiveantiplatmeds() {
+      let activeMeds = [];
+      if(this.state.effient) {
+         activeMeds.push({
+            med_name: this.state.effient,
+            med_dosage: this.state.effient_dosage,
+            med_dosage_time: this.state.effient_dosage_time
+         });
+      } 
+      if(this.state.aspirin) {
+         activeMeds.push({
+            med_name: this.state.aspirin,
+            med_dosage: this.state.aspirin_dosage,
+            med_dosage_time: this.state.aspirin_dosage_time
+         });
+      } 
+      if(this.state.plavix) {
+         activeMeds.push({
+            med_name: this.state.plavix,
+            med_dosage: this.state.plavix_dosage,
+            med_dosage_time: this.state.plavix_dosage_time
+         });
+      }
+      if(this.state.brillinta) {
+         activeMeds.push({
+            med_name: this.state.brillinta,
+            med_dosage: this.state.brillinta_dosage,
+            med_dosage_time: this.state.brillinta_dosage_time
+         });
+      }
+      console.log(activeMeds);
+      this.setState({ activeAntiplatMeds: activeMeds });
    }
 
    set_anticoagulation(data) {
@@ -338,17 +431,7 @@ class Page1 extends React.Component {
       if (transfusion === 'Yes') flags.push(`Transfusion did on ${transfusion_date}`);
       if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
 
-      let displayFlags = flags.map((flag) => {
-         return (
-            <div className="col-4">
-               <div className="alert myDanger" role="alert">
-                  <span className="white">{flag}</span>
-               </div>
-            </div>
-         );
-      });
-
-      return displayFlags;
+      this.setState({ dynamicFlags:flags });
    }
 
    //
@@ -357,24 +440,119 @@ class Page1 extends React.Component {
       this.setState({ genderSelected: value });
    }
 
-   handle_anticog_med_dropdown_value(value) {
-      this.setState({ anticogMedDropDownValChanged: value });
+   handle_anticog_med_dropdown_value(e, value) {
+      let activeMed = [];
+      for(let i=0; i<value.length; i++) {
+         if(value[i].selected) {
+            if(this.state.activeAnticogMeds[i] !== undefined) {
+               activeMed.push({
+                  med_name: value[i].value,
+                  med_dosage: this.state.activeAnticogMeds[i].med_dosage,
+                  med_dosage_time: 'pm'
+               });
+            } else {
+               activeMed.push({
+                  med_name: value[i].value,
+                  med_dosage: "",
+                  med_dosage_time: ""
+               });
+            }
+         }
+      }
+      
+      this.setState({ anticogMedDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
    }
 
-   handle_anticog_dosage_dropdown_value(value) {
-      this.setState({ anticogDosageDropDownValChanged: value });
+   handle_anticog_dosage_dropdown_value(e, value) {
+      let activeMed = [];
+      for(let i=0; i<value.length; i++) {
+         if(value[i].selected) {
+            if(this.state.activeAnticogMeds[i] !== undefined) {
+               activeMed.push({
+                  med_name: this.state.activeAnticogMeds[i].med_name,
+                  med_dosage: value[i].value,
+                  med_dosage_time: this.state.activeAnticogMeds[i].med_dosage_time
+               });
+            } else {
+               activeMed.push({
+                  med_name: "",
+                  med_dosage: value[i].value,
+                  med_dosage_time: ""
+               });
+            }
+         }
+      }
+      
+      this.setState({ anticogDosageDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
    }
    
-   handle_antiplat_med_dropdown_value(value) {
-      this.setState({ antiplatMedDropDownValChanged: value });
+   handle_antiplat_med_dropdown_value(e, value) {
+      let activeMed = [];
+      for(let i=0; i<value.length; i++) {
+         if(value[i].selected) {
+            if(this.state.activeAntiplatMeds[i] !== undefined) {
+               activeMed.push({
+                  med_name: value[i].value,
+                  med_dosage: this.state.activeAntiplatMeds[i].med_dosage,
+                  med_dosage_time: this.state.activeAntiplatMeds[i].med_dosage_time
+               });
+            } else {
+               activeMed.push({
+                  med_name: value[i].value,
+                  med_dosage: "",
+                  med_dosage_time: ""
+               });
+            }
+         }
+      }
+      
+      this.setState({ antiplatMedDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
    }
 
-   handle_antiplat_dosage_dropdown_value(value) {
-      this.setState({ antiplatDosageDropDownValChanged: value });
+   handle_antiplat_dosage_dropdown_value(e, value) {
+      let activeMed = [];
+      for(let i=0; i<value.length; i++) {
+         if(value[i].selected) {
+            if(this.state.activeAntiplatMeds[i] !== undefined) {
+               activeMed.push({
+                  med_name: this.state.activeAntiplatMeds[i].med_name,
+                  med_dosage: value[i].value,
+                  med_dosage_time: this.state.activeAntiplatMeds[i].med_dosage_time
+               });
+            } else {
+               activeMed.push({
+                  med_name: "",
+                  med_dosage: value[i].value,
+                  med_dosage_time: ""
+               });
+            }
+         }
+      }
+      
+      this.setState({ antiplatDosageDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
    }
 
-   handle_antiplat_dosage_time_dropdown_value(value) {
-      this.setState({ antiplatDosageTimeDropDownValChanged: value });
+   handle_antiplat_dosage_time_dropdown_value(e, value) {
+      let activeMed = [];
+      for(let i=0; i<value.length; i++) {
+         if(value[i].selected) {
+            if(this.state.activeAntiplatMeds[i] !== undefined) {
+               activeMed.push({
+                  med_name: this.state.activeAntiplatMeds[i].med_name,
+                  med_dosage: this.state.activeAntiplatMeds[i].med_dosage,
+                  med_dosage_time: value[i].value,
+               });
+            } else {
+               activeMed.push({
+                  med_name: "",
+                  med_dosage: "",
+                  med_dosage_time: value[i].value,
+               });
+            }
+         }
+      }
+      
+      this.setState({ antiplatDosageDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
    }
 
    changeAnticogMedDropdownValue() {
@@ -431,11 +609,22 @@ class Page1 extends React.Component {
          this.setState({ antiplatDosageTimeDropDownValChanged: this.state.aspirin_dosage_time });
       } else if(this.state.plavix_dosage_time !== null) {
          this.setState({ antiplatDosageTimeDropDownValChanged: this.state.plavix_dosage_time });
-      } else if(this.state.brillinta_dosage_timie !== null) {
-         this.setState({ antiplatDosageTimeDropDownValChanged: this.state.brillinta_dosage_timie });
+      } else if(this.state.brillinta_dosage_time !== null) {
+         this.setState({ antiplatDosageTimeDropDownValChanged: this.state.brillinta_dosage_time });
       } else if(this.state.effient_dosage_time !== null) {
          this.setState({ antiplatDosageTimeDropDownValChanged: this.state.effient_dosage_time });
       }
+   }
+
+   handle_flags_change_value(value) {
+      let activeFlag = [];
+      for(let i=0; i<value.length; i++) {
+         if(value[i].selected) {
+            activeFlag.push(value[i].value);
+         }
+      }
+
+      this.setState({ dynamicFlags:activeFlag });
    }
 
    submitForm() {
@@ -710,10 +899,28 @@ class Page1 extends React.Component {
                                  Current Dosing 
                               </h5>
                            </div>
-                           <div className="table-responsive">
+                           <table style={{ display: "inline-table" }} className="table-responsive">
+                              <tr style={{ borderBottom: "1px solid #ccc" }}>
+                                 <th>Medicine name</th>
+                                 <th>Dosage</th>
+                                 <th>Frequency</th>
+                              </tr>
+                              {
+                                 this.state.activeAnticogMeds.length > 0 ?
+                                    this.state.activeAnticogMeds.map((meds, index) => {
+                                       return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                          <td>{meds.med_name}</td>
+                                          <td>{meds.med_dosage}</td>
+                                          <td>{meds.med_dosage_time}</td>
+                                       </tr>
+                                    })
+                                 : ""
+                              }
+                           </table>
+                           <div style={{ marginTop: "15px" }}>
                               <div className="row" style={{ width: "100%" }}>
                                  <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_anticog_med_dropdown_value(e.target.value)}>
+                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_med_dropdown_value(e, e.target.selectedOptions)}>
                                        <option value={this.state.anticogMedDropDownValChanged}>{this.state.anticogMedDropDownValChanged}</option> 
                                        {
                                           this.state.anticogMedsDropdown.map((meds, index) => {
@@ -723,7 +930,7 @@ class Page1 extends React.Component {
                                     </select>
                                  </div>
                                  <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e.target.value)}>
+                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e, e.target.selectedOptions)}>
                                        <option value={this.state.anticogDosageDropDownValChanged}>{this.state.anticogDosageDropDownValChanged}</option>
                                        {
                                           this.state.anticogMedsDropdown.map((meds, mindex) => {
@@ -756,10 +963,28 @@ class Page1 extends React.Component {
                            >
                               <h5 style={{ color: 'white' }}>Medical Dose / Frequency</h5>
                            </div>
-                           <div className="table-responsive">
+                           <table style={{ display: "inline-table" }} className="table-responsive">
+                              <tr style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                 <th>Medicine name</th>
+                                 <th>Dosage</th>
+                                 <th>Frequency</th>
+                              </tr>
+                              {
+                                 this.state.activeAntiplatMeds.length > 0 ?
+                                    this.state.activeAntiplatMeds.map((meds, index) => {
+                                       return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                          <td>{meds.med_name}</td>
+                                          <td>{meds.med_dosage}</td>
+                                          <td>{meds.med_dosage_time}</td>
+                                       </tr>
+                                    })
+                                 : ""
+                              }
+                           </table>
+                           <div style={{ marginTop: "15px" }}>
                               <div className="row" style={{ width: "100%" }}>
                                  <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_antiplat_med_dropdown_value(e.target.value)}>
+                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_med_dropdown_value(e, e.target.selectedOptions)}>
                                        <option value={this.state.antiplatMedDropDownValChanged}>{this.state.antiplatMedDropDownValChanged}</option> 
                                        {
                                           this.state.antiplatMedsDropdown.map((meds, index) => {
@@ -769,7 +994,7 @@ class Page1 extends React.Component {
                                     </select>
                                  </div>
                                  <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e.target.value)}>
+                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e, e.target.selectedOptions)}>
                                        <option value={this.state.antiplatDosageDropDownValChanged}>{this.state.antiplatDosageDropDownValChanged}</option>
                                        {
                                           this.state.antiplatMedsDropdown.map((meds, mindex) => {
@@ -783,7 +1008,7 @@ class Page1 extends React.Component {
                                     </select>
                                  </div>
                                  <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e.target.value)}>
+                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e, e.target.selectedOptions)}>
                                        <option value={this.state.antiplatDosageTimeDropDownValChanged}>{this.state.antiplatDosageTimeDropDownValChanged}</option>
                                        {
                                           this.state.antiplatMedsDropdown.map((meds, mindex) => {
@@ -952,8 +1177,29 @@ class Page1 extends React.Component {
                   <br />
                   <br />
                   <h4>Flags</h4>
-                  <div className="row">{this.set_DynamicFlags()}</div>
-
+                  <div className="row">
+                     {
+                        this.state.dynamicFlags.map((flag) => {
+                           return <div className="col s4">
+                              <div className="alert myDanger" role="alert">
+                                 <span className="white">{flag}</span>
+                              </div>
+                           </div>
+                        })
+                     }
+                  </div>
+                  <div className="row">
+                     <div className="col s6">
+                        <select multiple={true} className="form-control" onChange={(e) => this.handle_flags_change_value(e.target.selectedOptions)}>
+                           <option value="">--- Choose corerct flag ---</option>
+                           {
+                              this.state.displayMedFlags.map((medsFlags, mfindex) => {
+                                 return <option key={mfindex} value={medsFlags.flag_name}>{medsFlags.flag_name}</option>
+                              })
+                           }
+                        </select>
+                     </div>
+                  </div>
                   <br />
                   <br />
 
