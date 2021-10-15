@@ -81,6 +81,7 @@ class Page1 extends React.Component {
          weight: '',
          indication_for_anticoagulation: '',
          chads_score_and_distribution: '',
+         dictation: "",
          
          activeAnticogMeds: [],
          activeAntiplatMeds: [],
@@ -1199,6 +1200,16 @@ class Page1 extends React.Component {
                            }
                         </select>
                      </div>
+                  </div>
+                  <br />
+                  <br />
+                  <div className="row" style={{ padding:"15px" }}>
+                     <>
+                        <h5>Dictation</h5>
+                        <textarea rows="3" className="form-control" value={this.state.dictation} 
+                        placeholder="please provide any additional feedback on patient"
+                        onChange={(e) => this.setState({ dictation: e.target.value })} ></textarea>
+                     </>
                   </div>
                   <br />
                   <br />

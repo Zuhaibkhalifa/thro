@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 class NurseHeader extends React.Component {
 
@@ -8,16 +9,18 @@ class NurseHeader extends React.Component {
                 <div className="row">
                     <div className="col-3">
                         <div className="dropdown dropright">
-                            <button
-                                className="btn custom-dropdown"
-                                type="button"
-                                id="dropdown1"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <i className="fa fa-bars" />
-                            </button>
+                            <NavLink to="/User/page2">
+                                <button
+                                    className="btn custom-dropdown"
+                                    type="button"
+                                    id="dropdown1"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    <i className="fa fa-exchange" />
+                                </button>
+                            </NavLink>
                             <div className="dropdown-menu" aria-labelledby="dropdown1">
                                 <a className="dropdown-item" href="!#">
                                     Action
@@ -36,16 +39,18 @@ class NurseHeader extends React.Component {
                     </div>
                     <div className="col-3 text-right">
                         <div className="dropdown dropleft">
-                            <button
-                                className="btn custom-dropdown"
-                                type="button"
-                                id="dropdown2"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <i className="fa fa-ellipsis-v" />
-                            </button>
+                            <NavLink to="/Nurse/patient_search">
+                                <button
+                                    className="btn custom-dropdown"
+                                    type="button"
+                                    id="dropdown2"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    <i className="fa fa-arrow-left" />
+                                </button>
+                            </NavLink>
                             <div className="dropdown-menu" aria-labelledby="dropdown2">
                                 <a className="dropdown-item" href="!#">
                                     Action
