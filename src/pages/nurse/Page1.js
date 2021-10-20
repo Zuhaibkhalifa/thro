@@ -51,6 +51,15 @@ class Page1 extends React.Component {
             { "med_name": "Eliquis (Apixaban)", "dosage": ["5 mg twice daily", "2.5 mg twice daily"] },
             { "med_name": "Edoxabon (Lixiana)", "dosage": ["60 mg once daily", "30 mg once daily", "15 mg once daily"] }
          ],
+         indicationAnticogVal: [
+            { "indication": "Venous Thromboembolism (VTE)" },
+            { "indication": "Atrial Fibrillation of flutter" },
+            { "indication": "Heart Valve Replacement" },
+            { "indication": "Blood clot in heart" },
+            { "indication": "Arterial Peripheral Thrombosis" },
+            { "indication": "Peripheral arterial Disease" }
+         ]
+         ,
          antiplatMedsDropdown: [
             { "med_name": "Aspirin (ASA)", "dosage": ["81 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
             { "med_name": "Plavix (Clopidogrel)", "dosage": ["75 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
@@ -86,6 +95,10 @@ class Page1 extends React.Component {
          activeAnticogMeds: [],
          activeAntiplatMeds: [],
          dynamicFlags: [],
+         indicationSubValFirst: false,
+         indicationSubValSecond: false,
+         indicationSubVal: "",
+         indicationSubValTime: "",
          
          poc_inr_date: '',
          poc_creat_date: '',
@@ -159,6 +172,7 @@ class Page1 extends React.Component {
       this.handle_flags_change_value = this.handle_flags_change_value.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
+      this.handleIndicationAnticogVal = this.handleIndicationAnticogVal.bind(this);
    }
 
    componentDidMount() {
@@ -296,6 +310,27 @@ class Page1 extends React.Component {
          this.setState({ loader: '' });
          this.setState({ loader: '' });
       }
+   }
+
+   handleIndicationAnticogVal(value) {
+      let anticoagulation = '';
+
+      for(let i=0; i<value.length; i++) {
+         if(value[i].value === ('DVT' || 'PE')) { this.setState({ indicationSubValSecond: true }) }
+         if(value[i].selected && value[i].value === 'Venous Thromboembolism (VTE)') {
+            this.setState({ indicationSubValFirst: true });
+            anticoagulation += value[i].value +', ';
+         } else if(value[i].value === 'DVT') {
+            anticoagulation += value[i].value +', ';
+         } else if(value[i].value === 'PE') {
+            anticoagulation += value[i].value +', ';
+         } else if(value[i].selected) {
+            anticoagulation += value[i].value +', ';
+         }
+      }
+
+      console.log(anticoagulation);
+      this.setState({ indication_for_anticoagulation: anticoagulation });
    }
 
    fillactiveanticogmeds() {
@@ -829,17 +864,48 @@ class Page1 extends React.Component {
                      <div className="col-12">
                         <div className="form-group">
                            <label htmlFor="usr">Indication(s) for Anticoagulation </label>
-                           <input
-                              type="text"
+                           <span style={{ color: "grey", float: "right", fontSize: "14px" }}>(press Ctrl for multiple)</span>
+                           <br />
+                           <span>{this.state.indication_for_anticoagulation}</span>
+                           <select
+                              multiple={true}
                               className="form-control"
-                              defaultValue={this.state.indication_for_anticoagulation}
-                              onChange={(e) =>
-                                 this.setState({
-                                    indication_for_anticoagulation: e.target.value,
+                              onChange={(e) => this.handleIndicationAnticogVal(e.target.selectedOptions) }
+                              id="indication_for_anticoagulation"
+                              style={{ height: "170px" }}
+                           >
+                              {
+                                 this.state.indicationAnticogVal.map((item, index) => {
+                                    return ([
+                                       <>
+                                          {
+                                             item.indication === 'Venous Thromboembolism (VTE)' ? 
+                                             <>
+                                                {
+                                                   this.state.indicationSubValFirst ? 
+                                                   <optgroup style={{ height: "50px" }} className="form-control" onChange={(e) => this.setState({ indicationSubVal: e.target.value })}>
+                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>DVT</option>
+                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>PE</option>
+                                                   </optgroup> : ""
+                                                }
+                                                {/* {
+                                                   this.state.indicationSubValSecond ?
+                                                   <optgroup style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValTime: e.target.value })}>
+                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
+                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
+                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
+                                                   </optgroup> : ""
+                                                } */}
+                                             </> : ""
+                                          }
+                                       </>,
+                                       <option key={index} value={item.indication}>
+                                          {item.indication}
+                                       </option>
+                                    ])
                                  })
                               }
-                              id="indication_for_anticoagulation"
-                           />
+                           </select>
                            {this.validator.message(
                               'anticoagulation',
                               this.state.indication_for_anticoagulation,
@@ -885,7 +951,7 @@ class Page1 extends React.Component {
                            >
                               <h5 style={{ color: 'white' }}>
                                  {' '}
-                                 What Lab They Use{' '}
+                                 Medication{' '}
                                  {this.state.lab_location_for_inr_test !== null ? (
                                     <span className="text-right" style={{ color: 'green' }}>
                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1191,6 +1257,7 @@ class Page1 extends React.Component {
                   </div>
                   <div className="row">
                      <div className="col s6">
+                        <span style={{ color: "grey", float: "right", fontSize: "14px" }}>(press Ctrl for multiple)</span>
                         <select multiple={true} className="form-control" onChange={(e) => this.handle_flags_change_value(e.target.selectedOptions)}>
                            <option value="">--- Choose corerct flag ---</option>
                            {
