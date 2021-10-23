@@ -914,7 +914,6 @@ class Page1 extends React.Component {
                         </div>
                      </div>
                   </div>
-
                   <div className="row">
                      <div className="col-12">
                         <div className="form-group">
