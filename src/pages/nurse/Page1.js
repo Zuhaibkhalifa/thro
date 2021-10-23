@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactSpinner from 'react-bootstrap-spinner';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import EditIcon from '@mui/icons-material/Edit';
+import classes from './styles.module.css';
 
 import $ from 'jquery';
 import axios from 'axios';
@@ -46,10 +51,11 @@ class Page1 extends React.Component {
 
       this.state = {
          anticogMedsDropdown: [
-            { "med_name": "Pradaxa (Dabigatran)", "dosage": ["75 mg twice daily", "110 mg twice daily", "150 mg twice daily"] },
-            { "med_name": "Xarelto (Rivaroxaban)", "dosage": ["15 mg twice daily", "15 mg once daily", "10 mg once daily", "20 mg once daily"] },
-            { "med_name": "Eliquis (Apixaban)", "dosage": ["5 mg twice daily", "2.5 mg twice daily"] },
-            { "med_name": "Edoxabon (Lixiana)", "dosage": ["60 mg once daily", "30 mg once daily", "15 mg once daily"] }
+            {
+               "med_name": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)"],
+               "dosage": ["2.5 mg", "5 mg", "10 mg", "15 mg", "20 mg", "30 mg", "60 mg", "75 mg", "110 mg", "150 mg"],
+               "dosage_time": ["am", "pm"]
+            }
          ],
          indicationAnticogVal: [
             { "indication": "Venous Thromboembolism (VTE)" },
@@ -61,10 +67,11 @@ class Page1 extends React.Component {
          ]
          ,
          antiplatMedsDropdown: [
-            { "med_name": "Aspirin (ASA)", "dosage": ["81 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
-            { "med_name": "Plavix (Clopidogrel)", "dosage": ["75 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
-            { "med_name": "Brillinta (Ticagrelor)", "dosage": ["60 mg", "90 mg"], "dosage_time": ["Once Daily", "Twice daily"] },
-            { "med_name": "Effient (Prasugrel)", "dosage": ["5 mg", "10 mg"], "dosage_time": ["Once Daily", "Twice daily"] }
+            {
+               "med_name": ["Aspirin (ASA)", "Plavix (Clopidogrel)", "Brillinta (Ticagrelor)", "Effient (Prasugrel)"],
+               "dosage": ["5 mg", "10 mg", "60 mg", "75 mg", "81 mg", "90 mg"],
+               "dosage_time": ["Once daily", "Twice daily"]
+            }
          ],
          displayMedFlags: [
             { "flag_name": "Blood clot while blood thinner interrupted" },
@@ -96,9 +103,13 @@ class Page1 extends React.Component {
          activeAntiplatMeds: [],
          dynamicFlags: [],
          indicationSubValFirst: false,
-         indicationSubValSecond: false,
          indicationSubVal: "",
          indicationSubValTime: "",
+         indicationSubValSecondTime: "",
+         indicationSubValFlag: false,
+         indicationSubValFlagShown: false,
+         indicationSubValSecondFlag: false,
+         indicationSubValSecondFlagShown: false,
          
          poc_inr_date: '',
          poc_creat_date: '',
@@ -151,8 +162,10 @@ class Page1 extends React.Component {
          referred_by: '',
          anticogMedDropDownValChanged: "",
          anticogDosageDropDownValChanged: "",
+         anticog_dosage_time_dropdown_value: "",
          antiplatMedDropDownValChanged: "",
          antiplatDosageDropDownValChanged: "",
+         antiplat_dosage_time_dropdown_value: "",
          antiplatDosageTimeDropDownValChanged: ""
       };
 
@@ -163,7 +176,6 @@ class Page1 extends React.Component {
       this.handle_anticog_dosage_dropdown_value = this.handle_anticog_dosage_dropdown_value.bind(this);
       this.handle_antiplat_med_dropdown_value = this.handle_antiplat_med_dropdown_value.bind(this);
       this.handle_antiplat_dosage_dropdown_value = this.handle_antiplat_dosage_dropdown_value.bind(this);
-      this.handle_antiplat_dosage_time_dropdown_value = this.handle_antiplat_dosage_time_dropdown_value.bind(this);
       this.changeAnticogMedDropdownValue = this.changeAnticogMedDropdownValue.bind(this);
       this.changeAnticogDosageDropdownValue = this.changeAnticogDosageDropdownValue.bind(this);
       this.changeAntiplatMedDropdownValue = this.changeAntiplatMedDropdownValue.bind(this);
@@ -173,6 +185,12 @@ class Page1 extends React.Component {
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
       this.handleIndicationAnticogVal = this.handleIndicationAnticogVal.bind(this);
+      this.handleIndicationSubValFlag = this.handleIndicationSubValFlag.bind(this);
+      this.handleIndicationSubValFlagEdit = this.handleIndicationSubValFlagEdit.bind(this);
+      this.handleIndicationSubValSecondFlag = this.handleIndicationSubValSecondFlag.bind(this);
+      this.handleIndicationSubValSecondFlagEdit = this.handleIndicationSubValSecondFlagEdit.bind(this);
+      this.handle_anticog_dosage_time_dropdown_value = this.handle_anticog_dosage_time_dropdown_value.bind(this);
+      this.handle_antiplat_dosage_time_dropdown_value = this.handle_antiplat_dosage_time_dropdown_value.bind(this);
    }
 
    componentDidMount() {
@@ -312,11 +330,33 @@ class Page1 extends React.Component {
       }
    }
 
+   handleIndicationSubValFlag() {
+      this.setState({ indicationSubValFlag:false });
+   }
+
+   handleIndicationSubValFlagEdit() {
+      this.setState({ indicationSubValFlagShown:false });
+   }
+
+   handleIndicationSubValSecondFlag() {
+      this.setState({ indicationSubValSecondFlag:false });
+   }
+
+   handleIndicationSubValSecondFlagEdit() {
+      this.setState({ indicationSubValSecondFlagShown:false });
+   }
+
    handleIndicationAnticogVal(value) {
       let anticoagulation = '';
-
+      if(this.state.indicationSubValTime) {
+         this.setState({ indicationSubValFlagShown:true });
+      }
+      if(this.state.indicationSubValSecondTime) {
+         this.setState({ indicationSubValSecondFlagShown:true });
+      }
       for(let i=0; i<value.length; i++) {
-         if(value[i].value === ('DVT' || 'PE')) { this.setState({ indicationSubValSecond: true }) }
+         if(value[i].value === ('DVT')) { this.setState({ indicationSubValFlag: true }); document.getElementById('dte-display').style.setProperty('display', 'block', 'important'); }
+         if(value[i].value === ('PE')) { this.setState({ indicationSubValSecondFlag: true }); document.getElementById('pe-display').style.setProperty('display', 'block', 'important'); }
          if(value[i].selected && value[i].value === 'Venous Thromboembolism (VTE)') {
             this.setState({ indicationSubValFirst: true });
             anticoagulation += value[i].value +', ';
@@ -328,8 +368,6 @@ class Page1 extends React.Component {
             anticoagulation += value[i].value +', ';
          }
       }
-
-      console.log(anticoagulation);
       this.setState({ indication_for_anticoagulation: anticoagulation });
    }
 
@@ -363,7 +401,7 @@ class Page1 extends React.Component {
             med_dosage_time: this.state.edoxabon_dosage_time
          });
       }
-      console.log(activeMeds);
+      
       this.setState({ activeAnticogMeds: activeMeds });
    }
 
@@ -484,13 +522,13 @@ class Page1 extends React.Component {
                activeMed.push({
                   med_name: value[i].value,
                   med_dosage: this.state.activeAnticogMeds[i].med_dosage,
-                  med_dosage_time: 'pm'
+                  med_dosage_time: this.state.anticog_dosage_time_dropdown_value
                });
             } else {
                activeMed.push({
                   med_name: value[i].value,
                   med_dosage: "",
-                  med_dosage_time: ""
+                  med_dosage_time: this.state.anticog_dosage_time_dropdown_value
                });
             }
          }
@@ -503,23 +541,32 @@ class Page1 extends React.Component {
       let activeMed = [];
       for(let i=0; i<value.length; i++) {
          if(value[i].selected) {
+            console.log(value[i].value, this.state.activeAnticogMeds[i]);
             if(this.state.activeAnticogMeds[i] !== undefined) {
                activeMed.push({
                   med_name: this.state.activeAnticogMeds[i].med_name,
                   med_dosage: value[i].value,
-                  med_dosage_time: this.state.activeAnticogMeds[i].med_dosage_time
+                  med_dosage_time: this.state.anticog_dosage_time_dropdown_value
                });
             } else {
                activeMed.push({
                   med_name: "",
                   med_dosage: value[i].value,
-                  med_dosage_time: ""
+                  med_dosage_time: this.state.anticog_dosage_time_dropdown_value
                });
             }
          }
       }
       
       this.setState({ anticogDosageDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
+   }
+
+   handle_anticog_dosage_time_dropdown_value(value) {
+      this.setState({ anticog_dosage_time_dropdown_value: value });
+   }
+
+   handle_antiplat_dosage_time_dropdown_value(value) {
+      this.setState({ antiplat_dosage_time_dropdown_value: value });
    }
    
    handle_antiplat_med_dropdown_value(e, value) {
@@ -530,13 +577,13 @@ class Page1 extends React.Component {
                activeMed.push({
                   med_name: value[i].value,
                   med_dosage: this.state.activeAntiplatMeds[i].med_dosage,
-                  med_dosage_time: this.state.activeAntiplatMeds[i].med_dosage_time
+                  med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
                });
             } else {
                activeMed.push({
                   med_name: value[i].value,
                   med_dosage: "",
-                  med_dosage_time: ""
+                  med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
                });
             }
          }
@@ -553,36 +600,13 @@ class Page1 extends React.Component {
                activeMed.push({
                   med_name: this.state.activeAntiplatMeds[i].med_name,
                   med_dosage: value[i].value,
-                  med_dosage_time: this.state.activeAntiplatMeds[i].med_dosage_time
+                  med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
                });
             } else {
                activeMed.push({
                   med_name: "",
                   med_dosage: value[i].value,
-                  med_dosage_time: ""
-               });
-            }
-         }
-      }
-      
-      this.setState({ antiplatDosageDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
-   }
-
-   handle_antiplat_dosage_time_dropdown_value(e, value) {
-      let activeMed = [];
-      for(let i=0; i<value.length; i++) {
-         if(value[i].selected) {
-            if(this.state.activeAntiplatMeds[i] !== undefined) {
-               activeMed.push({
-                  med_name: this.state.activeAntiplatMeds[i].med_name,
-                  med_dosage: this.state.activeAntiplatMeds[i].med_dosage,
-                  med_dosage_time: value[i].value,
-               });
-            } else {
-               activeMed.push({
-                  med_name: "",
-                  med_dosage: "",
-                  med_dosage_time: value[i].value,
+                  med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
                });
             }
          }
@@ -878,6 +902,9 @@ class Page1 extends React.Component {
                                  this.state.indicationAnticogVal.map((item, index) => {
                                     return ([
                                        <>
+                                          <option key={index} value={item.indication}>
+                                             {item.indication}
+                                          </option>
                                           {
                                              item.indication === 'Venous Thromboembolism (VTE)' ? 
                                              <>
@@ -888,24 +915,75 @@ class Page1 extends React.Component {
                                                       <option style={{ position: "relative", top: "-26px", left: "-12px" }}>PE</option>
                                                    </optgroup> : ""
                                                 }
-                                                {/* {
-                                                   this.state.indicationSubValSecond ?
-                                                   <optgroup style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValTime: e.target.value })}>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
-                                                   </optgroup> : ""
-                                                } */}
                                              </> : ""
                                           }
-                                       </>,
-                                       <option key={index} value={item.indication}>
-                                          {item.indication}
-                                       </option>
+                                       </>
                                     ])
                                  })
                               }
                            </select>
+                           <EditIcon id="dte-display" onClick={this.handleIndicationSubValFlagEdit} className={`${classes['antiCog-DTE-Edit']}`} />
+                           <EditIcon id="pe-display" onClick={this.handleIndicationSubValSecondFlagEdit} className={`${classes['antiCog-PE-Edit']}`} />
+                           {
+                              this.state.indicationSubValFlagShown ? "" : this.state.indicationSubValFlag ? 
+                              <Modal
+                                 open={this.state.indicationSubValFlag}
+                                 onClose={this.handleIndicationSubValFlag}
+                                 aria-labelledby="modal-modal-title"
+                                 aria-describedby="modal-modal-description"
+                              >
+                              <Box sx={{
+                                 position: 'absolute',
+                                 top: '50%',
+                                 left: '50%',
+                                 transform: 'translate(-50%, -50%)',
+                                 width: 400,
+                                 bgcolor: 'background.paper',
+                                 border: '2px solid #000',
+                                 boxShadow: 24,
+                                 p: 4,
+                              }}>
+                                 <Typography id="modal-modal-title" variant="h6" component="h2">
+                                 If So, how long ago
+                                 </Typography>
+                                 <select style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValTime: e.target.value })}>
+                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
+                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
+                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
+                                 </select>
+                              </Box>
+                              </Modal> : ""
+                           }
+                           {
+                              this.state.indicationSubValSecondFlagShown ? "" : this.state.indicationSubValSecondFlag ? 
+                              <Modal
+                                 open={this.state.indicationSubValSecondFlag}
+                                 onClose={this.handleIndicationSubValSecondFlag}
+                                 aria-labelledby="modal-modal-title"
+                                 aria-describedby="modal-modal-description"
+                              >
+                              <Box sx={{
+                                 position: 'absolute',
+                                 top: '50%',
+                                 left: '50%',
+                                 transform: 'translate(-50%, -50%)',
+                                 width: 400,
+                                 bgcolor: 'background.paper',
+                                 border: '2px solid #000',
+                                 boxShadow: 24,
+                                 p: 4,
+                              }}>
+                                 <Typography id="modal-modal-title" variant="h6" component="h2">
+                                 If So, how long ago
+                                 </Typography>
+                                 <select style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValSecondTime: e.target.value })}>
+                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
+                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
+                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
+                                 </select>
+                              </Box>
+                              </Modal> : ""
+                           }
                            {this.validator.message(
                               'anticoagulation',
                               this.state.indication_for_anticoagulation,
@@ -940,6 +1018,7 @@ class Page1 extends React.Component {
                      <div className="col-12">
                         <div className="form-group">
                            <h4>Anticoagulation Information </h4>
+                           <span style={{ color: "white", float: "right", fontSize: "14px" }}>(press Ctrl for multiple)</span>
                            <div
                               style={{
                                  backgroundColor: '#8ebce0',
@@ -987,25 +1066,28 @@ class Page1 extends React.Component {
                               <div className="row" style={{ width: "100%" }}>
                                  <div className="col s3">
                                     <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_med_dropdown_value(e, e.target.selectedOptions)}>
-                                       <option value={this.state.anticogMedDropDownValChanged}>{this.state.anticogMedDropDownValChanged}</option> 
                                        {
-                                          this.state.anticogMedsDropdown.map((meds, index) => {
-                                             return meds.med_name !== this.state.anticogMedDropDownValChanged ? <option key={index} value={meds.med_name}>{meds.med_name}</option> : ""
+                                          this.state.anticogMedsDropdown[0].med_name.map((meds, index) => {
+                                             return <option key={index} value={meds}>{meds}</option>
                                           }) 
                                        }
                                     </select>
                                  </div>
                                  <div className="col s3">
                                     <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e, e.target.selectedOptions)}>
-                                       <option value={this.state.anticogDosageDropDownValChanged}>{this.state.anticogDosageDropDownValChanged}</option>
                                        {
-                                          this.state.anticogMedsDropdown.map((meds, mindex) => {
-                                             return meds.med_name === this.state.anticogMedDropDownValChanged ?
-                                                this.state.anticogMedsDropdown[mindex].dosage.map((dosage, index) => {
-                                                   return dosage !== this.state.anticogDosageDropDownValChanged ? <option key={index} value={dosage}>{dosage}</option> : ""
-                                                })
-                                             : ""
-                                          })
+                                          this.state.anticogMedsDropdown[0].dosage.map((meds, index) => {
+                                             return <option key={index} value={meds}>{meds}</option>
+                                          }) 
+                                       }
+                                    </select>
+                                 </div>
+                                 <div className="col s3">
+                                    <select className="form-control" onChange={(e) => this.handle_anticog_dosage_time_dropdown_value(e.target.value)}>
+                                       {
+                                          this.state.anticogMedsDropdown[0].dosage_time.map((meds, index) => {
+                                             return <option key={index} value={meds}>{meds}</option>
+                                          }) 
                                        }
                                     </select>
                                  </div>
@@ -1019,6 +1101,7 @@ class Page1 extends React.Component {
                      <div className="col-12">
                         <div className="form-group">
                            <h4>Antiplatelet Information </h4>
+                           <span style={{ color: "white", float: "right", fontSize: "14px" }}>(press Ctrl for multiple)</span>
                            <div
                               style={{
                                  backgroundColor: '#8ebce0',
@@ -1051,39 +1134,28 @@ class Page1 extends React.Component {
                               <div className="row" style={{ width: "100%" }}>
                                  <div className="col s3">
                                     <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_med_dropdown_value(e, e.target.selectedOptions)}>
-                                       <option value={this.state.antiplatMedDropDownValChanged}>{this.state.antiplatMedDropDownValChanged}</option> 
                                        {
-                                          this.state.antiplatMedsDropdown.map((meds, index) => {
-                                             return meds.med_name !== this.state.antiplatMedDropDownValChanged ? <option key={index} value={meds.med_name}>{meds.med_name}</option> : ""
+                                          this.state.antiplatMedsDropdown[0].med_name.map((meds, index) => {
+                                             return <option key={index} value={meds}>{meds}</option>
                                           }) 
                                        }
                                     </select>
                                  </div>
                                  <div className="col s3">
                                     <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e, e.target.selectedOptions)}>
-                                       <option value={this.state.antiplatDosageDropDownValChanged}>{this.state.antiplatDosageDropDownValChanged}</option>
                                        {
-                                          this.state.antiplatMedsDropdown.map((meds, mindex) => {
-                                             return meds.med_name === this.state.antiplatMedDropDownValChanged ?
-                                                this.state.antiplatMedsDropdown[mindex].dosage.map((dosage, index) => {
-                                                   return dosage !== this.state.antiplatDosageDropDownValChanged ? <option key={index} value={dosage}>{dosage}</option> : ""
-                                                })
-                                             : ""
-                                          })
+                                          this.state.antiplatMedsDropdown[0].dosage.map((meds, index) => {
+                                             return <option key={index} value={meds}>{meds}</option>
+                                          }) 
                                        }
                                     </select>
                                  </div>
                                  <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e, e.target.selectedOptions)}>
-                                       <option value={this.state.antiplatDosageTimeDropDownValChanged}>{this.state.antiplatDosageTimeDropDownValChanged}</option>
+                                    <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e.target.value)}>
                                        {
-                                          this.state.antiplatMedsDropdown.map((meds, mindex) => {
-                                             return meds.med_name === this.state.antiplatMedDropDownValChanged ?
-                                                this.state.antiplatMedsDropdown[mindex].dosage_time.map((dosageTime, index) => {
-                                                   return dosageTime !== this.state.antiplatDosageTimeDropDownValChanged ? <option key={index} value={dosageTime}>{dosageTime}</option> : ""
-                                                })
-                                             : ""
-                                          })
+                                          this.state.antiplatMedsDropdown[0].dosage_time.map((meds, index) => {
+                                             return <option key={index} value={meds}>{meds}</option>
+                                          }) 
                                        }
                                     </select>
                                  </div>
