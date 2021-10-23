@@ -1,0 +1,18 @@
+
+.antiCog-DTE-Edit {
+    position: relative !important;
+    top: -166px !important;
+    right: 30px !important;
+    float: right !important;
+    color: black;
+    display: none !important;
+}
+
+.antiCog-PE-Edit {
+    position: relative !important;
+    top: -140px !important;
+    right: 6px !important;
+    float: right !important;
+    color: black;
+    display: none !important;
+}
