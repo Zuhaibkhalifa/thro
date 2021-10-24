@@ -384,29 +384,29 @@ class Page1 extends React.Component {
          });
       } 
       if(this.state.xarelto) {
-         let idx = this.state.xarelto_dosage_time.indexOf(' ', this.state.xarelto_dosage_time.indexOf(' ')+1);
+         let idx = this.state.xarelto_dosage.indexOf(' ', this.state.xarelto_dosage.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.xarelto,
             med_dosage: this.state.xarelto_dosage,
-            med_dosage_time: this.state.xarelto_dosage_time.substr(idx+1),
+            med_dosage_time: this.state.xarelto_dosage.substr(idx+1),
             med_dosage_freequency: this.state.xarelto_dosage_time
          });
       } 
       if(this.state.eliquis) {
-         let idx = this.state.eliquis_dosage_time.indexOf(' ', this.state.eliquis_dosage_time.indexOf(' ')+1);
+         let idx = this.state.eliquis_dosage.indexOf(' ', this.state.eliquis_dosage.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.eliquis,
             med_dosage: this.state.eliquis_dosage,
-            med_dosage_time: this.state.eliquis_dosage_time.substr(idx+1),
+            med_dosage_time: this.state.eliquis_dosage.substr(idx+1),
             med_dosage_freequency: this.state.eliquis_dosage_time
          });
       }
       if(this.state.edoxabon) {
-         let idx= this.state.edoxabon_dosage_time.indexOf(' ', this.state.edoxabon_dosage_time.indexOf(' ')+1);
+         let idx= this.state.edoxabon_dosage.indexOf(' ', this.state.edoxabon_dosage.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.edoxabon,
             med_dosage: this.state.edoxabon_dosage,
-            med_dosage_time: this.state.edoxabon_dosage_time.substr(idx+1),
+            med_dosage_time: this.state.edoxabon_dosage.substr(idx+1),
             med_dosage_freequency: this.state.edoxabon_dosage_time
          });
       }
