@@ -54,7 +54,7 @@ class Page1 extends React.Component {
             {
                "med_name": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)"],
                "dosage": ["2.5 mg", "5 mg", "10 mg", "15 mg", "20 mg", "30 mg", "60 mg", "75 mg", "110 mg", "150 mg"],
-               "dosage_time": ["am", "pm"]
+               "dosage_time": ["Once daily", "Twice daily"]
             }
          ],
          indicationAnticogVal: [
@@ -275,7 +275,7 @@ class Page1 extends React.Component {
                         plavix_dosage_time: data.plavix_dosage_time,
                         brillinta: data.brillinta,
                         brillinta_dosage: data.brillinta_dosage,
-                        brillinta_dosage_time: data.brillinta_dosage_time,
+                        brillinta_dosage_time: data.brillinta_dosage_timie,
                         effient: data.effient,
                         effient_dosage: data.effient_dosage,
                         effient_dosage_time: data.effient_dosage_time,
@@ -561,12 +561,22 @@ class Page1 extends React.Component {
       this.setState({ anticogDosageDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
    }
 
-   handle_anticog_dosage_time_dropdown_value(value) {
-      this.setState({ anticog_dosage_time_dropdown_value: value });
+   handle_anticog_dosage_time_dropdown_value(value, med_name) {
+      let elemIndex = this.state.activeAnticogMeds.findIndex(x=> x.med_name === med_name);
+      let tempState = [...this.state.activeAnticogMeds];
+      let tempElem = {...tempState[elemIndex]};
+      tempElem.med_dosage_time = value;
+      tempState[elemIndex] = tempElem;
+      this.setState({ activeAnticogMeds:tempState });
    }
 
-   handle_antiplat_dosage_time_dropdown_value(value) {
-      this.setState({ antiplat_dosage_time_dropdown_value: value });
+   handle_antiplat_dosage_time_dropdown_value(value, med_name) {
+      let elemIndex = this.state.activeAntiplatMeds.findIndex(x=> x.med_name === med_name);
+      let tempState = [...this.state.activeAntiplatMeds];
+      let tempElem = {...tempState[elemIndex]};
+      tempElem.med_dosage_time = value;
+      tempState[elemIndex] = tempElem;
+      this.setState({ activeAntiplatMeds:tempState });
    }
    
    handle_antiplat_med_dropdown_value(e, value) {
@@ -1056,7 +1066,13 @@ class Page1 extends React.Component {
                                        return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
                                           <td>{meds.med_name}</td>
                                           <td>{meds.med_dosage}</td>
-                                          <td>{meds.med_dosage_time}</td>
+                                          <td>
+                                             <select className="form-control" onChange={(e) => this.handle_anticog_dosage_time_dropdown_value(e.target.value, meds.med_name)}>
+                                                <option value={meds.med_dosage_time}>{meds.med_dosage_time}</option>
+                                                <option value="Once daily">Once daily</option>
+                                                <option value="Twice daily">Twice daily</option>
+                                             </select>
+                                          </td>
                                        </tr>
                                     })
                                  : ""
@@ -1077,15 +1093,6 @@ class Page1 extends React.Component {
                                     <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e, e.target.selectedOptions)}>
                                        {
                                           this.state.anticogMedsDropdown[0].dosage.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                                 <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_anticog_dosage_time_dropdown_value(e.target.value)}>
-                                       {
-                                          this.state.anticogMedsDropdown[0].dosage_time.map((meds, index) => {
                                              return <option key={index} value={meds}>{meds}</option>
                                           }) 
                                        }
@@ -1124,7 +1131,13 @@ class Page1 extends React.Component {
                                        return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
                                           <td>{meds.med_name}</td>
                                           <td>{meds.med_dosage}</td>
-                                          <td>{meds.med_dosage_time}</td>
+                                          <td>
+                                             <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e.target.value, meds.med_name)}>
+                                                <option value={meds.med_dosage_time}>{meds.med_dosage_time}</option>
+                                                <option value="Once daily">Once daily</option>
+                                                <option value="Twice daily">Twice daily</option>
+                                             </select>
+                                          </td>
                                        </tr>
                                     })
                                  : ""
@@ -1145,15 +1158,6 @@ class Page1 extends React.Component {
                                     <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e, e.target.selectedOptions)}>
                                        {
                                           this.state.antiplatMedsDropdown[0].dosage.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                                 <div className="col s3">
-                                    <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e.target.value)}>
-                                       {
-                                          this.state.antiplatMedsDropdown[0].dosage_time.map((meds, index) => {
                                              return <option key={index} value={meds}>{meds}</option>
                                           }) 
                                        }
