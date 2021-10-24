@@ -191,6 +191,7 @@ class Page1 extends React.Component {
       this.handleIndicationSubValSecondFlagEdit = this.handleIndicationSubValSecondFlagEdit.bind(this);
       this.handle_anticog_dosage_time_dropdown_value = this.handle_anticog_dosage_time_dropdown_value.bind(this);
       this.handle_antiplat_dosage_time_dropdown_value = this.handle_antiplat_dosage_time_dropdown_value.bind(this);
+      this.handle_anticog_dosage_time_am_or_pm_dropdown_value = this.handle_anticog_dosage_time_am_or_pm_dropdown_value.bind(this);
    }
 
    componentDidMount() {
@@ -374,31 +375,39 @@ class Page1 extends React.Component {
    fillactiveanticogmeds() {
       let activeMeds = [];
       if(this.state.pradaxa) {
+         let idx = this.state.pradaxa_dosage.indexOf(' ', this.state.pradaxa_dosage.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.pradaxa,
             med_dosage: this.state.pradaxa_dosage,
-            med_dosage_time: ""
+            med_dosage_time: this.state.pradaxa_dosage.substr(idx+1),
+            med_dosage_freequency: "",
          });
       } 
       if(this.state.xarelto) {
+         let idx = this.state.xarelto_dosage_time.indexOf(' ', this.state.xarelto_dosage_time.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.xarelto,
             med_dosage: this.state.xarelto_dosage,
-            med_dosage_time: this.state.xarelto_dosage_time
+            med_dosage_time: this.state.xarelto_dosage_time.substr(idx+1),
+            med_dosage_freequency: this.state.xarelto_dosage_time
          });
       } 
       if(this.state.eliquis) {
+         let idx = this.state.eliquis_dosage_time.indexOf(' ', this.state.eliquis_dosage_time.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.eliquis,
             med_dosage: this.state.eliquis_dosage,
-            med_dosage_time: this.state.eliquis_dosage_time
+            med_dosage_time: this.state.eliquis_dosage_time.substr(idx+1),
+            med_dosage_freequency: this.state.eliquis_dosage_time
          });
       }
       if(this.state.edoxabon) {
+         let idx= this.state.edoxabon_dosage_time.indexOf(' ', this.state.edoxabon_dosage_time.indexOf(' ')+1);
          activeMeds.push({
             med_name: this.state.edoxabon,
             med_dosage: this.state.edoxabon_dosage,
-            med_dosage_time: this.state.edoxabon_dosage_time
+            med_dosage_time: this.state.edoxabon_dosage_time.substr(idx+1),
+            med_dosage_freequency: this.state.edoxabon_dosage_time
          });
       }
       
@@ -411,7 +420,7 @@ class Page1 extends React.Component {
          activeMeds.push({
             med_name: this.state.effient,
             med_dosage: this.state.effient_dosage,
-            med_dosage_time: this.state.effient_dosage_time
+            med_dosage_time: this.state.effient_dosage_time,
          });
       } 
       if(this.state.aspirin) {
@@ -577,6 +586,15 @@ class Page1 extends React.Component {
       tempElem.med_dosage_time = value;
       tempState[elemIndex] = tempElem;
       this.setState({ activeAntiplatMeds:tempState });
+   }
+
+   handle_anticog_dosage_time_am_or_pm_dropdown_value(value, med_name) {
+      let elemIndex = this.state.activeAnticogMeds.findIndex(x=> x.med_name === med_name);
+      let tempState = [...this.state.activeAnticogMeds];
+      let tempElem = {...tempState[elemIndex]};
+      tempElem.med_dosage_freequency = value;
+      tempState[elemIndex] = tempElem;
+      this.setState({ activeAnticogMeds:tempState });
    }
    
    handle_antiplat_med_dropdown_value(e, value) {
@@ -1059,6 +1077,7 @@ class Page1 extends React.Component {
                                  <th>Medicine name</th>
                                  <th>Dosage</th>
                                  <th>Frequency</th>
+                                 <th>Time</th>
                               </tr>
                               {
                                  this.state.activeAnticogMeds.length > 0 ?
@@ -1071,6 +1090,13 @@ class Page1 extends React.Component {
                                                 <option value={meds.med_dosage_time}>{meds.med_dosage_time}</option>
                                                 <option value="Once daily">Once daily</option>
                                                 <option value="Twice daily">Twice daily</option>
+                                             </select>
+                                          </td>
+                                          <td>
+                                             <select className="form-control" onChange={(e) => this.handle_anticog_dosage_time_am_or_pm_dropdown_value(e.target.value, meds.med_name)}>
+                                                <option value={meds.med_dosage_freequency}>{meds.med_dosage_freequency}</option>
+                                                <option value="am">am</option>
+                                                <option value="pm">pm</option>
                                              </select>
                                           </td>
                                        </tr>
@@ -1133,7 +1159,7 @@ class Page1 extends React.Component {
                                           <td>{meds.med_dosage}</td>
                                           <td>
                                              <select className="form-control" onChange={(e) => this.handle_antiplat_dosage_time_dropdown_value(e.target.value, meds.med_name)}>
-                                                <option value={meds.med_dosage_time}>{meds.med_dosage_time}</option>
+                                                <option value="--- Select ---">--- Select ---</option>
                                                 <option value="Once daily">Once daily</option>
                                                 <option value="Twice daily">Twice daily</option>
                                              </select>
