@@ -1,18 +1,16 @@
 
-.antiCog-DTE-Edit {
+.indication_anticpg_edit {
     position: relative !important;
-    top: -166px !important;
+    top: -34px !important;
     right: 30px !important;
     float: right !important;
     color: black;
-    display: none !important;
 }
 
-.antiCog-PE-Edit {
+.anticpg_edit {
     position: relative !important;
-    top: -140px !important;
-    right: 6px !important;
+    top: 0px !important;
+    right: 88px !important;
     float: right !important;
     color: black;
-    display: none !important;
 }
