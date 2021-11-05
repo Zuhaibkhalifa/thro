@@ -37,10 +37,14 @@ class Page13 extends React.Component {
             q7_ans_option: '',
             loader: '',
             transfusionDate: { minDate: '', maxDate: '' },
+            patient_id: '',
+            redirectButton: false,
+            nurse_add: false
         };
 
         // Bind " this " re of class to Methods
         this.submitForm = this.submitForm.bind(this);
+        this.redirectBackNurse = this.redirectBackNurse.bind(this);
 
         //
         var element = document.getElementById('body');
@@ -118,6 +122,15 @@ class Page13 extends React.Component {
             document.getElementById('threethree_freq2').disabled = false;
             document.getElementById('threethree_freq3').disabled = false;
         }
+    }
+
+    redirectBackNurse() {
+       this.submitForm();
+       if(this.state.nurse_add) {
+           this.props.history.push('/Nurse/add_patient')
+       } else {
+          this.props.history.push('/Nurse/Nurse1')
+       }
     }
 
     submitForm() {
@@ -211,6 +224,7 @@ class Page13 extends React.Component {
             not_sure: this.state.q6_ans,
             had_transfusion_in_last_three_months: this.state.q7_ans,
             had_transfusion_in_last_three_months_when: this.state.q7_ans_option,
+            patient_id: this.state.patient_id
         };
 
         console.log('Page 13 - page13 func - param: ', param);
@@ -517,18 +531,27 @@ class Page13 extends React.Component {
                         </form>
                         {/* Default form login */}
                         <nav aria-label="Page navigation example">
-                            <ul className="pagination justify-content-center">
-                                <li className="page-item">
-                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
-                                        <i className="fa fa-angle-double-left"></i> Previous
-                                    </button>
-                                </li>
-                                <li className="page-item">
-                                    <button className="page-link" onClick={this.submitForm}>
-                                        Next <i className="fa fa-angle-double-right"></i>
-                                    </button>
-                                </li>
-                            </ul>
+                            {!this.state.redirectButton ?
+                                <ul className="pagination justify-content-center">
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                            <i className="fa fa-angle-double-left"></i> Previous
+                                        </button>
+                                    </li>
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.submitForm}>
+                                            Next <i className="fa fa-angle-double-right"></i>
+                                        </button>
+                                    </li>
+                                </ul> : 
+                                <ul className="pagination justify-content-center">
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                            <i className="fa fa-angle-double-left"></i> Go Back
+                                        </button>
+                                    </li>
+                                </ul>
+                            }
                         </nav>
                         <br />
                     </div>
@@ -538,6 +561,13 @@ class Page13 extends React.Component {
     }
 
     componentDidMount() {
+        if(this.props.location.state !== undefined) {
+            this.setState({ 
+                patient_id: this.props.location.state.patient_id, 
+                redirectButton: true,
+                nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        }
         $(document).ready(function () {
             $('#oneone').hide();
             $('#twotwo').hide();

@@ -140,7 +140,7 @@ class Page3 extends React.Component {
                      weight: data.weight,
                      understanding: data.understanding,
                      completed_by: data.who_is_completing_this_form,
-                     reviewed_by: data.reviewed_by,
+                     reviewed_by: data.physicianName,
                      genderSelected: data.gender,
                      indication_for_anticoagulation: data.indication_for_anticoagulation,
                      chads_score_and_distribution: data.chads_score_and_distribution,
@@ -154,7 +154,7 @@ class Page3 extends React.Component {
                      poc_inr_text: data.poc_inr_text,
                      poc_inr_date: data.poc_inr_date,
 
-                     details_on_recomemendation: data.details_on_recomemendation,
+                     details_on_recomemendation: data.dictation,
                      weightSelected: data.weight_unit,
                      aspirin: data.aspirin,
                      aspirin_dosage: data.aspirin_dosage,

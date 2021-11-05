@@ -19,7 +19,7 @@ import procedures from './../../helper/procedures';
 //
 
 let data;
-class Page1 extends React.Component {
+class AddPatient extends React.Component {
    constructor(props) {
       super(props);
 
@@ -116,6 +116,9 @@ class Page1 extends React.Component {
          indication_for_anticoagulation: '',
          chads_score_and_distribution: '',
          dictation: "",
+         patient_user_name: '',
+         patient_user_email: '',
+         patient_user_password: '',
          
          activeAnticogMeds: [],
          activeAntiplatMeds: [],
@@ -194,26 +197,8 @@ class Page1 extends React.Component {
       this.handleAntiCogRedirection = this.handleAntiCogRedirection.bind(this);
       this.handleAntiPlatRedirection = this.handleAntiPlatRedirection.bind(this);
       this.handleFlagsRedirection = this.handleFlagsRedirection.bind(this);
-      // this.handle_anticog_med_dropdown_value = this.handle_anticog_med_dropdown_value.bind(this);
-      // this.handle_anticog_dosage_dropdown_value = this.handle_anticog_dosage_dropdown_value.bind(this);
-      // this.handle_antiplat_med_dropdown_value = this.handle_antiplat_med_dropdown_value.bind(this);
-      // this.handle_antiplat_dosage_dropdown_value = this.handle_antiplat_dosage_dropdown_value.bind(this);
-      // this.changeAnticogMedDropdownValue = this.changeAnticogMedDropdownValue.bind(this);
-      // this.changeAnticogDosageDropdownValue = this.changeAnticogDosageDropdownValue.bind(this);
-      // this.changeAntiplatMedDropdownValue = this.changeAntiplatMedDropdownValue.bind(this);
-      // this.changeAntiplatDosageDropdownValue = this.changeAntiplatDosageDropdownValue.bind(this);
-      // this.changeAntiplatDosageTimeDropdownValue = this.changeAntiplatDosageTimeDropdownValue.bind(this);
-      this.handle_flags_change_value = this.handle_flags_change_value.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
-      // this.handleIndicationAnticogVal = this.handleIndicationAnticogVal.bind(this);
-      // this.handleIndicationSubValFlag = this.handleIndicationSubValFlag.bind(this);
-      // this.handleIndicationSubValFlagEdit = this.handleIndicationSubValFlagEdit.bind(this);
-      // this.handleIndicationSubValSecondFlag = this.handleIndicationSubValSecondFlag.bind(this);
-      // this.handleIndicationSubValSecondFlagEdit = this.handleIndicationSubValSecondFlagEdit.bind(this);
-      // this.handle_anticog_dosage_time_dropdown_value = this.handle_anticog_dosage_time_dropdown_value.bind(this);
-      // this.handle_antiplat_dosage_time_dropdown_value = this.handle_antiplat_dosage_time_dropdown_value.bind(this);
-      // this.handle_anticog_dosage_time_am_or_pm_dropdown_value = this.handle_anticog_dosage_time_am_or_pm_dropdown_value.bind(this);
    }
 
    componentDidMount() {
@@ -547,209 +532,28 @@ class Page1 extends React.Component {
       this.setState({ dynamicFlags:flags });
    }
 
-   //
-
    handleChange_gender(value) {
       this.setState({ genderSelected: value });
+      this.submitForm();
    }
 
-   // handle_anticog_med_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          if(this.state.activeAnticogMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: this.state.activeAnticogMeds[i].med_dosage,
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: "",
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ anticogMedDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
-   // }
+//    handle_flags_change_value(value) {
+//       let activeFlag = [];
+//       for(let i=0; i<value.length; i++) {
+//          if(value[i].selected) {
+//             activeFlag.push(value[i].value);
+//          }
+//       }
 
-   // handle_anticog_dosage_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          console.log(value[i].value, this.state.activeAnticogMeds[i]);
-   //          if(this.state.activeAnticogMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: this.state.activeAnticogMeds[i].med_name,
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: "",
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ anticogDosageDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
-   // }
-
-   // handle_anticog_dosage_time_dropdown_value(value, med_name) {
-   //    let elemIndex = this.state.activeAnticogMeds.findIndex(x=> x.med_name === med_name);
-   //    let tempState = [...this.state.activeAnticogMeds];
-   //    let tempElem = {...tempState[elemIndex]};
-   //    tempElem.med_dosage_time = value;
-   //    tempState[elemIndex] = tempElem;
-   //    this.setState({ activeAnticogMeds:tempState });
-   // }
-
-   // handle_antiplat_dosage_time_dropdown_value(value, med_name) {
-   //    let elemIndex = this.state.activeAntiplatMeds.findIndex(x=> x.med_name === med_name);
-   //    let tempState = [...this.state.activeAntiplatMeds];
-   //    let tempElem = {...tempState[elemIndex]};
-   //    tempElem.med_dosage_time = value;
-   //    tempState[elemIndex] = tempElem;
-   //    this.setState({ activeAntiplatMeds:tempState });
-   // }
-
-   // handle_anticog_dosage_time_am_or_pm_dropdown_value(value, med_name) {
-   //    let elemIndex = this.state.activeAnticogMeds.findIndex(x=> x.med_name === med_name);
-   //    let tempState = [...this.state.activeAnticogMeds];
-   //    let tempElem = {...tempState[elemIndex]};
-   //    tempElem.med_dosage_freequency = value;
-   //    tempState[elemIndex] = tempElem;
-   //    this.setState({ activeAnticogMeds:tempState });
-   // }
-   
-   // handle_antiplat_med_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          if(this.state.activeAntiplatMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: this.state.activeAntiplatMeds[i].med_dosage,
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: "",
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ antiplatMedDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
-   // }
-
-   // handle_antiplat_dosage_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          if(this.state.activeAntiplatMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: this.state.activeAntiplatMeds[i].med_name,
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: "",
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ antiplatDosageDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
-   // }
-
-   // changeAnticogMedDropdownValue() {
-   //    if(this.state.pradaxa !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.pradaxa });
-   //    } else if(this.state.xarelto !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.xarelto });
-   //    } else if(this.state.eliquis !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.eliquis });
-   //    } else if(this.state.edoxabon !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.edoxabon });
-   //    }
-   // }
-
-   // changeAnticogDosageDropdownValue() {
-   //    if(this.state.pradaxa_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.pradaxa_dosage });
-   //    } else if(this.state.xarelto_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.xarelto_dosage });
-   //    } else if(this.state.eliquis_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.eliquis_dosage });
-   //    } else if(this.state.edoxabon_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.edoxabon_dosage });
-   //    }
-   // }
-
-   // changeAntiplatMedDropdownValue() {
-   //    if(this.state.aspirin !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.aspirin });
-   //    } else if(this.state.plavix !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.plavix });
-   //    } else if(this.state.brillinta !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.brillinta });
-   //    } else if(this.state.effient !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.effient });
-   //    }
-   //    console.log(this.state.antiplatMedDropDownValChanged);
-   // }
-
-   // changeAntiplatDosageDropdownValue() {
-   //    if(this.state.aspirin_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.aspirin_dosage });
-   //    } else if(this.state.plavix_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.plavix_dosage });
-   //    } else if(this.state.brillinta_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.brillinta_dosage });
-   //    } else if(this.state.effient_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.effient_dosage });
-   //    }
-   // }
-
-   // changeAntiplatDosageTimeDropdownValue() {
-   //    if(this.state.aspirin_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.aspirin_dosage_time });
-   //    } else if(this.state.plavix_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.plavix_dosage_time });
-   //    } else if(this.state.brillinta_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.brillinta_dosage_time });
-   //    } else if(this.state.effient_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.effient_dosage_time });
-   //    }
-   // }
-
-   handle_flags_change_value(value) {
-      let activeFlag = [];
-      for(let i=0; i<value.length; i++) {
-         if(value[i].selected) {
-            activeFlag.push(value[i].value);
-         }
-      }
-
-      this.setState({ dynamicFlags:activeFlag });
-   }
+//       this.setState({ dynamicFlags:activeFlag });
+//    }
 
    submitForm() {
       if (this.validator.allValid()) {
-         console.log('Nure page1 - submitForm - state: ', this.state);
+        localStorage.setItem('patient_id', this.state.patient_id); 
+        console.log('Nure page1 - submitForm - state: ', this.state);
          this.page5(this.state);
-         this.props.history.push('/Nurse/Nurse3');
+         if(!this.state.indication_for_anticoagulation) { this.props.history.push('/Nurse/Nurse3'); }
       } else {
          window.scroll({
             top: 500,
@@ -787,20 +591,27 @@ class Page1 extends React.Component {
          reviewed_by: this.state.reviewed_by,
          patient_id: localStorage.getItem('patient_id'),
          referred_by: this.state.referred_by,
-         dictation: this.state.dictation
+         dictation: this.state.dictation,
+         name: this.state.patient_user_name,
+         email: this.state.patient_user_email,
+         password: this.state.patient_user_password,
+         password_confirmation: this.state.patient_user_password,
+         user_role: "Patient"
       };
       let patient_id = localStorage.getItem('patient_id');
-      server(`nurse/page5/:${patient_id}`, param);
+      server(`nurse/add_patient/:${patient_id}`, param);
    }
 
    handleChange_weight(value) {
       this.setState({ weightSelected: value });
       // this.setState({ weight: value });
+      this.submitForm();
    }
 
    handle_procedure(value) {
       this.setState({ procedure: value });
       // this.setState({ weight: value });
+      this.submitForm();
    }
 
    handleIndicationRedirection(value) {
@@ -811,11 +622,11 @@ class Page1 extends React.Component {
       } else {
          redirectPage = '/User/Page4';
       }
-      this.props.history.push({ pathname: redirectPage, state:{ patient_id: this.state.patient_id } });
+      this.props.history.push({ pathname: redirectPage, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
    handleFlagsRedirection() {
-      this.props.history.push({ pathname: '/User/Page13', state:{ patient_id: this.state.patient_id } });
+      this.props.history.push({ pathname: '/User/Page13', state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
    
    handleAntiCogRedirection(value) {
@@ -831,7 +642,7 @@ class Page1 extends React.Component {
       } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
          redirect = this.state.redirectToMedPage[3].redirectPage
       }
-      this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
+      this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
    handleAntiPlatRedirection(value) {
@@ -847,7 +658,7 @@ class Page1 extends React.Component {
       } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
          redirect = this.state.redirectToMedPage[3].redirectPage
       }
-      this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
+      this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
    render() {
@@ -862,7 +673,7 @@ class Page1 extends React.Component {
                ''
             )}
             <div className="container">
-               <h4 className="text-center myHeading">Patient Summary</h4>
+               <h4 className="text-center myHeading">New Patient Details</h4>
                <h5 className="text-center myHeading">For Nurse's Use</h5>
                {/* container */}
                <div className="jumbotron">
@@ -878,7 +689,6 @@ class Page1 extends React.Component {
                      <div className="col-6 text-left">
                         <input
                            type="text"
-                           disabled
                            id="patient_id"
                            className="form-control"
                            defaultValue={this.state.patient_id}
@@ -889,11 +699,59 @@ class Page1 extends React.Component {
                   <br />
                   <div className="row">
                      <div className="col-6">
+                        <label htmlFor="usr">Pt User_Name </label>
+                     </div>
+
+                     <div className="col-6 text-left">
+                        <input
+                           type="text"
+                           id="patient_user_name"
+                           className="form-control"
+                           defaultValue={this.state.patient_user_name}
+                           onChange={(e) => this.setState({ patient_user_name: e.target.value })}
+                        />
+                     </div>
+                  </div>
+                  <br />
+                  <div className="row">
+                     <div className="col-6">
+                        <label htmlFor="usr">Pt User_Email </label>
+                     </div>
+
+                     <div className="col-6 text-left">
+                        <input
+                           type="email"
+                           id="patient_user_email"
+                           className="form-control"
+                           defaultValue={this.state.patient_user_email}
+                           onChange={(e) => this.setState({ patient_user_email: e.target.value })}
+                        />
+                     </div>
+                  </div>
+                  <br />
+                  <div className="row">
+                     <div className="col-6">
+                        <label htmlFor="usr">Pt User_Password </label>
+                     </div>
+
+                     <div className="col-6 text-left">
+                        <input
+                           type="password"
+                           id="patient_user_password"
+                           className="form-control"
+                           defaultValue={this.state.patient_user_password}
+                           onChange={(e) => this.setState({ patient_user_password: e.target.value })}
+                        />
+                     </div>
+                  </div>
+                  <br />
+                  <div className="row">
+                     <div className="col-6">
                         <label htmlFor="usr">Patients procedure summary</label>
                      </div>
 
                      <div className="col-6 text-left">
-                        <textarea type="text" disabled className="form-control" defaultValue={this.state.procedure} />
+                        <textarea type="text" disabled className="form-control" placeholder="for patient use only" defaultValue={this.state.procedure} />
                      </div>
                   </div>
                   <br />
@@ -1084,11 +942,6 @@ class Page1 extends React.Component {
                               </Box>
                               </Modal> : ""
                            } */}
-                           {this.validator.message(
-                              'anticoagulation',
-                              this.state.indication_for_anticoagulation,
-                              'required'
-                           )}
                         </div>
                      </div>
                   </div>
@@ -1107,7 +960,6 @@ class Page1 extends React.Component {
                               }
                               id="chads_score_and_distribution"
                            />
-                           {this.validator.message('chads_score', this.state.chads_score_and_distribution, 'required')}
                         </div>
                      </div>
                   </div>
@@ -1279,7 +1131,6 @@ class Page1 extends React.Component {
                                     defaultValue={this.state.poc_inr_date}
                                     onChange={(e) => this.setState({ poc_inr_date: e.target.value })}
                                  />
-                                 {this.validator.message('poc_inr_date', this.state.poc_inr_date, 'required')}
                               </div>
                               <div className="col-6">
                                  {' '}
@@ -1290,7 +1141,6 @@ class Page1 extends React.Component {
                                     value={this.state.poc_inr_text}
                                     onChange={(e) => this.setState({ poc_inr_text: e.target.value })}
                                  />
-                                 {this.validator.message('poc_inr_text', this.state.poc_inr_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1313,7 +1163,6 @@ class Page1 extends React.Component {
                                     }
                                     id="poc_creat"
                                  />
-                                 {this.validator.message('poc_creat_date', this.state.poc_creat_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -1327,7 +1176,6 @@ class Page1 extends React.Component {
                                     }
                                     id="poc_creat"
                                  />
-                                 {this.validator.message('poc_creat_text', this.state.poc_creat_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1348,7 +1196,6 @@ class Page1 extends React.Component {
                                     value={this.state.hb_date}
                                     onChange={(e) => this.setState({ hb_date: e.target.value })}
                                  />
-                                 {this.validator.message('hb_date', this.state.hb_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -1358,7 +1205,6 @@ class Page1 extends React.Component {
                                     defaultValue={this.state.hb_text}
                                     onChange={(e) => this.setState({ hb_text: e.target.value })}
                                  />
-                                 {this.validator.message('hb_text', this.state.hb_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1378,7 +1224,6 @@ class Page1 extends React.Component {
                                     onChange={(e) => this.setState({ plt_date: e.target.value })}
                                     id="plt"
                                  />
-                                 {this.validator.message('plt_date', this.state.plt_date, 'required')}
                               </div>
                               <div className="col-6">
                                  {' '}
@@ -1389,7 +1234,6 @@ class Page1 extends React.Component {
                                     onChange={(e) => this.setState({ plt_text: e.target.value })}
                                     id="plt"
                                  />
-                                 {this.validator.message('plt_text', this.state.plt_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1404,7 +1248,6 @@ class Page1 extends React.Component {
                               value={this.state.referred_by}
                               onChange={(e) => this.setState({ referred_by: e.target.value })}
                            />
-                           {this.validator.message('referred_by', this.state.referred_by, 'required')}
                         </div>
                      </div>
                   </div>
@@ -1484,4 +1327,4 @@ class Page1 extends React.Component {
       );
    }
 }
-export default Page1;
+export default AddPatient;

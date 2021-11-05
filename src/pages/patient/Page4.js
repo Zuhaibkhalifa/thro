@@ -41,9 +41,13 @@ class Page4 extends React.Component {
             error4: '',
             error5: '',
             loader: '',
+            patient_id: '',
+            redirectButton: false,
+            nurse_add: false
         };
 
         this.submitForm = this.submitForm.bind(this);
+        this.redirectBackNurse = this.redirectBackNurse.bind(this);
         this.mainOption = this.mainOption.bind(this);
         this.onRadioBtn1 = this.onRadioBtn1.bind(this);
         this.onRadioBtn2 = this.onRadioBtn2.bind(this);
@@ -77,6 +81,14 @@ class Page4 extends React.Component {
         }
     }
 
+    redirectBackNurse() {
+        this.submitForm();
+        if(this.state.nurse_add) {
+            this.props.history.push('/Nurse/add_patient')
+        } else {
+            this.props.history.push('/Nurse/Nurse1')
+        }
+    }
     //
     submitForm() {
         //var chk=this.renderElement();
@@ -148,6 +160,7 @@ class Page4 extends React.Component {
             other: this.state.q7_sub_ans,
 
             none: this.state.q8_ans,
+            patient_id: this.state.patient_id
         };
 
         console.log('Patient Page 4 - Page4 Func: ', param);
@@ -496,18 +509,27 @@ class Page4 extends React.Component {
                     </form>
                     {/* Default form login */}
                     <nav aria-label="Page navigation example">
-                        <ul className="pagination justify-content-center">
-                            <li className="page-item">
-                                <button className="page-link" onClick={goBack} tabIndex={-1}>
-                                    <i className="fa fa-angle-double-left"></i> Previous
-                                </button>
-                            </li>
-                            <li className="page-item">
-                                <button className="page-link" onClick={this.submitForm}>
-                                    Next <i className="fa fa-angle-double-right"></i>
-                                </button>
-                            </li>
-                        </ul>
+                        {!this.state.redirectButton ?
+                            <ul className="pagination justify-content-center">
+                                <li className="page-item">
+                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                        <i className="fa fa-angle-double-left"></i> Previous
+                                    </button>
+                                </li>
+                                <li className="page-item">
+                                    <button className="page-link" onClick={this.submitForm}>
+                                        Next <i className="fa fa-angle-double-right"></i>
+                                    </button>
+                                </li>
+                            </ul> : 
+                            <ul className="pagination justify-content-center">
+                                <li className="page-item">
+                                    <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                        <i className="fa fa-angle-double-left"></i> Go Back
+                                    </button>
+                                </li>
+                            </ul>
+                        }
                     </nav>
                     <br />
                 </div>
@@ -519,7 +541,13 @@ class Page4 extends React.Component {
         $('#toggle').hide();
         $('#toggle1').hide();
         $('#toggle2').hide();
-
+        if(this.props.location.state !== undefined) {
+            this.setState({ 
+                patient_id: this.props.location.state.patient_id, 
+                redirectButton: true,
+                nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        }
         $(document).ready(function () {});
     }
 }

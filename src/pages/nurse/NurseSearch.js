@@ -106,6 +106,12 @@ class NurseSearch extends React.Component {
          totalPatients: '',
          testData: demoData,
       };
+
+      this.handleAddPatient = this.handleAddPatient.bind(this);
+   }
+
+   handleAddPatient() {
+      this.props.history.push('/Nurse/add_patient');
    }
 
    componentDidMount() {
@@ -193,6 +199,15 @@ class NurseSearch extends React.Component {
 
                      <br />
                      <div className="row">
+                        <div className="col-sm-12">
+                           <button className="btn btn-primary" 
+                              style={{ float: 'right' }}
+                              onClick={this.handleAddPatient}
+                              >
+                                 <i className="fa fa-plus"></i>Add Patient
+                           </button>
+                        </div>
+                        <div className="row"></div>
                         <div className="col-sm-12">
                            <MUIDataTable
                               title={'Patient List'}
