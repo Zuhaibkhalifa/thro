@@ -526,20 +526,8 @@ class Page3 extends React.Component {
                                  paddingBottom: 10,
                               }}
                            >
-                              <h5 style={{ color: 'white' }}>
-                                 What Lab They Use
-                                 {this.state.lab_location_for_inr_test !== null ? (
-                                    <span className="text-right" style={{ color: 'green' }}>
-                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                       {this.state.lab_location_for_inr_test}
-                                    </span>
-                                 ) : (
-                                    ''
-                                 )}
-                                 <br />
-                              </h5>
                               <h5 style={{ color: 'white' }} className="text-center">
-                                 Current Dosing
+                                 Medical Dose / Frequency
                               </h5>
                            </div>
                            <div className="table-responsive">
@@ -792,7 +780,6 @@ class Page3 extends React.Component {
                         </div>
                      </div>
                   </div>
-
                   <h4>Flags</h4>
                   <div className="row">{this.set_DynamicFlags()}</div>
 
@@ -820,6 +807,27 @@ class Page3 extends React.Component {
                            )}
                         </div>
                      </div>
+                  </div>
+                  <div
+                     style={{
+                        backgroundColor: '#8ebce0',
+                        paddingLeft: 20,
+                        paddingTop: 5,
+                        paddingBottom: 10,
+                     }}
+                  >
+                     <h5 style={{ color: 'white' }}>
+                        What Lab They Use
+                        {this.state.lab_location_for_inr_test !== null ? (
+                           <span className="text-right" style={{ color: 'green' }}>
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              {this.state.lab_location_for_inr_test}
+                           </span>
+                        ) : (
+                           ''
+                        )}
+                        <br />
+                     </h5>
                   </div>
                   <div className="row">
                      <div className="col-12">

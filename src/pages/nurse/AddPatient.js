@@ -534,7 +534,7 @@ class AddPatient extends React.Component {
 
    handleChange_gender(value) {
       this.setState({ genderSelected: value });
-      this.submitForm();
+      this.page5(this.state);
    }
 
 //    handle_flags_change_value(value) {

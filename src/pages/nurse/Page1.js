@@ -1164,28 +1164,6 @@ class Page1 extends React.Component {
                               }
 
                            </table>
-                           {/* <div style={{ marginTop: "15px" }}>
-                              <div className="row" style={{ width: "100%" }}>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_med_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.anticogMedsDropdown[0].med_name.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.anticogMedsDropdown[0].dosage.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                              </div>
-                           </div> */}
                         </div>
                      </div>
                   </div>
@@ -1236,28 +1214,6 @@ class Page1 extends React.Component {
                                  </tr>
                               }
                            </table>
-                           {/* <div style={{ marginTop: "15px" }}>
-                              <div className="row" style={{ width: "100%" }}>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_med_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.antiplatMedsDropdown[0].med_name.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.antiplatMedsDropdown[0].dosage.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                              </div>
-                           </div> */}
                         </div>
                      </div>
                   </div>

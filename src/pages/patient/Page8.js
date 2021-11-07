@@ -209,18 +209,21 @@ class Page8 extends React.Component {
          param = {
             pradaxa: this.state.q1_ans,
             pradaxa_dosage: this.state.q1_ans_dosage,
+            patient_id: this.state.patient_id
          };
       } else if (document.getElementById('xarelto_rdo').checked === true) {
          param = {
             xarelto: this.state.q2_ans,
             xarelto_dosage: this.state.q2_ans_dosage,
             xarelto_dosage_time: this.state.q2_ans_dosage_timing,
+            patient_id: this.state.patient_id
             // xarelto_dosage_time: this.state.q2_ans_dosage_meal_taken,
          };
       } else if (document.getElementById('eliquis_rdo').checked === true) {
          param = {
             eliquis: this.state.q3_ans,
             eliquis_dosage: this.state.q3_ans_dosage,
+            patient_id: this.state.patient_id
          };
       } else if (document.getElementById('edxo_rdo').checked === true) {
          param = {
