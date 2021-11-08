@@ -199,6 +199,7 @@ class AddPatient extends React.Component {
       this.handleFlagsRedirection = this.handleFlagsRedirection.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
+      this.page5Post = this.page5Post.bind(this);
    }
 
    componentDidMount() {
@@ -534,19 +535,44 @@ class AddPatient extends React.Component {
 
    handleChange_gender(value) {
       this.setState({ genderSelected: value });
-      this.page5(this.state);
+      this.page5Post(this.state);
    }
 
-//    handle_flags_change_value(value) {
-//       let activeFlag = [];
-//       for(let i=0; i<value.length; i++) {
-//          if(value[i].selected) {
-//             activeFlag.push(value[i].value);
-//          }
-//       }
+   page5Post(params) {
+      let param = {
+         procedure: this.state.procedure,
+         date_of_procedure: this.state.date_of_procedure,
+         age: this.state.age,
+         gender: this.state.genderSelected,
+         weight: this.state.weight,
+         indication_for_anticoagulation: this.state.indication_for_anticoagulation,
+         chads_score_and_distribution: this.state.chads_score_and_distribution,
 
-//       this.setState({ dynamicFlags:activeFlag });
-//    }
+         poc_creat_text: this.state.poc_creat_text,
+         poc_creat_date: this.state.poc_creat_date,
+         hb_text: this.state.hb_text,
+         hb_date: this.state.hb_date,
+         plt_text: this.state.plt_text,
+         plt_date: this.state.plt_date,
+         poc_inr_text: this.state.poc_inr_text,
+         poc_inr_date: this.state.poc_inr_date,
+
+         details_on_recomemendation: this.state.details_on_recomemendation,
+         understanding: this.state.understanding,
+         who_is_completing_this_form: this.state.completed_by,
+         reviewed_by: this.state.reviewed_by,
+         patient_id: localStorage.getItem('patient_id'),
+         referred_by: this.state.referred_by,
+         dictation: this.state.dictation,
+         name: this.state.patient_user_name,
+         email: this.state.patient_user_email,
+         password: this.state.patient_user_password,
+         password_confirmation: this.state.patient_user_password,
+         user_role: "Patient"
+      };
+      let patient_id = localStorage.getItem('patient_id');
+      server(`nurse/add_patient/:${patient_id}`, param);
+   }
 
    submitForm() {
       if (this.validator.allValid()) {
