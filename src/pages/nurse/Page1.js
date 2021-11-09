@@ -357,7 +357,7 @@ class Page1 extends React.Component {
    fillactiveanticogmeds() {
       let activeMeds = [];
       if(this.state.dalteparin) {
-         let idx = this.state.dalteparin_freq.indexOf(' ', this.state.pradaxa_freq.indexOf(' ')+1);
+         let idx = this.state.dalteparin_freq.indexOf(' ');
          activeMeds.push({
             med_name: this.state.dalteparin,
             med_dosage: this.state.dalteparin_dosage,
@@ -366,7 +366,7 @@ class Page1 extends React.Component {
          });
       }
       if(this.state.enoxaparin) {
-         let idx = this.state.enoxaparin_freq.indexOf(' ', this.state.enoxaparin_freq.indexOf(' ')+1);
+         let idx = this.state.enoxaparin_freq.indexOf(' ');
          activeMeds.push({
             med_name: this.state.enoxaparin,
             med_dosage: this.state.enoxaparin_dosage,
@@ -376,7 +376,7 @@ class Page1 extends React.Component {
       }
       
       if(this.state.tinzaparin) {
-         let idx = this.state.tinzaparin_freq.indexOf(' ', this.state.tinzaparin_freq.indexOf(' ')+1);
+         let idx = this.state.tinzaparin_freq.indexOf(' ');
          activeMeds.push({
             med_name: this.state.tinzaparin,
             med_dosage: this.state.tinzaparin_dosage,
