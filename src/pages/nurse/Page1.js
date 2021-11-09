@@ -52,7 +52,7 @@ class Page1 extends React.Component {
       this.state = {
          anticogMedsDropdown: [
             {
-               "med_name": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)"],
+               "med_name": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)", "Dalteparin (Fragmin)", "Enoxaparin (Lovenox)", "Tinzaparin (Innohep)"],
                "dosage": ["2.5 mg", "5 mg", "10 mg", "15 mg", "20 mg", "30 mg", "60 mg", "75 mg", "110 mg", "150 mg"],
                "dosage_time": ["Once daily", "Twice daily"]
             }
@@ -147,6 +147,15 @@ class Page1 extends React.Component {
          genderSelected: '',
          weightSelected: '',
          patient_id: '',
+         dalteparin: '',
+         dalteparin_dosage: '',
+         dalteparin_freq: '',
+         enoxaparin: '',
+         enoxaparin_dosage: '',
+         enoxaparin_freq: '',
+         tinzaparin: '',
+         tinzaparin_dosage: '',
+         tinzaparin_freq: '',
          aspirin: '',
          aspirin_dosage: '',
          aspirin_dosage_time: '',
@@ -194,26 +203,9 @@ class Page1 extends React.Component {
       this.handleAntiCogRedirection = this.handleAntiCogRedirection.bind(this);
       this.handleAntiPlatRedirection = this.handleAntiPlatRedirection.bind(this);
       this.handleFlagsRedirection = this.handleFlagsRedirection.bind(this);
-      // this.handle_anticog_med_dropdown_value = this.handle_anticog_med_dropdown_value.bind(this);
-      // this.handle_anticog_dosage_dropdown_value = this.handle_anticog_dosage_dropdown_value.bind(this);
-      // this.handle_antiplat_med_dropdown_value = this.handle_antiplat_med_dropdown_value.bind(this);
-      // this.handle_antiplat_dosage_dropdown_value = this.handle_antiplat_dosage_dropdown_value.bind(this);
-      // this.changeAnticogMedDropdownValue = this.changeAnticogMedDropdownValue.bind(this);
-      // this.changeAnticogDosageDropdownValue = this.changeAnticogDosageDropdownValue.bind(this);
-      // this.changeAntiplatMedDropdownValue = this.changeAntiplatMedDropdownValue.bind(this);
-      // this.changeAntiplatDosageDropdownValue = this.changeAntiplatDosageDropdownValue.bind(this);
-      // this.changeAntiplatDosageTimeDropdownValue = this.changeAntiplatDosageTimeDropdownValue.bind(this);
       this.handle_flags_change_value = this.handle_flags_change_value.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
-      // this.handleIndicationAnticogVal = this.handleIndicationAnticogVal.bind(this);
-      // this.handleIndicationSubValFlag = this.handleIndicationSubValFlag.bind(this);
-      // this.handleIndicationSubValFlagEdit = this.handleIndicationSubValFlagEdit.bind(this);
-      // this.handleIndicationSubValSecondFlag = this.handleIndicationSubValSecondFlag.bind(this);
-      // this.handleIndicationSubValSecondFlagEdit = this.handleIndicationSubValSecondFlagEdit.bind(this);
-      // this.handle_anticog_dosage_time_dropdown_value = this.handle_anticog_dosage_time_dropdown_value.bind(this);
-      // this.handle_antiplat_dosage_time_dropdown_value = this.handle_antiplat_dosage_time_dropdown_value.bind(this);
-      // this.handle_anticog_dosage_time_am_or_pm_dropdown_value = this.handle_anticog_dosage_time_am_or_pm_dropdown_value.bind(this);
    }
 
    componentDidMount() {
@@ -290,6 +282,15 @@ class Page1 extends React.Component {
                         details_on_recomemendation: data.details_on_recomemendation,
 
                         weightSelected: data.weight_unit,
+                        dalteparin: data.dalteparin,
+                        dalteparin_dosage: data.dalteparin_dosage,
+                        dalteparin_freq: data.dalteparin_freq,
+                        enoxaparin: data.enoxaparin,
+                        enoxaparin_dosage: data.enoxaparin_dosage,
+                        enoxaparin_freq: data.enoxaparin_freq,
+                        tinzaparin: data.tinzaparin,
+                        tinzaparin_dosage: data.tinzaparin_dosage,
+                        tinzaparin_freq: data.tinzaparin_freq,
                         aspirin: data.aspirin,
                         aspirin_dosage: data.aspirin_dosage,
                         aspirin_dosage_time: data.aspirin_dosage_time,
@@ -353,49 +354,36 @@ class Page1 extends React.Component {
       }
    }
 
-   // handleIndicationSubValFlag() {
-   //    this.setState({ indicationSubValFlag:false });
-   // }
-
-   // handleIndicationSubValFlagEdit() {
-   //    this.setState({ indicationSubValFlagShown:false });
-   // }
-
-   // handleIndicationSubValSecondFlag() {
-   //    this.setState({ indicationSubValSecondFlag:false });
-   // }
-
-   // handleIndicationSubValSecondFlagEdit() {
-   //    this.setState({ indicationSubValSecondFlagShown:false });
-   // }
-
-   // handleIndicationAnticogVal(value) {
-   //    let anticoagulation = '';
-   //    if(this.state.indicationSubValTime) {
-   //       this.setState({ indicationSubValFlagShown:true });
-   //    }
-   //    if(this.state.indicationSubValSecondTime) {
-   //       this.setState({ indicationSubValSecondFlagShown:true });
-   //    }
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].value === ('DVT')) { this.setState({ indicationSubValFlag: true }); document.getElementById('dte-display').style.setProperty('display', 'block', 'important'); }
-   //       if(value[i].value === ('PE')) { this.setState({ indicationSubValSecondFlag: true }); document.getElementById('pe-display').style.setProperty('display', 'block', 'important'); }
-   //       if(value[i].selected && value[i].value === 'Venous Thromboembolism (VTE)') {
-   //          this.setState({ indicationSubValFirst: true });
-   //          anticoagulation += value[i].value +', ';
-   //       } else if(value[i].value === 'DVT') {
-   //          anticoagulation += value[i].value +', ';
-   //       } else if(value[i].value === 'PE') {
-   //          anticoagulation += value[i].value +', ';
-   //       } else if(value[i].selected) {
-   //          anticoagulation += value[i].value +', ';
-   //       }
-   //    }
-   //    this.setState({ indication_for_anticoagulation: anticoagulation });
-   // }
-
    fillactiveanticogmeds() {
       let activeMeds = [];
+      if(this.state.dalteparin) {
+         let idx = this.state.dalteparin_freq.indexOf(' ', this.state.pradaxa_freq.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.dalteparin,
+            med_dosage: this.state.dalteparin_dosage,
+            med_dosage_time: this.state.dalteparin_freq.substr(idx+1),
+            med_dosage_freequency: this.state.dalteparin_freq.substr(idx+1),
+         });
+      }
+      if(this.state.enoxaparin) {
+         let idx = this.state.enoxaparin_freq.indexOf(' ', this.state.enoxaparin_freq.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.enoxaparin,
+            med_dosage: this.state.enoxaparin_dosage,
+            med_dosage_time: this.state.enoxaparin_freq.substr(idx+1),
+            med_dosage_freequency: this.state.enoxaparin_freq.substr(idx+1),
+         });
+      }
+      
+      if(this.state.tinzaparin) {
+         let idx = this.state.tinzaparin_freq.indexOf(' ', this.state.tinzaparin_freq.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.tinzaparin,
+            med_dosage: this.state.tinzaparin_dosage,
+            med_dosage_time: this.state.tinzaparin_freq.substr(idx+1),
+            med_dosage_freequency: this.state.tinzaparin_freq.substr(idx+1),
+         });
+      }
       if(this.state.pradaxa) {
          let idx = this.state.pradaxa_dosage.indexOf(' ', this.state.pradaxa_dosage.indexOf(' ')+1);
          activeMeds.push({

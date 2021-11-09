@@ -59,7 +59,7 @@ class Page9 extends React.Component {
    }
 
    submitForm() {
-      console.log('Patient 9 - submit');
+      console.log('Patient 9 - submit', this.state);
       const emptyErrors = {
          error1: '',
          error2: '',
@@ -80,11 +80,11 @@ class Page9 extends React.Component {
          document.getElementById('q2').checked === false &&
          document.getElementById('q3').checked === false
       ) {
-         console.log('Patient 9 - submit - error1');
+         console.log('Patient 9 - submit - error1', errors);
          errors.error1 = 'Please select any one of the options';
          this.setState({ ...errors });
       } else if (document.getElementById('q1').checked === true) {
-         console.log('Patient 9 - submit - error2');
+         console.log('Patient 9 - submit - error2', errors);
          if (
             document.getElementById('opt_dalteparin_dosage_other').checked === false &&
             document.getElementById('dalteparin_dosage1').checked === false
@@ -102,7 +102,7 @@ class Page9 extends React.Component {
 
          this.setState({ ...errors });
       } else if (document.getElementById('q2').checked === true) {
-         console.log('Patient 9 - submit - error3');
+         console.log('Patient 9 - submit - error3', errors);
          if (
             document.getElementById('opt_enoxaparin_dosage_other').checked === false &&
             document.getElementById('enoxaparin_dosage1').checked === false
@@ -120,7 +120,7 @@ class Page9 extends React.Component {
 
          this.setState({ ...errors });
       } else if (document.getElementById('q3').checked === true) {
-         console.log('Patient 9 - submit - error4');
+         console.log('Patient 9 - submit - error4', errors);
          if (
             document.getElementById('opt_tinzaparin_dosage_other').checked === false &&
             document.getElementById('tinzaparin_dosage1').checked === false
@@ -192,11 +192,12 @@ class Page9 extends React.Component {
 
    handleClickMain(e) {
       const { id } = e.target;
+      console.log(e.target.value, id);
       $("input[id='q4']:checked").prop('checked', false);
 
       ['q1', 'q2', 'q3'].map((q) => {
          if (id === q) {
-            this.setState({ [q]: 'Yes' });
+            this.setState({ [q]: e.target.value });
             return $(`#${q}_content`).show(500);
          } else {
             this.setState({ [q]: '' });
