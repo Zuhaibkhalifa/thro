@@ -39,6 +39,7 @@ class Page10 extends React.Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
         this.toggle = this.toggle.bind(this);
@@ -72,6 +73,14 @@ class Page10 extends React.Component {
            this.props.history.push('/Nurse/Nurse1')
         }
     }
+
+    
+
+   redirectNextPage() {
+      if(this.props.location.state !== undefined) {
+         this.props.history.push({ pathname:'/User/Page11', state:{ patient_id: this.props.location.state.patient_id } });
+      }
+   }
 
     submitForm() {
         if (
@@ -624,6 +633,13 @@ class Page10 extends React.Component {
                                         <i className="fa fa-angle-double-left"></i> Go Back
                                     </button>
                                 </li>
+                                {this.state.q1_ans ? 
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                            Next Page <i className="fa fa-angle-double-right"></i>
+                                        </button>
+                                    </li> : ""
+                                }
                             </ul>
                         }
                     </nav>

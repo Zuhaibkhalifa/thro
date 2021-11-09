@@ -59,6 +59,7 @@ class Page8 extends React.Component {
       this.edxo_rdo = this.eliquis_rdo.bind(this);
       this.opt_none = this.other_rdo.bind(this);
       this.dynamicRouting = this.dynamicRouting.bind(this);
+      this.redirectNextPage = this.redirectNextPage.bind(this);
 
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
@@ -309,6 +310,13 @@ class Page8 extends React.Component {
          q2_ans_dosage_meal_taken: '',
       });
    }
+
+   redirectNextPage() {
+      if(this.props.location.state !== undefined) {
+         this.props.history.push({ pathname:'/User/Page9', state:{ patient_id: this.props.location.state.patient_id } });
+      }
+   }
+
    opt_none() {
       this.setState({
          q1_ans: '',
@@ -698,6 +706,13 @@ class Page8 extends React.Component {
                                        <i className="fa fa-angle-double-left"></i> Go Back
                                  </button>
                               </li>
+                              { this.state.q5_ans === 'None Of The Above' ?
+                                 <li className="page-item">
+                                    <button className="page-link" onClick={this.redirectNextPage}>
+                                          Next Page <i className="fa fa-angle-double-right"></i>
+                                    </button>
+                                 </li> : ""
+                              }
                            </ul>
                         }
                   </nav>
