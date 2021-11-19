@@ -156,11 +156,13 @@ export default async function thromboAlgo() {
       const surgeryAlgo = () => {
          const proc = res.procedure;
 
-         if (proc.search('pacemaker') !== -1 || (proc.search('ICD') !== -1 && proc.search('placement') !== -1))
+         if(proc !== undefined) {
+            if (proc.search('pacemaker') !== -1 || (proc.search('ICD') !== -1 && proc.search('placement') !== -1))
             return 0;
-         if (proc.search('high') !== -1) return 1;
-         if (proc.search('mod') !== -1) return 2;
-         if (proc.search('low') !== -1) return 3;
+            if (proc.search('high') !== -1) return 1;
+            if (proc.search('mod') !== -1) return 2;
+            if (proc.search('low') !== -1) return 3;
+         }
 
          return -1;
       };
