@@ -3,12 +3,28 @@ import React from 'react';
 class Header extends React.Component {
     constructor(props) {
         super(props);
+        console.log(this.props);
         this.go_away = this.go_away.bind(this);
+        this.go_home = this.go_home.bind(this);
+        this.redirectBackNurse = this.redirectBackNurse.bind(this);
+    }
+
+    redirectBackNurse() {
+        if(this.props.nurse_add) {
+            this.props.history.push('/Nurse/add_patient')
+        } else {
+            this.props.history.push('/Nurse/Nurse1');
+        }
     }
 
     go_away() {
         localStorage.clear();
         window.location = '/signin';
+        //    this.props.history.push('/signin');
+    }
+
+    go_home() {
+        window.location = '/User/Section';
         //    this.props.history.push('/signin');
     }
 
@@ -26,23 +42,12 @@ class Header extends React.Component {
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false"
+                                    onClick={this.go_home}
                                 >
-                                    <span className="fa-stack fa-sm">
-                                        <i className="fa fa-circle fa-stack-2x" />
-                                        <i className="fa fa-bars fa-stack-1x fa-inverse" />
+                                    <span>
+                                        <i className="fa fa-home" />
                                     </span>
                                 </button>
-                                <div className="dropdown-menu" aria-labelledby="dropdown1">
-                                    <a className="dropdown-item" href="!#">
-                                        Action
-                                    </a>
-                                    <a className="dropdown-item" href="!#">
-                                        Another action
-                                    </a>
-                                    <a className="dropdown-item" href="!#">
-                                        Something else here
-                                    </a>
-                                </div>
                             </div>
                         </div>
                         <div className="col-6">
@@ -50,31 +55,34 @@ class Header extends React.Component {
                         </div>
                         <div className="col-3 text-right">
                             <div className="dropdown dropleft">
-                                <button
-                                    onClick={this.go_away}
+                                {!this.props.patient_id ?
+                                    <button
+                                        onClick={this.go_away}
+                                        className="btn custom-dropdown"
+                                        type="button"
+                                        id="dropdown2"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <span>
+                                            <i className="fa fa-sign-out" />
+                                        </span>
+                                    </button> :
+                                    <button
+                                    onClick={this.redirectBackNurse}
                                     className="btn custom-dropdown"
                                     type="button"
                                     id="dropdown2"
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false"
-                                >
-                                    <span className="fa-stack fa-sm">
-                                        <i className="fa fa-circle fa-stack-2x" />
-                                        <i className="fa fa-ellipsis-v fa-stack-1x fa-inverse" />
-                                    </span>
-                                </button>
-                                <div className="dropdown-menu" aria-labelledby="dropdown2">
-                                    <a className="dropdown-item" href="!#">
-                                        Action
-                                    </a>
-                                    <a className="dropdown-item" href="!#">
-                                        Another action
-                                    </a>
-                                    <a className="dropdown-item" href="!#">
-                                        Something else here
-                                    </a>
-                                </div>
+                                    >
+                                        <span>
+                                            <i className="fa fa-arrow-left" />
+                                        </span>
+                                    </button>
+                                }
                             </div>
                         </div>
                     </div>

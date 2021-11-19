@@ -7,6 +7,9 @@ import { server } from '../../utils/functions';
 import ReactSpinner from 'react-bootstrap-spinner';
 import _ from 'lodash';
 
+import { domain } from '../../App';
+import axios from 'axios';
+
 class Page9 extends React.Component {
    constructor(props) {
       super(props);
@@ -46,6 +49,43 @@ class Page9 extends React.Component {
 
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
+
+      const headers = {
+         'Content-Type': 'application/json',
+         Accept: 'application/json',
+         Authorization: 'Bearer ' + localStorage.getItem('token'),
+      };
+      try {
+         axios
+            .get(domain + '/api/patient/page9LoadData', {
+               headers: headers,
+            })
+            .then((response) => {
+               console.log(response);
+               let servrData = response.data.success[0];
+               if(servrData) {
+                  this.setState({
+                     loader: '',
+                     q1: servrData.dalteparin,
+                     q1_dosage: servrData.dalteparin_dosage,
+                     q1_freq: servrData.dalteparin_freq,
+                     q2: servrData.enoxaparin,
+                     q2_dosage: servrData.enoxaparin_dosage,
+                     q2_freq: servrData.enoxaparin_freq,
+                     q3: servrData.tinzaparin,
+                     q3_dosage: servrData.tinzaparin_dosage,
+                     q3_freq: servrData.tinzaparin_freq,
+                     q4: servrData.none,
+                  });
+               } else {
+                  this.setState({ loader: '' })
+              }
+            });
+      } catch (error) {
+         console.error(error);
+         this.setState({ loader: '' });
+         this.props.history.push('/');
+      }
 
    }
 
@@ -244,8 +284,9 @@ class Page9 extends React.Component {
 
 
    redirectNextPage() {
-      if(this.props.location.state !== undefined) {
-         this.props.history.push({ pathname:'/User/Page10', state:{ patient_id: this.props.location.state.patient_id } });
+      this.submitForm();
+      if(this.state.patient_id !== "") {
+         this.props.history.push({ pathname:'/User/Page10', state:{ patient_id: this.state.patient_id } });
       }
    }
    //
@@ -254,7 +295,7 @@ class Page9 extends React.Component {
    render() {
       return (
          <React.Fragment>
-            <Header />
+            <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
             {this.state.loader === 1 ? (
                <div className="centered">
                   <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -515,34 +556,34 @@ class Page9 extends React.Component {
                   </form>
                   {/* Default form login */}
                   <nav aria-label="Page navigation example">
-                     {!this.state.redirectButton ?
-                        <ul className="pagination justify-content-center">
-                           <li className="page-item">
-                              <button className="page-link" onClick={goBack} tabIndex={-1}>
-                                    <i className="fa fa-angle-double-left"></i> Previous
-                              </button>
-                           </li>
-                           <li className="page-item">
-                              <button className="page-link" onClick={this.submitForm}>
-                                    Next <i className="fa fa-angle-double-right"></i>
-                              </button>
-                           </li>
-                        </ul> : 
-                        <ul className="pagination justify-content-center">
-                           <li className="page-item">
-                              <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
-                                    <i className="fa fa-angle-double-left"></i> Go Back
-                              </button>
-                           </li>
-                           { this.state.q4 === 'Yes' ?
+                        {!this.state.redirectButton ?
+                           <ul className="pagination justify-content-center">
                               <li className="page-item">
-                                 <button className="page-link" onClick={this.redirectNextPage}>
-                                       Next Page <i className="fa fa-angle-double-right"></i>
-                                 </button>
-                              </li> : ""
-                           }
-                        </ul>
-                     }
+                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                       <i className="fa fa-angle-double-left"></i> Previous
+                                    </button>
+                              </li>
+                              <li className="page-item">
+                                    <button className="page-link" onClick={this.submitForm}>
+                                       Next <i className="fa fa-angle-double-right"></i>
+                                    </button>
+                              </li>
+                           </ul> : 
+                           <ul className="pagination justify-content-center">
+                              <li className="page-item">
+                                    <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                       <i className="fa fa-angle-double-left"></i> Go Back
+                                    </button>
+                              </li>
+                              { this.state.q4 === "Yes" ?
+                                 <li className="page-item">
+                                       <button className="page-link" onClick={this.redirectNextPage}>
+                                          Next Page <i className="fa fa-angle-double-right"></i>
+                                       </button>
+                                 </li> : ""
+                              }
+                           </ul>
+                        }
                   </nav>
                   <br />
                </div>
@@ -558,7 +599,13 @@ class Page9 extends React.Component {
              redirectButton: true,
              nurse_add: this.props.location.state.nurse_add ? true : false
          });
-      }
+      } else if(localStorage.getItem('patient_id') !== null) {
+         this.setState({ 
+             patient_id: localStorage.getItem('patient_id'),
+             redirectButton: true,
+             nurse_add: false 
+         });
+     }
       $('#q1_content').hide();
       $('#q2_content').hide();
       $('#q3_content').hide();

@@ -49,7 +49,11 @@ class Page16 extends React.Component {
                console.log(response);
 
                this.setState({ loader: '' });
-            });
+            }, (err) => {
+               this.setState({ loader: '' });
+               localStorage.clear();
+               this.props.history.push('/');
+           });
       } catch (error) {
          console.error(error);
          this.setState({ loader: '' });

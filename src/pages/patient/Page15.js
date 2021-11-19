@@ -30,9 +30,14 @@ class Page15 extends React.Component {
             error4: '',
             error5: '',
             loader: '',
+            patient_id: '',
+            redirectButton: false,
+            nurse_add: false
         };
 
         this.submitForm = this.submitForm.bind(this);
+        this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
@@ -48,11 +53,26 @@ class Page15 extends React.Component {
                 })
                 .then((response) => {
                     console.log(response);
-                    this.setState({ loader: '' });
+                    let servrData = response.data.success[0];
+                    if(servrData) {
+                        this.setState({ 
+                            loader: '',
+                            q1_ans: servrData.being_treated_cancer,
+                            cancer: servrData.cancer,
+                            radiation: servrData.radiation,
+                            radiation_ongoing: servrData.radiation_ongoing,
+                            chemotherapy: servrData.chemotherapy,
+                            chemotherapy_ongoing: servrData.chemotherapy_ongoing,
+                            chemotherapy_finished: servrData.chemotherapy_finished, 
+                        });
+                    } else {
+                        this.setState({ loader: '' })
+                    }
                 });
         } catch (error) {
             console.error(error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
         }
     }
 
@@ -91,8 +111,26 @@ class Page15 extends React.Component {
         } else {
             console.log('Submit form - state: ', this.state);
             this.page15(this.state);
-            this.props.history.push('/User/Page16');
+            if(!this.state.patient_id === "") {
+                this.props.history.push('/User/Page16');
+            }
         }
+    }
+
+    redirectBackNurse() {
+        this.submitForm();
+        if(this.state.nurse_add) {
+            this.props.history.push('/Nurse/add_patient')
+        } else {
+           this.props.history.push('/Nurse/Nurse1')
+        }
+    }
+     
+    redirectNextPage() {
+        this.submitForm();
+         if(this.state.patient_id !== "") {
+             this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
+         }
     }
 
     //
@@ -101,6 +139,7 @@ class Page15 extends React.Component {
         if (document.getElementById('no').checked === true) {
             param = {
                 being_treated_cancer: this.state.q1_ans,
+                patient_id: this.state.patient_id
             };
         } else {
             param = {
@@ -111,6 +150,7 @@ class Page15 extends React.Component {
                 chemotherapy: this.state.chemotherapy,
                 chemotherapy_ongoing: this.state.chemotherapy_ongoing,
                 chemotherapy_finished: this.state.chemotherapy_finished,
+                patient_id: this.state.patient_id
             };
         }
 
@@ -121,7 +161,7 @@ class Page15 extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -277,18 +317,32 @@ class Page15 extends React.Component {
                         </form>
                         {/* Default form login */}
                         <nav aria-label="Page navigation example">
+                            {!this.state.redirectButton ?
                             <ul className="pagination justify-content-center">
                                 <li className="page-item">
-                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                        <button className="page-link" onClick={goBack} tabIndex={-1}>
                                         <i className="fa fa-angle-double-left"></i> Previous
-                                    </button>
+                                        </button>
                                 </li>
                                 <li className="page-item">
-                                    <button className="page-link" onClick={this.submitForm}>
+                                        <button className="page-link" onClick={this.submitForm}>
                                         Next <i className="fa fa-angle-double-right"></i>
-                                    </button>
+                                        </button>
+                                </li>
+                            </ul> : 
+                            <ul className="pagination justify-content-center">
+                                <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                        <i className="fa fa-angle-double-left"></i> Go Back
+                                        </button>
+                                </li>
+                                <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                        Next Page <i className="fa fa-angle-double-right"></i>
+                                        </button>
                                 </li>
                             </ul>
+                            }
                         </nav>
                         <br />
                     </div>
@@ -299,6 +353,19 @@ class Page15 extends React.Component {
 
     //
     componentDidMount() {
+        if(this.props.location.state !== undefined) {
+            this.setState({ 
+                patient_id: this.props.location.state.patient_id, 
+                redirectButton: true,
+                nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        } else if(localStorage.getItem('patient_id') !== null) {
+            this.setState({ 
+                patient_id: localStorage.getItem('patient_id'),
+                redirectButton: true,
+                nurse_add: false 
+            });
+        }
         $(document).ready(function () {
             $('#show_data').hide();
             $('#chemo_opt').hide();

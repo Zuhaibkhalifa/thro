@@ -32,10 +32,15 @@ class Page6 extends React.Component {
             q4_sub_ans3: '',
             q4_sub_ans4: '',
             loader: '',
+            patient_id: '',
+            redirectButton: false,
+            nurse_add: false
         };
 
         this.submitForm = this.submitForm.bind(this);
         this.otherboxfunc = this.otherboxfunc.bind(this);
+        this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         this.no_error = this.no_error.bind(this);
 
         var element = document.getElementById('body');
@@ -55,11 +60,30 @@ class Page6 extends React.Component {
                 })
                 .then((response) => {
                     console.log('Patient page6 - get Data - Success response: ', response.success);
-                    this.setState({ loader: '' });
+                    let servrData = response.data.success[0];
+                    if(servrData) {
+                        this.setState({ 
+                            loader: '',
+                            q1_ans: servrData.mechanical_heart_valve,
+                            q2_ans: servrData.tissue_heart_valve,
+                            q3_ans: servrData.dont_know,
+                            q1_sub_ans1: servrData.mechanical_heart_valve_Is_the_valve_bileaflet,
+                            q1_sub_ans2: servrData.mechanical_heart_valve_Is_the_valve_ball_and_cage,
+                            q1_sub_ans3: servrData.mechanical_heart_valve_Is_the_valve_tilting_disc,
+                            q1_sub_ans4: servrData.mechanical_heart_valve_Is_the_valve_dont_know,
+                            q4_sub_ans1: servrData.location_aortic,
+                            q4_sub_ans2: servrData.location_mitral,
+                            q4_sub_ans3: servrData.location_other,
+                            q4_sub_ans4: servrData.location_dont_know 
+                        });
+                    } else {
+                        this.setState({ loader: '' })
+                    }
                 });
         } catch (error) {
             console.error('Patient page6 - get Data - Error response: ', error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
 
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -180,7 +204,9 @@ class Page6 extends React.Component {
             this.no_error();
             console.log('Patient page 6 - submit - state: ', this.state);
             this.page6(this.state);
-            this.props.history.push('/User/Page7');
+            if(!this.state.patient_id === "") {
+                this.props.history.push('/User/Page7');
+            }
         }
     }
 
@@ -192,6 +218,24 @@ class Page6 extends React.Component {
             error4: '',
             error5: '',
         });
+    }
+
+    
+
+    redirectBackNurse() {
+        this.submitForm();
+        if(this.state.nurse_add) {
+            this.props.history.push('/Nurse/add_patient')
+        } else {
+            this.props.history.push('/Nurse/Nurse1')
+        }
+    }
+
+    redirectNextPage() {
+        this.submitForm();
+        if(this.state.patient_id !== "") {
+           this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
+        }
     }
 
     //
@@ -208,6 +252,7 @@ class Page6 extends React.Component {
             location_mitral: this.state.q4_sub_ans2,
             location_other: this.state.q4_sub_ans3,
             location_dont_know: this.state.q4_sub_ans4,
+            patient_id: this.state.patient_id
         };
         console.log('Patient page6 - page6 func - param: ', param);
         server('patient/page6Post', param);
@@ -219,7 +264,7 @@ class Page6 extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -382,18 +427,32 @@ class Page6 extends React.Component {
                         </form>
                         {/* Default form login */}
                         <nav aria-label="Page navigation example">
-                            <ul className="pagination justify-content-center">
-                                <li className="page-item">
-                                    <button className="page-link" onClick={goBack}>
-                                        <i className="fa fa-angle-double-left"></i> Previous
-                                    </button>
-                                </li>
-                                <li className="page-item">
-                                    <button className="page-link" onClick={this.submitForm}>
-                                        Next <i className="fa fa-angle-double-right"></i>
-                                    </button>
-                                </li>
-                            </ul>
+                            {!this.state.redirectButton ?
+                                <ul className="pagination justify-content-center">
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                            <i className="fa fa-angle-double-left"></i> Previous
+                                        </button>
+                                    </li>
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.submitForm}>
+                                            Next <i className="fa fa-angle-double-right"></i>
+                                        </button>
+                                    </li>
+                                </ul> : 
+                                <ul className="pagination justify-content-center">
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                            <i className="fa fa-angle-double-left"></i> Go Back
+                                        </button>
+                                    </li>
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                            Next Page <i className="fa fa-angle-double-right"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            }
                         </nav>
                         <br />
                     </div>
@@ -402,6 +461,19 @@ class Page6 extends React.Component {
         );
     }
     componentDidMount() {
+        if(this.props.location.state !== undefined) {
+            this.setState({ 
+                patient_id: this.props.location.state.patient_id, 
+                redirectButton: true,
+                nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        } else if(localStorage.getItem('patient_id') !== null) {
+            this.setState({ 
+                patient_id: localStorage.getItem('patient_id'),
+                redirectButton: true,
+                nurse_add: false 
+            });
+        }
         $(document).ready(function () {
             $('#other_box').hide();
             $('#mechanical').hide(500);

@@ -169,6 +169,11 @@ class Page1 extends React.Component {
          effient_dosage: '',
          effient_dosage_time: '',
          not_using_drugs: '',
+         bleeding_requiring_treatment_last_three_months: '',
+         cognitive_heart_failure: '',
+         diabetes: '',
+         stroke_or_mini_stroke: '',
+         high_blood_pressure: '',
          ulcer_in_stomach_or_bowel_last_three_months: '',
          had_transfusion_in_last_three_months_when: '',
          had_transfusion_in_last_three_months: '',
@@ -327,12 +332,8 @@ class Page1 extends React.Component {
                         high_blood_pressure: data.high_blood_pressure,
                         diabetes: data.diabetes,
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
+                        bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months
                      });
-                     // this.changeAnticogMedDropdownValue();
-                     // this.changeAnticogDosageDropdownValue();
-                     // this.changeAntiplatMedDropdownValue();
-                     // this.changeAntiplatDosageDropdownValue();
-                     // this.changeAntiplatDosageTimeDropdownValue();
                      this.fillactiveanticogmeds();
                      this.fillactiveantiplatmeds();
                      this.set_DynamicFlags();
@@ -350,8 +351,9 @@ class Page1 extends React.Component {
             );
       } catch (error) {
          this.setState({ loader: '' });
-         this.setState({ loader: '' });
       }
+
+      this.forceUpdate();
    }
 
    fillactiveanticogmeds() {
@@ -422,6 +424,8 @@ class Page1 extends React.Component {
       }
       
       this.setState({ activeAnticogMeds: activeMeds });
+
+      this.forceUpdate();
    }
 
    fillactiveantiplatmeds() {
@@ -522,6 +526,11 @@ class Page1 extends React.Component {
    set_DynamicFlags() {
       const {
          liver_disease: liver,
+         bleeding_requiring_treatment_last_three_months: bleeding_requiring_treatment_in_last_three_months,
+         cognitive_heart_failure: cognitive_heart_fail,
+         diabetes: diabetic,
+         stroke_or_mini_stroke: stroke_mini_stroke,
+         high_blood_pressure: high_blood_pressures,
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
@@ -531,196 +540,18 @@ class Page1 extends React.Component {
       if (liver === 'Yes') flags.push('Liver Diseases');
       if (transfusion === 'Yes') flags.push(`Transfusion did on ${transfusion_date}`);
       if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
-
+      if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('bleeding_requiring_treatment_last_three_months');
+      if(cognitive_heart_fail === 'Yes') flags.push('cognitive_heart_failure');
+      if(high_blood_pressures === 'Yes') flags.push('high_blood_pressure');
+      if(stroke_mini_stroke === 'Yes') flags.push('stroke_or_mini_stroke');
+      if(diabetic === 'Yes') flags.push('diabetes');
+      
       this.setState({ dynamicFlags:flags });
    }
-
-   //
 
    handleChange_gender(value) {
       this.setState({ genderSelected: value });
    }
-
-   // handle_anticog_med_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          if(this.state.activeAnticogMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: this.state.activeAnticogMeds[i].med_dosage,
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: "",
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ anticogMedDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
-   // }
-
-   // handle_anticog_dosage_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          console.log(value[i].value, this.state.activeAnticogMeds[i]);
-   //          if(this.state.activeAnticogMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: this.state.activeAnticogMeds[i].med_name,
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: "",
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.anticog_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ anticogDosageDropDownValChanged: e.target.value, activeAnticogMeds: activeMed });
-   // }
-
-   // handle_anticog_dosage_time_dropdown_value(value, med_name) {
-   //    let elemIndex = this.state.activeAnticogMeds.findIndex(x=> x.med_name === med_name);
-   //    let tempState = [...this.state.activeAnticogMeds];
-   //    let tempElem = {...tempState[elemIndex]};
-   //    tempElem.med_dosage_time = value;
-   //    tempState[elemIndex] = tempElem;
-   //    this.setState({ activeAnticogMeds:tempState });
-   // }
-
-   // handle_antiplat_dosage_time_dropdown_value(value, med_name) {
-   //    let elemIndex = this.state.activeAntiplatMeds.findIndex(x=> x.med_name === med_name);
-   //    let tempState = [...this.state.activeAntiplatMeds];
-   //    let tempElem = {...tempState[elemIndex]};
-   //    tempElem.med_dosage_time = value;
-   //    tempState[elemIndex] = tempElem;
-   //    this.setState({ activeAntiplatMeds:tempState });
-   // }
-
-   // handle_anticog_dosage_time_am_or_pm_dropdown_value(value, med_name) {
-   //    let elemIndex = this.state.activeAnticogMeds.findIndex(x=> x.med_name === med_name);
-   //    let tempState = [...this.state.activeAnticogMeds];
-   //    let tempElem = {...tempState[elemIndex]};
-   //    tempElem.med_dosage_freequency = value;
-   //    tempState[elemIndex] = tempElem;
-   //    this.setState({ activeAnticogMeds:tempState });
-   // }
-   
-   // handle_antiplat_med_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          if(this.state.activeAntiplatMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: this.state.activeAntiplatMeds[i].med_dosage,
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: value[i].value,
-   //                med_dosage: "",
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ antiplatMedDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
-   // }
-
-   // handle_antiplat_dosage_dropdown_value(e, value) {
-   //    let activeMed = [];
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].selected) {
-   //          if(this.state.activeAntiplatMeds[i] !== undefined) {
-   //             activeMed.push({
-   //                med_name: this.state.activeAntiplatMeds[i].med_name,
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          } else {
-   //             activeMed.push({
-   //                med_name: "",
-   //                med_dosage: value[i].value,
-   //                med_dosage_time: this.state.antiplat_dosage_time_dropdown_value
-   //             });
-   //          }
-   //       }
-   //    }
-      
-   //    this.setState({ antiplatDosageDropDownValChanged: e.target.value, activeAntiplatMeds: activeMed });
-   // }
-
-   // changeAnticogMedDropdownValue() {
-   //    if(this.state.pradaxa !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.pradaxa });
-   //    } else if(this.state.xarelto !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.xarelto });
-   //    } else if(this.state.eliquis !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.eliquis });
-   //    } else if(this.state.edoxabon !== null) {
-   //       this.setState({ anticogMedDropDownValChanged: this.state.edoxabon });
-   //    }
-   // }
-
-   // changeAnticogDosageDropdownValue() {
-   //    if(this.state.pradaxa_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.pradaxa_dosage });
-   //    } else if(this.state.xarelto_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.xarelto_dosage });
-   //    } else if(this.state.eliquis_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.eliquis_dosage });
-   //    } else if(this.state.edoxabon_dosage !== null) {
-   //       this.setState({ anticogDosageDropDownValChanged: this.state.edoxabon_dosage });
-   //    }
-   // }
-
-   // changeAntiplatMedDropdownValue() {
-   //    if(this.state.aspirin !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.aspirin });
-   //    } else if(this.state.plavix !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.plavix });
-   //    } else if(this.state.brillinta !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.brillinta });
-   //    } else if(this.state.effient !== null) {
-   //       this.setState({ antiplatMedDropDownValChanged: this.state.effient });
-   //    }
-   //    console.log(this.state.antiplatMedDropDownValChanged);
-   // }
-
-   // changeAntiplatDosageDropdownValue() {
-   //    if(this.state.aspirin_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.aspirin_dosage });
-   //    } else if(this.state.plavix_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.plavix_dosage });
-   //    } else if(this.state.brillinta_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.brillinta_dosage });
-   //    } else if(this.state.effient_dosage !== null) {
-   //       this.setState({ antiplatDosageDropDownValChanged: this.state.effient_dosage });
-   //    }
-   // }
-
-   // changeAntiplatDosageTimeDropdownValue() {
-   //    if(this.state.aspirin_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.aspirin_dosage_time });
-   //    } else if(this.state.plavix_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.plavix_dosage_time });
-   //    } else if(this.state.brillinta_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.brillinta_dosage_time });
-   //    } else if(this.state.effient_dosage_time !== null) {
-   //       this.setState({ antiplatDosageTimeDropDownValChanged: this.state.effient_dosage_time });
-   //    }
-   // }
 
    handle_flags_change_value(value) {
       let activeFlag = [];
@@ -803,38 +634,16 @@ class Page1 extends React.Component {
    }
 
    handleFlagsRedirection() {
-      this.props.history.push({ pathname: '/User/Page13', state:{ patient_id: this.state.patient_id } });
+      this.props.history.push({ pathname: '/User/Page3', state:{ patient_id: this.state.patient_id } });
    }
    
    handleAntiCogRedirection(value) {
-      let redirect = '';
-      if(value === '') {
-         redirect = '/User/Page8';
-      } if(this.state.redirectToMedPage[0].medPhase1.includes(value)) {
-         redirect = this.state.redirectToMedPage[0].redirectPage
-      } else if(this.state.redirectToMedPage[1].medPhase2.includes(value)) {
-         redirect = this.state.redirectToMedPage[1].redirectPage
-      } else if(this.state.redirectToMedPage[2].medPhase3.includes(value)) {
-         redirect = this.state.redirectToMedPage[2].redirectPage
-      } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
-         redirect = this.state.redirectToMedPage[3].redirectPage
-      }
+      let redirect = '/User/Page8';
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
    }
 
    handleAntiPlatRedirection(value) {
-      let redirect = '';
-      if(value === '') {
-         redirect = '/User/Page8';
-      } else if(this.state.redirectToMedPage[0].medPhase1.includes(value)) {
-         redirect = this.state.redirectToMedPage[0].redirectPage
-      } else if(this.state.redirectToMedPage[1].medPhase2.includes(value)) {
-         redirect = this.state.redirectToMedPage[1].redirectPage
-      } else if(this.state.redirectToMedPage[2].medPhase3.includes(value)) {
-         redirect = this.state.redirectToMedPage[2].redirectPage
-      } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
-         redirect = this.state.redirectToMedPage[3].redirectPage
-      }
+      let redirect = '/User/Page11';
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
    }
 
@@ -988,90 +797,6 @@ class Page1 extends React.Component {
                               value={this.state.indication_for_anticoagulation}
                            />
                            <EditIcon onClick={() => this.handleIndicationRedirection(this.state.indication_for_anticoagulation)} className={`${classes['indication_anticpg_edit']}`} />
-                              {/* {
-                                 this.state.indicationAnticogVal.map((item, index) => {
-                                    return ([
-                                       <>
-                                          <option key={index} value={item.indication}>
-                                             {item.indication}
-                                          </option>
-                                          {
-                                             item.indication === 'Venous Thromboembolism (VTE)' ? 
-                                             <>
-                                                {
-                                                   this.state.indicationSubValFirst ? 
-                                                   <optgroup style={{ height: "50px" }} className="form-control" onChange={(e) => this.setState({ indicationSubVal: e.target.value })}>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>DVT</option>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>PE</option>
-                                                   </optgroup> : ""
-                                                }
-                                             </> : ""
-                                          }
-                                       </>
-                                    ])
-                                 })
-                              }
-                           </select> */}
-                           {/* {
-                              this.state.indicationSubValFlagShown ? "" : this.state.indicationSubValFlag ? 
-                              <Modal
-                                 open={this.state.indicationSubValFlag}
-                                 onClose={this.handleIndicationSubValFlag}
-                                 aria-labelledby="modal-modal-title"
-                                 aria-describedby="modal-modal-description"
-                              >
-                              <Box sx={{
-                                 position: 'absolute',
-                                 top: '50%',
-                                 left: '50%',
-                                 transform: 'translate(-50%, -50%)',
-                                 width: 400,
-                                 bgcolor: 'background.paper',
-                                 border: '2px solid #000',
-                                 boxShadow: 24,
-                                 p: 4,
-                              }}>
-                                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                                 If So, how long ago
-                                 </Typography>
-                                 <select style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValTime: e.target.value })}>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
-                                 </select>
-                              </Box>
-                              </Modal> : ""
-                           }
-                           {
-                              this.state.indicationSubValSecondFlagShown ? "" : this.state.indicationSubValSecondFlag ? 
-                              <Modal
-                                 open={this.state.indicationSubValSecondFlag}
-                                 onClose={this.handleIndicationSubValSecondFlag}
-                                 aria-labelledby="modal-modal-title"
-                                 aria-describedby="modal-modal-description"
-                              >
-                              <Box sx={{
-                                 position: 'absolute',
-                                 top: '50%',
-                                 left: '50%',
-                                 transform: 'translate(-50%, -50%)',
-                                 width: 400,
-                                 bgcolor: 'background.paper',
-                                 border: '2px solid #000',
-                                 boxShadow: 24,
-                                 p: 4,
-                              }}>
-                                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                                 If So, how long ago
-                                 </Typography>
-                                 <select style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValSecondTime: e.target.value })}>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
-                                 </select>
-                              </Box>
-                              </Modal> : ""
-                           } */}
                            {this.validator.message(
                               'anticoagulation',
                               this.state.indication_for_anticoagulation,

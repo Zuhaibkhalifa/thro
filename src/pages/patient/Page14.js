@@ -15,9 +15,18 @@ class Page14 extends React.Component {
             element: (message, className) => <div className="text-danger">{message}</div>,
         });
         console.log(this.validator);
-        this.state = { q1_ans: '', q2_ans: '', loader: '' };
+        this.state = { 
+            q1_ans: '', 
+            q2_ans: '', 
+            loader: '', 
+            patient_id: '',
+            redirectButton: false,
+            nurse_add: false
+        };
 
         this.submitForm = this.submitForm.bind(this);
+        this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
@@ -33,11 +42,21 @@ class Page14 extends React.Component {
                 })
                 .then((response) => {
                     console.log(response);
-                    this.setState({ loader: '' });
+                    let servrData = response.data.success[0];
+                    if(servrData) {
+                        this.setState({ 
+                            loader: '',
+                            q1_ans: servrData.cirrhosis_of_liver, 
+                            q2_ans: servrData.antiphospholipid_antibody_syndrome,  
+                        });
+                    } else {
+                        this.setState({ loader: '' })
+                    }
                 });
         } catch (error) {
             console.error(error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
         }
     }
 
@@ -59,15 +78,35 @@ class Page14 extends React.Component {
         var param = {
             cirrhosis_of_liver: this.state.q1_ans,
             antiphospholipid_antibody_syndrome: this.state.q2_ans,
+            patient_id: this.state.patient_id
         };
 
         server('patient/page14', param);
         //this.props.history.push('');
     }
+
+    
+    redirectBackNurse() {
+        this.submitForm();
+        if(this.state.nurse_add) {
+            this.props.history.push('/Nurse/add_patient')
+        } else {
+           this.props.history.push('/Nurse/Nurse1')
+        }
+    }
+     
+    redirectNextPage() {
+        console.log(this.props);
+         this.submitForm();
+         if(this.state.patient_id !== "") {
+             this.props.history.push({ pathname:'/User/Page15', state:{ patient_id: this.state.patient_id } });
+         }
+    }
+
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -131,24 +170,54 @@ class Page14 extends React.Component {
                         </form>
                         {/* Default form login */}
                         <nav aria-label="Page navigation example">
+                            {!this.state.redirectButton ?
                             <ul className="pagination justify-content-center">
                                 <li className="page-item">
-                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                        <button className="page-link" onClick={goBack} tabIndex={-1}>
                                         <i className="fa fa-angle-double-left"></i> Previous
-                                    </button>
+                                        </button>
                                 </li>
                                 <li className="page-item">
-                                    <button className="page-link" onClick={this.submitForm}>
+                                        <button className="page-link" onClick={this.submitForm}>
                                         Next <i className="fa fa-angle-double-right"></i>
-                                    </button>
+                                        </button>
+                                </li>
+                            </ul> : 
+                            <ul className="pagination justify-content-center">
+                                <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                        <i className="fa fa-angle-double-left"></i> Go Back
+                                        </button>
+                                </li>
+                                <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                        Next Page <i className="fa fa-angle-double-right"></i>
+                                        </button>
                                 </li>
                             </ul>
+                            }
                         </nav>
                         <br />
                     </div>
                 </div>
             </React.Fragment>
         );
+    }
+    componentDidMount() {
+        console.log(this.props);
+        if(this.props.location.state !== undefined) {
+            this.setState({ 
+                patient_id: this.props.location.state.patient_id, 
+                redirectButton: true,
+                nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        } else if(localStorage.getItem('patient_id') !== null) {
+            this.setState({ 
+                patient_id: localStorage.getItem('patient_id'),
+                redirectButton: true,
+                nurse_add: false 
+            });
+        }
     }
 }
 export default Page14;

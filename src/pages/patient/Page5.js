@@ -38,6 +38,7 @@ class Page5 extends React.Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         this.mainOption = this.mainOption.bind(this);
         this.onRadioBtn1 = this.onRadioBtn1.bind(this);
         this.onRadioBtn2 = this.onRadioBtn2.bind(this);
@@ -61,11 +62,24 @@ class Page5 extends React.Component {
                 })
                 .then((response) => {
                     console.log('Patient page5 - get data - Server Success Reponse: ', response);
-                    this.setState({ loader: '' });
+                    let servrData = response.data.success[0];
+                    if(servrData) {
+                        this.setState({
+                            q1_ans: servrData.deep_vein_thrombosis,
+                            q2_ans: servrData.pulmonary_embolism,
+                            q3_ans: servrData.not_sure,
+                            q1_sub_q1_ans: servrData.deep_vein_thrombosis_how_long_ago,
+                            q1_sub_q2_ans: servrData.pulmonary_embolism_how_long_ago,
+                            loader: '',
+                        });
+                    } else {
+                        this.setState({ loader: '' })
+                    }
                 });
         } catch (error) {
             console.error('Patient page5 - get data - Server Error Reponse: ', error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
         }
     }
 
@@ -102,6 +116,13 @@ class Page5 extends React.Component {
             this.props.history.push('/Nurse/add_patient')
         } else {
             this.props.history.push('/Nurse/Nurse1')
+        }
+    }
+
+    redirectNextPage() {
+        this.submitForm();
+        if(this.props.location.state !== undefined) {
+           this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
         }
     }
 
@@ -150,7 +171,7 @@ class Page5 extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -337,6 +358,11 @@ class Page5 extends React.Component {
                                     <li className="page-item">
                                         <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
                                             <i className="fa fa-angle-double-left"></i> Go Back
+                                        </button>
+                                    </li>
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                            Next Page <i className="fa fa-angle-double-right"></i>
                                         </button>
                                     </li>
                                 </ul>

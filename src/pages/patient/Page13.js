@@ -45,6 +45,7 @@ class Page13 extends React.Component {
         // Bind " this " re of class to Methods
         this.submitForm = this.submitForm.bind(this);
         this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
 
         //
         var element = document.getElementById('body');
@@ -63,11 +64,30 @@ class Page13 extends React.Component {
                 })
                 .then((response) => {
                     console.log(response);
-                    this.setState({ loader: '' });
+                    let servrData = response.data.success[0];
+                    if(servrData) {
+                        this.setState({ 
+                            loader: '',
+                            q1_ans: servrData.bleeding_requiring_treatment,
+                            q1_ans_option: servrData.bleeding_requiring_treatment_last_three_months,
+                            q2_ans: servrData.bleeding_from_stomach,
+                            q2_ans_option: servrData.bleeding_from_stomach_last_three_months,
+                            q3_ans: servrData.ulcer_in_stomach_or_bowel,
+                            q3_ans_option: servrData.ulcer_in_stomach_or_bowel_last_three_months,
+                            q4_ans: servrData.liver_disease,
+                            q5_ans: servrData.kidney_disease,
+                            q6_ans: servrData.not_sure,
+                            q7_ans: servrData.had_transfusion_in_last_three_months,
+                            q7_ans_option: servrData.had_transfusion_in_last_three_months_when
+                        });
+                    } else {
+                        this.setState({ loader: '' })
+                    }
                 });
         } catch (error) {
             console.error(error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
         }
     }
 
@@ -131,6 +151,14 @@ class Page13 extends React.Component {
        } else {
           this.props.history.push('/Nurse/Nurse1')
        }
+    }
+    
+    redirectNextPage() {
+        this.submitForm();
+        console.log(this.props);
+        if(this.state.patient_id !== "") {
+            this.props.history.push({ pathname:'/User/Page14', state:{ patient_id: this.state.patient_id } });
+        }
     }
 
     submitForm() {
@@ -240,7 +268,7 @@ class Page13 extends React.Component {
 
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -532,25 +560,30 @@ class Page13 extends React.Component {
                         {/* Default form login */}
                         <nav aria-label="Page navigation example">
                             {!this.state.redirectButton ?
-                                <ul className="pagination justify-content-center">
-                                    <li className="page-item">
+                            <ul className="pagination justify-content-center">
+                                <li className="page-item">
                                         <button className="page-link" onClick={goBack} tabIndex={-1}>
-                                            <i className="fa fa-angle-double-left"></i> Previous
+                                        <i className="fa fa-angle-double-left"></i> Previous
                                         </button>
-                                    </li>
-                                    <li className="page-item">
+                                </li>
+                                <li className="page-item">
                                         <button className="page-link" onClick={this.submitForm}>
-                                            Next <i className="fa fa-angle-double-right"></i>
+                                        Next <i className="fa fa-angle-double-right"></i>
                                         </button>
-                                    </li>
-                                </ul> : 
-                                <ul className="pagination justify-content-center">
-                                    <li className="page-item">
+                                </li>
+                            </ul> : 
+                            <ul className="pagination justify-content-center">
+                                <li className="page-item">
                                         <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
-                                            <i className="fa fa-angle-double-left"></i> Go Back
+                                        <i className="fa fa-angle-double-left"></i> Go Back
                                         </button>
-                                    </li>
-                                </ul>
+                                </li>
+                                <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                        Next Page <i className="fa fa-angle-double-right"></i>
+                                        </button>
+                                </li>
+                            </ul>
                             }
                         </nav>
                         <br />
@@ -566,6 +599,12 @@ class Page13 extends React.Component {
                 patient_id: this.props.location.state.patient_id, 
                 redirectButton: true,
                 nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        } else if(localStorage.getItem('patient_id') !== null) {
+            this.setState({ 
+                patient_id: localStorage.getItem('patient_id'),
+                redirectButton: true,
+                nurse_add: false 
             });
         }
         $(document).ready(function () {

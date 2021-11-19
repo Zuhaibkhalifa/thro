@@ -76,6 +76,7 @@ class Page11 extends React.Component {
         // Binding "this" to functions
         this.submitForm = this.submitForm.bind(this);
         this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         this.radioCustInputToggle = this.radioCustInputToggle.bind(this);
         this.checkBoxToggle = this.checkBoxToggle.bind(this);
         this.handleClickNoneCheckBox = this.handleClickNoneCheckBox.bind(this);
@@ -99,12 +100,12 @@ class Page11 extends React.Component {
                 })
                 .then((response) => {
                     console.log('Patient page 11 - reponse from Server: ', response);
-
                     this.setState({ loader: '' });
                 });
         } catch (error) {
             console.error(error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
         }
     }
 
@@ -137,6 +138,13 @@ class Page11 extends React.Component {
             this.props.history.push('/Nurse/add_patient')
         } else {
            this.props.history.push('/Nurse/Nurse1')
+        }
+    }
+    
+    redirectNextPage() {
+        this.submitForm();
+        if(this.props.location.state !== undefined) {
+            this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
         }
     }
 
@@ -362,7 +370,7 @@ class Page11 extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add}  />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -440,27 +448,32 @@ class Page11 extends React.Component {
                             {this.renderNoneCheckBox('q5', 'none', 'No, I am not on any of these medications')}
                         </form>
                         <nav aria-label="Page navigation example">
-                        {!this.state.redirectButton ?
+                            {!this.state.redirectButton ?
                             <ul className="pagination justify-content-center">
                                 <li className="page-item">
-                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                        <button className="page-link" onClick={goBack} tabIndex={-1}>
                                         <i className="fa fa-angle-double-left"></i> Previous
-                                    </button>
+                                        </button>
                                 </li>
                                 <li className="page-item">
-                                    <button className="page-link" onClick={this.submitForm}>
+                                        <button className="page-link" onClick={this.submitForm}>
                                         Next <i className="fa fa-angle-double-right"></i>
-                                    </button>
+                                        </button>
                                 </li>
                             </ul> : 
                             <ul className="pagination justify-content-center">
                                 <li className="page-item">
-                                    <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                        <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
                                         <i className="fa fa-angle-double-left"></i> Go Back
-                                    </button>
+                                        </button>
+                                </li>
+                                <li className="page-item">
+                                        <button className="page-link" onClick={this.redirectNextPage}>
+                                        Next Page <i className="fa fa-angle-double-right"></i>
+                                        </button>
                                 </li>
                             </ul>
-                        }
+                            }
                         </nav>
                         <br />
                     </div>

@@ -200,9 +200,17 @@ class AddPatient extends React.Component {
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
       this.page5Post = this.page5Post.bind(this);
+      this.getUserData = this.getUserData.bind(this);
+
+      if (this.props.location.state !== undefined) {
+         if (this.props.location.state.nurse_add) {
+            this.getUserData();
+         }
+      }
    }
 
-   componentDidMount() {
+   getUserData() {
+      this.setState({ loader: 0 });
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -338,47 +346,6 @@ class AddPatient extends React.Component {
          this.setState({ loader: '' });
       }
    }
-
-   // handleIndicationSubValFlag() {
-   //    this.setState({ indicationSubValFlag:false });
-   // }
-
-   // handleIndicationSubValFlagEdit() {
-   //    this.setState({ indicationSubValFlagShown:false });
-   // }
-
-   // handleIndicationSubValSecondFlag() {
-   //    this.setState({ indicationSubValSecondFlag:false });
-   // }
-
-   // handleIndicationSubValSecondFlagEdit() {
-   //    this.setState({ indicationSubValSecondFlagShown:false });
-   // }
-
-   // handleIndicationAnticogVal(value) {
-   //    let anticoagulation = '';
-   //    if(this.state.indicationSubValTime) {
-   //       this.setState({ indicationSubValFlagShown:true });
-   //    }
-   //    if(this.state.indicationSubValSecondTime) {
-   //       this.setState({ indicationSubValSecondFlagShown:true });
-   //    }
-   //    for(let i=0; i<value.length; i++) {
-   //       if(value[i].value === ('DVT')) { this.setState({ indicationSubValFlag: true }); document.getElementById('dte-display').style.setProperty('display', 'block', 'important'); }
-   //       if(value[i].value === ('PE')) { this.setState({ indicationSubValSecondFlag: true }); document.getElementById('pe-display').style.setProperty('display', 'block', 'important'); }
-   //       if(value[i].selected && value[i].value === 'Venous Thromboembolism (VTE)') {
-   //          this.setState({ indicationSubValFirst: true });
-   //          anticoagulation += value[i].value +', ';
-   //       } else if(value[i].value === 'DVT') {
-   //          anticoagulation += value[i].value +', ';
-   //       } else if(value[i].value === 'PE') {
-   //          anticoagulation += value[i].value +', ';
-   //       } else if(value[i].selected) {
-   //          anticoagulation += value[i].value +', ';
-   //       }
-   //    }
-   //    this.setState({ indication_for_anticoagulation: anticoagulation });
-   // }
 
    fillactiveanticogmeds() {
       let activeMeds = [];
@@ -535,7 +502,6 @@ class AddPatient extends React.Component {
 
    handleChange_gender(value) {
       this.setState({ genderSelected: value });
-      this.page5Post(this.state);
    }
 
    page5Post(params) {
@@ -570,7 +536,7 @@ class AddPatient extends React.Component {
          password_confirmation: this.state.patient_user_password,
          user_role: "Patient"
       };
-      let patient_id = localStorage.getItem('patient_id');
+      let patient_id = localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id;
       server(`nurse/add_patient/:${patient_id}`, param);
    }
 
@@ -615,7 +581,7 @@ class AddPatient extends React.Component {
          understanding: this.state.understanding,
          who_is_completing_this_form: this.state.completed_by,
          reviewed_by: this.state.reviewed_by,
-         patient_id: localStorage.getItem('patient_id'),
+         patient_id: localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id,
          referred_by: this.state.referred_by,
          dictation: this.state.dictation,
          name: this.state.patient_user_name,
@@ -624,34 +590,34 @@ class AddPatient extends React.Component {
          password_confirmation: this.state.patient_user_password,
          user_role: "Patient"
       };
-      let patient_id = localStorage.getItem('patient_id');
+      let patient_id = localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id;
       server(`nurse/add_patient/:${patient_id}`, param);
    }
 
    handleChange_weight(value) {
       this.setState({ weightSelected: value });
-      // this.setState({ weight: value });
-      this.submitForm();
+      // this.setState({ weight: value }); 
    }
 
    handle_procedure(value) {
       this.setState({ procedure: value });
       // this.setState({ weight: value });
-      this.submitForm();
    }
 
    handleIndicationRedirection(value) {
       let data = value.split(',');
       let redirectPage = '';
       if(data.includes('None Of The Above')) {
-         redirectPage = '/User/Page5';
+         redirectPage = '/User/Page6';
       } else {
          redirectPage = '/User/Page4';
       }
+      this.submitForm();
       this.props.history.push({ pathname: redirectPage, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
    handleFlagsRedirection() {
+      this.submitForm();
       this.props.history.push({ pathname: '/User/Page13', state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
    
@@ -668,13 +634,14 @@ class AddPatient extends React.Component {
       } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
          redirect = this.state.redirectToMedPage[3].redirectPage
       }
+      this.submitForm();
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
    handleAntiPlatRedirection(value) {
       let redirect = '';
       if(value === '') {
-         redirect = '/User/Page8';
+         redirect = '/User/Page11';
       } else if(this.state.redirectToMedPage[0].medPhase1.includes(value)) {
          redirect = this.state.redirectToMedPage[0].redirectPage
       } else if(this.state.redirectToMedPage[1].medPhase2.includes(value)) {
@@ -684,6 +651,7 @@ class AddPatient extends React.Component {
       } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
          redirect = this.state.redirectToMedPage[3].redirectPage
       }
+      this.submitForm();
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
@@ -691,7 +659,7 @@ class AddPatient extends React.Component {
       return (
          <React.Fragment>
             <Header />
-            {this.state.loader === 1 ? (
+            {this.state.loader === 0 ? (
                <div className="centered">
                   <ReactSpinner type="border" color="blue" size="5" />
                </div>

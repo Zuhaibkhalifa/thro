@@ -52,6 +52,7 @@ class Page8 extends React.Component {
 
       this.submitForm = this.submitForm.bind(this);
       this.redirectBackNurse = this.redirectBackNurse.bind(this);
+      this.redirectNextPage = this.redirectNextPage.bind(this);
       this.pradaxa_rdo = this.pradaxa_rdo.bind(this);
       this.xarelto_rdo = this.xarelto_rdo.bind(this);
       this.eliquis_rdo = this.eliquis_rdo.bind(this);
@@ -59,7 +60,6 @@ class Page8 extends React.Component {
       this.edxo_rdo = this.eliquis_rdo.bind(this);
       this.opt_none = this.other_rdo.bind(this);
       this.dynamicRouting = this.dynamicRouting.bind(this);
-      this.redirectNextPage = this.redirectNextPage.bind(this);
 
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
@@ -76,20 +76,31 @@ class Page8 extends React.Component {
             })
             .then((response) => {
                console.log(response);
-               this.setState({ loader: '' });
+               let servrData = response.data.success[0];
+               if(servrData) {
+                  this.setState({ 
+                     loader: '',
+                     q1_ans: servrData.pradaxa,
+                     q1_ans_dosage: servrData.pradaxa_dosage,
+                     q2_ans: servrData.xarelto,
+                     q2_ans_dosage: servrData.xarelto_dosage,
+                     q2_ans_dosage_timing: servrData.xarelto_dosage_time,
+                     q2_ans_dosage_meal_taken: servrData.eliquis,
+                     q3_ans: servrData.eliquis_dosage,
+                     q3_ans_dosage: servrData.eliquis_dosage_time,
+                     q4_ans: servrData.edoxabon,
+                     q4_ans_dosage: servrData.edoxabon_dosage,
+                     q4_ans_dosage_timing: servrData.edoxabon_dosage_time,
+                     q5_ans: '' 
+                  });
+               } else {
+                  this.setState({ loader: '' })
+              }
             });
       } catch (error) {
          console.error(error);
          this.setState({ loader: '' });
-      }
-   }
-
-   redirectBackNurse() {
-      this.submitForm();
-      if(this.state.nurse_add) {
-          this.props.history.push('/Nurse/add_patient')
-      } else {
-         this.props.history.push('/Nurse/Nurse1')
+         this.props.history.push('/');
       }
    }
 
@@ -240,6 +251,23 @@ class Page8 extends React.Component {
       // this.props.history.push('');
    }
 
+   
+   redirectBackNurse() {
+      this.submitForm();
+      if(this.state.nurse_add) {
+          this.props.history.push('/Nurse/add_patient')
+      } else {
+         this.props.history.push('/Nurse/Nurse1')
+      }
+   }
+
+   redirectNextPage() {
+      this.submitForm();
+       if(this.props.location.state !== undefined) {
+          this.props.history.push({ pathname:'/User/Page9', state:{ patient_id: this.props.location.state.patient_id } });
+       }
+   }
+   
    valueChanged1() {
       if (document.getElementById('optradio5').checked === true) {
          document.getElementById('de').style.display = 'block';
@@ -311,12 +339,6 @@ class Page8 extends React.Component {
       });
    }
 
-   redirectNextPage() {
-      if(this.props.location.state !== undefined) {
-         this.props.history.push({ pathname:'/User/Page9', state:{ patient_id: this.props.location.state.patient_id } });
-      }
-   }
-
    opt_none() {
       this.setState({
          q1_ans: '',
@@ -339,7 +361,7 @@ class Page8 extends React.Component {
    render() {
       return (
          <React.Fragment>
-            <Header />
+            <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
             <>
                {this.state.loader === 1 ? (
                   <div className="centered">
@@ -687,30 +709,30 @@ class Page8 extends React.Component {
                   </form>
                   {/* Default form login */}
                   <nav aria-label="Page navigation example">
-                     {!this.state.redirectButton ?
+                        {!this.state.redirectButton ?
                            <ul className="pagination justify-content-center">
                               <li className="page-item">
-                                 <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
                                        <i className="fa fa-angle-double-left"></i> Previous
-                                 </button>
+                                    </button>
                               </li>
                               <li className="page-item">
-                                 <button className="page-link" onClick={this.submitForm}>
+                                    <button className="page-link" onClick={this.submitForm}>
                                        Next <i className="fa fa-angle-double-right"></i>
-                                 </button>
+                                    </button>
                               </li>
                            </ul> : 
                            <ul className="pagination justify-content-center">
                               <li className="page-item">
-                                 <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                    <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
                                        <i className="fa fa-angle-double-left"></i> Go Back
-                                 </button>
-                              </li>
-                              { this.state.q5_ans === 'None Of The Above' ?
-                                 <li className="page-item">
-                                    <button className="page-link" onClick={this.redirectNextPage}>
-                                          Next Page <i className="fa fa-angle-double-right"></i>
                                     </button>
+                              </li>
+                              { this.state.q5_ans === "None Of The Above" ?
+                                 <li className="page-item">
+                                       <button className="page-link" onClick={this.redirectNextPage}>
+                                          Next Page <i className="fa fa-angle-double-right"></i>
+                                       </button>
                                  </li> : ""
                               }
                            </ul>
@@ -729,7 +751,13 @@ class Page8 extends React.Component {
              redirectButton: true,
              nurse_add: this.props.location.state.nurse_add ? true : false
          });
-      }
+      } else if(localStorage.getItem('patient_id') !== null) {
+         this.setState({ 
+             patient_id: localStorage.getItem('patient_id'),
+             redirectButton: true,
+             nurse_add: false 
+         });
+     }
       $(document).ready(function () {
          $('#pradaxa_dosage').hide();
          $('#eliquis_dosage').hide();

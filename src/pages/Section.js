@@ -31,11 +31,21 @@ class Section extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
-        axios.get(domain + '/api/profile', { headers:headers }).then((response) => {
-            console.log(response);
-            this.setState({ user_role: response.data.user_role, loading: 0 });
-        });
-        console.log(this.state);
+        try {
+            axios.get(domain + '/api/profile', { headers:headers }).then((response) => {
+                console.log(response);
+                this.setState({ user_role: response.data.user_role, loading: 0 });
+            }, (err) => {
+                this.setState({ loader: '' });
+                localStorage.clear();
+                this.props.history.push('/');
+            });
+            console.log(this.state);
+        } catch(ex) {
+            console.log('error ==>', ex.message);
+            this.setState({ loader: '' });
+            this.props.history.push('/');
+        }
     }
     
     render() {

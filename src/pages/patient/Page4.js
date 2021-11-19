@@ -48,6 +48,7 @@ class Page4 extends React.Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.redirectBackNurse = this.redirectBackNurse.bind(this);
+        this.redirectNextPage = this.redirectNextPage.bind(this);
         this.mainOption = this.mainOption.bind(this);
         this.onRadioBtn1 = this.onRadioBtn1.bind(this);
         this.onRadioBtn2 = this.onRadioBtn2.bind(this);
@@ -72,12 +73,32 @@ class Page4 extends React.Component {
                 })
                 .then((response) => {
                     console.log('Patient page 4 - Constructor - Success Response: ', response);
+                    let servrData = response.data.success[0];
 
-                    this.setState({ loader: '' });
+                    if(servrData) {
+                        this.setState({
+                            q1_ans: servrData.venous_thromboelism,
+                            q1_sub_q1_ans: servrData.dvt,
+                            q1_sub_q1_ans_inner1: servrData.dvt_how_long_ago,
+                            q1_sub_q2_ans: servrData.pe,
+                            q1_sub_q2_ans_inner2: servrData.pe_dvt_how_long_ago,
+                            q2_ans: servrData.atrial_fibrillation_of_flutter,
+                            q3_ans: servrData.heart_valve_replacement,
+                            q4_ans: servrData.blood_clot_in_heart,
+                            q5_ans: servrData.arterial_peripheral_thrombosis,
+                            q6_ans: servrData.peripheral_arterial_disease,
+                            q7_sub_ans: servrData.other,
+                            q8_ans: servrData.none,
+                            loader: '',
+                        });
+                    } else {
+                        this.setState({ loader: '' })
+                    }
                 });
         } catch (error) {
             console.error('Patient page 4 - Constructor - Response Error: ', error);
             this.setState({ loader: '' });
+            this.props.history.push('/');
         }
     }
 
@@ -87,6 +108,17 @@ class Page4 extends React.Component {
             this.props.history.push('/Nurse/add_patient')
         } else {
             this.props.history.push('/Nurse/Nurse1')
+        }
+    }
+
+    redirectNextPage() {
+        this.submitForm();
+        if(this.props.location.state !== undefined) {
+           if(this.state.q3_ans === "Yes") {
+                this.props.history.push({ pathname:'/User/Page6', state:{ patient_id: this.props.location.state.patient_id } });
+           } else {
+                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
+           }
         }
     }
     //
@@ -137,7 +169,11 @@ class Page4 extends React.Component {
             this.no_errors();
             console.log('Patient page 4 - SubmitForm - State: ', this.state);
             this.page4();
-            this.props.history.push('/User/Page6');
+            if(this.state.q3_ans === "Yes") {
+                this.props.history.push('/User/Page6');
+            } else {
+                this.props.history.push('/User/Page5');
+            }
         }
     }
 
@@ -253,7 +289,7 @@ class Page4 extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header patient_id={this.state.patient_id} patient_add={this.state.patient_add} />
                 {this.state.loader === 1 ? (
                     <div className="centered">
                         <ReactSpinner type="border" color="bg-primary" size="5" />
@@ -528,6 +564,11 @@ class Page4 extends React.Component {
                                         <i className="fa fa-angle-double-left"></i> Go Back
                                     </button>
                                 </li>
+                                <li className="page-item">
+                                    <button className="page-link" onClick={this.redirectNextPage}>
+                                        Next Page <i className="fa fa-angle-double-right"></i>
+                                    </button>
+                                </li>
                             </ul>
                         }
                     </nav>
@@ -546,6 +587,12 @@ class Page4 extends React.Component {
                 patient_id: this.props.location.state.patient_id, 
                 redirectButton: true,
                 nurse_add: this.props.location.state.nurse_add ? true : false
+            });
+        } else if(localStorage.getItem('patient_id') !== null) {
+            this.setState({ 
+                patient_id: localStorage.getItem('patient_id'),
+                redirectButton: true,
+                nurse_add: false 
             });
         }
         $(document).ready(function () {});
