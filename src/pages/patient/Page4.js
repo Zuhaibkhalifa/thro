@@ -114,9 +114,11 @@ class Page4 extends React.Component {
     redirectNextPage() {
         this.submitForm();
         if(this.props.location.state !== undefined) {
-           if(this.state.q3_ans === "Yes") {
+            if(this.state.q3_ans === "Yes" && this.state.q5_ans === "Yes") {
+                this.props.history.push({ pathname:'/User/Page5', state:{ patient_id: this.props.location.state.patient_id } });
+            } else if(this.state.q3_ans === "Yes") {
                 this.props.history.push({ pathname:'/User/Page6', state:{ patient_id: this.props.location.state.patient_id } });
-           } else {
+            } else {
                 this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
            }
         }
@@ -169,7 +171,9 @@ class Page4 extends React.Component {
             this.no_errors();
             console.log('Patient page 4 - SubmitForm - State: ', this.state);
             this.page4();
-            if(this.state.q3_ans === "Yes") {
+            if(this.state.q3_ans === "Yes" && this.state.q5_ans === "Yes") {
+                this.props.history.push('/User/Page5');
+            } else if(this.state.q3_ans === "Yes") {
                 this.props.history.push('/User/Page6');
             } else {
                 this.props.history.push('/User/Page5');
