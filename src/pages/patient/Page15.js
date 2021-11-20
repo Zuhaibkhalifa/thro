@@ -111,7 +111,7 @@ class Page15 extends React.Component {
         } else {
             console.log('Submit form - state: ', this.state);
             this.page15(this.state);
-            if(!this.state.patient_id === "") {
+            if(this.state.patient_id === "") {
                 this.props.history.push('/User/Page16');
             }
         }
