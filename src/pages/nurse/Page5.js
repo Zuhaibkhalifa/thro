@@ -66,6 +66,22 @@ class Page3 extends React.Component {
          completed_by: '',
          reviewed_by: '',
          loader: 1,
+         
+         displayMedFlags: [
+            { "flag_name": "Blood clot while blood thinner interrupted" },
+            { "flag_name": "Liver Cirrhosis" },
+            { "flag_name": "Transfusion within last 3 months" },
+            { "flag_name": "Stroke or ministroke/TIA within last 3 months" },
+            { "flag_name": "Bleeding within past 3 months (patient page 13)" },
+            { "flag_name": "Requiring treatment in hospital OR from stomach or bowel" },
+            { "flag_name": "Ulcer within last 3 months" },
+            { "flag_name": "Currently undergoing Cancer therapy" },
+            { "flag_name": "Antiphospholipid antibody syndrome" },
+            { "flag_name": "Mitral stenosis" },
+            { "flag_name": "DVT or PE in the last 3 months" },
+            { "flag_name": "CHADS score > 4" },
+            { "flag_name": "CrCl <30" },
+         ],
 
          procedureSelected: '',
          weightSelected: '',
@@ -83,6 +99,7 @@ class Page3 extends React.Component {
          effient_dosage: '',
          effient_dosage_time: '',
          not_using_drugs: '',
+
          ulcer_in_stomach_or_bowel_last_three_months: '',
          had_transfusion_in_last_three_months_when: '',
          had_transfusion_in_last_three_months: '',
@@ -101,6 +118,22 @@ class Page3 extends React.Component {
          edoxabon: '',
          edoxabon_dosage: '',
          edoxabon_dosage_time: '',
+         
+         dalteparin: '',
+         dalteparin_dosage: '',
+         dalteparin_freq: '',
+         enoxaparin: '',
+         enoxaparin_dosage: '',
+         enoxaparin_freq: '',
+         tinzaparin: '',
+         tinzaparin_dosage: '',
+         tinzaparin_freq: '',
+         dynamicFlags: [],
+         cognitive_heart_failure: '',
+         high_blood_pressure: '',
+         diabetes: '',
+         stroke_or_mini_stroke: '',
+         bleeding_requiring_treatment_last_three_months: ''
       };
 
       this.submitForm = this.submitForm.bind(this);
@@ -169,9 +202,24 @@ class Page3 extends React.Component {
                      effient_dosage: data.effient_dosage,
                      effient_dosage_time: data.effient_dosage_time,
                      not_using_drugs: data.not_using_drugs,
+                     dalteparin: data.dalteparin,
+                     dalteparin_dosage: data.dalteparin_dosage,
+                     dalteparin_freq: data.dalteparin_freq,
+                     enoxaparin: data.enoxaparin,
+                     enoxaparin_dosage: data.enoxaparin_dosage,
+                     enoxaparin_freq: data.enoxaparin_freq,
+                     tinzaparin: data.tinzaparin,
+                     tinzaparin_dosage: data.tinzaparin_dosage,
+                     tinzaparin_freq: data.tinzaparin_freq,
                      ulcer_in_stomach_or_bowel_last_three_months: data.ulcer_in_stomach_or_bowel_last_three_months,
                      had_transfusion_in_last_three_months_when: data.had_transfusion_in_last_three_months_when,
                      had_transfusion_in_last_three_months: data.had_transfusion_in_last_three_months,
+
+                     cognitive_heart_failure: data.cognitive_heart_failure,
+                     high_blood_pressure: data.high_blood_pressure,
+                     diabetes: data.diabetes,
+                     stroke_or_mini_stroke: data.stroke_or_mini_stroke,
+                     bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months,
 
                      liver_disease: data.liver_disease,
                      lab_location_for_inr_test: data.lab_location_for_inr_test,
@@ -190,6 +238,7 @@ class Page3 extends React.Component {
                   });
 
                   // this.set_CHADS_score();
+                  this.set_DynamicFlags();
                   console.log('Nurse page 3 - state after reponse: ', this.state);
                }
             });
@@ -254,6 +303,11 @@ class Page3 extends React.Component {
    set_DynamicFlags() {
       const {
          liver_disease: liver,
+         bleeding_requiring_treatment_last_three_months: bleeding_requiring_treatment_in_last_three_months,
+         cognitive_heart_failure: cognitive_heart_fail,
+         diabetes: diabetic,
+         stroke_or_mini_stroke: stroke_mini_stroke,
+         high_blood_pressure: high_blood_pressures,
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
@@ -263,18 +317,14 @@ class Page3 extends React.Component {
       if (liver === 'Yes') flags.push('Liver Diseases');
       if (transfusion === 'Yes') flags.push(`Transfusion did on ${transfusion_date}`);
       if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
-
-      let displayFlags = flags.map((flag) => {
-         return (
-            <div className="col-4">
-               <div className="alert myDanger" role="alert">
-                  <span className="white">{flag}</span>
-               </div>
-            </div>
-         );
-      });
-
-      return displayFlags;
+      if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('bleeding_requiring_treatment_last_three_months');
+      if(cognitive_heart_fail === 'Yes') flags.push('cognitive_heart_failure');
+      if(high_blood_pressures === 'Yes') flags.push('high_blood_pressure');
+      if(stroke_mini_stroke === 'Yes') flags.push('stroke_or_mini_stroke');
+      if(diabetic === 'Yes') flags.push('diabetes');
+      
+      console.log(flags);
+      this.setState({ dynamicFlags:flags });
    }
 
    //
@@ -572,6 +622,37 @@ class Page3 extends React.Component {
                                     ) : (
                                        ''
                                     )}
+
+                                    {this.state.dalteparin !== null ? (
+                                       <tr style={{ color: 'white' }}>
+                                          <td>{this.state.dalteparin} </td>
+                                          <td>{this.state.dalteparin_dosage}</td>
+                                          <td>{this.state.dalteparin_freq}</td>
+                                       </tr>
+                                    ) : (
+                                       ''
+                                    )}
+
+                                    
+                                    {this.state.enoxaparin !== null ? (
+                                       <tr style={{ color: 'white' }}>
+                                          <td>{this.state.enoxaparin} </td>
+                                          <td>{this.state.enoxaparin_dosage}</td>
+                                          <td>{this.state.enoxaparin_freq}</td>
+                                       </tr>
+                                    ) : (
+                                       ''
+                                    )}
+
+                                    {this.state.tinzaparin !== null ? (
+                                       <tr style={{ color: 'white' }}>
+                                          <td>{this.state.tinzaparin} </td>
+                                          <td>{this.state.tinzaparin_dosage}</td>
+                                          <td>{this.state.tinzaparin_freq}</td>
+                                       </tr>
+                                    ) : (
+                                       ''
+                                    )}
                                  </tbody>
                               </table>
                            </div>
@@ -781,7 +862,17 @@ class Page3 extends React.Component {
                      </div>
                   </div>
                   <h4>Flags</h4>
-                  <div className="row">{this.set_DynamicFlags()}</div>
+                  <div className="row">
+                     {
+                        this.state.dynamicFlags.map((flag) => {
+                           return <div className="col s4">
+                              <div className="alert myDanger" role="alert">
+                                 <span className="white">{flag}</span>
+                              </div>
+                           </div>
+                        })
+                     }
+                  </div>
 
                   <br />
                   <h6>Aditional Information</h6>

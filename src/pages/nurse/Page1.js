@@ -334,6 +334,7 @@ class Page1 extends React.Component {
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
                         bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months
                      });
+                     this.forceUpdate();
                      this.fillactiveanticogmeds();
                      this.fillactiveantiplatmeds();
                      this.set_DynamicFlags();

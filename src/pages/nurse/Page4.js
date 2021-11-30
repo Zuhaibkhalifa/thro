@@ -27,7 +27,9 @@ class Page4 extends React.Component {
       this.submitForm = this.submitForm.bind(this);
       this.page8 = this.page8.bind(this);
       this.onDateChange = this.onDateChange.bind(this);
+   }
 
+   componentDidMount() {
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',

@@ -21,7 +21,7 @@ export default async function thromboAlgo() {
    console.log('Indicators: ', indicators);
 
    // Get all the data needed for Thrombo Algo
-   function getAlgoData() {
+   async function getAlgoData() {
       let res;
       const headers = {
          'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export default async function thromboAlgo() {
 
       try {
          let patient_id = localStorage.getItem('patient_id');
-         res = axios.get(domain + `/api/nurse/medicationAlgoDetails/:${patient_id}`, {
+         res = await axios.get(domain + `/api/nurse/medicationAlgoDetails/:${patient_id}`, {
             headers: headers,
          });
 

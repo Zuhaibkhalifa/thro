@@ -81,7 +81,7 @@ class Page2 extends React.Component {
     redirectBackNurse() {
         this.submitForm();
         if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/add_patient')
+            this.props.history.push('/Nurse/Nurse1')
         } else {
         this.props.history.push('/Nurse/Nurse1')
         }
@@ -304,7 +304,7 @@ class Page2 extends React.Component {
                                     </li>
                                     <li className="page-item">
                                         <button className="page-link" onClick={this.redirectNextPage}>
-                                            Next Page <i className="fa fa-angle-double-right"></i>
+                                            done <i className="fa fa-angle-double-right"></i>
                                         </button>
                                     </li>
                                 </ul>

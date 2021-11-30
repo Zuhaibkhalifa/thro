@@ -177,7 +177,7 @@ class Page7 extends React.Component {
     redirectBackNurse() {
         this.submitForm();
         if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/add_patient')
+            this.props.history.push('/Nurse/Nurse1')
         } else {
             this.props.history.push('/Nurse/Nurse1')
         }
@@ -240,6 +240,7 @@ class Page7 extends React.Component {
                             type="checkbox"
                             name="optradio"
                             className="pull-right"
+                            checked={this.state.q1 ? true : false}
                             onClick={handleChange}
                             id="q1"
                             value="Yes"
@@ -252,6 +253,7 @@ class Page7 extends React.Component {
                         <input
                             type="checkbox"
                             name="optradio"
+                            checked={this.state.q2 ? true : false}
                             className="pull-right"
                             onClick={handleChange}
                             id="q2"
@@ -263,6 +265,7 @@ class Page7 extends React.Component {
                         <input
                             type="checkbox"
                             name="optradio"
+                            checked={this.state.q3 ? true : false}
                             className="pull-right"
                             onClick={handleChange}
                             value="Yes"
@@ -273,6 +276,7 @@ class Page7 extends React.Component {
                         <input
                             type="checkbox"
                             name="optradio"
+                            checked={this.state.q4 ? true : false}
                             className="pull-right"
                             onClick={handleChange}
                             value="Yes"
@@ -284,6 +288,7 @@ class Page7 extends React.Component {
                             type="checkbox"
                             name="optradio"
                             id="q5"
+                            checked={this.state.q5 ? true : false}
                             value="Yes"
                             className="pull-right"
                             onClick={this.handleChange}
@@ -299,6 +304,7 @@ class Page7 extends React.Component {
                                 type="radio"
                                 name="dvt"
                                 id="dvt1"
+                                checked={this.state.q5_sub ? true : false}
                                 className="pull-right"
                                 value="Less than 1 month ago"
                                 onChange={(e) => this.setState({ q5_sub: e.target.value })}
@@ -309,6 +315,7 @@ class Page7 extends React.Component {
                                 type="radio"
                                 name="dvt"
                                 id="dvt2"
+                                checked={this.state.q5_sub ? true : false}
                                 className="pull-right"
                                 value="Between 1 and 3 months ago"
                                 onChange={(e) => this.setState({ q5_sub: e.target.value })}
@@ -320,6 +327,7 @@ class Page7 extends React.Component {
                                 name="dvt"
                                 id="dvt3"
                                 className="pull-right"
+                                checked={this.state.q5_sub ? true : false}
                                 value="More than 3 months ago"
                                 onChange={(e) => this.setState({ q5_sub: e.target.value })}
                             />

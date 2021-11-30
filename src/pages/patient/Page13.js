@@ -147,7 +147,7 @@ class Page13 extends React.Component {
     redirectBackNurse() {
        this.submitForm();
        if(this.state.nurse_add) {
-           this.props.history.push('/Nurse/add_patient')
+        this.props.history.push('/Nurse/Nurse1')
        } else {
           this.props.history.push('/Nurse/Nurse1')
        }
@@ -301,7 +301,7 @@ class Page13 extends React.Component {
                                     id="one"
                                     name="rdo"
                                     value=""
-                                    onChange={(e) => this.setState({ q1_ans: 'Yes' })}
+                                    onChange={(e) => this.setState({ q1_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
                             <div className="checkbox" id="oneone">
@@ -314,7 +314,7 @@ class Page13 extends React.Component {
                                     id="oneone_freq1"
                                     className="pull-right"
                                     defaultChecked={this.state.q1_ans_option === 'Yes'}
-                                    onChange={(e) => this.setState({ q1_ans_option: 'Yes' })}
+                                    onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <br />
                                 <label className="radio-inline blue">No</label>
@@ -324,7 +324,7 @@ class Page13 extends React.Component {
                                     id="oneone_freq2"
                                     className="pull-right"
                                     defaultChecked={this.state.q1_ans_option === 'No'}
-                                    onChange={(e) => this.setState({ q1_ans_option: 'No' })}
+                                    onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
 
                                 <br />
@@ -351,7 +351,7 @@ class Page13 extends React.Component {
                                     id="two"
                                     name="rdo"
                                     value="Yes"
-                                    onChange={(e) => this.setState({ q2_ans: 'Yes' })}
+                                    onChange={(e) => this.setState({ q2_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
                             <div className="checkbox" id="twotwo">
@@ -365,7 +365,7 @@ class Page13 extends React.Component {
                                     id="twotwo_freq1"
                                     className="pull-right"
                                     defaultChecked={this.state.q2_ans_option === 'Yes'}
-                                    onChange={(e) => this.setState({ q2_ans_option: 'Yes' })}
+                                    onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <br />
                                 <label className="radio-inline blue">No</label>
@@ -375,7 +375,7 @@ class Page13 extends React.Component {
                                     id="twotwo_freq2"
                                     className="pull-right"
                                     defaultChecked={this.state.q2_ans_option === 'No'}
-                                    onChange={(e) => this.setState({ q2_ans_option: 'No' })}
+                                    onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
 
                                 <br />
@@ -401,7 +401,7 @@ class Page13 extends React.Component {
                                     className="pull-right"
                                     id="three"
                                     value="Yes"
-                                    onChange={(e) => this.setState({ q3_ans: 'Yes' })}
+                                    onChange={(e) => this.setState({ q3_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
 
@@ -416,7 +416,7 @@ class Page13 extends React.Component {
                                     id="threethree_freq1"
                                     className="pull-right"
                                     defaultChecked={this.state.q3_ans_option === 'Yes'}
-                                    onChange={(e) => this.setState({ q3_ans_option: 'Yes' })}
+                                    onChange={(e) => this.setState({ q3_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <br />
                                 <label className="radio-inline blue">No</label>
@@ -426,7 +426,7 @@ class Page13 extends React.Component {
                                     id="threethree_freq2"
                                     className="pull-right"
                                     defaultChecked={this.state.q3_ans_option === 'No'}
-                                    onChange={(e) => this.setState({ q3_ans_option: 'No' })}
+                                    onChange={(e) => this.setState({ q3_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
 
                                 <br />
@@ -454,7 +454,7 @@ class Page13 extends React.Component {
                                     id="four"
                                     name="rdo"
                                     defaultChecked={this.state.q4_ans === 'Yes'}
-                                    onChange={(e) => this.setState({ q4_ans: 'Yes' })}
+                                    onChange={(e) => this.setState({ q4_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
                             <div className="checkbox" id="fourfour">
@@ -465,7 +465,7 @@ class Page13 extends React.Component {
                                     id="six"
                                     name="rdo"
                                     defaultChecked={this.state.q5_ans === 'Yes'}
-                                    onChange={(e) => this.setState({ q5_ans: 'Yes' })}
+                                    onChange={(e) => this.setState({ q5_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
                             <div className="checkbox" id="fourfour">
@@ -477,7 +477,7 @@ class Page13 extends React.Component {
                                     name="rdo"
                                     onClick={this.toggleOptions}
                                     defaultChecked={this.state.q1_ans === 'Yes'}
-                                    onChange={(e) => this.setState({ q6_ans: 'Yes' })}
+                                    onChange={(e) => this.setState({ q6_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <div className="text-danger">
                                     {' '}
@@ -496,7 +496,7 @@ class Page13 extends React.Component {
                                 id="optradio_yes"
                                 className="pull-right"
                                 value="Yes"
-                                onChange={(e) => this.setState({ q7_ans: 'Yes' })}
+                                onChange={(e) => this.setState({ q7_ans: e.target.checked ? 'Yes' : 'No' })}
                             />
                             <br />
                             <label className="radio-inline blue">No</label>
@@ -506,7 +506,7 @@ class Page13 extends React.Component {
                                 id="optradio_no"
                                 className="pull-right"
                                 value="No"
-                                onChange={(e) => this.setState({ q7_ans: 'No' })}
+                                onChange={(e) => this.setState({ q7_ans: e.target.checked ? 'Yes' : 'No' })}
                             />
 
                             <br />

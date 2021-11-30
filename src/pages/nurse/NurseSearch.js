@@ -125,15 +125,15 @@ class NurseSearch extends React.Component {
          let patientData = [];
          console.log(response);
          servData.forEach((data) => {
+            console.log(data.id)
             if (data.user_role !== 'Admin' && data.user_role !== 'Nurse') {
                let weight = data.weight + data.weight_unit;
-               let patient_id = data.id;
                let button =
-                  data.patient_id == null ? (
+                  data.id == null ? (
                      <button className="btn btn-info" disabled={true}>
                         <Link
                            style={{ color: 'white', textDecoration: 'none', pointerEvents: 'none' }}
-                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: patient_id } }}
+                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: data.id } }}
                         >
                            get info
                         </Link>
@@ -142,7 +142,7 @@ class NurseSearch extends React.Component {
                      <button className="btn btn-info">
                         <Link
                            style={{ color: 'white', textDecoration: 'none' }}
-                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: patient_id } }}
+                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: data.id } }}
                         >
                            get info
                         </Link>

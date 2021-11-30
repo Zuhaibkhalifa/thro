@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 import axios from 'axios';
+import { server } from '../../utils/functions';
 import { goBack } from '../../utils/user';
 import ReactSpinner from 'react-bootstrap-spinner';
 import { domain } from '../../App';
@@ -53,6 +54,16 @@ class Page3 extends React.Component {
                     } else {
                         this.setState({ loader: '' })
                     }
+
+                    let optradio1 = document.getElementById('optradio1');
+                    let optradio2 = document.getElementById('optradio2');
+                    let optradio3 = document.getElementById('optradio3');
+
+                    if(this.state.q1_ans !== '') {
+                        if(this.state.q1_ans === 'Yes') optradio1.checked = true;
+                        else if(this.state.q1_ans === 'No') optradio2.checked = true;
+                        else optradio3.checked = true;
+                    }
                 });
         } catch (error) {
             console.error('Patient Page 3 - Response - error: ', error);
@@ -64,9 +75,9 @@ class Page3 extends React.Component {
     redirectBackNurse() {
         this.submitForm();
         if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/add_patient')
+            this.props.history.push('/Nurse/Nurse1')
         } else {
-        this.props.history.push('/Nurse/Nurse1')
+            this.props.history.push('/Nurse/Nurse1')
         }
     }
 
@@ -99,7 +110,8 @@ class Page3 extends React.Component {
             patient_id: this.state.patient_id
         };
 
-        console.log('Patient Page 3 - page3 func - params: ', param);
+        var a = server('patient/page3', param);
+        console.log('Patient Page 3 - page3 server - response: ', a);
     }
 
     inputChangedHandler(e) {

@@ -92,7 +92,7 @@ class Page9 extends React.Component {
    redirectBackNurse() {
        this.submitForm();
        if(this.state.nurse_add) {
-           this.props.history.push('/Nurse/add_patient')
+         this.props.history.push('/Nurse/Nurse1')
        } else {
           this.props.history.push('/Nurse/Nurse1')
        }

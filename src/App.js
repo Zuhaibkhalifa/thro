@@ -19,7 +19,6 @@ const Page4 = React.lazy(() => import('./pages/patient/Page4'));
 const Page7 = React.lazy(() => import('./pages/patient/Page7'));
 const Page8 = React.lazy(() => import('./pages/patient/Page8'));
 const Page9 = React.lazy(() => import('./pages/patient/Page9'));
-const Page5 = React.lazy(() => import('./pages/patient/Page5'));
 const Page6 = React.lazy(() => import('./pages/patient/Page6'));
 const Page10 = React.lazy(() => import('./pages/patient/Page10'));
 const Page11 = React.lazy(() => import('./pages/patient/Page11'));
@@ -57,7 +56,6 @@ const App = () => {
             <PrivateRoute path="/User/Page2" component={Page2} />
             <PrivateRoute path="/User/Page3" component={Page3} />
             <PrivateRoute path="/User/Page4" component={Page4} />
-            <PrivateRoute path="/User/Page5" component={Page5} />
             <PrivateRoute path="/User/Page6" component={Page6} />
             <PrivateRoute path="/User/Page7" component={Page7} />
             <PrivateRoute path="/User/Page8" component={Page8} />

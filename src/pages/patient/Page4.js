@@ -26,6 +26,7 @@ class Page4 extends React.Component {
             q1_sub_q1_ans_inner1: '',
             q1_sub_q2_ans: '',
             q1_sub_q2_ans_inner2: '',
+            q2_ans: '',
             q3_ans: '',
             q4_ans: '',
             q5_ans: '',
@@ -89,10 +90,55 @@ class Page4 extends React.Component {
                             q6_ans: servrData.peripheral_arterial_disease,
                             q7_sub_ans: servrData.other,
                             q8_ans: servrData.none,
-                            loader: '',
+                            loader: ''
                         });
                     } else {
                         this.setState({ loader: '' })
+                    }
+
+                    let vte = document.getElementById('vte');
+                    let dvt_option1 = document.getElementById('dvt_option1');
+                    let pe_option1 = document.getElementById('pe_option1');
+                    let mainOption2 = document.getElementById('mainOption2');
+                    let hvr = document.getElementById('hvr');
+                    let mainOption3 = document.getElementById('mainOption3');
+                    let mainOption4 = document.getElementById('mainOption4');
+                    let mainOption5 = document.getElementById('mainOption5');
+                    let optradio7 = document.getElementById('optradio7');
+                    let reason = document.getElementById('reason');
+                    let optradio8 = document.getElementById('optradio8');
+
+                    if(this.state.q1_ans === 'Yes') {
+                        vte.checked = true;
+                        this.showhidevte();
+                        if(this.state.q1_sub_q1_ans === 'Yes') {
+                            dvt_option1.checked = true;
+                            this.onRadioBtn1()
+                        }
+                        if(this.state.q1_sub_q2_ans === 'Yes') {
+                            pe_option1.checked = true;
+                            this.onRadioBtn2();
+                        }
+                    }
+                    if(this.state.q2_ans === 'Yes') mainOption2.checked = true;
+                    if(this.state.q3_ans === 'Yes') hvr.checked = true;
+                    if(this.state.q4_ans === 'Yes') mainOption3.checked = true;
+                    if(this.state.q5_ans === 'Yes') mainOption4.checked = true;
+                    if(this.state.q6_ans === 'Yes') mainOption5.checked = true;
+                    if(this.state.q7_ans === 'Yes') {
+                        optradio7.checked = true;
+                        reason.value = this.state.q7_sub_ans;
+                    }
+                    if(this.state.q8_ans === 'Yes') {
+                        optradio8.checked = true;
+                        document.getElementById('de').style.display = 'none';
+                        document.getElementById('vte').disabled = true;
+                        document.getElementById('mainOption2').disabled = true;
+                        document.getElementById('mainOption3').disabled = true;
+                        document.getElementById('mainOption4').disabled = true;
+                        document.getElementById('mainOption5').disabled = true;
+                        document.getElementById('optradio7').disabled = true;
+                        document.getElementById('hvr').disabled = true;
                     }
                 });
         } catch (error) {
@@ -105,7 +151,7 @@ class Page4 extends React.Component {
     redirectBackNurse() {
         this.submitForm();
         if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/add_patient')
+            this.props.history.push('/Nurse/Nurse1')
         } else {
             this.props.history.push('/Nurse/Nurse1')
         }
@@ -114,9 +160,7 @@ class Page4 extends React.Component {
     redirectNextPage() {
         this.submitForm();
         if(this.props.location.state !== undefined) {
-            if(this.state.q3_ans === "Yes" && this.state.q5_ans === "Yes") {
-                this.props.history.push({ pathname:'/User/Page5', state:{ patient_id: this.props.location.state.patient_id } });
-            } else if(this.state.q3_ans === "Yes") {
+            if(this.state.q3_ans === "Yes") {
                 this.props.history.push({ pathname:'/User/Page6', state:{ patient_id: this.props.location.state.patient_id } });
             } else {
                 this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
@@ -171,12 +215,10 @@ class Page4 extends React.Component {
             this.no_errors();
             console.log('Patient page 4 - SubmitForm - State: ', this.state);
             this.page4();
-            if(this.state.q3_ans === "Yes" && this.state.q5_ans === "Yes") {
-                this.props.history.push('/User/Page5');
-            } else if(this.state.q3_ans === "Yes") {
+            if(this.state.q3_ans === "Yes") {
                 this.props.history.push('/User/Page6');
             } else {
-                this.props.history.push('/User/Page5');
+                this.props.history.push('/User/Page7');
             }
         }
     }
@@ -318,7 +360,7 @@ class Page4 extends React.Component {
                             name="optradio"
                             value="Yes"
                             className="pull-right"
-                            onChange={(e) => this.setState({ q1_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q1_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                             id="vte"
                             onClick={this.showhidevte}
                         />
@@ -331,7 +373,7 @@ class Page4 extends React.Component {
                                 name="dvt_option"
                                 className="pull-right"
                                 onClick={this.onRadioBtn1}
-                                onChange={(e) => this.setState({ q1_sub_q1_ans: 'Yes' })}
+                                onChange={(e) => this.setState({ q1_sub_q1_ans: e.target.checked ? 'Yes' : 'No' })}
                             />
                             <div id="toggle1">
                                 <p className="blue">
@@ -341,47 +383,50 @@ class Page4 extends React.Component {
                                 <input
                                     type="radio"
                                     name="dvt_sub_opt"
-                                    id="dvt_option1"
+                                    id="dvt_option2"
                                     className="pull-right"
                                     onChange={(e) =>
                                         this.setState({
-                                            q1_sub_q1_ans_inner1: 'Less than 1 month ago',
+                                            q1_sub_q1_ans_inner1: e.target.checked ? 'Less than 1 month ago' : '',
                                         })
                                     }
                                 />
                                 <br />
                                 <label className="radio-inline blue">Between 1 and 3 months ago</label>
                                 <input
+                                    id="dvt_option3"
                                     type="radio"
                                     name="dvt_sub_opt"
                                     className="pull-right"
                                     onChange={(e) =>
                                         this.setState({
-                                            q1_sub_q1_ans_inner1: 'Between 1 and 3 months ago',
+                                            q1_sub_q1_ans_inner1: e.target.checked ? 'Between 1 and 3 months ago' : '',
                                         })
                                     }
                                 />
                                 <br />
                                 <label className="radio-inline blue">More than 3 months ago</label>
                                 <input
+                                    id="dvt_option4"
                                     type="radio"
-                                    name="dvt_sub_opt"
+                                    name="dvt_sub_opt1"
                                     className="pull-right"
                                     onChange={(e) =>
                                         this.setState({
-                                            q1_sub_q1_ans_inner1: 'More than 3 months ago<',
+                                            q1_sub_q1_ans_inner1: e.target.checked ? 'More than 3 months ago' : '',
                                         })
                                     }
                                 />
                                 <br />
                                 <label className="radio-inline blue">Not Sure</label>
                                 <input
+                                    id="dvt_option5"
                                     type="radio"
                                     name="dvt_sub_opt"
                                     className="pull-right"
                                     onChange={(e) =>
                                         this.setState({
-                                            q1_sub_q1_ans_inner1: 'Not Sure',
+                                            q1_sub_q1_ans_inner1: e.target.checked ? 'Not Sure' : '',
                                         })
                                     }
                                 />
@@ -396,7 +441,7 @@ class Page4 extends React.Component {
                                 name="pe_option"
                                 className="pull-right"
                                 onClick={this.onRadioBtn2}
-                                onChange={(e) => this.setState({ q1_sub_q2_ans: 'Yes' })}
+                                onChange={(e) => this.setState({ q1_sub_q2_ans: e.target.checked ? 'Yes' : 'No' })}
                             />
                         </div>
 
@@ -406,46 +451,50 @@ class Page4 extends React.Component {
                             </p>
                             <label className="radio-inline blue">Less than 1 month ago</label>
                             <input
+                                id="pe_option2"
                                 type="radio"
                                 name="pe_sub_option"
                                 className="pull-right"
                                 onChange={(e) =>
                                     this.setState({
-                                        q1_sub_q2_ans_inner2: 'Less than 1 month ago',
+                                        q1_sub_q2_ans_inner2: e.target.checked ? 'Less than 1 month ago' : '',
                                     })
                                 }
                             />
                             <br />
                             <label className="radio-inline blue">Between 1 and 3 months ago</label>
                             <input
+                                id="pe_option3"
                                 type="radio"
                                 name="pe_sub_option"
                                 className="pull-right"
                                 onChange={(e) =>
                                     this.setState({
-                                        q1_sub_q2_ans_inner2: 'Between 1 and 3 months ago',
+                                        q1_sub_q2_ans_inner2: e.target.checked ? 'Between 1 and 3 months ago' : '',
                                     })
                                 }
                             />
                             <br />
                             <label className="radio-inline blue">More than 3 months ago</label>
                             <input
+                                id="pe_option4"
                                 type="radio"
                                 name="pe_sub_option"
                                 className="pull-right"
                                 onChange={(e) =>
                                     this.setState({
-                                        q1_sub_q2_ans_inner2: 'More than 3 months ago',
+                                        q1_sub_q2_ans_inner2: e.target.checked ? 'More than 3 months ago' : '',
                                     })
                                 }
                             />
                             <br />
                             <label className="radio-inline blue">Not Sure</label>
                             <input
+                                id="pe_option5"
                                 type="radio"
                                 name="pe_sub_option"
                                 className="pull-right"
-                                onChange={(e) => this.setState({ q1_sub_q2_ans_inner2: 'Not Sure' })}
+                                onChange={(e) => this.setState({ q1_sub_q2_ans_inner2: e.target.checked ? 'Not Sure' : '' })}
                             />
                             <div className="text-danger"> {this.state.error4 !== '' ? this.state.error4 : ''}</div>
                         </div>
@@ -459,7 +508,7 @@ class Page4 extends React.Component {
                             type="checkbox"
                             name="optradio"
                             className="pull-right"
-                            onChange={(e) => this.setState({ q2_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q2_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                             onClick={this.showhide}
                             id="mainOption2"
                         />
@@ -470,7 +519,7 @@ class Page4 extends React.Component {
                             name="optradio"
                             className="pull-right"
                             id="hvr"
-                            onChange={(e) => this.setState({ q3_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q3_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                         />
                         <br />
                         <label className="radio-inline blue">Blood clot in heart</label>
@@ -480,7 +529,7 @@ class Page4 extends React.Component {
                             className="pull-right"
                             value="1"
                             defaultChecked={this.state.q4_ans === '1'}
-                            onChange={(e) => this.setState({ q4_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q4_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                             onClick={this.showhide}
                             id="mainOption3"
                         />
@@ -490,7 +539,7 @@ class Page4 extends React.Component {
                             type="checkbox"
                             name="optradio"
                             className="pull-right"
-                            onChange={(e) => this.setState({ q5_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q5_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                             onClick={this.showhide}
                             id="mainOption4"
                         />
@@ -500,7 +549,7 @@ class Page4 extends React.Component {
                             type="checkbox"
                             name="optradio"
                             className="pull-right"
-                            onChange={(e) => this.setState({ q6_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q6_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                             onClick={this.showhide}
                             id="mainOption5"
                         />
@@ -513,7 +562,7 @@ class Page4 extends React.Component {
                             value="Other"
                             className="pull-right"
                             onClick={this.showhide}
-                            onChange={(e) => this.setState({ q7_ans: 'Other', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q7_ans: e.target.checked ? 'Other' : '', chkVal: 1 })}
                         />
                         <div id="de">
                             <label className="radio-inline blue">Reason for treatment with blood</label>
@@ -535,7 +584,7 @@ class Page4 extends React.Component {
                             name="optradio"
                             id="optradio8"
                             className="pull-right"
-                            onChange={(e) => this.setState({ q8_ans: 'Yes', chkVal: 1 })}
+                            onChange={(e) => this.setState({ q8_ans: e.target.checked ? 'Yes' : 'No', chkVal: 1 })}
                             onClick={this.mainOption}
                         />
                         <br />
