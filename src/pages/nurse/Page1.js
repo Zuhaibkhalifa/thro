@@ -50,63 +50,6 @@ class Page1 extends React.Component {
       // console.log("Constructor - Validator: ", this.validator);
 
       this.state = {
-         anticogMedsDropdown: [
-            {
-               "med_name": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)", "Dalteparin (Fragmin)", "Enoxaparin (Lovenox)", "Tinzaparin (Innohep)"],
-               "dosage": ["2.5 mg", "5 mg", "10 mg", "15 mg", "20 mg", "30 mg", "60 mg", "75 mg", "110 mg", "150 mg"],
-               "dosage_time": ["Once daily", "Twice daily"]
-            }
-         ],
-         redirectToMedPage: [
-            {
-               "medPhase1": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)"],
-               "redirectPage": "/User/Page8"
-            },
-            {
-               "medPhase2": ["Dalteparin (Fragmin)", "Enoxaparin (Lovenox)", "Tinzaparin (Innohep)"],
-               "redirectPage": "/User/Page9"
-            },
-            {
-               "medPhase3": ["Coumadin (Warfarin)", "Sintrom (Acenocoumarol)"],
-               "redirectPage": "/User/Page10"
-            },
-            {
-               "medPhase4": ["Aspirin (ASA)", "Plavix (Clopidogrel)", "Brillinta (Ticagrelor)", "Effient (Prasugrel)"],
-               "redirectPage": "/User/Page11"
-            }
-         ],
-         indicationAnticogVal: [
-            { "indication": "Venous Thromboembolism (VTE)" },
-            { "indication": "Atrial Fibrillation of flutter" },
-            { "indication": "Heart Valve Replacement" },
-            { "indication": "Blood clot in heart" },
-            { "indication": "Arterial Peripheral Thrombosis" },
-            { "indication": "Peripheral arterial Disease" }
-         ]
-         ,
-         antiplatMedsDropdown: [
-            {
-               "med_name": ["Aspirin (ASA)", "Plavix (Clopidogrel)", "Brillinta (Ticagrelor)", "Effient (Prasugrel)"],
-               "dosage": ["5 mg", "10 mg", "60 mg", "75 mg", "81 mg", "90 mg"],
-               "dosage_time": ["Once daily", "Twice daily"]
-            }
-         ],
-         displayMedFlags: [
-            { "flag_name": "Blood clot while blood thinner interrupted" },
-            { "flag_name": "Liver Cirrhosis" },
-            { "flag_name": "Transfusion within last 3 months" },
-            { "flag_name": "Stroke or ministroke/TIA within last 3 months" },
-            { "flag_name": "Bleeding within past 3 months (patient page 13)" },
-            { "flag_name": "Requiring treatment in hospital OR from stomach or bowel" },
-            { "flag_name": "Ulcer within last 3 months" },
-            { "flag_name": "Currently undergoing Cancer therapy" },
-            { "flag_name": "Antiphospholipid antibody syndrome" },
-            { "flag_name": "Mitral stenosis" },
-            { "flag_name": "DVT or PE in the last 3 months" },
-            { "flag_name": "CHADS score > 4" },
-            { "flag_name": "CrCl <30" },
-         ],
-         
          month_year: '',
          procedure: '',
          date_of_procedure: '',
@@ -120,14 +63,6 @@ class Page1 extends React.Component {
          activeAnticogMeds: [],
          activeAntiplatMeds: [],
          dynamicFlags: [],
-         indicationSubValFirst: false,
-         indicationSubVal: "",
-         indicationSubValTime: "",
-         indicationSubValSecondTime: "",
-         indicationSubValFlag: false,
-         indicationSubValFlagShown: false,
-         indicationSubValSecondFlag: false,
-         indicationSubValSecondFlagShown: false,
          
          poc_inr_date: '',
          poc_creat_date: '',
@@ -156,6 +91,22 @@ class Page1 extends React.Component {
          tinzaparin: '',
          tinzaparin_dosage: '',
          tinzaparin_freq: '',
+         coumadin: '',
+         coumadin_monday: '',
+         coumadin_tuesday: '',
+         coumadin_wednesday: '',
+         coumadin_thursday: '',
+         coumadin_friday: '',
+         coumadin_saturday: '',
+         coumadin_sunday: '',
+         sintrom: '',
+         sintrom_monday: '',
+         sintrom_tuesday: '',
+         sintrom_wednesday: '',
+         sintrom_thursday: '',
+         sintrom_friday: '',
+         sintrom_saturday: '',
+         sintrom_sunday: '',
          aspirin: '',
          aspirin_dosage: '',
          aspirin_dosage_time: '',
@@ -192,13 +143,6 @@ class Page1 extends React.Component {
          edoxabon_dosage_time: '',
          ulcer_in_stomach_or_bowel: '',
          referred_by: '',
-         anticogMedDropDownValChanged: "",
-         anticogDosageDropDownValChanged: "",
-         anticog_dosage_time_dropdown_value: "",
-         antiplatMedDropDownValChanged: "",
-         antiplatDosageDropDownValChanged: "",
-         antiplat_dosage_time_dropdown_value: "",
-         antiplatDosageTimeDropDownValChanged: ""
       };
 
       // Bind " this " ref of class to Methods
@@ -327,6 +271,23 @@ class Page1 extends React.Component {
                         edoxabon: data.edoxabon,
                         edoxabon_dosage: data.edoxabon_dosage,
                         edoxabon_dosage_time: data.edoxabon_dosage_time,
+                        coumadin: data.coumadin,
+                        coumadin_monday: data.coumadin_monday,
+                        coumadin_tuesday: data.coumadin_tuesday,
+                        coumadin_wednesday: data.coumadin_wednesday,
+                        coumadin_thursday: data.coumadin_thursday,
+                        coumadin_friday: data.coumadin_friday,
+                        coumadin_saturday: data.coumadin_saturday,
+                        coumadin_sunday: data.coumadin_sunday,
+                        sintrom: data.sintrom,
+                        sintrom_monday: data.sintrom_monday,
+                        sintrom_tuesday: data.sintrom_tuesday,
+                        sintrom_wednesday: data.sintrom_wednesday,
+                        sintrom_thursday: data.sintrom_thursday,
+                        sintrom_friday: data.sintrom_friday,
+                        sintrom_saturday: data.sintrom_saturday,
+                        sintrom_sunday: data.sintrom_sunday,
+
                         ulcer_in_stomach_or_bowel: data.ulcer_in_stomach_or_bowel,
                         cognitive_heart_failure: data.cognitive_heart_failure,
                         high_blood_pressure: data.high_blood_pressure,
@@ -424,6 +385,32 @@ class Page1 extends React.Component {
          });
       }
       
+      if(this.state.coumadin) {
+         activeMeds.push({
+            med_name: this.state.coumadin,
+            med_dosage_monday: this.state.coumadin_monday,
+            med_dosage_tuesday: this.state.coumadin_tuesday,
+            med_dosage_wednesday: this.statecoumadin_wednesday,
+            med_dosage_thursday: this.state.coumadin_thursday,
+            coumadin_friday: this.state.coumadin_friday,
+            med_dosage_saturday: this.state.coumadin_saturday,
+            med_dosage_sunday: this.state.coumadin_sunday
+         });
+      } 
+      
+      if(this.state.sintrom) {
+         activeMeds.push({
+            med_name: this.state.sintrom,
+            med_dosage_monday: this.state.sintrom_monday,
+            med_dosage_tuesday: this.state.sintrom_tuesday,
+            med_dosage_wednesday: this.state.sintrom_wednesday,
+            med_dosage_thursday: this.state.sintrom_thursday,
+            med_dosage_friday: this.state.sintrom_friday,
+            med_dosage_saturday: this.state.sintrom_saturday,
+            med_dosage_sunday: this.state.sintrom_sunday
+         });
+      }
+      console.log(this.state);
       this.setState({ activeAnticogMeds: activeMeds });
 
       this.forceUpdate();
@@ -589,6 +576,7 @@ class Page1 extends React.Component {
          age: this.state.age,
          gender: this.state.genderSelected,
          weight: this.state.weight,
+         weightSelected: this.state.weightSelected,
          indication_for_anticoagulation: this.state.indication_for_anticoagulation,
          chads_score_and_distribution: this.state.chads_score_and_distribution,
 
@@ -638,12 +626,12 @@ class Page1 extends React.Component {
       this.props.history.push({ pathname: '/User/Page3', state:{ patient_id: this.state.patient_id } });
    }
    
-   handleAntiCogRedirection(value) {
+   handleAntiCogRedirection() {
       let redirect = '/User/Page8';
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
    }
 
-   handleAntiPlatRedirection(value) {
+   handleAntiPlatRedirection() {
       let redirect = '/User/Page11';
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
    }
@@ -699,8 +687,7 @@ class Page1 extends React.Component {
                      <div className="col-6">
                         {procedures(
                            this.state.procedure,
-                           this.handle_procedure,
-                           this.validator.message('procedure', this.state.procedure, 'required|not_select_procedure')
+                           this.handle_procedure
                         )}
                      </div>
                      <div className="col-6">
@@ -713,7 +700,6 @@ class Page1 extends React.Component {
                               defaultValue={this.state.date_of_procedure}
                               onChange={(e) => this.setState({ date_of_procedure: e.target.value })}
                            />
-                           {this.validator.message('procedure_date', this.state.date_of_procedure, 'required')}
                         </div>
                      </div>
                   </div>
@@ -730,7 +716,6 @@ class Page1 extends React.Component {
                               defaultValue={this.state.age}
                               onChange={(e) => this.setState({ age: e.target.value })}
                            />
-                           {this.validator.message('age', this.state.age, 'required')}
                         </div>
                      </div>
 
@@ -748,7 +733,6 @@ class Page1 extends React.Component {
                               <option>Female</option>
                               <option>Other</option>
                            </select>
-                           {this.validator.message('gender', this.state.genderSelected, 'required')}
                         </div>
                      </div>
                      <div className="col-2">
@@ -762,8 +746,6 @@ class Page1 extends React.Component {
                               defaultValue={this.state.weight}
                               onChange={(e) => this.setState({ weight: e.target.value })}
                            />
-
-                           {this.validator.message('weight', this.state.weight, 'required')}
                         </div>
                      </div>
 
@@ -780,7 +762,6 @@ class Page1 extends React.Component {
                               <option>lbs</option>
                               <option>Kg</option>
                            </select>
-                           {this.validator.message('unit_weight', this.state.weightSelected, 'required')}
                         </div>
                      </div>
                   </div>
@@ -798,11 +779,6 @@ class Page1 extends React.Component {
                               value={this.state.indication_for_anticoagulation}
                            />
                            <EditIcon onClick={() => this.handleIndicationRedirection(this.state.indication_for_anticoagulation)} className={`${classes['indication_anticpg_edit']}`} />
-                           {this.validator.message(
-                              'anticoagulation',
-                              this.state.indication_for_anticoagulation,
-                              'required'
-                           )}
                         </div>
                      </div>
                   </div>
@@ -821,7 +797,6 @@ class Page1 extends React.Component {
                               }
                               id="chads_score_and_distribution"
                            />
-                           {this.validator.message('chads_score', this.state.chads_score_and_distribution, 'required')}
                         </div>
                      </div>
                   </div>
@@ -848,36 +823,85 @@ class Page1 extends React.Component {
                                  Current Dosing 
                               </h5>
                            </div>
-                           <table style={{ display: "inline-table" }} className="table-responsive">
-                              <tr style={{ borderBottom: "1px solid #ccc" }}>
-                                 <th>Medicine name</th>
-                                 <th>Dosage</th>
-                                 <th>Frequency</th>
-                                 <th>Time</th>
-                                 <th>Action</th>
-                              </tr>
-                              {
-                                 this.state.activeAnticogMeds.length > 0 ?
-                                    this.state.activeAnticogMeds.map((meds, index) => {
-                                       return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
-                                          <td>{meds.med_name}</td>
-                                          <td>{meds.med_dosage}</td>
-                                          <td>{meds.med_dosage_time}</td>
-                                          <td>{meds.med_dosage_freequency}</td>
-                                          <td><EditIcon onClick={() => this.handleAntiCogRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} /></td>
+                           {
+                              (this.state.coumadin || this.state.sintrom) ?
+                              <> 
+                                 <table style={{ display: "inline-table" }} className="table-responsive">
+                                    <tr style={{ borderBottom: "1px solid #ccc" }}>
+                                       <th>Medicine name</th>
+                                       <th>MON</th>
+                                       <th>TUE</th>
+                                       <th>WED</th>
+                                       <th>THR</th>
+                                       <th>FRI</th>
+                                       <th>SAT</th>
+                                       <th>SUN</th>
+                                       <th>Action</th>
+                                    </tr>
+                                    {
+                                       this.state.activeAnticogMeds.length > 0 ?
+                                          this.state.activeAnticogMeds.map((meds, index) => {
+                                             return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                                <td>{meds.med_name}</td>
+                                                <td>{meds.med_dosage_monday}</td>
+                                                <td>{meds.med_dosage_tuesday}</td>
+                                                <td>{meds.med_dosage_wednesday}</td>
+                                                <td>{meds.med_dosage_thursday}</td>
+                                                <td>{meds.med_dosage_friday}</td>
+                                                <td>{meds.med_dosage_saturday}</td>
+                                                <td>{meds.med_dosage_sunday}</td>
+                                                <td><EditIcon onClick={() => this.handleAntiCogRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} /></td>
+                                             </tr>
+                                          })
+                                       : 
+                                       <tr>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td><EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} /></td>
                                        </tr>
-                                    })
-                                 : 
-                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} /></td>
-                                 </tr>
-                              }
+                                    }
 
-                           </table>
+                                 </table>
+                              </> :
+                              <> 
+                                 <table style={{ display: "inline-table" }} className="table-responsive">
+                                    <tr style={{ borderBottom: "1px solid #ccc" }}>
+                                       <th>Medicine name</th>
+                                       <th>Dosage</th>
+                                       <th>Frequency</th>
+                                       <th>Time</th>
+                                       <th>Action</th>
+                                    </tr>
+                                    {
+                                       this.state.activeAnticogMeds.length > 0 ?
+                                          this.state.activeAnticogMeds.map((meds, index) => {
+                                             return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                                <td>{meds.med_name}</td>
+                                                <td>{meds.med_dosage}</td>
+                                                <td>{meds.med_dosage_time}</td>
+                                                <td>{meds.med_dosage_freequency}</td>
+                                                <td><EditIcon onClick={() => this.handleAntiCogRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} /></td>
+                                             </tr>
+                                          })
+                                       : 
+                                       <tr>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td><EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} /></td>
+                                       </tr>
+                                    }
+
+                                 </table>
+                              </>
+                           }
                         </div>
                      </div>
                   </div>

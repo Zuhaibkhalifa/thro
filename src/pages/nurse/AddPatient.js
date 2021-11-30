@@ -689,6 +689,7 @@ class AddPatient extends React.Component {
                            onChange={(e) => this.setState({ patient_id: e.target.value })}
                         />
                      </div>
+                        {this.validator.message('patient_id', this.state.patient_id, 'required|enter_patient_id')}
                   </div>
                   <br />
                   <div className="row">
@@ -753,8 +754,7 @@ class AddPatient extends React.Component {
                      <div className="col-6">
                         {procedures(
                            this.state.procedure,
-                           this.handle_procedure,
-                           this.validator.message('procedure', this.state.procedure, 'required|not_select_procedure')
+                           this.handle_procedure
                         )}
                      </div>
                      <div className="col-6">
@@ -767,7 +767,6 @@ class AddPatient extends React.Component {
                               defaultValue={this.state.date_of_procedure}
                               onChange={(e) => this.setState({ date_of_procedure: e.target.value })}
                            />
-                           {this.validator.message('procedure_date', this.state.date_of_procedure, 'required')}
                         </div>
                      </div>
                   </div>
@@ -784,7 +783,6 @@ class AddPatient extends React.Component {
                               defaultValue={this.state.age}
                               onChange={(e) => this.setState({ age: e.target.value })}
                            />
-                           {this.validator.message('age', this.state.age, 'required')}
                         </div>
                      </div>
 
@@ -802,7 +800,6 @@ class AddPatient extends React.Component {
                               <option>Female</option>
                               <option>Other</option>
                            </select>
-                           {this.validator.message('gender', this.state.genderSelected, 'required')}
                         </div>
                      </div>
                      <div className="col-2">
@@ -817,7 +814,6 @@ class AddPatient extends React.Component {
                               onChange={(e) => this.setState({ weight: e.target.value })}
                            />
 
-                           {this.validator.message('weight', this.state.weight, 'required')}
                         </div>
                      </div>
 
@@ -834,7 +830,6 @@ class AddPatient extends React.Component {
                               <option>lbs</option>
                               <option>Kg</option>
                            </select>
-                           {this.validator.message('unit_weight', this.state.weightSelected, 'required')}
                         </div>
                      </div>
                   </div>
@@ -852,90 +847,6 @@ class AddPatient extends React.Component {
                               value={this.state.indication_for_anticoagulation}
                            />
                            <EditIcon onClick={() => this.handleIndicationRedirection(this.state.indication_for_anticoagulation)} className={`${classes['indication_anticpg_edit']}`} />
-                              {/* {
-                                 this.state.indicationAnticogVal.map((item, index) => {
-                                    return ([
-                                       <>
-                                          <option key={index} value={item.indication}>
-                                             {item.indication}
-                                          </option>
-                                          {
-                                             item.indication === 'Venous Thromboembolism (VTE)' ? 
-                                             <>
-                                                {
-                                                   this.state.indicationSubValFirst ? 
-                                                   <optgroup style={{ height: "50px" }} className="form-control" onChange={(e) => this.setState({ indicationSubVal: e.target.value })}>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>DVT</option>
-                                                      <option style={{ position: "relative", top: "-26px", left: "-12px" }}>PE</option>
-                                                   </optgroup> : ""
-                                                }
-                                             </> : ""
-                                          }
-                                       </>
-                                    ])
-                                 })
-                              }
-                           </select> */}
-                           {/* {
-                              this.state.indicationSubValFlagShown ? "" : this.state.indicationSubValFlag ? 
-                              <Modal
-                                 open={this.state.indicationSubValFlag}
-                                 onClose={this.handleIndicationSubValFlag}
-                                 aria-labelledby="modal-modal-title"
-                                 aria-describedby="modal-modal-description"
-                              >
-                              <Box sx={{
-                                 position: 'absolute',
-                                 top: '50%',
-                                 left: '50%',
-                                 transform: 'translate(-50%, -50%)',
-                                 width: 400,
-                                 bgcolor: 'background.paper',
-                                 border: '2px solid #000',
-                                 boxShadow: 24,
-                                 p: 4,
-                              }}>
-                                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                                 If So, how long ago
-                                 </Typography>
-                                 <select style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValTime: e.target.value })}>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
-                                 </select>
-                              </Box>
-                              </Modal> : ""
-                           }
-                           {
-                              this.state.indicationSubValSecondFlagShown ? "" : this.state.indicationSubValSecondFlag ? 
-                              <Modal
-                                 open={this.state.indicationSubValSecondFlag}
-                                 onClose={this.handleIndicationSubValSecondFlag}
-                                 aria-labelledby="modal-modal-title"
-                                 aria-describedby="modal-modal-description"
-                              >
-                              <Box sx={{
-                                 position: 'absolute',
-                                 top: '50%',
-                                 left: '50%',
-                                 transform: 'translate(-50%, -50%)',
-                                 width: 400,
-                                 bgcolor: 'background.paper',
-                                 border: '2px solid #000',
-                                 boxShadow: 24,
-                                 p: 4,
-                              }}>
-                                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                                 If So, how long ago
-                                 </Typography>
-                                 <select style={{ height: "80px" }} className="form-control" onChange={(e) => this.setState({ indicationSubValSecondTime: e.target.value })}>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Less than 1 month ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>Between 1 and 3 months ago</option>
-                                    <option style={{ position: "relative", top: "-26px", left: "-12px" }}>More than 3 months ago</option>
-                                 </select>
-                              </Box>
-                              </Modal> : ""
-                           } */}
                         </div>
                      </div>
                   </div>
@@ -1010,28 +921,6 @@ class AddPatient extends React.Component {
                               }
 
                            </table>
-                           {/* <div style={{ marginTop: "15px" }}>
-                              <div className="row" style={{ width: "100%" }}>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_med_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.anticogMedsDropdown[0].med_name.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_anticog_dosage_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.anticogMedsDropdown[0].dosage.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                              </div>
-                           </div> */}
                         </div>
                      </div>
                   </div>
@@ -1082,28 +971,6 @@ class AddPatient extends React.Component {
                                  </tr>
                               }
                            </table>
-                           {/* <div style={{ marginTop: "15px" }}>
-                              <div className="row" style={{ width: "100%" }}>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_med_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.antiplatMedsDropdown[0].med_name.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                                 <div className="col s3">
-                                    <select multiple={true} className="form-control" onChange={(e) => this.handle_antiplat_dosage_dropdown_value(e, e.target.selectedOptions)}>
-                                       {
-                                          this.state.antiplatMedsDropdown[0].dosage.map((meds, index) => {
-                                             return <option key={index} value={meds}>{meds}</option>
-                                          }) 
-                                       }
-                                    </select>
-                                 </div>
-                              </div>
-                           </div> */}
                         </div>
                      </div>
                   </div>
@@ -1263,19 +1130,6 @@ class AddPatient extends React.Component {
                         })
                      }
                   </div>
-                  {/* <div className="row">
-                     <div className="col s6">
-                        <span style={{ color: "grey", float: "right", fontSize: "14px" }}>(press Ctrl for multiple)</span>
-                        <select multiple={true} className="form-control" onChange={(e) => this.handle_flags_change_value(e.target.selectedOptions)}>
-                           <option value="">--- Choose corerct flag ---</option>
-                           {
-                              this.state.displayMedFlags.map((medsFlags, mfindex) => {
-                                 return <option key={mfindex} value={medsFlags.flag_name}>{medsFlags.flag_name}</option>
-                              })
-                           }
-                        </select>
-                     </div>
-                  </div> */}
                   <h5>
                      What Lab Did Patient Use : 
                      {this.state.lab_location_for_inr_test !== null ? (

@@ -23,6 +23,8 @@ class Page10 extends React.Component {
             q1_ans_wednesday: '',
             q1_ans_thursday: '',
             q1_ans_friday: '',
+            q1_ans_saturday: '',
+            q1_ans_sunday: '',
             q1_ans_other: '',
             q2_ans: '',
             q2_ans_monday: '',
@@ -30,6 +32,8 @@ class Page10 extends React.Component {
             q2_ans_wednesday: '',
             q2_ans_thursday: '',
             q2_ans_friday: '',
+            q2_ans_saturday: '',
+            q2_ans_sunday: '',
             q2_ans_other: '',
             loader: 1,
             patient_id: '',
@@ -67,6 +71,8 @@ class Page10 extends React.Component {
                             q1_ans_wednesday: servrData.coumadin_wednesday,
                             q1_ans_thursday: servrData.coumadin_thursday,
                             q1_ans_friday: servrData.coumadin_friday,
+                            q1_ans_saturday: servrData.coumadin_saturday,
+                            q1_ans_sunday: servrData.coumadin_sunday,
                             q1_ans_other: servrData.not_sure,
                             q2_ans: servrData.sintrom,
                             q2_ans_monday: servrData.sintrom_monday,
@@ -74,6 +80,8 @@ class Page10 extends React.Component {
                             q2_ans_wednesday: servrData.sintrom_wednesday,
                             q2_ans_thursday: servrData.sintrom_thursday,
                             q2_ans_friday: servrData.sintrom_friday,
+                            q2_ans_saturday: servrData.sintrom_saturday,
+                            q2_ans_sunday: servrData.sintrom_sunday,
                             q2_ans_other: servrData.not_sure 
                         });
                     } else {
@@ -223,7 +231,7 @@ class Page10 extends React.Component {
             coumadin_monday: this.state.q1_ans_monday,
             coumadin_tuesday: this.state.q1_ans_tuesday,
             coumadin_wednesday: this.state.q1_ans_wednesday,
-            coumadin_thursday: this.state.q1_ans_thursady,
+            coumadin_thursday: this.state.q1_ans_thursday,
             coumadin_friday: this.state.q1_ans_friday,
             coumadin_saturday: this.state.q1_ans_saturday,
             coumadin_sunday: this.state.q1_ans_sunday,
@@ -231,7 +239,7 @@ class Page10 extends React.Component {
             sintrom_monday: this.state.q2_ans_monday,
             sintrom_tuesday: this.state.q2_ans_tuesday,
             sintrom_wednesday: this.state.q2_ans_wednesday,
-            sintrom_thursday: this.state.q2_ans_thursady,
+            sintrom_thursday: this.state.q2_ans_thursday,
             sintrom_friday: this.state.q2_ans_friday,
             sintrom_saturday: this.state.q2_ans_saturday,
             sintrom_sunday: this.state.q2_ans_sunday,
@@ -442,7 +450,7 @@ class Page10 extends React.Component {
                             className="pull-right"
                             id="acenocoumarol1"
                             value="Sintrom (Acenocoumarol)"
-                            onClick={(e) => this.setState({ q1_ans: 'Sintrom (Acenocoumarol)' })}
+                            onClick={(e) => this.setState({ q2_ans: 'Sintrom (Acenocoumarol)' })}
                             onChange={this.acenocoumarol}
                         />
 

@@ -60,28 +60,13 @@ class Page3 extends React.Component {
          poc_creat_text: '',
          hb_text: '',
          plt_text: '',
+         dictation: "",
 
          details_on_recomemendation: '',
          understanding: '',
          completed_by: '',
          reviewed_by: '',
          loader: 1,
-         
-         displayMedFlags: [
-            { "flag_name": "Blood clot while blood thinner interrupted" },
-            { "flag_name": "Liver Cirrhosis" },
-            { "flag_name": "Transfusion within last 3 months" },
-            { "flag_name": "Stroke or ministroke/TIA within last 3 months" },
-            { "flag_name": "Bleeding within past 3 months (patient page 13)" },
-            { "flag_name": "Requiring treatment in hospital OR from stomach or bowel" },
-            { "flag_name": "Ulcer within last 3 months" },
-            { "flag_name": "Currently undergoing Cancer therapy" },
-            { "flag_name": "Antiphospholipid antibody syndrome" },
-            { "flag_name": "Mitral stenosis" },
-            { "flag_name": "DVT or PE in the last 3 months" },
-            { "flag_name": "CHADS score > 4" },
-            { "flag_name": "CrCl <30" },
-         ],
 
          procedureSelected: '',
          weightSelected: '',
@@ -128,7 +113,25 @@ class Page3 extends React.Component {
          tinzaparin: '',
          tinzaparin_dosage: '',
          tinzaparin_freq: '',
+         coumadin: '',
+         coumadin_monday: '',
+         coumadin_tuesday: '',
+         coumadin_wednesday: '',
+         coumadin_thursday: '',
+         coumadin_friday: '',
+         coumadin_saturday: '',
+         coumadin_sunday: '',
+         sintrom: '',
+         sintrom_monday: '',
+         sintrom_tuesday: '',
+         sintrom_wednesday: '',
+         sintrom_thursday: '',
+         sintrom_friday: '',
+         sintrom_saturday: '',
+         sintrom_sunday: '',
          dynamicFlags: [],
+         activeAnticogMeds: [],
+         activeAntiplatMeds: [],
          cognitive_heart_failure: '',
          high_blood_pressure: '',
          diabetes: '',
@@ -139,6 +142,8 @@ class Page3 extends React.Component {
       this.submitForm = this.submitForm.bind(this);
       this.set_CHADS_score = this.set_CHADS_score.bind(this);
       this.handle_procedure = this.handle_procedure.bind(this);
+      this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
+      this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
 
       const headers = {
          'Content-Type': 'application/json',
@@ -211,6 +216,22 @@ class Page3 extends React.Component {
                      tinzaparin: data.tinzaparin,
                      tinzaparin_dosage: data.tinzaparin_dosage,
                      tinzaparin_freq: data.tinzaparin_freq,
+                     coumadin: data.coumadin,
+                     coumadin_monday: data.coumadin_monday,
+                     coumadin_tuesday: data.coumadin_tuesday,
+                     coumadin_wednesday: data.coumadin_wednesday,
+                     coumadin_thursday: data.coumadin_thursday,
+                     coumadin_friday: data.coumadin_friday,
+                     coumadin_saturday: data.coumadin_saturday,
+                     coumadin_sunday: data.coumadin_sunday,
+                     sintrom: data.sintrom,
+                     sintrom_monday: data.sintrom_monday,
+                     sintrom_tuesday: data.sintrom_tuesday,
+                     sintrom_wednesday: data.sintrom_wednesday,
+                     sintrom_thursday: data.sintrom_thursday,
+                     sintrom_friday: data.sintrom_friday,
+                     sintrom_saturday: data.sintrom_saturday,
+                     sintrom_sunday: data.sintrom_sunday,
                      ulcer_in_stomach_or_bowel_last_three_months: data.ulcer_in_stomach_or_bowel_last_three_months,
                      had_transfusion_in_last_three_months_when: data.had_transfusion_in_last_three_months_when,
                      had_transfusion_in_last_three_months: data.had_transfusion_in_last_three_months,
@@ -239,6 +260,8 @@ class Page3 extends React.Component {
 
                   // this.set_CHADS_score();
                   this.set_DynamicFlags();
+                  this.fillactiveanticogmeds();
+                  this.fillactiveantiplatmeds();
                   console.log('Nurse page 3 - state after reponse: ', this.state);
                }
             });
@@ -246,6 +269,146 @@ class Page3 extends React.Component {
          this.setState({ loader: '' });
          console.error('Nurse page3 - error response: ', error);
       }
+   }
+
+   fillactiveanticogmeds() {
+      let activeMeds = [];
+      if(this.state.dalteparin) {
+         let idx = this.state.dalteparin_freq.indexOf(' ');
+         activeMeds.push({
+            med_name: this.state.dalteparin,
+            med_dosage: this.state.dalteparin_dosage,
+            med_dosage_time: this.state.dalteparin_freq.substr(idx+1),
+            med_dosage_freequency: this.state.dalteparin_freq.substr(idx+1),
+         });
+      }
+      if(this.state.enoxaparin) {
+         let idx = this.state.enoxaparin_freq.indexOf(' ');
+         activeMeds.push({
+            med_name: this.state.enoxaparin,
+            med_dosage: this.state.enoxaparin_dosage,
+            med_dosage_time: this.state.enoxaparin_freq.substr(idx+1),
+            med_dosage_freequency: this.state.enoxaparin_freq.substr(idx+1),
+         });
+      }
+      
+      if(this.state.tinzaparin) {
+         let idx = this.state.tinzaparin_freq.indexOf(' ');
+         activeMeds.push({
+            med_name: this.state.tinzaparin,
+            med_dosage: this.state.tinzaparin_dosage,
+            med_dosage_time: this.state.tinzaparin_freq.substr(idx+1),
+            med_dosage_freequency: this.state.tinzaparin_freq.substr(idx+1),
+         });
+      }
+      if(this.state.pradaxa) {
+         let idx = this.state.pradaxa_dosage.indexOf(' ', this.state.pradaxa_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.pradaxa,
+            med_dosage: this.state.pradaxa_dosage,
+            med_dosage_time: this.state.pradaxa_dosage.substr(idx+1),
+            med_dosage_freequency: "am / pm",
+         });
+      } 
+      if(this.state.xarelto) {
+         let idx = this.state.xarelto_dosage.indexOf(' ', this.state.xarelto_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.xarelto,
+            med_dosage: this.state.xarelto_dosage,
+            med_dosage_time: this.state.xarelto_dosage.substr(idx+1),
+            med_dosage_freequency: this.state.xarelto_dosage_time
+         });
+      } 
+      if(this.state.eliquis) {
+         let idx = this.state.eliquis_dosage.indexOf(' ', this.state.eliquis_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.eliquis,
+            med_dosage: this.state.eliquis_dosage,
+            med_dosage_time: this.state.eliquis_dosage.substr(idx+1),
+            med_dosage_freequency: this.state.eliquis_dosage_time
+         });
+      }
+      if(this.state.edoxabon) {
+         let idx= this.state.edoxabon_dosage.indexOf(' ', this.state.edoxabon_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.edoxabon,
+            med_dosage: this.state.edoxabon_dosage,
+            med_dosage_time: this.state.edoxabon_dosage.substr(idx+1),
+            med_dosage_freequency: this.state.edoxabon_dosage_time
+         });
+      }
+      
+      if(this.state.coumadin) {
+         activeMeds.push({
+            med_name: this.state.coumadin,
+            med_dosage_monday: this.state.coumadin_monday,
+            med_dosage_tuesday: this.state.coumadin_tuesday,
+            med_dosage_wednesday: this.statecoumadin_wednesday,
+            med_dosage_thursday: this.state.coumadin_thursday,
+            coumadin_friday: this.state.coumadin_friday,
+            med_dosage_saturday: this.state.coumadin_saturday,
+            med_dosage_sunday: this.state.coumadin_sunday
+         });
+      } 
+      
+      if(this.state.sintrom) {
+         activeMeds.push({
+            med_name: this.state.sintrom,
+            med_dosage_monday: this.state.sintrom_monday,
+            med_dosage_tuesday: this.state.sintrom_tuesday,
+            med_dosage_wednesday: this.state.sintrom_wednesday,
+            med_dosage_thursday: this.state.sintrom_thursday,
+            med_dosage_friday: this.state.sintrom_friday,
+            med_dosage_saturday: this.state.sintrom_saturday,
+            med_dosage_sunday: this.state.sintrom_sunday
+         });
+      }
+      console.log(this.state);
+      this.setState({ activeAnticogMeds: activeMeds });
+
+      this.forceUpdate();
+   }
+
+   fillactiveantiplatmeds() {
+      let activeMeds = [];
+      if(this.state.effient) {
+         let idx= this.state.effient_dosage.indexOf(' ', this.state.effient_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.effient,
+            med_dosage: this.state.effient_dosage,
+            med_dosage_freequency: this.state.effient_dosage_time,
+            med_dosage_time: this.state.effient_dosage_time.substr(idx+1)
+         });
+      } 
+      if(this.state.aspirin) {
+         let idx= this.state.aspirin_dosage.indexOf(' ', this.state.aspirin_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.aspirin,
+            med_dosage: this.state.aspirin_dosage,
+            med_dosage_freequency: this.state.aspirin_dosage_time,
+            med_dosage_time: this.state.aspirin_dosage_time.substr(idx+1)
+         });
+      } 
+      if(this.state.plavix) {
+         let idx= this.state.plavix_dosage.indexOf(' ', this.state.plavix_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.plavix,
+            med_dosage: this.state.plavix_dosage,
+            med_dosage_freequency: this.state.plavix_dosage_time,
+            med_dosage_time: this.state.plavix_dosage_time.substr(idx+1)
+         });
+      }
+      if(this.state.brillinta) {
+         let idx= this.state.brillinta_dosage.indexOf(' ', this.state.brillinta_dosage.indexOf(' ')+1);
+         activeMeds.push({
+            med_name: this.state.brillinta,
+            med_dosage: this.state.brillinta_dosage,
+            med_dosage_freequency: this.state.brillinta_dosage_time,
+            med_dosage_time: this.state.brillinta_dosage_time.substr(idx+1)
+         });
+      }
+      console.log(activeMeds);
+      this.setState({ activeAntiplatMeds: activeMeds });
    }
 
    set_anticoagulation(data) {
@@ -359,6 +522,7 @@ class Page3 extends React.Component {
          age: this.state.age,
          gender: this.state.procedureSelected,
          weight: this.state.weight,
+         weightSelected: this.state.weightSelected,
          indication_for_anticoagulation: this.state.indication_for_anticoagulation,
          chads_score_and_distribution: this.state.chads_score_and_distribution,
 
@@ -576,86 +740,87 @@ class Page3 extends React.Component {
                                  paddingBottom: 10,
                               }}
                            >
-                              <h5 style={{ color: 'white' }} className="text-center">
+                              <h5 style={{ color: 'white' }}>
                                  Medical Dose / Frequency
+                                 <br />
+                              </h5>
+                              <h5 style={{ color: 'white' }} className="text-center">
+                                 Current Dosing 
                               </h5>
                            </div>
-                           <div className="table-responsive">
-                              <table className="table table-striped text-center">
-                                 <thead></thead>
-                                 <tbody>
-                                    {this.state.pradaxa !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.pradaxa} </td>
-                                          <td>{this.state.pradaxa_dosage}</td>
+                           {
+                              (this.state.coumadin || this.state.sintrom) ?
+                              <> 
+                                 <table style={{ display: "inline-table" }} className="table-responsive">
+                                    <tr style={{ borderBottom: "1px solid #ccc" }}>
+                                       <th>Medicine name</th>
+                                       <th>MON</th>
+                                       <th>TUE</th>
+                                       <th>WED</th>
+                                       <th>THR</th>
+                                       <th>FRI</th>
+                                       <th>SAT</th>
+                                       <th>SUN</th>
+                                    </tr>
+                                    {
+                                       this.state.activeAnticogMeds.length > 0 ?
+                                          this.state.activeAnticogMeds.map((meds, index) => {
+                                             return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                                <td>{meds.med_name}</td>
+                                                <td>{meds.med_dosage_monday}</td>
+                                                <td>{meds.med_dosage_tuesday}</td>
+                                                <td>{meds.med_dosage_wednesday}</td>
+                                                <td>{meds.med_dosage_thursday}</td>
+                                                <td>{meds.med_dosage_friday}</td>
+                                                <td>{meds.med_dosage_saturday}</td>
+                                                <td>{meds.med_dosage_sunday}</td>
+                                             </tr>
+                                          })
+                                       : 
+                                       <tr>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
                                        </tr>
-                                    ) : (
-                                       ''
-                                    )}
+                                    }
 
-                                    {this.state.xarelto !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.xarelto} </td>
-                                          <td>{this.state.xarelto_dosage}</td>
-                                          <td>{this.state.xarelto_dosage_time}</td>
+                                 </table>
+                              </> :
+                              <> 
+                                 <table style={{ display: "inline-table" }} className="table-responsive">
+                                    <tr style={{ borderBottom: "1px solid #ccc" }}>
+                                       <th>Medicine name</th>
+                                       <th>Dosage</th>
+                                       <th>Frequency</th>
+                                       <th>Time</th>
+                                    </tr>
+                                    {
+                                       this.state.activeAnticogMeds.length > 0 ?
+                                          this.state.activeAnticogMeds.map((meds, index) => {
+                                             return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                                <td>{meds.med_name}</td>
+                                                <td>{meds.med_dosage}</td>
+                                                <td>{meds.med_dosage_time}</td>
+                                                <td>{meds.med_dosage_freequency}</td>
+                                             </tr>
+                                          })
+                                       : 
+                                       <tr>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
                                        </tr>
-                                    ) : (
-                                       ''
-                                    )}
+                                    }
 
-                                    {this.state.eliquis !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.eliquis} </td>
-                                          <td>{this.state.eliquis_dosage}</td>
-                                          <td>{this.state.eliquis_dosage_time}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    {this.state.edoxabon !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.edoxabon} </td>
-                                          <td>{this.state.edoxabon_dosage}</td>
-                                          <td>{this.state.edoxabon_dosage_time}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    {this.state.dalteparin !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.dalteparin} </td>
-                                          <td>{this.state.dalteparin_dosage}</td>
-                                          <td>{this.state.dalteparin_freq}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    
-                                    {this.state.enoxaparin !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.enoxaparin} </td>
-                                          <td>{this.state.enoxaparin_dosage}</td>
-                                          <td>{this.state.enoxaparin_freq}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-
-                                    {this.state.tinzaparin !== null ? (
-                                       <tr style={{ color: 'white' }}>
-                                          <td>{this.state.tinzaparin} </td>
-                                          <td>{this.state.tinzaparin_dosage}</td>
-                                          <td>{this.state.tinzaparin_freq}</td>
-                                       </tr>
-                                    ) : (
-                                       ''
-                                    )}
-                                 </tbody>
-                              </table>
-                           </div>
+                                 </table>
+                              </>
+                           }
                         </div>
                      </div>
                   </div>
@@ -673,63 +838,36 @@ class Page3 extends React.Component {
                               }}
                            >
                               <h5 style={{ color: 'white' }}>Medical Dose / Frequency</h5>
-
-                              <div className="table-responsive">
-                                 <table className="table table-striped text-center">
-                                    <thead></thead>
-                                    <tbody>
-                                       {this.state.aspirin !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.aspirin} </td>
-                                             <td>{this.state.aspirin_dosage}</td>
-                                             <td>{this.state.aspirin_dosage_time}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-                                       {this.state.brillinta !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.brillinta} </td>
-                                             <td>{this.state.brillinta_dosage}</td>
-                                             <td>{this.state.brillinta_dosage_timie}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-
-                                       {this.state.effient !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.effient} </td>
-                                             <td>{this.state.effient_dosage}</td>
-                                             <td>{this.state.effient_dosage_time}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-
-                                       {this.state.plavix !== null ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td>{this.state.plavix} </td>
-                                             <td>{this.state.plavix_dosage}</td>
-                                             <td>{this.state.plavix_dosage_time}</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-
-                                       {this.state.not_using_drugs === '' ? (
-                                          <tr style={{ color: 'white' }}>
-                                             <td> N/A </td>
-                                             <td>N/A</td>
-                                             <td>N/A</td>
-                                          </tr>
-                                       ) : (
-                                          ''
-                                       )}
-                                    </tbody>
-                                 </table>
-                              </div>
+                              <h5 style={{ color: 'white' }} className="text-center">
+                                 Current Dosing 
+                              </h5>
                            </div>
+                           <table style={{ display: "inline-table" }} className="table-responsive">
+                              <tr style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                 <th>Medicine name</th>
+                                 <th>Dosage</th>
+                                 <th>Frequency</th>
+                                 <th>Time</th>
+                              </tr>
+                              {
+                                 this.state.activeAntiplatMeds.length > 0 ?
+                                    this.state.activeAntiplatMeds.map((meds, index) => {
+                                       return <tr key={index} style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                                          <td>{meds.med_name}</td>
+                                          <td>{meds.med_dosage}</td>
+                                          <td>{meds.med_dosage_freequency}</td>
+                                          <td>{meds.med_dosage_time}</td>
+                                       </tr>
+                                    })
+                                 : 
+                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                 </tr>
+                              }
+                           </table>
                         </div>
                      </div>
                   </div>
