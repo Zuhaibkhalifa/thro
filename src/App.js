@@ -40,7 +40,7 @@ const Nurse6 = React.lazy(() => import('./pages/nurse/Page6'));
 
 // global Domain
 export const domain = 'https://thrombolink-server.herokuapp.com';
-// export const domain = "http://localhost:8000";
+// export const domain = "http://localhost:8000"; 
 
 const App = () => {
    return (
