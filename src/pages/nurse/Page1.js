@@ -387,9 +387,9 @@ class Page1 extends React.Component {
             med_name: this.state.coumadin,
             med_dosage_monday: this.state.coumadin_monday,
             med_dosage_tuesday: this.state.coumadin_tuesday,
-            med_dosage_wednesday: this.statecoumadin_wednesday,
+            med_dosage_wednesday: this.state.coumadin_wednesday,
             med_dosage_thursday: this.state.coumadin_thursday,
-            coumadin_friday: this.state.coumadin_friday,
+            med_dosage_friday: this.state.coumadin_friday,
             med_dosage_saturday: this.state.coumadin_saturday,
             med_dosage_sunday: this.state.coumadin_sunday
          });
