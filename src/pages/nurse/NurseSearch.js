@@ -16,54 +16,6 @@ const col = [
       },
    },
    {
-      name: 'user_id',
-      label: 'User Id',
-      options: {
-         filter: true,
-         sort: true,
-      },
-   },
-   {
-      name: 'name',
-      label: 'Patient Name',
-      options: {
-         filter: true,
-         sort: true,
-      },
-   },
-   {
-      name: 'email',
-      label: 'Email',
-      options: {
-         filter: true,
-         sort: true,
-      },
-   },
-   {
-      name: 'age',
-      label: 'Age',
-      options: {
-         filter: true,
-         sort: true,
-      },
-   },
-   {
-      name: 'weight',
-      label: 'Weight',
-      options: {
-         filter: true,
-         sort: true,
-      },
-   },
-   {
-      name: 'nurse',
-      label: 'Nurse',
-      options: {
-         filter: true,
-         sort: true,
-      },
-   },
-   {
       name: 'action',
       label: 'Action',
       options: {
@@ -76,14 +28,7 @@ const col = [
 let demoData = [
    {
       patient_id: '1250',
-      user_id: '34',
-      name: 'Test User',
-      email: 'test@test.com',
-      age: '22',
-      weight: '65kg',
-      sex: 'male',
-      nurse: 'Claurie',
-      action: <button className="btn btn-info">get info</button>,
+      action: <button className="btn btn-info">view profile</button>,
    },
 ];
 
@@ -97,13 +42,7 @@ class NurseSearch extends React.Component {
       super(props);
       this.state = {
          loader: 1,
-         patientCount: 150,
-         ineligiblePatients: 12,
-         activePatients: 85,
          patientId: '',
-         patientName: '',
-         patientEmail: '',
-         totalPatients: '',
          testData: demoData,
       };
 
@@ -120,45 +59,30 @@ class NurseSearch extends React.Component {
          Accept: 'application/json',
          Authorization: 'Bearer ' + localStorage.getItem('token'),
       };
-      axios.get(domain + '/api/users', { headers: headers }).then((response) => {
-         let servData = response.data;
+      axios.get(domain + '/api/getPatients', { headers: headers }).then((response) => {
+         let servData = response.data.success;
          let patientData = [];
          console.log(response);
          servData.forEach((data) => {
-            console.log(data.id)
-            if (data.user_role !== 'Admin' && data.user_role !== 'Nurse') {
-               let weight = data.weight + data.weight_unit;
+            if (data) {
                let button =
-                  data.id == null ? (
-                     <button className="btn btn-info" disabled={true}>
-                        <Link
-                           style={{ color: 'white', textDecoration: 'none', pointerEvents: 'none' }}
-                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: data.id } }}
-                        >
-                           get info
-                        </Link>
-                     </button>
-                  ) : (
+                  data.patient_id !== null ? 
+                  (
                      <button className="btn btn-info">
                         <Link
                            style={{ color: 'white', textDecoration: 'none' }}
-                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: data.id } }}
+                           to={{ pathname: '/Nurse/Nurse1', state: { patient_id: data.patient_id } }}
                         >
-                           get info
+                           view profile
                         </Link>
                      </button>
-                  );
-               patientData.push({
-                  patient_id: data.patient_id ? data.patient_id : 'Profile Not Completed',
-                  user_id: data.id ? data.id : 'Profile Not Completed',
-                  name: data.name ? data.name : 'Profile Not Completed',
-                  email: data.email ? data.email : 'Profile Not Completed',
-                  age: data.age ? data.age : 'Profile Not Completed',
-                  weight: weight ? weight : 'Profile Not Completed',
-                  sex: data.gender ? data.gender : 'Profile Not Completed',
-                  nurse: data.physicianName ? data.physicianName : 'Profile Not Completed',
-                  action: button,
-               });
+                  ) : "";
+               if(data.patient_id) {
+                  patientData.push({
+                     patient_id: data.patient_id,
+                     action: button,
+                  });
+               }
             }
          });
          this.setState({ testData: patientData, loader: 0 });
@@ -178,25 +102,6 @@ class NurseSearch extends React.Component {
                   <div className="container-fluid">
                      <br />
                      <br />
-                     {/*---------------------------------------------------------------------------------*/}
-                     {/* <div className="row"> 
-                          <div className="db-s-box col-md-4 col-xs-12 col-sm-12"> 
-                              <h3>Total Patients</h3>
-                              <i className="fa fa-users fa-2x" aria-hidden="true" />
-                              <h4 className="text-left">{ this.state.patientCount }</h4>
-                          </div> 
-                          <div className="db-s-box col-md-4 col-xs-12 col-sm-12"> 
-                              <h3>Active Patients</h3>
-                              <i className="fa fa-users fa-2x" aria-hidden="true" />
-                              <h4 className="text-left">{ this.state.activePatients }</h4>
-                          </div> 
-                          <div className="db-s-box col-md-4 col-xs-12 col-sm-12"> 
-                              <h3>Ineligibal Patients</h3>
-                              <i className="fa fa-users fa-2x" aria-hidden="true" />
-                              <h4 className="text-left">{ this.state.ineligiblePatients }</h4>
-                          </div> 
-                        </div>  */}
-
                      <br />
                      <div className="row">
                         <div className="col-sm-12">

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 
 const renderTable = function (table, onDateChange, editable = false) {
-   console.log('>>>  renderTable, table: ', table);
+   // console.log('>>>  renderTable, table: ', table);
    if (table === 'none') return <div style={{ fontSize: 18, textAlign: 'center' }}>No Drug was selected!</div>;
 
    return (
@@ -42,6 +42,7 @@ const renderTableBody = function (table, onChange, editable = false) {
    const date = ['d_5', 'd_4', 'd_3', 'd_2', 'd_1', 'd', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6'];
 
    const body = table.data.map((row, rowIdx) => {
+      // console.log(">>> table row -", table);
       return (
          <div key={rowIdx} class="tableRow">
             {table.header.map((attr) => {
@@ -56,7 +57,7 @@ const renderTableBody = function (table, onChange, editable = false) {
 };
 
 const renderNote = function (table) {
-   console.log('>>>  RenderNote - table: ', table);
+   // console.log('>>>  RenderNote - table: ', table);
    if (table === 'none' || _.isEmpty(table.note)) {
       return null;
    }
@@ -85,7 +86,7 @@ const renderNote = function (table) {
 //
 const renderBodyCell = function (key, val, rowIdx, data, onChange, editable = false) {
    const trueVal = val !== '' ? val : '--';
-
+   // console.log('>>> render table body -', key, val, rowIdx, data);
    if (key === 'date' && rowIdx === 5 && editable) {
       return (
          <div key={key} class="cell" data-title={capitalizeFirstLetter(key)}>

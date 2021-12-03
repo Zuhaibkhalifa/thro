@@ -50,62 +50,6 @@ class AddPatient extends React.Component {
       // console.log("Constructor - Validator: ", this.validator);
 
       this.state = {
-         anticogMedsDropdown: [
-            {
-               "med_name": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)"],
-               "dosage": ["2.5 mg", "5 mg", "10 mg", "15 mg", "20 mg", "30 mg", "60 mg", "75 mg", "110 mg", "150 mg"],
-               "dosage_time": ["Once daily", "Twice daily"]
-            }
-         ],
-         redirectToMedPage: [
-            {
-               "medPhase1": ["Pradaxa (Dabigatran)", "Xarelto (Rivaroxaban)", "Eliquis (Apixaban)", "Edoxabon (Lixiana)"],
-               "redirectPage": "/User/Page8"
-            },
-            {
-               "medPhase2": ["Dalteparin (Fragmin)", "Enoxaparin (Lovenox)", "Tinzaparin (Innohep)"],
-               "redirectPage": "/User/Page9"
-            },
-            {
-               "medPhase3": ["Coumadin (Warfarin)", "Sintrom (Acenocoumarol)"],
-               "redirectPage": "/User/Page10"
-            },
-            {
-               "medPhase4": ["Aspirin (ASA)", "Plavix (Clopidogrel)", "Brillinta (Ticagrelor)", "Effient (Prasugrel)"],
-               "redirectPage": "/User/Page11"
-            }
-         ],
-         indicationAnticogVal: [
-            { "indication": "Venous Thromboembolism (VTE)" },
-            { "indication": "Atrial Fibrillation of flutter" },
-            { "indication": "Heart Valve Replacement" },
-            { "indication": "Blood clot in heart" },
-            { "indication": "Arterial Peripheral Thrombosis" },
-            { "indication": "Peripheral arterial Disease" }
-         ]
-         ,
-         antiplatMedsDropdown: [
-            {
-               "med_name": ["Aspirin (ASA)", "Plavix (Clopidogrel)", "Brillinta (Ticagrelor)", "Effient (Prasugrel)"],
-               "dosage": ["5 mg", "10 mg", "60 mg", "75 mg", "81 mg", "90 mg"],
-               "dosage_time": ["Once daily", "Twice daily"]
-            }
-         ],
-         displayMedFlags: [
-            { "flag_name": "Blood clot while blood thinner interrupted" },
-            { "flag_name": "Liver Cirrhosis" },
-            { "flag_name": "Transfusion within last 3 months" },
-            { "flag_name": "Stroke or ministroke/TIA within last 3 months" },
-            { "flag_name": "Bleeding within past 3 months (patient page 13)" },
-            { "flag_name": "Requiring treatment in hospital OR from stomach or bowel" },
-            { "flag_name": "Ulcer within last 3 months" },
-            { "flag_name": "Currently undergoing Cancer therapy" },
-            { "flag_name": "Antiphospholipid antibody syndrome" },
-            { "flag_name": "Mitral stenosis" },
-            { "flag_name": "DVT or PE in the last 3 months" },
-            { "flag_name": "CHADS score > 4" },
-            { "flag_name": "CrCl <30" },
-         ],
          
          month_year: '',
          procedure: '',
@@ -116,9 +60,6 @@ class AddPatient extends React.Component {
          indication_for_anticoagulation: '',
          chads_score_and_distribution: '',
          dictation: "",
-         patient_user_name: '',
-         patient_user_email: '',
-         patient_user_password: '',
          
          activeAnticogMeds: [],
          activeAntiplatMeds: [],
@@ -321,11 +262,6 @@ class AddPatient extends React.Component {
                         diabetes: data.diabetes,
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
                      });
-                     // this.changeAnticogMedDropdownValue();
-                     // this.changeAnticogDosageDropdownValue();
-                     // this.changeAntiplatMedDropdownValue();
-                     // this.changeAntiplatDosageDropdownValue();
-                     // this.changeAntiplatDosageTimeDropdownValue();
                      this.fillactiveanticogmeds();
                      this.fillactiveantiplatmeds();
                      this.set_DynamicFlags();
@@ -530,13 +466,9 @@ class AddPatient extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
          referred_by: this.state.referred_by,
          dictation: this.state.dictation,
-         name: this.state.patient_user_name,
-         email: this.state.patient_user_email,
-         password: this.state.patient_user_password,
-         password_confirmation: this.state.patient_user_password,
-         user_role: "Patient"
       };
       let patient_id = localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id;
+      console.log(param)
       server(`nurse/add_patient/:${patient_id}`, param);
    }
 
@@ -584,11 +516,6 @@ class AddPatient extends React.Component {
          patient_id: localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id,
          referred_by: this.state.referred_by,
          dictation: this.state.dictation,
-         name: this.state.patient_user_name,
-         email: this.state.patient_user_email,
-         password: this.state.patient_user_password,
-         password_confirmation: this.state.patient_user_password,
-         user_role: "Patient"
       };
       let patient_id = localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id;
       server(`nurse/add_patient/:${patient_id}`, param);
@@ -622,35 +549,13 @@ class AddPatient extends React.Component {
    }
    
    handleAntiCogRedirection(value) {
-      let redirect = '';
-      if(value === '') {
-         redirect = '/User/Page8';
-      } if(this.state.redirectToMedPage[0].medPhase1.includes(value)) {
-         redirect = this.state.redirectToMedPage[0].redirectPage
-      } else if(this.state.redirectToMedPage[1].medPhase2.includes(value)) {
-         redirect = this.state.redirectToMedPage[1].redirectPage
-      } else if(this.state.redirectToMedPage[2].medPhase3.includes(value)) {
-         redirect = this.state.redirectToMedPage[2].redirectPage
-      } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
-         redirect = this.state.redirectToMedPage[3].redirectPage
-      }
+      let redirect = '/User/Page8';
       this.submitForm();
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
 
    handleAntiPlatRedirection(value) {
-      let redirect = '';
-      if(value === '') {
-         redirect = '/User/Page11';
-      } else if(this.state.redirectToMedPage[0].medPhase1.includes(value)) {
-         redirect = this.state.redirectToMedPage[0].redirectPage
-      } else if(this.state.redirectToMedPage[1].medPhase2.includes(value)) {
-         redirect = this.state.redirectToMedPage[1].redirectPage
-      } else if(this.state.redirectToMedPage[2].medPhase3.includes(value)) {
-         redirect = this.state.redirectToMedPage[2].redirectPage
-      } else if(this.state.redirectToMedPage[3].medPhase4.includes(value)) {
-         redirect = this.state.redirectToMedPage[3].redirectPage
-      }
+      let redirect = '/User/Page11';
       this.submitForm();
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id, nurse_add: true } });
    }
@@ -690,54 +595,6 @@ class AddPatient extends React.Component {
                         />
                      </div>
                         {this.validator.message('patient_id', this.state.patient_id, 'required|enter_patient_id')}
-                  </div>
-                  <br />
-                  <div className="row">
-                     <div className="col-6">
-                        <label htmlFor="usr">Pt User_Name </label>
-                     </div>
-
-                     <div className="col-6 text-left">
-                        <input
-                           type="text"
-                           id="patient_user_name"
-                           className="form-control"
-                           defaultValue={this.state.patient_user_name}
-                           onChange={(e) => this.setState({ patient_user_name: e.target.value })}
-                        />
-                     </div>
-                  </div>
-                  <br />
-                  <div className="row">
-                     <div className="col-6">
-                        <label htmlFor="usr">Pt User_Email </label>
-                     </div>
-
-                     <div className="col-6 text-left">
-                        <input
-                           type="email"
-                           id="patient_user_email"
-                           className="form-control"
-                           defaultValue={this.state.patient_user_email}
-                           onChange={(e) => this.setState({ patient_user_email: e.target.value })}
-                        />
-                     </div>
-                  </div>
-                  <br />
-                  <div className="row">
-                     <div className="col-6">
-                        <label htmlFor="usr">Pt User_Password </label>
-                     </div>
-
-                     <div className="col-6 text-left">
-                        <input
-                           type="password"
-                           id="patient_user_password"
-                           className="form-control"
-                           defaultValue={this.state.patient_user_password}
-                           onChange={(e) => this.setState({ patient_user_password: e.target.value })}
-                        />
-                     </div>
                   </div>
                   <br />
                   <div className="row">

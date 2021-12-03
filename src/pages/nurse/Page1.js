@@ -2,9 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactSpinner from 'react-bootstrap-spinner';
-// import Box from '@mui/material/Box';
-// import Typography from '@mui/material/Typography';
-// import Modal from '@mui/material/Modal';
 import EditIcon from '@mui/icons-material/Edit';
 import classes from './styles.module.css';
 
@@ -410,10 +407,16 @@ class Page1 extends React.Component {
             med_dosage_sunday: this.state.sintrom_sunday
          });
       }
-      console.log(this.state);
+      console.log(activeMeds);
       this.setState({ activeAnticogMeds: activeMeds });
 
-      this.forceUpdate();
+      console.log(this.props.location);
+      if(this.props.location.state) {
+         if(activeMeds.length === 0) {
+            console.log('reloading !!!')
+            window.location.reload();
+         }
+      }
    }
 
    fillactiveantiplatmeds() {
@@ -456,6 +459,14 @@ class Page1 extends React.Component {
       }
       console.log(activeMeds);
       this.setState({ activeAntiplatMeds: activeMeds });
+
+      console.log(this.props.location);
+      if(this.props.location.state) {
+         if(activeMeds.length === 0) {
+            console.log('reloading !!!')
+            window.location.reload();
+         }
+      }
    }
 
    set_anticoagulation(data) {
@@ -483,6 +494,13 @@ class Page1 extends React.Component {
       }
 
       this.setState({ indication_for_anticoagulation: anticoagulation });
+      console.log(this.props.location);
+      if(this.props.location.state) {
+         if(anticoagulation === '') {
+            console.log('reloading !!!')
+            window.location.reload();
+         }
+      }
    }
 
    set_CHADS_score() {
@@ -535,6 +553,14 @@ class Page1 extends React.Component {
       if(diabetic === 'Yes') flags.push('diabetes');
       
       this.setState({ dynamicFlags:flags });
+
+      console.log(this.props.location);
+      if(this.props.location.state) {
+         if(flags.length === 0) {
+            console.log('reloading !!!')
+            window.location.reload();
+         }
+      }
    }
 
    handleChange_gender(value) {
@@ -619,20 +645,24 @@ class Page1 extends React.Component {
       } else {
          redirectPage = '/User/Page4';
       }
+      this.page5(this.state);
       this.props.history.push({ pathname: redirectPage, state:{ patient_id: this.state.patient_id } });
    }
 
    handleFlagsRedirection() {
+      this.page5(this.state);
       this.props.history.push({ pathname: '/User/Page3', state:{ patient_id: this.state.patient_id } });
    }
    
    handleAntiCogRedirection() {
       let redirect = '/User/Page8';
+      this.page5(this.state);
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
    }
 
    handleAntiPlatRedirection() {
       let redirect = '/User/Page11';
+      this.page5(this.state);
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
    }
 
@@ -973,7 +1003,6 @@ class Page1 extends React.Component {
                                     defaultValue={this.state.poc_inr_date}
                                     onChange={(e) => this.setState({ poc_inr_date: e.target.value })}
                                  />
-                                 {this.validator.message('poc_inr_date', this.state.poc_inr_date, 'required')}
                               </div>
                               <div className="col-6">
                                  {' '}
@@ -984,7 +1013,6 @@ class Page1 extends React.Component {
                                     value={this.state.poc_inr_text}
                                     onChange={(e) => this.setState({ poc_inr_text: e.target.value })}
                                  />
-                                 {this.validator.message('poc_inr_text', this.state.poc_inr_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1007,7 +1035,6 @@ class Page1 extends React.Component {
                                     }
                                     id="poc_creat"
                                  />
-                                 {this.validator.message('poc_creat_date', this.state.poc_creat_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -1021,7 +1048,6 @@ class Page1 extends React.Component {
                                     }
                                     id="poc_creat"
                                  />
-                                 {this.validator.message('poc_creat_text', this.state.poc_creat_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1042,7 +1068,6 @@ class Page1 extends React.Component {
                                     value={this.state.hb_date}
                                     onChange={(e) => this.setState({ hb_date: e.target.value })}
                                  />
-                                 {this.validator.message('hb_date', this.state.hb_date, 'required')}
                               </div>
                               <div className="col-6">
                                  <input
@@ -1052,7 +1077,6 @@ class Page1 extends React.Component {
                                     defaultValue={this.state.hb_text}
                                     onChange={(e) => this.setState({ hb_text: e.target.value })}
                                  />
-                                 {this.validator.message('hb_text', this.state.hb_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1072,7 +1096,6 @@ class Page1 extends React.Component {
                                     onChange={(e) => this.setState({ plt_date: e.target.value })}
                                     id="plt"
                                  />
-                                 {this.validator.message('plt_date', this.state.plt_date, 'required')}
                               </div>
                               <div className="col-6">
                                  {' '}
@@ -1083,7 +1106,6 @@ class Page1 extends React.Component {
                                     onChange={(e) => this.setState({ plt_text: e.target.value })}
                                     id="plt"
                                  />
-                                 {this.validator.message('plt_text', this.state.plt_text, 'required')}
                               </div>
                            </div>
                         </div>
@@ -1098,7 +1120,6 @@ class Page1 extends React.Component {
                               value={this.state.referred_by}
                               onChange={(e) => this.setState({ referred_by: e.target.value })}
                            />
-                           {this.validator.message('referred_by', this.state.referred_by, 'required')}
                         </div>
                      </div>
                   </div>

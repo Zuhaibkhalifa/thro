@@ -20,9 +20,9 @@ class Page4 extends React.Component {
       this.validator = new SimpleReactValidator({
          element: (message, className) => <div className="text-danger">{message}</div>,
       });
-      console.log(this.validator);
+      // console.log(this.validator);
 
-      this.state = { email: '', loader: '', showHide: '', table: { header: [], data: [], note: {} } };
+      this.state = { email: '', loader: '', showHide: '', table: { header: [], data: [], note: {} }, date_of_procedure: '' };
 
       this.submitForm = this.submitForm.bind(this);
       this.page8 = this.page8.bind(this);
@@ -42,8 +42,18 @@ class Page4 extends React.Component {
                headers: headers,
             })
             .then((response) => {
-               console.log(response.data.success[0]);
+               // console.log(response.data.success[0]);
                console.log('response is here: ', response);
+
+               axios
+               .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
+                  // originally was page5LoadData
+                  headers: headers,
+               }).then((resp) => {
+                  // console.log(resp);
+                  let date = resp.data.success[0] ? resp.data.success[0].date_of_procedure : "";
+                  this.setState({ date_of_procedure: date });
+               });
                this.setState({ loader: '' });
                this.getDatafromAlgo();
             });
@@ -56,9 +66,14 @@ class Page4 extends React.Component {
    async getDatafromAlgo() {
       const inidcators = await thromboAlgos();
       const tableData = await thromboMedicationAlgo(inidcators);
-      console.log('> Nurse Page 4 => inidcators: ', inidcators);
-      console.log('> Nurse Page 4 => tableData: ', tableData);
+      // console.log('> Nurse Page 4 => inidcators: ', inidcators);
+      // console.log('> Nurse Page 4 => tableData: ', tableData);
+      tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
       this.setState({ table: tableData });
+
+      if(this.state.date_of_procedure) {
+         this.onDateChange(this.state.date_of_procedure);
+      }
    }
 
    submitForm() {
@@ -80,14 +95,14 @@ class Page4 extends React.Component {
          jsonTable: JSON.stringify({ ...this.state.table }),
          patient_id: localStorage.getItem('patient_id'),
       };
-      console.log('>>> JSON data: ', data);
+      // console.log('>>> JSON data: ', data);
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);
    }
 
    onDateChange(e) {
-      const { value } = e.target;
+      const value = e.target ? e.target.value : e;
       let newState = { ...this.state };
-
+      console.log(value);
       newState.table.data[0]['d_5'] = moment(value, 'YYYY-MM-DD').subtract(5, 'd').format('YYYY-MM-DD');
       newState.table.data[1]['d_4'] = moment(value, 'YYYY-MM-DD').subtract(4, 'd').format('YYYY-MM-DD');
       newState.table.data[2]['d_3'] = moment(value, 'YYYY-MM-DD').subtract(3, 'd').format('YYYY-MM-DD');
@@ -109,7 +124,7 @@ class Page4 extends React.Component {
 
    render() {
       const { table } = this.state;
-
+      // console.log(table)
       return (
          <React.Fragment>
             <Header />
