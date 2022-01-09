@@ -409,7 +409,7 @@ class Page4 extends React.Component {
                                 <input
                                     id="dvt_option4"
                                     type="radio"
-                                    name="dvt_sub_opt1"
+                                    name="dvt_sub_opt"
                                     className="pull-right"
                                     onChange={(e) =>
                                         this.setState({

@@ -137,10 +137,11 @@ class Page7 extends React.Component {
     //    It will makes sure to Nullify appropriate values in State Object, If its Unselected(Before it was selected)
     handleChange(e) {
         const { id, value, checked } = e.target;
-
-        const updatedValue = this.state[id] !== '' ? value : '';
-        this.setState({ [id]: updatedValue });
-        console.log(this.state);
+        if(checked) {
+            this.setState({ [id]: value });
+        } else {
+            this.setState({ [id]: '' });
+        }
         this.q5_ans_smartToggle(id, checked);
     }
 

@@ -64,6 +64,7 @@ class AddPatient extends React.Component {
          activeAnticogMeds: [],
          activeAntiplatMeds: [],
          dynamicFlags: [],
+         patient_ids: [],
          indicationSubValFirst: false,
          indicationSubVal: "",
          indicationSubValTime: "",
@@ -142,11 +143,50 @@ class AddPatient extends React.Component {
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
       this.page5Post = this.page5Post.bind(this);
       this.getUserData = this.getUserData.bind(this);
+      this.saveDraft = this.saveDraft.bind(this);
 
       if (this.props.location.state !== undefined) {
          if (this.props.location.state.nurse_add) {
             this.getUserData();
          }
+      }
+   }
+
+   componentDidMount() {
+      const headers = {
+         'Content-Type': 'application/json',
+         Accept: 'application/json',
+         Authorization: 'Bearer ' + localStorage.getItem('token'),
+      };
+      
+      try {
+         localStorage.removeItem('patient_id');
+         axios.get(domain + '/api/getPatients', { headers: headers }).then((response) => {
+            let servData = response.data.success;
+            let patientData = [];
+            console.log(response);
+            servData.forEach((data) => {
+               if (data) {
+                  if(data.patient_id !== null) {
+                     patientData.push(data.patient_id);
+                  }
+               }
+            });
+            this.setState({ patient_ids: patientData });
+         });
+      } catch (error) {
+         console.log("error ==>", error.message);
+      }
+   }
+   
+   saveDraft() {
+      if(this.state.patient_ids.includes(this.state.patient_id)) {
+         alert('sorry this patient_id already exists!');
+      } else {
+         localStorage.setItem('patient_id', this.state.patient_id);
+         console.log('Nure page1 - submitForm - state: ', this.state);
+         this.page5(this.state);
+         this.props.history.push('/Nurse/patient_search');
       }
    }
 
@@ -177,6 +217,7 @@ class AddPatient extends React.Component {
                this.setState({ patient_id: patient_id });
             }
          }
+
          axios
             .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
                // originally was page5LoadData
@@ -474,10 +515,14 @@ class AddPatient extends React.Component {
 
    submitForm() {
       if (this.validator.allValid()) {
-        localStorage.setItem('patient_id', this.state.patient_id); 
-        console.log('Nure page1 - submitForm - state: ', this.state);
-         this.page5(this.state);
-         if(!this.state.indication_for_anticoagulation) { this.props.history.push('/Nurse/Nurse3'); }
+         if(this.state.patient_ids.includes(this.state.patient_id)) {
+            alert('sorry this patient_id already exists!');
+         } else {
+            localStorage.setItem('patient_id', this.state.patient_id); 
+            console.log('Nure page1 - submitForm - state: ', this.state);
+            this.page5(this.state);
+            if(!this.state.indication_for_anticoagulation) { this.props.history.push('/Nurse/patient_search'); }
+         }
       } else {
          window.scroll({
             top: 500,
@@ -590,11 +635,11 @@ class AddPatient extends React.Component {
                            type="text"
                            id="patient_id"
                            className="form-control"
-                           defaultValue={this.state.patient_id}
+                           value={this.state.patient_id}
                            onChange={(e) => this.setState({ patient_id: e.target.value })}
                         />
                      </div>
-                        {this.validator.message('patient_id', this.state.patient_id, 'required|enter_patient_id')}
+                        {this.validator.message('patient_id', this.state.patient_id, 'required')}
                   </div>
                   <br />
                   <div className="row">
@@ -1016,7 +1061,11 @@ class AddPatient extends React.Component {
                         </Link>
                      </div>
 
-                     <div className="col-4"></div>
+                     <div className="col-4">
+                        <button onClick={this.saveDraft} className="btn btn-secondary btn-block">
+                           Save Draft
+                        </button>
+                     </div>
 
                      <div className="col-4">
                         <button onClick={this.submitForm} className="btn btn-primary btn-block">
