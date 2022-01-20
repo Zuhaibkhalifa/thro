@@ -134,6 +134,7 @@ class Page4 extends React.Component {
       };
       try {
          let patient_id = localStorage.getItem('patient_id');
+         this.setState({ patient_id: patient_id });
          axios
             .get(domain + `/api/nurse/page8LoadData/:${patient_id}`, {
                headers: headers,
@@ -609,12 +610,13 @@ class Page4 extends React.Component {
                      <br />
                      <div className="row">
                         <div className="col-6">
-                           {this.state.procedure}
+                           <h3>Procedure</h3>
+                           <p disabled className="form-control">{this.state.procedure}</p>
                         </div>
                         <div className="col-6">
                            <div className="form-group">
                               <label htmlFor="usr">Date of Procedure</label>
-                              <p>{this.state.date_of_procedure}</p>
+                              <p disabled className="form-control">{this.state.date_of_procedure}</p>
                            </div>
                         </div>
                      </div>
@@ -623,27 +625,27 @@ class Page4 extends React.Component {
                         <div className="col-4">
                            <div className="form-group">
                               <label htmlFor="usr">Age </label>
-                              <p>{this.state.age}</p>
+                              <p disabled className="form-control">{this.state.age}</p>
                            </div>
                         </div>
 
                         <div className="col-4">
                            <div className="form-group">
                               <label htmlFor="usr">Sex </label>
-                              <p>{this.state.genderSelected}</p>
+                              <p disabled className="form-control">{this.state.genderSelected}</p>
                            </div>
                         </div>
                         <div className="col-2">
                            <div className="form-group">
                               <label htmlFor="usr">Weight</label>
-                              <p>{this.state.weight}</p>
+                              <p disabled className="form-control">{this.state.weight}</p>
                            </div>
                         </div>
 
                         <div className="col-2">
                            <div className="form-group">
                               <label htmlFor="usr">Unit</label>
-                              <p>{this.state.weightSelected}</p>
+                              <p disabled className="form-control">{this.state.weightSelected}</p>
                            </div>
                         </div>
                      </div>
@@ -653,7 +655,7 @@ class Page4 extends React.Component {
                            <div className="form-group">
                               <label htmlFor="usr">Indication(s) for Anticoagulation </label>
                               <br />
-                              <p>{this.state.indication_for_anticoagulation}</p>
+                              <p disabled className="form-control">{this.state.indication_for_anticoagulation}</p>
                            </div>
                         </div>
                      </div>
@@ -661,7 +663,7 @@ class Page4 extends React.Component {
                         <div className="col-12">
                            <div className="form-group">
                               <label htmlFor="usr">CHADS Score And Distribution </label>
-                              <p>{this.state.chads_score_and_distribution}</p>
+                              <p disabled className="form-control">{this.state.chads_score_and_distribution}</p>
                            </div>
                         </div>
                      </div>
@@ -800,11 +802,11 @@ class Page4 extends React.Component {
 
                               <div className="row">
                                  <div className="col-6">
-                                    <p>{this.state.poc_inr_date}</p>
+                                    <p disabled className="form-control">{this.state.poc_inr_date}</p>
                                  </div>
                                  <div className="col-6">
                                     {' '}
-                                    <p>{this.state.poc_inr_text}</p>
+                                    <p disabled className="form-control">{this.state.poc_inr_text}</p>
                                  </div>
                               </div>
                            </div>
@@ -816,10 +818,10 @@ class Page4 extends React.Component {
 
                               <div className="row">
                                  <div className="col-6">
-                                    <p>{this.state.poc_creat_date}</p>
+                                    <p disabled className="form-control">{this.state.poc_creat_date}</p>
                                  </div>
                                  <div className="col-6">
-                                    <p>{this.state.poc_creat_text}</p>
+                                    <p disabled className="form-control">{this.state.poc_creat_text}</p>
                                  </div>
                               </div>
                            </div>
@@ -833,10 +835,10 @@ class Page4 extends React.Component {
                               <div className="row">
                                  <div className="col-6">
                                     {' '}
-                                    <p>{this.state.hb_date}</p>
+                                    <p disabled className="form-control">{this.state.hb_date}</p>
                                  </div>
                                  <div className="col-6">
-                                    <p>{this.state.hb_text}</p>
+                                    <p disabled className="form-control">{this.state.hb_text}</p>
                                  </div>
                               </div>
                            </div>
@@ -849,11 +851,11 @@ class Page4 extends React.Component {
                               <div className="row">
                                  <div className="col-6">
                                     {' '}
-                                    <p>{this.state.plt_date}</p>
+                                    <p disabled className="form-control">{this.state.plt_date}</p>
                                  </div>
                                  <div className="col-6">
                                     {' '}
-                                    <p>{this.state.plt_text}</p>
+                                    <p disabled className="form-control">{this.state.plt_text}</p>
                                  </div>
                               </div>
                            </div>
@@ -861,7 +863,7 @@ class Page4 extends React.Component {
                         <div className="col-6">
                            <div className="form-group">
                               <label htmlFor="usr">Referred By</label>
-                              <p>{this.state.referred_by}</p>
+                              <p disabled className="form-control">{this.state.referred_by}</p>
                            </div>
                         </div>
                      </div>
@@ -894,7 +896,7 @@ class Page4 extends React.Component {
                      <div className="row" style={{ padding:"15px" }}>
                         <>
                            <h5>Dictation</h5>
-                           <p className="form-control" value={this.state.dictation}></p>
+                           <p disabled className="form-control" value={this.state.dictation}></p>
                         </>
                      </div>
                   </div>
