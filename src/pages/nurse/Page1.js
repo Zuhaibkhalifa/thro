@@ -152,6 +152,7 @@ class Page1 extends React.Component {
       this.handle_flags_change_value = this.handle_flags_change_value.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
+      this.handleLabUsed = this.handleLabUsed.bind(this);
    }
 
    componentDidMount() {
@@ -647,6 +648,11 @@ class Page1 extends React.Component {
       }
       this.page5(this.state);
       this.props.history.push({ pathname: redirectPage, state:{ patient_id: this.state.patient_id } });
+   }
+
+   handleLabUsed() {
+      this.page5(this.state);
+      this.props.history.push({ pathname: '/User/Page12', state:{ patient_id: this.state.patient_id } });
    }
 
    handleFlagsRedirection() {
@@ -1164,6 +1170,9 @@ class Page1 extends React.Component {
                      ) : (
                         ''
                      )}
+                     <span>
+                        <EditIcon onClick={() => this.handleLabUsed()} className={`${classes['handle-lab-used']}`} />
+                     </span>
                   </h5>
                   <div className="row" style={{ padding:"15px" }}>
                      <>

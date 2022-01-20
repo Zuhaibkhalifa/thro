@@ -14,3 +14,11 @@
     float: right !important;
     color: black;
 }
+
+.handle-lab-used {
+    position: relative !important;
+    top: 0px !important;
+    right: 88px !important;
+    float: right !important;
+    color: black;
+}
