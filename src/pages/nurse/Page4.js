@@ -121,7 +121,7 @@ class Page4 extends React.Component {
 
       this.submitForm = this.submitForm.bind(this);
       this.page8 = this.page8.bind(this);
-      this.onDateChange = this.onDateChange.bind(this);
+      // this.onDateChange = this.onDateChange.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
    }
@@ -148,7 +148,7 @@ class Page4 extends React.Component {
                   // originally was page5LoadData
                   headers: headers,
                }).then((response) => {
-                  // console.log(resp);
+                  console.log(response);
                   let data = response.data.success[0];
                   this.setState({
                      referred_by: data.physicianName,
@@ -172,6 +172,7 @@ class Page4 extends React.Component {
                      plt_date: data.plt_date,
                      poc_inr_text: data.poc_inr_text,
                      poc_inr_date: data.poc_inr_date,
+                     dictation: data.dictation,
 
                      details_on_recomemendation: data.details_on_recomemendation,
 
@@ -511,12 +512,12 @@ class Page4 extends React.Component {
       const tableData = await thromboMedicationAlgo(inidcators);
       // console.log('> Nurse Page 4 => inidcators: ', inidcators);
       // console.log('> Nurse Page 4 => tableData: ', tableData);
-      tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
-      this.setState({ table: tableData });
+      // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
+      // this.setState({ table: tableData });
 
-      if(this.state.date_of_procedure) {
-         this.onDateChange(this.state.date_of_procedure);
-      }
+      // if(this.state.date_of_procedure) {
+      //    this.onDateChange(this.state.date_of_procedure);
+      // }
    }
 
    submitForm() {
@@ -542,26 +543,26 @@ class Page4 extends React.Component {
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);
    }
 
-   onDateChange(e) {
-      const value = e.target ? e.target.value : e;
-      let newState = { ...this.state };
-      console.log(value);
-      newState.table.data[0]['d_5'] = moment(value, 'YYYY-MM-DD').subtract(5, 'd').format('YYYY-MM-DD');
-      newState.table.data[1]['d_4'] = moment(value, 'YYYY-MM-DD').subtract(4, 'd').format('YYYY-MM-DD');
-      newState.table.data[2]['d_3'] = moment(value, 'YYYY-MM-DD').subtract(3, 'd').format('YYYY-MM-DD');
-      newState.table.data[3]['d_2'] = moment(value, 'YYYY-MM-DD').subtract(2, 'd').format('YYYY-MM-DD');
-      newState.table.data[4]['d_1'] = moment(value, 'YYYY-MM-DD').subtract(1, 'd').format('YYYY-MM-DD');
+   // onDateChange(e) {
+   //    const value = e.target ? e.target.value : e;
+   //    let newState = { ...this.state };
+   //    console.log(value);
+   //    newState.table.data[0]['d_5'] = moment(value, 'YYYY-MM-DD').subtract(5, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[1]['d_4'] = moment(value, 'YYYY-MM-DD').subtract(4, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[2]['d_3'] = moment(value, 'YYYY-MM-DD').subtract(3, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[3]['d_2'] = moment(value, 'YYYY-MM-DD').subtract(2, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[4]['d_1'] = moment(value, 'YYYY-MM-DD').subtract(1, 'd').format('YYYY-MM-DD');
 
-      newState.table.data[5].d = value;
+   //    newState.table.data[5].d = value;
 
-      newState.table.data[6]['d1'] = moment(value, 'YYYY-MM-DD').add(1, 'd').format('YYYY-MM-DD');
-      newState.table.data[7]['d2'] = moment(value, 'YYYY-MM-DD').add(2, 'd').format('YYYY-MM-DD');
-      newState.table.data[8]['d3'] = moment(value, 'YYYY-MM-DD').add(3, 'd').format('YYYY-MM-DD');
-      newState.table.data[9]['d4'] = moment(value, 'YYYY-MM-DD').add(4, 'd').format('YYYY-MM-DD');
-      newState.table.data[10]['d5'] = moment(value, 'YYYY-MM-DD').add(5, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[6]['d1'] = moment(value, 'YYYY-MM-DD').add(1, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[7]['d2'] = moment(value, 'YYYY-MM-DD').add(2, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[8]['d3'] = moment(value, 'YYYY-MM-DD').add(3, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[9]['d4'] = moment(value, 'YYYY-MM-DD').add(4, 'd').format('YYYY-MM-DD');
+   //    newState.table.data[10]['d5'] = moment(value, 'YYYY-MM-DD').add(5, 'd').format('YYYY-MM-DD');
 
-      this.setState({ ...newState });
-   }
+   //    this.setState({ ...newState });
+   // }
 
    //
 
@@ -896,7 +897,7 @@ class Page4 extends React.Component {
                      <div className="row" style={{ padding:"15px" }}>
                         <>
                            <h5>Dictation</h5>
-                           <p disabled className="form-control" value={this.state.dictation}></p>
+                           <p disabled className="form-control">{this.state.dictation}</p>
                         </>
                      </div>
                   </div>
@@ -918,22 +919,63 @@ class Page4 extends React.Component {
                   <br />
 
                   <div className="jumbotron" style={{ paddingTop: '2.25rem' }}>
-                     {mapToView.renderTable(table, this.onDateChange, true)}
-
-                     <br />
-                     <br />
+                     <table style={{ display: "inline-table" }} className="table-responsive">
+                        <tr style={{ borderBottom: "1px solid #ccc" }}>
+                           <th>Date</th>
+                           <th>Lab</th>
+                           <th colSpan={2}>
+                              <select className="form-control">
+                                 <option value="test1">Pradaxa</option>
+                                 <option value="test2">Elliquis</option>
+                                 <option value="test3">Effient</option>
+                              </select>
+                           </th>
+                        </tr>
+                        <tr style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
+                           <td><input type='date' value="26-01-2022" className="form-control" /></td>
+                           <td><input type='text' value="" className="form-control" /></td>
+                           <td><input type='number' value="2" className="form-control" /></td>
+                           <td>
+                              <select className='form-control'>
+                                 <option value={'AM/PM'}>AM / PM</option>
+                                 <option value={'Morning'}>MORNING</option>
+                                 <option value={'Afternoon'}>AFTERNOON</option>
+                                 <option value={'Evning'}>EVENING</option>
+                              </select>
+                           </td>
+                        </tr>
+                     </table>
+   
+                     <div className="row">
+                        <div className="col-3" style={{ marginTop: '15px' }}>
+                           <div className='form-group'>
+                              <label htmlFor='vka-label'>VKA</label>
+                              <input type='checkbox' style={{ marginLeft: '5px' }} value='vka' />
+                           </div>
+                           <div className='form-group'>
+                              <label htmlFor='doac-label'>DOAC</label>
+                              <input type='checkbox' style={{ marginLeft: '5px' }} value='doac' />
+                           </div>
+                           <div className='form-group'>
+                              <label htmlFor='antiplatelets-label'>ANTIPLATELES</label>
+                              <input type='checkbox' style={{ marginLeft: '5px' }} value='antiplatelets' />
+                           </div>
+                           <div className='form-group'>
+                              <label htmlFor='warfain-label'>WARFAIN</label>
+                              <input type='checkbox' style={{ marginLeft: '5px' }} value='warfain' />
+                           </div>
+                        </div>
+                     </div>
                      <div className="row">
                         <div className="col-4">
-                           <Link to="/Nurse/Nurse3" className="btn btn-outline-primary  btn-block">
-                              Back
+                           <Link to="#" className="btn btn-outline-danger  btn-block">
+                              Save & Approve
                            </Link>
                         </div>
 
-                        <div className="col-4"></div>
-
                         <div className="col-4">
-                           <button onClick={this.submitForm} className="btn btn-primary btn-block">
-                              Next
+                           <button className="btn btn-secondary btn-block">
+                              Save Draft
                            </button>
                         </div>
                      </div>

@@ -563,7 +563,7 @@ class AddPatient extends React.Component {
          dictation: this.state.dictation,
       };
       let patient_id = localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id;
-      server(`nurse/add_patient/:${patient_id}`, param);
+      server(`nurse/page5/:${patient_id}`, param);
    }
 
    handleChange_weight(value) {

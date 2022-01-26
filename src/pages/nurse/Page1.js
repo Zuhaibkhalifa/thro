@@ -225,6 +225,7 @@ class Page1 extends React.Component {
                         plt_date: data.plt_date,
                         poc_inr_text: data.poc_inr_text,
                         poc_inr_date: data.poc_inr_date,
+                        dictation: data.dictation,
 
                         details_on_recomemendation: data.details_on_recomemendation,
 

@@ -7,12 +7,10 @@ export default async function thromboMedicationAlgo(__indicators) {
    const data = await getDrugData();
    console.log('thromboMedicationAlgo - getDrugData => data: ', data);
 
-   const algodata = mapMedicationData(data);
-   console.log('thromboMedicationAlgo - algodata: ', algodata);
+   const indicators = check_sugery_bleeding_risk_outlier(__indicators, data);
+   console.log('medAlgo indicators >>', indicators);
 
-   const indicators = check_sugery_bleeding_risk_outlier(__indicators);
-
-   const tableData = detectCase(algodata);
+   const tableData = detectCase(data);
    console.log('thromboMedicationAlgo - detectCase - table: ', tableData);
 
    // Get all the data needed for Thrombo Algo
@@ -29,59 +27,13 @@ export default async function thromboMedicationAlgo(__indicators) {
             headers: headers,
          });
 
-         console.log('MedicationAlgo data - response: ', res.data.success[0]);
-         return await res.data.success[0];
+         console.log('MedicationAlgo data - response: ', res.data);
+         return await res.data.success;
 
          //
       } catch (error) {
          console.error(error);
       }
-   }
-
-   function mapMedicationData(d) {
-      let data = {};
-
-      data['warfain'] = d.coumadin != null ? true : false;
-
-      data['dabigatran'] = d.pradaxa != null ? true : false;
-
-      data['apixaban'] = d.eliquis != null ? true : false;
-
-      data['rivaroxaban'] = d.Xarelto != null ? true : false;
-      data['rivaroxaban_dosage'] = checkAndGetDosage(d.xarelto_dosage, ['10', '15', '20']);
-      data['rivaroxaban_freq'] = checkAndGetDosage(d.xarelto_dosage, ['once', 'twice']);
-      data['rivaroxaban_dosage_time'] = checkAndGetDosage(d.xarelto_dosage_time, ['am', 'pm']);
-
-      data['edoxabon'] = d.edoxabon != null ? true : false;
-      data['edoxabon_freq'] = checkAndGetDosage(d.edoxabon_dosage, ['once']);
-      data['edoxabon_dosage_time'] = checkAndGetDosage(d.edoxabon_dosage_time, ['am', 'pm']);
-
-      data['lmwh'] = d.dalteparin != null || d.enoxaparin != null || d.tinzaparin != null ? true : false;
-      data['lmwh_drug'] =
-         d.dalteparin != null
-            ? 'dalteparin'
-            : d.enoxaparin != null
-            ? 'enoxaparin'
-            : d.tinzaparin != null
-            ? 'tinzaparin'
-            : null;
-
-      data[`lmwh_dosage`] = d[`${data['lmwh_drug']}_dosage`] != null ? d[`${data['lmwh_drug']}_dosage`] : 'none';
-      data[`lmwh_freq`] = checkAndGetDosage(d[`${data['lmwh_drug']}_freq`], ['once', 'twice']);
-
-      // data['lmwh_dalteparin'] = d.dalteparin != null ? true : false;
-      // data['lmwh_dalteparin_dosage'] = d.dalteparin_dosage != null ? d.dalteparin_dosage : 'none';
-      // data['lmwh_dalteparin_freq'] = checkAndGetDosage(d.dalteparin_freq, ['once', 'twice']);
-
-      // data['lmwh_enoxaparin'] = d.enoxaparin != null ? true : false;
-      // data['lmwh_enoxaparin_dosage'] = d.enoxaparin_dosage != null ? d.enoxaparin_dosage : 'none';
-      // data['lmwh_enoxaparin_freq'] = checkAndGetDosage(d.enoxaparin_freq, ['once', 'twice']);
-
-      // data['lmwh_tinzaparin'] = d.tinzaparin != null ? true : false;
-      // data['lmwh_tinzaparin_dosage'] = d.tinzaparin_dosage != null ? d.tinzaparin_dosage : 'none';
-      // data['lmwh_tinzaparin_freq'] = checkAndGetDosage(d.tinzaparin_freq, ['once', 'twice']);
-
-      return data;
    }
 
    // if indicators.surgeryBleedingRisk is 0(Zero)
@@ -90,9 +42,9 @@ export default async function thromboMedicationAlgo(__indicators) {
       const indicators = { ..._indicators };
 
       if (indicators.surgeryBleedingRisk === 0) {
-         if (_algodata.apixaban || _algodata.edoxabon || _algodata.rivaroxaban || _algodata.dabigatran)
+         if(_algodata.doac.length !== 0 ) {
             indicators.surgeryBleedingRisk = 2;
-         else {
+         } else {
             indicators.surgeryBleedingRisk = 3;
          }
       }
@@ -101,34 +53,35 @@ export default async function thromboMedicationAlgo(__indicators) {
    }
 
    function detectCase(d) {
-      if (d.warfain) return Warfain(indicators);
-      else if (d.lmwh && d.lmwh_freq === 'twice') return LMWH_twice(indicators);
-      else if (d.lmwh && d.lmwh_freq === 'once') return LMWH_once(indicators);
-      else if (d.dabigatran) return Dabigatran(indicators);
-      else if (d.apixaban) return Apixaban(indicators);
-      else if (
-         d.rivaroxaban &&
-         d.rivaroxaban_freq === 'once' &&
-         (d.rivaroxaban_dosage === '15' || d.rivaroxaban_dosage === '20')
-      )
-         return Rivaroxaban_20_or_15_once(indicators);
-      else if (d.rivaroxaban && d.rivaroxaban_freq === 'once' && d.rivaroxaban_dosage === '10')
-         return Rivaroxaban_10_once(indicators);
-      else if (d.rivaroxaban && d.rivaroxaban_freq === 'twice' && d.rivaroxaban_dosage === '15')
-         return Rivaroxaban_15_twice(indicators);
-      else if (d.edoxabon && d.edoxabon_freq === 'once') return Edoxaban(indicators);
+      let data = {};
+      data['vka'] = mapToVKACases(d.vka, indicators);
+      data['lmwh'] = (d.lmwh[0].med_dosage_time === 'twice daily') ? LMWH_twice(data.lmwh, indicators) : LMWH_once(data.lmwh, indicators)
+      data['doac'] = doacCases(d.doac, indicators);
+      data['antiplatelets'] = antiplatelets(d.antiplatelets, indicators);
 
-      return 'none';
+      return data;
    }
 
-   //
-   //
+   function doacCases(d, indicators) {
+      let data = {};
+      data['dabigatran'] = Dabigatran(indicators);
+      data['apixaban'] = Apixaban(indicators);
+      data['rivaroxaban'] = (d[1].med_dosage_time === 'once daily' && (d[1].med_dosage?.split(' ')[0] === '15' || d[1].med_dosage?.split(' ')[0] === '20')) ? Rivaroxaban_20_or_15_once(indicators) : d[1].med_dosage_time === 'once daily' && d[1].med_dosage?.split(' ')[0] === '10' ? Rivaroxaban_10_once(indicators) : d[1].med_dosage_time === 'twice daily' && d[1].med_dosage?.split(' ')[0] === '15' ? Rivaroxaban_15_twice(indicators) : Edoxaban(indicators);
+      
+      return data;
+   }
 
-   function Warfain(indicators) {
-      console.log('>>   CASE Warfain');
-      const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
+   function mapToVKACases(meds, indicators) {
+      const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
+      let dropdownElem = document.createElement('select');
+      let options = document.createElement('option');
+      for(let med_data in meds) {
+         options.value = meds[med_data].med_name;
+         options.text = meds[med_data].med_name;
+         dropdownElem.append(options);
+      } 
       let table = {
-         header: ['date', 'warfain', 'lab'],
+         header: ['date', dropdownElem, 'lab'],
          data: [
             { d_5: 'D-5', warfain: 'No', lab: '' },
             { d_4: 'D-4', warfain: 'No', lab: '' },
@@ -152,6 +105,159 @@ export default async function thromboMedicationAlgo(__indicators) {
          data = modifyData(data, [4], 'lmwh', 'am only');
          return modifyData(data, [6], 'lmwh', 'pm only');
       };
+      
+      const heparin = (data) => {
+         data = addNote(
+            data,
+            'NoteHeprain1',
+            'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery'
+         );
+         data = addNote(
+            data,
+            'NoteHeprain2',
+            'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2'
+         );
+
+         data = addNewProp(data, 'heparin_4', '');
+         data = modifyData(data, [0, 1, 2, 3, 4], 'heparin_4', 'NoteHeprain1');
+         data = modifyData(data, [6, 7, 8, 9, 10, 11], 'heparin_4', 'NoteHeprain2');
+         return modifyData(data, [2, 3, 4, 5, 6, 7, 8, 9, 10], 'lab', 'INR');
+      };
+
+      // case a.1
+      if (IR === 0 && PBR === 0 && SBR === 2) return table;
+      // case a.2  FLAG
+      else if (IR === 0 && PBR === 1 && SBR === 2) {
+         table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+         return table;
+      }
+
+      // case a.3
+      else if (IR === 0 && PBR === 0 && SBR === 1) {
+         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+         return table;
+      }
+
+      // case a.4
+      else if (IR === 0 && PBR === 1 && SBR === 1) {
+         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+         return table;
+      }
+
+      // case b
+      else if (SBR === 3) {
+         table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'warfain', 'usual dosage');
+
+         table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+         table.data[11].lab = 'Goto lab for INR test';
+
+         return table;
+      }
+
+      // case c.1
+      else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl >= 30) {
+         return lmwh(table);
+      }
+
+      // case c.2
+      else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl >= 30) {
+         table = lmwh(table);
+         table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+
+         return table;
+      }
+
+      // case c.3    FLAG
+      else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl >= 30) {
+         table = lmwh(table);
+         table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+
+         return table;
+      }
+
+      // case c.4    FLAG
+      else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl >= 30) {
+         table = lmwh(table);
+         table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+
+         return table;
+      }
+
+      // case d.1
+      else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl < 30) {
+         table = heparin(table);
+         table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR');
+
+         return table;
+      }
+
+      // case e.1
+      else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
+         table = heparin(table);
+         table = modifyData(table, [5, 6, 7], 'warfain', 'usual dosage');
+         table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR');
+
+         return table;
+      }
+
+      // case e.2     FLAG
+      else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl < 30) {
+         table = heparin(table);
+         table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR');
+
+         return table;
+      }
+
+      // case e.3     FLAG
+      else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
+         table = heparin(table);
+         table = modifyData(table, [5, 6, 7], 'warfain', 'usual dosage');
+         table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR');
+
+         return table;
+      }
+
+      return table;
+   }
+
+   function antiplatelets(meds, indicators) {
+      console.log('>>   CASE Antiplatelets');
+      const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
+      let dropdownElem = document.createElement('select');
+      let options = document.createElement('option');
+      for(let med_data in meds) {
+         options.value = meds[med_data].med_name;
+         options.text = meds[med_data].med_name;
+         dropdownElem.append(options);
+      } 
+      let table = {
+         header: ['date', dropdownElem, 'lab'],
+         data: [
+            { d_5: 'D-5', lab: '' },
+            { d_4: 'D-4', lab: '' },
+            { d_3: 'D-3', lab: '' },
+            { d_2: 'D-2', lab: '' },
+            { d_1: 'D-1', lab: '' },
+            { d: 'D', lab: '' },
+            { d1: 'D1', lab: '' },
+            { d2: 'D2', lab: '' },
+            { d3: 'D3', lab: '' },
+            { d4: 'D4', lab: '' },
+            { d5: 'D5', lab: '' },
+            { d6: 'First weekday after D5', lab: 'Goto Lab for INR test' },
+         ],
+         note: {},
+      };
+
+      const lmwh = (data) => {
+         data = addNewProp(data, 'lmwh', '');
+         data = modifyData(data, [2, 3, 7, 8], 'lmwh', 'am pm');
+         data = modifyData(data, [4], 'lmwh', 'am only');
+         return modifyData(data, [6], 'lmwh', 'pm only');
+      };
+      
       const heparin = (data) => {
          data = addNote(
             data,
@@ -270,7 +376,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function LMWH_twice(indicators) {
       console.log('>>   CASE LMWH_twice');
-      const { patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
+      const { patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {
          header: ['date', 'lmwh'],
          data: [
@@ -330,7 +436,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function LMWH_once(indicators) {
       console.log('>>   CASE LMWH_once');
-      const { patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators;
+      const { patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {
          header: ['date', 'lmwh'],
          data: [
@@ -390,7 +496,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function Dabigatran(indicators) {
       console.log('>>   CASE Dabigatran');
-      const { surgeryBleedingRisk: SBR, CrCl } = indicators;
+      const { surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {
          header: ['date', 'dabigatran'],
          data: [
@@ -448,7 +554,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function Apixaban(indicators) {
       console.log('>>   CASE Apixaban');
-      const { surgeryBleedingRisk: SBR } = indicators;
+      const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
       let table = {
          header: ['date', 'apixaban'],
          data: [
@@ -491,8 +597,8 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function Rivaroxaban_20_or_15_once(indicators) {
       console.log('>>   CASE Rivaroxaban_20_or_15_once');
-      const { surgeryBleedingRisk: SBR } = indicators;
-      const { rivaroxaban_dosage_time: RDT } = algodata;
+      const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
+      const { rivaroxaban_dosage_time: RDT } = algodata.doac[1].med_dosage_time ? algodata.doac[1].med_dosage_time : '';
 
       let table = {
          header: ['date', 'rivaroxaban'],
@@ -541,8 +647,8 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function Rivaroxaban_10_once(indicators) {
       console.log('>>   CASE Rivaroxaban_10_once');
-      const { surgeryBleedingRisk: SBR } = indicators;
-      const { rivaroxaban_dosage_time: RDT } = algodata;
+      const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
+      const { rivaroxaban_dosage_time: RDT } = algodata.doac[1].med_dosage_time ? algodata.doac[1].med_dosage_time : '';
 
       let table = {
          header: ['date', 'rivaroxaban'],
@@ -615,8 +721,8 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function Edoxaban(indicators) {
       console.log('>>   CASE Edoxaban');
-      const { surgeryBleedingRisk: SBR } = indicators;
-      const { rivaroxaban_dosage_time: RDT } = algodata;
+      const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
+      const { rivaroxaban_dosage_time: RDT } = algodata.doac[1].med_dosage_time ? algodata.doac[1].med_dosage_time : '';
 
       let table = {
          header: ['date', 'edoxabon'],
@@ -687,10 +793,10 @@ export default async function thromboMedicationAlgo(__indicators) {
    }
 
    //
-   function checkAndGetDosage(str, arr) {
-      if (str === null || str === undefined) return 'none';
-      for (let i = 0; i < arr.length; i++) if (str.search(arr[i]) !== -1) return arr[i];
-   }
+   // function checkAndGetDosage(str, arr) {
+   //    if (str === null || str === undefined) return 'none';
+   //    for (let i = 0; i < arr.length; i++) if (str.search(arr[i]) !== -1) return arr[i];
+   // }
 
    return tableData;
 }
