@@ -43,61 +43,96 @@ export default async function thromboMedicationAlgo(__indicators) {
 
       if (indicators.surgeryBleedingRisk === 0) {
          if(_algodata.doac.length !== 0 ) {
-            indicators.surgeryBleedingRisk = 2;
-         } else {
-            indicators.surgeryBleedingRisk = 3;
+            let meds = _algodata.doac?.find(x => x.med_name !== "");
+            if(meds !== undefined) {
+               indicators.surgeryBleedingRisk = 2;
+            } else {
+               indicators.surgeryBleedingRisk = 3;
+            }
          }
       }
 
       return indicators;
    }
 
-   function detectCase(d) {
+   function detectCase(meds) {
       let data = {};
-      data['vka'] = mapToVKACases(d.vka, indicators);
-      data['lmwh'] = (d.lmwh[0].med_dosage_time === 'twice daily') ? LMWH_twice(data.lmwh, indicators) : LMWH_once(data.lmwh, indicators)
-      data['doac'] = doacCases(d.doac, indicators);
-      data['antiplatelets'] = antiplatelets(d.antiplatelets, indicators);
+      data['vka'] = mapToVKACases(meds.vka, indicators);
+      data['lmwh'] = lmwhCases(meds.lmwh, indicators);
+      data['doac'] = doacCases(meds.doac, indicators);
+      data['antiplatelets'] = antiplatelets(meds.antiplatelet, indicators);
 
       return data;
    }
 
-   function doacCases(d, indicators) {
+   function lmwhCases(meds, indicators) {
+      let med_data = meds.find(x => x.med_name !== "");
+
+      if(med_data !== undefined) {
+         for(let medIndx in meds) {
+            if(meds[medIndx].med_dosage.toLowerCase() === ('once daily').toLowerCase()) {
+               return LMWH_twice(meds[medIndx], indicators);
+            } else if(meds[medIndx].med_dosage.toLowerCase() === ('twice daily').toLowerCase()) {
+               return LMWH_once(meds[medIndx], indicators);
+            }
+         }
+      }
+   }
+
+   function doacCases(meds, indicators) {
       let data = {};
-      data['dabigatran'] = Dabigatran(indicators);
-      data['apixaban'] = Apixaban(indicators);
-      data['rivaroxaban'] = (d[1].med_dosage_time === 'once daily' && (d[1].med_dosage?.split(' ')[0] === '15' || d[1].med_dosage?.split(' ')[0] === '20')) ? Rivaroxaban_20_or_15_once(indicators) : d[1].med_dosage_time === 'once daily' && d[1].med_dosage?.split(' ')[0] === '10' ? Rivaroxaban_10_once(indicators) : d[1].med_dosage_time === 'twice daily' && d[1].med_dosage?.split(' ')[0] === '15' ? Rivaroxaban_15_twice(indicators) : Edoxaban(indicators);
+      let med_data = meds.find(x => x.med_name !== "");
+      
+      if(med_data !== undefined) {
+         for(let medIndx in meds) {
+            if(meds[medIndx].med_name === "Pradaxa (Dabigatran)") {
+               data['dabigatran'] = Dabigatran(meds[medIndx], indicators);
+            } else if(meds[medIndx].med_name === "Eliquis (Apixaban)") {
+               data['apixaban'] = Apixaban(meds[medIndx], indicators);
+            } else if(meds[medIndx].med_name === "Xarelto (Rivaroxaban)") {
+               if(meds[medIndx].med_dosage_time.toLowerCase() === ('once daily').toLowerCase() && (meds[medIndx].med_dosage === '15' || meds[medIndx].med_dosage === '20')) {
+                  data['rivaroxaban'] = Rivaroxaban_20_or_15_once(meds[medIndx], indicators);
+               } else if(meds[medIndx].med_dosage_time.toLowerCase() === ('once daily').toLowerCase() && meds[medIndx].med_dosage === '10') {
+                  data['rivaroxaban'] = Rivaroxaban_10_once(meds[medIndx], indicators);
+               } else if(meds[medIndx].med_dosage_time.toLowerCase() === ('twice daily').toLowerCase() && meds[medIndx].med_dosage === '15') {
+                  data['rivaroxaban'] = Rivaroxaban_15_twice(meds[medIndx], indicators);
+               }
+            } else if(meds[medIndx].med_name === "Edoxabon (Lixiana)") {
+               data['edoxaban'] = Edoxaban(meds[medIndx], indicators);
+            }
+         }
+      }
       
       return data;
    }
 
    function mapToVKACases(meds, indicators) {
+      let med_data = meds.find(x => x.med_name !== "");
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
-      let dropdownElem = document.createElement('select');
-      let options = document.createElement('option');
-      for(let med_data in meds) {
-         options.value = meds[med_data].med_name;
-         options.text = meds[med_data].med_name;
-         dropdownElem.append(options);
-      } 
-      let table = {
-         header: ['date', dropdownElem, 'lab'],
-         data: [
-            { d_5: 'D-5', warfain: 'No', lab: '' },
-            { d_4: 'D-4', warfain: 'No', lab: '' },
-            { d_3: 'D-3', warfain: 'No', lab: '' },
-            { d_2: 'D-2', warfain: 'No', lab: '' },
-            { d_1: 'D-1', warfain: 'No', lab: '' },
-            { d: 'D', warfain: 'usual dosage * 2', lab: '' },
-            { d1: 'D1', warfain: 'usual dosage * 2', lab: '' },
-            { d2: 'D2', warfain: 'usual dosage', lab: '' },
-            { d3: 'D3', warfain: 'usual dosage', lab: '' },
-            { d4: 'D4', warfain: 'usual dosage', lab: '' },
-            { d5: 'D5', warfain: 'usual dosage', lab: '' },
+      let table = {};
+
+      if(med_data !== undefined) {
+         let data = [
+            { warfain: 'No', lab: '' },
+            { warfain: 'No', lab: '' },
+            { warfain: 'No', lab: '' },
+            { warfain: 'No', lab: '' },
+            { warfain: 'No', lab: '' },
+            { warfain: 'usual dosage * 2', lab: '' },
+            { warfain: 'usual dosage * 2', lab: '' },
+            { warfain: 'usual dosage', lab: '' },
+            { warfain: 'usual dosage', lab: '' },
+            { warfain: 'usual dosage', lab: '' },
+            { warfain: 'usual dosage', lab: '' },
             { d6: 'First weekday after D5', warfain: '', lab: 'Goto Lab for INR test' },
-         ],
-         note: {},
-      };
+         ];
+
+         table['header'] = [med_data];
+         table['data'] = data;
+
+      } else {
+         return undefined;
+      }
 
       const lmwh = (data) => {
          data = addNewProp(data, 'lmwh', '');
@@ -224,32 +259,29 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function antiplatelets(meds, indicators) {
       console.log('>>   CASE Antiplatelets');
+      let med_data = meds.find(x => x.med_name !== "");
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
-      let dropdownElem = document.createElement('select');
-      let options = document.createElement('option');
-      for(let med_data in meds) {
-         options.value = meds[med_data].med_name;
-         options.text = meds[med_data].med_name;
-         dropdownElem.append(options);
-      } 
-      let table = {
-         header: ['date', dropdownElem, 'lab'],
-         data: [
-            { d_5: 'D-5', lab: '' },
-            { d_4: 'D-4', lab: '' },
-            { d_3: 'D-3', lab: '' },
-            { d_2: 'D-2', lab: '' },
-            { d_1: 'D-1', lab: '' },
-            { d: 'D', lab: '' },
-            { d1: 'D1', lab: '' },
-            { d2: 'D2', lab: '' },
-            { d3: 'D3', lab: '' },
-            { d4: 'D4', lab: '' },
-            { d5: 'D5', lab: '' },
+      let table = {};
+      if(med_data !== undefined) {
+         let med_Indx = meds.findIndex(x => x.med_name !== "");
+         let data = [
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
+            { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
             { d6: 'First weekday after D5', lab: 'Goto Lab for INR test' },
-         ],
-         note: {},
-      };
+         ];
+
+         table['header'] = [meds[med_Indx]];
+         table['data'] = data;
+      }
 
       const lmwh = (data) => {
          data = addNewProp(data, 'lmwh', '');
@@ -374,23 +406,23 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function LMWH_twice(indicators) {
+   function LMWH_twice(meds, indicators) {
       console.log('>>   CASE LMWH_twice');
       const { patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {
-         header: ['date', 'lmwh'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', lmwh: 'Am Pm' },
-            { d_4: 'D-4', lmwh: 'Am Pm' },
-            { d_3: 'D-3', lmwh: 'Am Pm' },
-            { d_2: 'D-2', lmwh: 'Am Pm' },
-            { d_1: 'D-1', lmwh: 'Am Only' },
-            { d: 'D', lmwh: '' },
-            { d1: 'D1', lmwh: 'Pm Only' },
-            { d2: 'D2', lmwh: 'Am Pm' },
-            { d3: 'D3', lmwh: 'Am Pm' },
-            { d4: 'D4', lmwh: 'Am Pm' },
-            { d5: 'D5', lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Only' },
+            { 'dosage': meds.med_dosage, lmwh: '' },
+            { 'dosage': meds.med_dosage, lmwh: 'Pm Only' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
          ],
          note: {},
       };
@@ -434,23 +466,23 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function LMWH_once(indicators) {
+   function LMWH_once(meds, indicators) {
       console.log('>>   CASE LMWH_once');
       const { patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {
-         header: ['date', 'lmwh'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', lmwh: 'Yes' },
-            { d_4: 'D-4', lmwh: 'Yes' },
-            { d_3: 'D-3', lmwh: 'Yes' },
-            { d_2: 'D-2', lmwh: 'Yes' },
-            { d_1: 'D-1', lmwh: 'Half dose in am' },
-            { d: 'D', lmwh: '' },
-            { d1: 'D1', lmwh: 'Half dose in pm' },
-            { d2: 'D2', lmwh: 'Yes' },
-            { d3: 'D3', lmwh: 'Yes' },
-            { d4: 'D4', lmwh: 'Yes' },
-            { d5: 'D5', lmwh: 'Yes' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Only' },
+            { 'dosage': meds.med_dosage, lmwh: '' },
+            { 'dosage': meds.med_dosage, lmwh: 'Pm Only' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
+            { 'dosage': meds.med_dosage, lmwh: 'Am Pm' },
          ],
          note: {},
       };
@@ -494,23 +526,23 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function Dabigatran(indicators) {
+   function Dabigatran(meds, indicators) {
       console.log('>>   CASE Dabigatran');
       const { surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {
-         header: ['date', 'dabigatran'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', dabigatran: 'Am and Pm' },
-            { d_4: 'D-4', dabigatran: 'Am and Pm' },
-            { d_3: 'D-3', dabigatran: 'Am and Pm' },
-            { d_2: 'D-2', dabigatran: 'Am and Pm' },
-            { d_1: 'D-1', dabigatran: 'Am and Pm' },
-            { d: 'D', dabigatran: 'Am and Pm' },
-            { d1: 'D1', dabigatran: 'Am and Pm' },
-            { d2: 'D2', dabigatran: 'Am and Pm' },
-            { d3: 'D3', dabigatran: 'Am and Pm' },
-            { d4: 'D4', dabigatran: 'Am and Pm' },
-            { d5: 'D5', dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, dabigatran: 'Am and Pm' },
          ],
          note: {},
       };
@@ -552,23 +584,23 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function Apixaban(indicators) {
+   function Apixaban(meds, indicators) {
       console.log('>>   CASE Apixaban');
       const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
       let table = {
-         header: ['date', 'apixaban'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', apixaban: 'Am and Pm' },
-            { d_4: 'D-4', apixaban: 'Am and Pm' },
-            { d_3: 'D-3', apixaban: 'Am and Pm' },
-            { d_2: 'D-2', apixaban: 'Am and Pm' },
-            { d_1: 'D-1', apixaban: 'Am and Pm' },
-            { d: 'D', apixaban: 'Am and Pm' },
-            { d1: 'D1', apixaban: 'Am and Pm' },
-            { d2: 'D2', apixaban: 'Am and Pm' },
-            { d3: 'D3', apixaban: 'Am and Pm' },
-            { d4: 'D4', apixaban: 'Am and Pm' },
-            { d5: 'D5', apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
+            { 'dosage': meds.med_dosage, apixaban: 'Am and Pm' },
          ],
          note: {},
       };
@@ -595,25 +627,25 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function Rivaroxaban_20_or_15_once(indicators) {
+   function Rivaroxaban_20_or_15_once(meds, indicators) {
       console.log('>>   CASE Rivaroxaban_20_or_15_once');
       const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
-      const { rivaroxaban_dosage_time: RDT } = algodata.doac[1].med_dosage_time ? algodata.doac[1].med_dosage_time : '';
+      const { rivaroxaban_dosage_time: RDT } = meds.med_dosage_time ? meds.med_dosage_time : '';
 
       let table = {
-         header: ['date', 'rivaroxaban'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', rivaroxaban: 'yes' },
-            { d_4: 'D-4', rivaroxaban: 'yes' },
-            { d_3: 'D-3', rivaroxaban: 'yes' },
-            { d_2: 'D-2', rivaroxaban: 'yes' },
-            { d_1: 'D-1', rivaroxaban: 'yes' },
-            { d: 'D', rivaroxaban: 'yes' },
-            { d1: 'D1', rivaroxaban: 'yes' },
-            { d2: 'D2', rivaroxaban: 'yes' },
-            { d3: 'D3', rivaroxaban: 'yes' },
-            { d4: 'D4', rivaroxaban: 'yes' },
-            { d5: 'D5', rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
          ],
          note: {},
       };
@@ -645,25 +677,25 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function Rivaroxaban_10_once(indicators) {
+   function Rivaroxaban_10_once(meds, indicators) {
       console.log('>>   CASE Rivaroxaban_10_once');
       const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
-      const { rivaroxaban_dosage_time: RDT } = algodata.doac[1].med_dosage_time ? algodata.doac[1].med_dosage_time : '';
+      const { rivaroxaban_dosage_time: RDT } = meds.med_dosage_time ? meds.med_dosage_time : '';
 
       let table = {
-         header: ['date', 'rivaroxaban'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', rivaroxaban: 'yes' },
-            { d_4: 'D-4', rivaroxaban: 'yes' },
-            { d_3: 'D-3', rivaroxaban: 'yes' },
-            { d_2: 'D-2', rivaroxaban: 'yes' },
-            { d_1: 'D-1', rivaroxaban: 'yes' },
-            { d: 'D', rivaroxaban: 'yes' },
-            { d1: 'D1', rivaroxaban: 'yes' },
-            { d2: 'D2', rivaroxaban: 'yes' },
-            { d3: 'D3', rivaroxaban: 'yes' },
-            { d4: 'D4', rivaroxaban: 'yes' },
-            { d5: 'D5', rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+            { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
          ],
          note: {},
       };
@@ -695,22 +727,22 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function Rivaroxaban_15_twice(indicators) {
+   function Rivaroxaban_15_twice(meds, indicators) {
       console.log('>>   CASE Rivaroxaban_15_twice');
       let table = {
-         header: ['date', 'rivaroxaban'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', rivaroxaban: ' ' },
-            { d_4: 'D-4', rivaroxaban: ' ' },
-            { d_3: 'D-3', rivaroxaban: ' ' },
-            { d_2: 'D-2', rivaroxaban: ' ' },
-            { d_1: 'D-1', rivaroxaban: ' ' },
-            { d: 'D', rivaroxaban: ' ' },
-            { d1: 'D1', rivaroxaban: ' ' },
-            { d2: 'D2', rivaroxaban: ' ' },
-            { d3: 'D3', rivaroxaban: ' ' },
-            { d4: 'D4', rivaroxaban: ' ' },
-            { d5: 'D5', rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+            { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
          ],
          note: {},
       };
@@ -719,25 +751,25 @@ export default async function thromboMedicationAlgo(__indicators) {
       return table;
    }
 
-   function Edoxaban(indicators) {
+   function Edoxaban(meds, indicators) {
       console.log('>>   CASE Edoxaban');
       const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
-      const { rivaroxaban_dosage_time: RDT } = algodata.doac[1].med_dosage_time ? algodata.doac[1].med_dosage_time : '';
+      const { rivaroxaban_dosage_time: RDT } = meds.med_dosage_time ? meds.med_dosage_time : '';
 
       let table = {
-         header: ['date', 'edoxabon'],
+         header: [meds],
          data: [
-            { d_5: 'D-5', edoxabon: 'yes' },
-            { d_4: 'D-4', edoxabon: 'yes' },
-            { d_3: 'D-3', edoxabon: 'yes' },
-            { d_2: 'D-2', edoxabon: 'yes' },
-            { d_1: 'D-1', edoxabon: 'yes' },
-            { d: 'D', edoxabon: 'yes' },
-            { d1: 'D1', edoxabon: 'yes' },
-            { d2: 'D2', edoxabon: 'yes' },
-            { d3: 'D3', edoxabon: 'yes' },
-            { d4: 'D4', edoxabon: 'yes' },
-            { d5: 'D5', edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+            { 'dosage': meds.med_dosage, edoxabon: 'yes' },
          ],
          note: {},
       };

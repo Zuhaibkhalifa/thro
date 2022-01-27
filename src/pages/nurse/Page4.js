@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -12,7 +11,7 @@ import { domain } from '../../App';
 
 import thromboAlgos from '../../helper/thromboAlgos';
 import thromboMedicationAlgo from '../../helper/thromboMedicationAlgo';
-import mapToView from '../../helper/mapMedicationDataToView';
+// import mapToView from '../../helper/mapMedicationDataToView';
 
 class Page4 extends React.Component {
    constructor(props) {
@@ -116,14 +115,134 @@ class Page4 extends React.Component {
          referred_by: '',
          email: '',
          showHide: '',
-         table: { header: [], data: [], note: {} }
+         table: {},
+         vka_chkBox: false,
+         doac_chkBox: false,
+         antiplatelets_chkBox: false,
+         lmwh_chkBox: false,
+
+         labVal1: '',
+         labVal2: '',
+         labVal3: '',
+         labVal4: '',
+         labVal5: '',
+         labVal6: '',
+         labVal7: '',
+         labVal8: '',
+         labVal9: '',
+         labVal10: '',
+         labVal11: '',
+
+         selectValVka1: '',
+         selectValVka2: '',
+         selectValVka3: '',
+         selectValVka4: '',
+         selectValVka5: '',
+         selectValVka6: '',
+         selectValVka7: '',
+         selectValVka8: '',
+         selectValVka9: '',
+         selectValVka10: '',
+         selectValVka11: '',
+
+         InptValVka1: 0,
+         InptValVka2: 0,
+         InptValVka3: 0,
+         InptValVka4: 0,
+         InptValVka5: 0,
+         InptValVka6: 0,
+         InptValVka7: 0,
+         InptValVka8: 0,
+         InptValVka9: 0,
+         InptValVka10: 0,
+         InptValVka11: 0,
+
+         selectValAntiplatelets1: '',
+         selectValAntiplatelets2: '',
+         selectValAntiplatelets3: '',
+         selectValAntiplatelets4: '',
+         selectValAntiplatelets5: '',
+         selectValAntiplatelets6: '',
+         selectValAntiplatelets7: '',
+         selectValAntiplatelets8: '',
+         selectValAntiplatelets9: '',
+         selectValAntiplatelets10: '',
+         selectValAntiplatelets11: '',
+
+         InptValAntiplatelets1: 0,   
+         InptValAntiplatelets2: 0,
+         InptValAntiplatelets3: 0,
+         InptValAntiplatelets4: 0,
+         InptValAntiplatelets5: 0,
+         InptValAntiplatelets6: 0,
+         InptValAntiplatelets7: 0,
+         InptValAntiplatelets8: 0,
+         InptValAntiplatelets9: 0,
+         InptValAntiplatelets10: 0,
+         InptValAntiplatelets11: 0,
+
+         selectValLmwh1: '',
+         selectValLmwh2: '',
+         selectValLmwh3: '',
+         selectValLmwh4: '',
+         selectValLmwh5: '',
+         selectValLmwh6: '',
+         selectValLmwh7: '',
+         selectValLmwh8: '',
+         selectValLmwh9: '',
+         selectValLmwh10: '',
+         selectValLmwh11: '',
+
+         InptValLmwh1: 0,
+         InptValLmwh2: 0,
+         InptValLmwh3: 0,
+         InptValLmwh4: 0,
+         InptValLmwh5: 0,
+         InptValLmwh6: 0,
+         InptValLmwh7: 0,
+         InptValLmwh8: 0,
+         InptValLmwh9: 0,
+         InptValLmwh10: 0,
+         InptValLmwh11: 0,
+        
+         selectValDoac1: '',
+         selectValDoac2: '',
+         selectValDoac3: '',
+         selectValDoac4: '',
+         selectValDoac5: '',
+         selectValDoac6: '',
+         selectValDoac7: '',
+         selectValDoac8: '',
+         selectValDoac9: '',
+         selectValDoac10: '',
+         selectValDoac11: '',
+
+         InptValDoac1: 0,
+         InptValDoac2: 0,
+         InptValDoac3: 0,
+         InptValDoac4: 0,
+         InptValDoac5: 0,
+         InptValDoac6: 0,
+         InptValDoac7: 0,
+         InptValDoac8: 0,
+         InptValDoac9: 0,
+         InptValDoac10: 0,
+         InptValDoac11: 0,
+
+         approved_by: ''
       };
 
       this.submitForm = this.submitForm.bind(this);
       this.page8 = this.page8.bind(this);
-      // this.onDateChange = this.onDateChange.bind(this);
+      this.onDateChange = this.onDateChange.bind(this);
+      this.handleLabValueChange = this.handleLabValueChange.bind(this);
+      this.handleSelectValueChange = this.handleSelectValueChange.bind(this);
+      this.handleInptValueChange = this.handleInptValueChange.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
+      this.handleApprovedBy = this.handleApprovedBy.bind(this);
+      this.handleSaveNApprove = this.handleSaveNApprove.bind(this);
+      this.handleSaveDraft = this.handleSaveDraft.bind(this);
    }
 
    componentDidMount() {
@@ -136,12 +255,17 @@ class Page4 extends React.Component {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
          axios
-            .get(domain + `/api/nurse/page8LoadData/:${patient_id}`, {
+            .get(domain + `/api/nurse/medicationJsonData/:${patient_id}`, {
                headers: headers,
             })
             .then((response) => {
                // console.log(response.data.success[0]);
                console.log('response is here: ', response);
+               let data = response.data.success[0];
+               this.setState({
+                  approved_by: data.approved_by,
+                  table_data: data.jsonTable
+               });
 
                axios
                .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
@@ -259,6 +383,42 @@ class Page4 extends React.Component {
       }
    }
 
+   handleApprovedBy(e) {
+      this.setState({
+         approved_by: e.target.value
+      });
+   }
+
+   handleSaveNApprove(tableData) {
+      if (this.state.table === 'none') return;
+
+      const data = {
+         jsonTable: JSON.stringify({ ...this.state.table }),
+         patient_id: localStorage.getItem('patient_id'),
+         last_modified: new Date().toLocaleDateString(),
+         approved_by: tableData.approved_by,
+         status: 'Approved'
+      };
+      console.log('>>> JSON data: ', data);
+      server(`nurse/medicationJsonData/:${data.patient_id}`, data);
+      this.props.history.push('/Nurse/Nurse5');
+   }
+
+   handleSaveDraft(tableData) {
+      if (this.state.table === 'none') return;
+
+      const data = {
+         jsonTable: JSON.stringify({ ...this.state.table }),
+         patient_id: localStorage.getItem('patient_id'),
+         last_modified: new Date().toLocaleDateString(),
+         approved_by: tableData.approved_by,
+         status: 'Draft'
+      };
+      console.log('>>> JSON data: ', data);
+      server(`nurse/medicationJsonData/:${data.patient_id}`, data);
+      this.props.history.push('/Nurse/Nurse5');
+   }
+
    fillactiveanticogmeds() {
       let activeMeds = [];
       if(this.state.dalteparin) {
@@ -361,6 +521,24 @@ class Page4 extends React.Component {
             window.location.reload();
          }
       }
+   }
+
+   handleLabValueChange(e, key) {
+      this.setState({
+         [key]: e.target.value
+      });
+   }
+
+   handleInptValueChange(e, key) {
+      this.setState({
+         [key]: e.target.value
+      });
+   }
+
+   handleSelectValueChange(e, key) {
+      this.setState({
+         [key]: e.target.value
+      });
    }
 
    fillactiveantiplatmeds() {
@@ -473,6 +651,30 @@ class Page4 extends React.Component {
       this.setState({ chads_score_and_distribution: score });
    }
 
+   setInitialState(key, value, length) {
+      for(let i=0; i<length; i++) {
+         this.setState({
+            [key+(i+1)]: value
+         });
+      }
+   }
+
+   setInitialLabState(key, value, length) {
+      for(let i=0; i<length; i++) {
+         this.setState({
+            [key+(i+1)]: value
+         });
+      }
+   }
+
+   setInitialSelectState(key, value, length) {
+      for(let i=0; i<length; i++) {
+         this.setState({
+            [key+(i+1)]: value
+         });
+      }
+   }
+
    set_DynamicFlags() {
       const {
          liver_disease: liver,
@@ -508,16 +710,114 @@ class Page4 extends React.Component {
    }
 
    async getDatafromAlgo() {
+      let table_data = {
+         vka: '',
+         lmwh: '',
+         antiplatelets: '',
+         doac: '',
+         headers: '',
+         date: [
+            {d_5: 'D-5'},
+            {d_4: 'D-4'},
+            {d_3: 'D-3'},
+            {d_2: 'D-2'},
+            {d_1: 'D-1'},
+            {d_0: 'D'},
+            {d1: 'D5'},
+            {d2: 'D4'},
+            {d3: 'D3'},
+            {d4: 'D2'},
+            {d5: 'D1'}
+         ]
+      };
       const inidcators = await thromboAlgos();
       const tableData = await thromboMedicationAlgo(inidcators);
-      // console.log('> Nurse Page 4 => inidcators: ', inidcators);
-      // console.log('> Nurse Page 4 => tableData: ', tableData);
+      console.log('> Nurse Page 4 => inidcators: ', inidcators);
+      console.log('> Nurse Page 4 => tableData: ', tableData);
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
-      // this.setState({ table: tableData });
+      let tableHeader = [];
+      if(tableData.vka !== undefined) {
+         let keyIdx = tableData.vka.data.findIndex(x => x.d6);
+         let keyIdx1 = tableData.vka.data.findIndex(x => x.warfain);
+         let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
+         let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
+         tableHeader.push({ 'vka': tableData.vka.header[0] });
+         table_data.vka = tableData.vka.data;
+         if(keyId !== '') {
+            this.setState({ 
+               [keyId]: tableData.vka.data[keyIdx].lab,
+               [keyId1]: tableData.vka.data[keyIdx1].warfain.split(' ')[0]
+            });
+            this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain.split(' ')[0], tableData.vka.data.length);
+            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
+            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
+         }
+      }
 
-      // if(this.state.date_of_procedure) {
-      //    this.onDateChange(this.state.date_of_procedure);
-      // }
+      if(tableData.lmwh !== undefined) {
+         let keyIdx1 = tableData.lmwh.data.findIndex(x => x.dosage);
+         let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
+         tableHeader.push({ 'lmwh': tableData.lmwh.header[0] });
+         table_data.lmwh = tableData.lmwh.data;
+         if(keyId1 !== '') {
+            this.setState({
+               [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0] 
+            });
+            this.setInitialState('InptValLmwh', tableData.lmwh.data[keyIdx1].dosage.split(' ')[0], tableData.lmwh.data.length);
+            this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.data.length);
+         }
+      }
+
+      if(tableData.doac !== undefined) {
+         
+         let dataKey = Object.keys(tableData.doac);
+         for(let datKey in dataKey) {
+            let keyIdx1 = tableData.doac[dataKey[datKey]].data.findIndex(x => x.dosage);
+            let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
+            tableHeader.push({ 'doac': tableData.doac[dataKey[datKey]].header[0] });
+            table_data.doac = tableData.doac[dataKey[datKey]].data;
+            if(keyId1 !== '') {
+               this.setState({
+                  [keyId1]: tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0] 
+               });
+               this.setInitialState('InptValDoac', tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0], tableData.doac[dataKey[datKey]].data.length);
+               this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac[dataKey[datKey]].data.length);
+            }
+         }
+      }
+
+      if(tableData.antiplatelets !== undefined) {
+         let keyIdx = tableData.antiplatelets.data.findIndex(x => x.d6);
+         let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
+         let keyIdx1 = tableData.antiplatelets.data.findIndex(x => x.antiplatelets);
+         let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
+         tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header[0].med_name !== undefined ? tableData.antiplatelets.header[0] : tableData.antiplatelets.header[1] });
+         table_data.antiplatelets = tableData.antiplatelets.data;
+         if(keyId !== '') {
+            this.setState({ 
+               [keyId]:tableData.antiplatelets.data[keyIdx].lab,
+               [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0]  
+            });
+            this.setInitialState('InptValAntiplatelets', tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.data.length);
+            this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.data.length);
+         }
+      }
+
+      table_data.headers = tableHeader;
+      table_data.date[5].d_0 = this.state.date_of_procedure;
+      console.log(this.state.table);
+
+      this.setState({ 
+         table: table_data, 
+         vka_chkBox: tableData.vka !== undefined ? true: false,
+         lmwh_chkBox: tableData.lmwh !== undefined ? true : false,
+         doac_chkBox: tableData.doac !== undefined ? true : false,
+         antiplatelets_chkBox: tableData.antiplatelets !== undefined ? true : false
+      });
+
+      if(this.state.date_of_procedure) {
+         this.onDateChange(this.state.date_of_procedure);
+      }
    }
 
    submitForm() {
@@ -543,26 +843,26 @@ class Page4 extends React.Component {
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);
    }
 
-   // onDateChange(e) {
-   //    const value = e.target ? e.target.value : e;
-   //    let newState = { ...this.state };
-   //    console.log(value);
-   //    newState.table.data[0]['d_5'] = moment(value, 'YYYY-MM-DD').subtract(5, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[1]['d_4'] = moment(value, 'YYYY-MM-DD').subtract(4, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[2]['d_3'] = moment(value, 'YYYY-MM-DD').subtract(3, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[3]['d_2'] = moment(value, 'YYYY-MM-DD').subtract(2, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[4]['d_1'] = moment(value, 'YYYY-MM-DD').subtract(1, 'd').format('YYYY-MM-DD');
+   onDateChange(e) {
+      const value = e.target ? e.target.value : e;
+      let newState = { ...this.state };
+      console.log(newState, value);
+      newState.table.date[0]['d_5'] = moment(value, 'YYYY-MM-DD').subtract(5, 'd').format('YYYY-MM-DD');
+      newState.table.date[1]['d_4'] = moment(value, 'YYYY-MM-DD').subtract(4, 'd').format('YYYY-MM-DD');
+      newState.table.date[2]['d_3'] = moment(value, 'YYYY-MM-DD').subtract(3, 'd').format('YYYY-MM-DD');
+      newState.table.date[3]['d_2'] = moment(value, 'YYYY-MM-DD').subtract(2, 'd').format('YYYY-MM-DD');
+      newState.table.date[4]['d_1'] = moment(value, 'YYYY-MM-DD').subtract(1, 'd').format('YYYY-MM-DD');
 
-   //    newState.table.data[5].d = value;
+      newState.table.date[5]['d_0'] = value;
 
-   //    newState.table.data[6]['d1'] = moment(value, 'YYYY-MM-DD').add(1, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[7]['d2'] = moment(value, 'YYYY-MM-DD').add(2, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[8]['d3'] = moment(value, 'YYYY-MM-DD').add(3, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[9]['d4'] = moment(value, 'YYYY-MM-DD').add(4, 'd').format('YYYY-MM-DD');
-   //    newState.table.data[10]['d5'] = moment(value, 'YYYY-MM-DD').add(5, 'd').format('YYYY-MM-DD');
+      newState.table.date[6]['d1'] = moment(value, 'YYYY-MM-DD').add(1, 'd').format('YYYY-MM-DD');
+      newState.table.date[7]['d2'] = moment(value, 'YYYY-MM-DD').add(2, 'd').format('YYYY-MM-DD');
+      newState.table.date[8]['d3'] = moment(value, 'YYYY-MM-DD').add(3, 'd').format('YYYY-MM-DD');
+      newState.table.date[9]['d4'] = moment(value, 'YYYY-MM-DD').add(4, 'd').format('YYYY-MM-DD');
+      newState.table.date[10]['d5'] = moment(value, 'YYYY-MM-DD').add(5, 'd').format('YYYY-MM-DD');
 
-   //    this.setState({ ...newState });
-   // }
+      this.setState({ ...newState });
+   }
 
    //
 
@@ -919,62 +1219,150 @@ class Page4 extends React.Component {
                   <br />
 
                   <div className="jumbotron" style={{ paddingTop: '2.25rem' }}>
-                     <table style={{ display: "inline-table" }} className="table-responsive">
-                        <tr style={{ borderBottom: "1px solid #ccc" }}>
-                           <th>Date</th>
-                           <th>Lab</th>
-                           <th colSpan={2}>
-                              <select className="form-control">
-                                 <option value="test1">Pradaxa</option>
-                                 <option value="test2">Elliquis</option>
-                                 <option value="test3">Effient</option>
-                              </select>
-                           </th>
-                        </tr>
-                        <tr style={{ borderBottom: "1px solid #ccc", paddingTop: "10px" }}>
-                           <td><input type='date' value="26-01-2022" className="form-control" /></td>
-                           <td><input type='text' value="" className="form-control" /></td>
-                           <td><input type='number' value="2" className="form-control" /></td>
-                           <td>
-                              <select className='form-control'>
-                                 <option value={'AM/PM'}>AM / PM</option>
-                                 <option value={'Morning'}>MORNING</option>
-                                 <option value={'Afternoon'}>AFTERNOON</option>
-                                 <option value={'Evning'}>EVENING</option>
-                              </select>
-                           </td>
-                        </tr>
-                     </table>
+                     {
+                        this.state.table !== undefined ?
+                        <>
+                           <table style={{ display: "inline-table" }} className="table-responsive table-bordered">
+                              <tr style={{ borderBottom: "1px solid #ccc" }}>
+                                 <th>Date</th>
+                                 <th>Lab</th>
+                                 {
+                                    this.state.vka_chkBox ? 
+                                    <th colSpan={2}>
+                                       <select className='form-control'>
+                                          <option value={this.state.table.headers.findIndex(x => x.vka) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.vka)].vka?.med_name : ''}>{this.state.table.headers.findIndex(x => x.vka) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.vka)].vka?.med_name : ''}</option>
+                                       </select>
+                                    </th> : <></>
+                                 }
+                                 {
+                                    this.state.lmwh_chkBox ?
+                                    <th colSpan={2}>
+                                       <select className='form-control'>
+                                          <option value={this.state.table.headers.findIndex(x => x.lmwh) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.lmwh)].lmwh?.med_name : ''}>{this.state.table.headers.findIndex(x => x.lmwh) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.lmwh)].lmwh?.med_name : ''}</option>
+                                       </select>
+                                    </th> : <></>
+                                 }
+                                 {
+                                    this.state.doac_chkBox ?
+                                    <th colSpan={2}>
+                                       <select className='form-control'>
+                                          <option value={this.state.table.headers.findIndex(x => x.doac) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.doac)].doac?.med_name : ''}>{this.state.table.headers.findIndex(x => x.doac) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.doac)].doac?.med_name : ''}</option>
+                                       </select>
+                                    </th> : <></>
+                                 }
+                                 {
+                                    this.state.antiplatelets_chkBox ?
+                                    <th colSpan={2}>
+                                       <select className='form-control'>
+                                          <option value={this.state.table.headers.findIndex(x => x.antiplatelets) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.antiplatelets)].antiplatelets?.med_name : ''}>{this.state.table.headers.findIndex(x => x.antiplatelets) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.antiplatelets)].antiplatelets?.med_name : ''}</option>
+                                       </select>
+                                    </th> : <></>
+                                 }
+                              </tr>
+                              {
+                                 this.state.table.date?.map((date, key) => {
+                                    let dataKey = Object.keys(date)[0];
+                                    let vkaKey = key;
+                                    let antiplateletKey = key;
+                                    let lmwhKey = key;
+                                    let doacKey = key;
+                                    return (
+                                       <>
+                                          <tr key={`date-key-${key}`} style={{ borderBottom: "1px solid #ccc" }}>
+                                             <td><input type='date' disabled={dataKey !== 'd_0' ? true : false} onChange={(e) => this.onDateChange(e)} value={date[dataKey]} className='form-control' /></td>
+                                             <td>
+                                                <input id={`labVal${vkaKey+1}`} type="text" onChange={(e) => this.handleLabValueChange(e, `labVal${vkaKey+1}`)} value={this.state[`labVal${vkaKey+1}`]} className='form-control' />
+                                             </td>
+                                             {
+                                                this.state.vka_chkBox ?
+                                                <>
+                                                   <td><input id={`InptValVka${vkaKey+1}`} type="number" value={this.state[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
+                                                   <td>
+                                                      <select id={`selectValVka${vkaKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValVka${vkaKey+1}`)} className='form-control'>
+                                                         <option value={'twice daily'}>twice daily</option>
+                                                         <option value={'once daily'}>once daily</option>
+                                                      </select>
+                                                   </td>
+                                                </> 
+                                                : <></>
+                                             }
+                                             {this.state.lmwh_chkBox ?
+                                                <>
+                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
+                                                   <td>
+                                                      <select id={`selectValLmh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmh${lmwhKey+1}`)} className='form-control'>
+                                                         <option value={'twice daily'}>twice daily</option>
+                                                         <option value={'once daily'}>once daily</option>
+                                                      </select>
+                                                   </td>
+                                                </> : <></>
+                                             }
+                                             {this.state.antiplatelets_chkBox ?
+                                                <>
+                                                   <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="number" value={this.state[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
+                                                   <td>
+                                                      <select id={`selectValAntiplatelets${antiplateletKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAntiplatelets${antiplateletKey+1}`)} className='form-control'>
+                                                         <option value={'twice daily'}>twice daily</option>
+                                                         <option value={'once daily'}>once daily</option>
+                                                      </select>
+                                                   </td>
+                                                </> : <></>
+                                             }
+                                             {this.state.doac_chkBox ?
+                                                <>
+                                                   <td><input id={`InptValDoac${doacKey+1}`} type="number" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
+                                                   <td>
+                                                      <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
+                                                         <option value={'twice daily'}>twice daily</option>
+                                                         <option value={'once daily'}>once daily</option>
+                                                      </select>
+                                                   </td>
+                                                </> : <></>
+                                             }
+                                          </tr>
+                                       </>
+                                    )
+                                 })
+                              }
+                           </table>
+                        </> : ""
+                     }
    
                      <div className="row">
                         <div className="col-3" style={{ marginTop: '15px' }}>
                            <div className='form-group'>
                               <label htmlFor='vka-label'>VKA</label>
-                              <input type='checkbox' style={{ marginLeft: '5px' }} value='vka' />
-                           </div>
+                              <input type='checkbox' checked={this.state.vka_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ vka_chkBox: e.target.checked })} value={this.state.vka_chkBox} />
+                           </div> 
                            <div className='form-group'>
                               <label htmlFor='doac-label'>DOAC</label>
-                              <input type='checkbox' style={{ marginLeft: '5px' }} value='doac' />
+                              <input type='checkbox' checked={this.state.doac_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ doac_chkBox: e.target.checked })} value={this.state.doac_chkBox} />
                            </div>
                            <div className='form-group'>
                               <label htmlFor='antiplatelets-label'>ANTIPLATELES</label>
-                              <input type='checkbox' style={{ marginLeft: '5px' }} value='antiplatelets' />
+                              <input type='checkbox' checked={this.state.antiplatelets_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ antiplatelets_chkBox: e.target.checked })} value={this.state.antiplatelets_chkBox} />
                            </div>
                            <div className='form-group'>
-                              <label htmlFor='warfain-label'>WARFAIN</label>
-                              <input type='checkbox' style={{ marginLeft: '5px' }} value='warfain' />
+                              <label htmlFor='lmwh-label'>LMWH</label>
+                              <input type='checkbox' checked={this.state.lmwh_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ lmwh_chkBox: e.target.checked })} value={this.state.lmwh_chkBox} />
+                           </div>
+                        </div>
+                        <div className='col-6'>
+                           <div className='form-group'>
+                              <label htmlFor='approvedBy'>Approved By</label>
+                              <input type='text' className='form-control' value={this.state.approved_by} onChange={(e) => this.handleApprovedBy(e)} />
                            </div>
                         </div>
                      </div>
                      <div className="row">
                         <div className="col-4">
-                           <Link to="#" className="btn btn-outline-danger  btn-block">
+                           <button onClick={() => this.handleSaveNApprove(this.state)} className="btn btn-outline-danger  btn-block">
                               Save & Approve
-                           </Link>
+                           </button>
                         </div>
 
                         <div className="col-4">
-                           <button className="btn btn-secondary btn-block">
+                           <button onClick={() => this.handleSaveDraft(this.state)} className="btn btn-secondary btn-block">
                               Save Draft
                            </button>
                         </div>
