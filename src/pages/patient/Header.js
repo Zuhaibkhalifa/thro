@@ -19,7 +19,7 @@ class Header extends React.Component {
 
     go_away() {
         localStorage.clear();
-        window.location = '/signin';
+        window.location = '/';
         //    this.props.history.push('/signin');
     }
 

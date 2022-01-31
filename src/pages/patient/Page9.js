@@ -90,12 +90,7 @@ class Page9 extends React.Component {
    }
 
    redirectBackNurse() {
-       this.submitForm();
-       if(this.state.nurse_add) {
-         this.props.history.push('/Nurse/Nurse1')
-       } else {
-          this.props.history.push('/Nurse/Nurse1')
-       }
+      this.submitForm();
    }
 
    submitForm() {
@@ -182,8 +177,14 @@ class Page9 extends React.Component {
       if (_.isEqual(emptyErrors, errors)) {
          this.setState({ ...errors });
          console.log('Patient 9 - submit - state: ', this.state);
-         this.page9(this.state);
-         this.dynamicRouting();
+         
+         if(this.state.redirectButton) {
+            this.page9(this.state);
+            this.props.history.push('/Nurse/Nurse1');
+         } else {
+            this.page9(this.state);
+            this.dynamicRouting();
+         }
       }
    }
 

@@ -80,11 +80,6 @@ class Page2 extends React.Component {
     
     redirectBackNurse() {
         this.submitForm();
-        if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/Nurse1')
-        } else {
-        this.props.history.push('/Nurse/Nurse1')
-        }
     }
 
     redirectNextPage() {
@@ -110,8 +105,14 @@ class Page2 extends React.Component {
             // alert('You submitted the form and stuff!');
             console.log('Patient Page 2 - submit form: ', this.state);
 
-            this.page2(this.state);
-            this.props.history.push('/User/Page3');
+            
+            if(this.state.redirectButton) {
+                this.page2(this.state);
+                this.props.history.push('/Nurse/Nurse1')
+            } else {
+                this.page2(this.state);
+                this.props.history.push('/User/Page3');
+            }
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time

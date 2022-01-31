@@ -198,9 +198,14 @@ class Page8 extends React.Component {
       } else {
          //  alert('You submitted the form and stuff!');
          console.log(this.state);
-         this.page8(this.state);
-         //  this.props.history.push('/User/Page10');
-         this.dynamicRouting();
+         
+         if(this.state.redirectButton) {
+            this.props.history.push('/Nurse/Nurse1');
+            this.page8(this.state);
+         } else {
+            this.page8(this.state);
+            this.dynamicRouting();
+         }
       }
    }
 
@@ -254,11 +259,6 @@ class Page8 extends React.Component {
    
    redirectBackNurse() {
       this.submitForm();
-      if(this.state.nurse_add) {
-         this.props.history.push('/Nurse/Nurse1')
-      } else {
-         this.props.history.push('/Nurse/Nurse1')
-      }
    }
 
    redirectNextPage() {
@@ -709,34 +709,34 @@ class Page8 extends React.Component {
                   </form>
                   {/* Default form login */}
                   <nav aria-label="Page navigation example">
-                        {!this.state.redirectButton ?
-                           <ul className="pagination justify-content-center">
+                     {!this.state.redirectButton ?
+                        <ul className="pagination justify-content-center">
+                           <li className="page-item">
+                                 <button className="page-link" onClick={goBack} tabIndex={-1}>
+                                    <i className="fa fa-angle-double-left"></i> Previous
+                                 </button>
+                           </li>
+                           <li className="page-item">
+                                 <button className="page-link" onClick={this.submitForm}>
+                                    Next <i className="fa fa-angle-double-right"></i>
+                                 </button>
+                           </li>
+                        </ul> : 
+                        <ul className="pagination justify-content-center">
+                           <li className="page-item">
+                                 <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
+                                    <i className="fa fa-angle-double-left"></i> Go Back
+                                 </button>
+                           </li>
+                           { this.state.q5_ans === "None Of The Above" ?
                               <li className="page-item">
-                                    <button className="page-link" onClick={goBack} tabIndex={-1}>
-                                       <i className="fa fa-angle-double-left"></i> Previous
+                                    <button className="page-link" onClick={this.redirectNextPage}>
+                                       Next Page <i className="fa fa-angle-double-right"></i>
                                     </button>
-                              </li>
-                              <li className="page-item">
-                                    <button className="page-link" onClick={this.submitForm}>
-                                       Next <i className="fa fa-angle-double-right"></i>
-                                    </button>
-                              </li>
-                           </ul> : 
-                           <ul className="pagination justify-content-center">
-                              <li className="page-item">
-                                    <button className="page-link" onClick={this.redirectBackNurse} tabIndex={-1}>
-                                       <i className="fa fa-angle-double-left"></i> Go Back
-                                    </button>
-                              </li>
-                              { this.state.q5_ans === "None Of The Above" ?
-                                 <li className="page-item">
-                                       <button className="page-link" onClick={this.redirectNextPage}>
-                                          Next Page <i className="fa fa-angle-double-right"></i>
-                                       </button>
-                                 </li> : ""
-                              }
-                           </ul>
-                        }
+                              </li> : ""
+                           }
+                        </ul>
+                     }
                   </nav>
                   <br />
                </div>

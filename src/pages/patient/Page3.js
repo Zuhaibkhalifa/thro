@@ -74,11 +74,6 @@ class Page3 extends React.Component {
 
     redirectBackNurse() {
         this.submitForm();
-        if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/Nurse1')
-        } else {
-            this.props.history.push('/Nurse/Nurse1')
-        }
     }
 
     redirectNextPage() {
@@ -94,8 +89,13 @@ class Page3 extends React.Component {
 
     submitForm() {
         if (this.validator.allValid()) {
-            this.page3(this.state);
-            this.props.history.push('/User/Page4');
+            if(this.state.redirectButton) {
+                this.page3(this.state);
+                this.props.history.push('/Nurse/Nurse1');
+            } else {
+                this.page3(this.state);
+                this.props.history.push('/User/Page4');    
+            }
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time

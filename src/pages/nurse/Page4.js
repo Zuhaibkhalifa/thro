@@ -120,6 +120,8 @@ class Page4 extends React.Component {
          doac_chkBox: false,
          antiplatelets_chkBox: false,
          lmwh_chkBox: false,
+         aspirin_chkBox: false,
+         iv_heparin_chkBox: false,
 
          labVal1: '',
          labVal2: '',
@@ -157,6 +159,54 @@ class Page4 extends React.Component {
          InptValVka10: 0,
          InptValVka11: 0,
 
+         selectValAspirin1: '',
+         selectValAspirin2: '',
+         selectValAspirin3: '',
+         selectValAspirin4: '',
+         selectValAspirin5: '',
+         selectValAspirin6: '',
+         selectValAspirin7: '',
+         selectValAspirin8: '',
+         selectValAspirin9: '',
+         selectValAspirin10: '',
+         selectValAspirin11: '',
+
+         InptValAspirin1: 0,
+         InptValAspirin2: 0,
+         InptValAspirin3: 0,
+         InptValAspirin4: 0,
+         InptValAspirin5: 0,
+         InptValAspirin6: 0,
+         InptValAspirin7: 0,
+         InptValAspirin8: 0,
+         InptValAspirin9: 0,
+         InptValAspirin10: 0,
+         InptValAspirin11: 0,
+
+         selectValIvHeparin1: '',
+         selectValIvHeparin2: '',
+         selectValIvHeparin3: '',
+         selectValIvHeparin4: '',
+         selectValIvHeparin5: '',
+         selectValIvHeparin6: '',
+         selectValIvHeparin7: '',
+         selectValIvHeparin8: '',
+         selectValIvHeparin9: '',
+         selectValIvHeparin10: '',
+         selectValIvHeparin11: '',
+
+         InptValIvHeparin1: 0,
+         InptValIvHeparin2: 0,
+         InptValIvHeparin3: 0,
+         InptValIvHeparin4: 0,
+         InptValIvHeparin5: 0,
+         InptValIvHeparin6: 0,
+         InptValIvHeparin7: 0,
+         InptValIvHeparin8: 0,
+         InptValIvHeparin9: 0,
+         InptValIvHeparin10: 0,
+         InptValIvHeparin11: 0,
+
          selectValAntiplatelets1: '',
          selectValAntiplatelets2: '',
          selectValAntiplatelets3: '',
@@ -180,6 +230,30 @@ class Page4 extends React.Component {
          InptValAntiplatelets9: 0,
          InptValAntiplatelets10: 0,
          InptValAntiplatelets11: 0,
+
+         selectValAntiplateletsVer21: '',
+         selectValAntiplateletsVer22: '',
+         selectValAntiplateletsVer23: '',
+         selectValAntiplateletsVer24: '',
+         selectValAntiplateletsVer25: '',
+         selectValAntiplateletsVer26: '',
+         selectValAntiplateletsVer27: '',
+         selectValAntiplateletsVer28: '',
+         selectValAntiplateletsVer29: '',
+         selectValAntiplateletsVer210: '',
+         selectValAntiplateletsVer211: '',
+
+         InptValAntiplateletsVer21: 0,
+         InptValAntiplateletsVer22: 0,
+         InptValAntiplateletsVer23: 0,
+         InptValAntiplateletsVer24: 0,
+         InptValAntiplateletsVer25: 0,
+         InptValAntiplateletsVer26: 0,
+         InptValAntiplateletsVer27: 0,
+         InptValAntiplateletsVer28: 0,
+         InptValAntiplateletsVer29: 0,
+         InptValAntiplateletsVer210: 0,
+         InptValAntiplateletsVer211: 0,
 
          selectValLmwh1: '',
          selectValLmwh2: '',
@@ -229,10 +303,13 @@ class Page4 extends React.Component {
          InptValDoac10: 0,
          InptValDoac11: 0,
 
-         approved_by: ''
+         approved_by: '',
+         active_lmwh: '',
+         active_doac: '',
+         active_vka: ''
       };
 
-      this.submitForm = this.submitForm.bind(this);
+      // this.submitForm = this.submitForm.bind(this);
       this.page8 = this.page8.bind(this);
       this.onDateChange = this.onDateChange.bind(this);
       this.handleLabValueChange = this.handleLabValueChange.bind(this);
@@ -243,6 +320,7 @@ class Page4 extends React.Component {
       this.handleApprovedBy = this.handleApprovedBy.bind(this);
       this.handleSaveNApprove = this.handleSaveNApprove.bind(this);
       this.handleSaveDraft = this.handleSaveDraft.bind(this);
+      this.handleDropdownValChange = this.handleDropdownValChange.bind(this);
    }
 
    componentDidMount() {
@@ -262,10 +340,15 @@ class Page4 extends React.Component {
                // console.log(response.data.success[0]);
                console.log('response is here: ', response);
                let data = response.data.success[0];
-               this.setState({
-                  approved_by: data.approved_by,
-                  table_data: data.jsonTable
-               });
+               if(response.data.success !== 'not_found') {
+                  if(data.jsonTable !== '') {
+                     this.getDataApiAlgo(JSON.parse(data.jsonTable), data);
+                  } else {
+                     this.getDatafromAlgo();
+                  }
+               } else {
+                  this.getDatafromAlgo();
+               }
 
                axios
                .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
@@ -373,7 +456,6 @@ class Page4 extends React.Component {
                   this.set_CHADS_score();
                });
                this.setState({ loader: '' });
-               this.getDatafromAlgo();
             });
 
          
@@ -383,6 +465,121 @@ class Page4 extends React.Component {
       }
    }
 
+   getDataApiAlgo(tableValue, respData) {
+      console.log('iam here');
+      let table_data = {
+         vka: '',
+         lmwh: '',
+         antiplatelets: '',
+         doac: '',
+         aspirin: '',
+         iv_heparin: '',
+         headers: '',
+         date: tableValue.date
+      };
+
+      const tableData = tableValue;
+      let tableHeader = [];
+      if(tableData.vka !== '') {
+         let keyIdx = tableData.vka.findIndex(x => x.d6);
+         let keyIdx1 = tableData.vka.findIndex(x => x.warfain);
+         let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
+         let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
+         table_data.vka = tableData.vka;
+         if(keyId !== '') {
+            if(tableData.vka[0].warfain !== 'No') {
+               this.setState({ 
+                  [keyId]: tableData.vka[keyIdx].lab,
+                  [keyId1]: tableData.vka[keyIdx1].warfain.split(' ')[0]
+               });
+               this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain.split(' ')[0], tableData.vka.length);
+               this.setInitialLabState('labVal', tableData.vka[keyIdx].lab, tableData.vka.length);
+               this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
+            }
+         }
+      }
+
+      if(tableData.lmwh !== '') {
+         let keyIdx1 = tableData.lmwh.findIndex(x => x.dosage);
+         let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
+         table_data.lmwh = tableData.lmwh;
+         if(keyId1 !== '') {
+            if(tableData.lmwh[0].dosage !== '') {
+               this.setState({
+                  [keyId1]: tableData.lmwh[keyIdx1].dosage.split(' ')[0] 
+               });
+               this.setInitialState('InptValLmwh', tableData.lmwh[keyIdx1].dosage.split(' ')[0], tableData.lmwh.length);
+               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.length);
+            }
+         }
+      }
+
+      if(tableData.doac !== '') {
+         let keyIdx1 = tableData.doac.findIndex(x => x.dosage);
+         let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
+         if(keyId1 !== '') {
+            table_data.doac = tableData.doac;
+            if(tableData.doac[0].dosage !=='') {
+               this.setState({
+                  [keyId1]: tableData.doac[keyIdx1].dosage.split(' ')[0] 
+               });
+               this.setInitialState('InptValDoac', tableData.doac[keyIdx1].dosage.split(' ')[0], tableData.doac.length);
+               this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac.length);
+            }
+         }
+      }
+
+      if(tableData.antiplatelets !== '') {
+         let keyIdx1 = tableData.antiplatelets.findIndex(x => x.antiplatelets);
+         let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
+         table_data.antiplatelets = tableData.antiplatelets;
+         if(keyId1 !== '') {
+            if(tableData.antiplatelets[0].antiplatelets !== '') {
+               this.setState({
+                  [keyId1]: tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0] 
+               });
+               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.length);
+               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.length);
+            }
+         }
+      }
+
+      if(tableData.aspirin !== '') {
+         let keyIdx1 = tableData.aspirin.findIndex(x => x.aspirin);
+         let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
+         tableHeader.push({ 'aspirin': tableData.aspirin.header });
+         table_data.aspirin = tableData.aspirin;
+         if(keyId1 !== '') {
+            if(tableData.aspirin[0].aspirin !== '') {
+               this.setState({
+                  [keyId1]: tableData.aspirin[keyIdx1].aspirin.split(' ')[0] 
+               });
+               this.setInitialState('InptValAspirin', tableData.aspirin[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.length);
+               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.length);
+            }
+         }
+      }
+
+      if(table_data.iv_heparin !== '') {
+         this.setInitialState('InptValIvHeparin', '', 11);
+         this.setInitialSelectState('selectValIvHeparin', 'once daily', 11);
+      }
+
+      table_data.headers = tableData.headers;
+
+      console.log(tableData, table_data);
+      
+      this.setState({
+         approved_by: respData.approved_by,
+         table: table_data,
+         vka_chkBox: respData.is_vka_selected,
+         doac_chkBox: respData.is_doac_selected,
+         antiplatelets_chkBox: respData.is_antiplatelets_selected,
+         aspirin_chkBox: respData.is_aspirin_selected,
+         iv_heparin_chkBox: respData.is_iv_heparin_selected
+      });
+   }
+
    handleApprovedBy(e) {
       this.setState({
          approved_by: e.target.value
@@ -390,6 +587,7 @@ class Page4 extends React.Component {
    }
 
    handleSaveNApprove(tableData) {
+      
       if (this.state.table === 'none') return;
 
       const data = {
@@ -397,7 +595,13 @@ class Page4 extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
          last_modified: new Date().toLocaleDateString(),
          approved_by: tableData.approved_by,
-         status: 'Approved'
+         status: 'Approved',
+         is_vka_selected: this.state.vka_chkBox, 
+         is_doac_selected: this.state.doac_chkBox, 
+         is_antiplatelets_selected: this.state.antiplatelets_chkBox, 
+         is_lmwh_selected: this.state.lmwh_chkBox, 
+         is_aspirin_selected: this.state.aspirin_chkBox, 
+         is_iv_heparin_selected: this.state.iv_heparin_chkBox
       };
       console.log('>>> JSON data: ', data);
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);
@@ -659,6 +863,22 @@ class Page4 extends React.Component {
       }
    }
 
+   handleDropdownValChange(key, value, dose) {
+      if(key.toLowerCase().endsWith('vka')) {
+         this.setInitialState(key, dose, 11);
+         this.setState({ active_vka: value });
+      } else if(key.toLowerCase().endsWith('doac')) {
+         this.setInitialState(key, dose, 11);
+         this.setState({ active_doac: value });
+      } else if(key.toLowerCase().endsWith('lmwh')) {
+         this.setInitialState(key, dose, 11);
+         this.setState({ active_lmwh: value });
+      } else if(key.toLowerCase().endsWith('antiplatelets')) {
+         this.setInitialState(key, dose, 11);
+      }
+      console.log(key, value, dose);
+   }
+
    setInitialLabState(key, value, length) {
       for(let i=0; i<length; i++) {
          this.setState({
@@ -715,6 +935,8 @@ class Page4 extends React.Component {
          lmwh: '',
          antiplatelets: '',
          doac: '',
+         aspirin: '',
+         iv_heparin: '',
          headers: '',
          date: [
             {d_5: 'D-5'},
@@ -741,30 +963,36 @@ class Page4 extends React.Component {
          let keyIdx1 = tableData.vka.data.findIndex(x => x.warfain);
          let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
-         tableHeader.push({ 'vka': tableData.vka.header[0] });
+         tableHeader.push({ 'vka': tableData.vka.header });
          table_data.vka = tableData.vka.data;
          if(keyId !== '') {
-            this.setState({ 
-               [keyId]: tableData.vka.data[keyIdx].lab,
-               [keyId1]: tableData.vka.data[keyIdx1].warfain.split(' ')[0]
-            });
-            this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain.split(' ')[0], tableData.vka.data.length);
-            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
-            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
+            if(tableData.vka.data[0].warfain !== 'No') {
+               this.setState({ active_vka: tableData.vka.header[0].med_name });
+               this.setState({ 
+                  [keyId]: tableData.vka.data[keyIdx].lab,
+                  [keyId1]: tableData.vka.data[keyIdx1].warfain.split(' ')[0]
+               });
+               this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain.split(' ')[0], tableData.vka.data.length);
+               this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
+               this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
+            }
          }
       }
 
       if(tableData.lmwh !== undefined) {
          let keyIdx1 = tableData.lmwh.data.findIndex(x => x.dosage);
          let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
-         tableHeader.push({ 'lmwh': tableData.lmwh.header[0] });
+         tableHeader.push({ 'lmwh': tableData.lmwh.header });
          table_data.lmwh = tableData.lmwh.data;
          if(keyId1 !== '') {
-            this.setState({
-               [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0] 
-            });
-            this.setInitialState('InptValLmwh', tableData.lmwh.data[keyIdx1].dosage.split(' ')[0], tableData.lmwh.data.length);
-            this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.data.length);
+            if(tableData.lmwh.data[0].dosage !== '') {
+               this.setState({ active_lmwh: tableData.lmwh.header[0].med_name });
+               this.setState({
+                  [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0] 
+               });
+               this.setInitialState('InptValLmwh', tableData.lmwh.data[keyIdx1].dosage.split(' ')[0], tableData.lmwh.data.length);
+               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.data.length);
+            }
          }
       }
 
@@ -774,61 +1002,76 @@ class Page4 extends React.Component {
          for(let datKey in dataKey) {
             let keyIdx1 = tableData.doac[dataKey[datKey]].data.findIndex(x => x.dosage);
             let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
-            tableHeader.push({ 'doac': tableData.doac[dataKey[datKey]].header[0] });
-            table_data.doac = tableData.doac[dataKey[datKey]].data;
+            tableHeader.push({ 'doac': tableData.doac[dataKey[datKey]].header });
             if(keyId1 !== '') {
-               this.setState({
-                  [keyId1]: tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0] 
-               });
-               this.setInitialState('InptValDoac', tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0], tableData.doac[dataKey[datKey]].data.length);
-               this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac[dataKey[datKey]].data.length);
+               this.setState({ active_doac: dataKey[0] });
+               table_data.doac = tableData.doac[dataKey[datKey]].data;
+               if(tableData.doac[dataKey[datKey]].data[0].dosage !=='') {
+                  this.setState({
+                     [keyId1]: tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0] 
+                  });
+                  this.setInitialState('InptValDoac', tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0], tableData.doac[dataKey[datKey]].data.length);
+                  this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac[dataKey[datKey]].data.length);
+               }
             }
          }
       }
 
       if(tableData.antiplatelets !== undefined) {
-         let keyIdx = tableData.antiplatelets.data.findIndex(x => x.d6);
-         let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
          let keyIdx1 = tableData.antiplatelets.data.findIndex(x => x.antiplatelets);
          let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
-         tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header[0].med_name !== undefined ? tableData.antiplatelets.header[0] : tableData.antiplatelets.header[1] });
+         tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header });
          table_data.antiplatelets = tableData.antiplatelets.data;
-         if(keyId !== '') {
-            this.setState({ 
-               [keyId]:tableData.antiplatelets.data[keyIdx].lab,
-               [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0]  
-            });
-            this.setInitialState('InptValAntiplatelets', tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.data.length);
-            this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.data.length);
+         if(keyId1 !== '') {
+            if(tableData.antiplatelets.data[0].antiplatelets !== '') {
+               this.setState({
+                  [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0] 
+               });
+               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.data.length);
+               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.data.length);
+            }
          }
+      }
+
+      if(tableData.aspirin !== undefined) {
+         let keyIdx1 = tableData.aspirin.data.findIndex(x => x.aspirin);
+         let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
+         tableHeader.push({ 'aspirin': tableData.aspirin.header });
+         table_data.aspirin = tableData.aspirin.data;
+         if(keyId1 !== '') {
+            if(tableData.aspirin.data[0].aspirin !== '') {
+               this.setState({
+                  [keyId1]: tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0] 
+               });
+               this.setInitialState('InptValAspirin', tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.data.length);
+               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.data.length);
+            }
+         }
+      }
+
+      if(table_data.iv_heparin === '') {
+         tableHeader.push({ 'iv_heparin': 'Heparin' });
+         this.setInitialState('InptValIvHeparin', '', 11);
+         this.setInitialSelectState('selectValIvHeparin', 'once daily', 11);
       }
 
       table_data.headers = tableHeader;
       table_data.date[5].d_0 = this.state.date_of_procedure;
-      console.log(this.state.table);
 
       this.setState({ 
          table: table_data, 
-         vka_chkBox: tableData.vka !== undefined ? true: false,
-         lmwh_chkBox: tableData.lmwh !== undefined ? true : false,
+         vka_chkBox: tableData.vka.data[0].warfain !== 'No' ? true: false,
+         lmwh_chkBox: tableData.lmwh.data[0].dosage !== '' ? true : false,
          doac_chkBox: tableData.doac !== undefined ? true : false,
-         antiplatelets_chkBox: tableData.antiplatelets !== undefined ? true : false
+         antiplatelets_chkBox: tableData.antiplatelets !== undefined ? true : false,
+         aspirin_chkBox: tableData.aspirin.data[0].aspirin !== '' ? true : false,
+         iv_heparin_chkBox: false
       });
+
+      console.log(this.state.table);
 
       if(this.state.date_of_procedure) {
          this.onDateChange(this.state.date_of_procedure);
-      }
-   }
-
-   submitForm() {
-      if (this.validator.allValid()) {
-         this.page8();
-         this.props.history.push('/Nurse/Nurse5');
-      } else {
-         this.validator.showMessages();
-         // rerender to show messages for the first time
-         // you can use the autoForceUpdate option to do this automatically`
-         this.forceUpdate();
       }
    }
 
@@ -1229,32 +1472,64 @@ class Page4 extends React.Component {
                                  {
                                     this.state.vka_chkBox ? 
                                     <th colSpan={2}>
-                                       <select className='form-control'>
-                                          <option value={this.state.table.headers.findIndex(x => x.vka) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.vka)].vka?.med_name : ''}>{this.state.table.headers.findIndex(x => x.vka) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.vka)].vka?.med_name : ''}</option>
-                                       </select>
-                                    </th> : <></>
-                                 }
-                                 {
-                                    this.state.lmwh_chkBox ?
-                                    <th colSpan={2}>
-                                       <select className='form-control'>
-                                          <option value={this.state.table.headers.findIndex(x => x.lmwh) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.lmwh)].lmwh?.med_name : ''}>{this.state.table.headers.findIndex(x => x.lmwh) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.lmwh)].lmwh?.med_name : ''}</option>
+                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValVka`, e.target.value, this.state.InptValVka1)}>
+                                          {
+                                             this.state.table.headers.find(x => x['vka']).vka.map((heads, key) => {
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                             })
+                                          }
                                        </select>
                                     </th> : <></>
                                  }
                                  {
                                     this.state.doac_chkBox ?
                                     <th colSpan={2}>
-                                       <select className='form-control'>
-                                          <option value={this.state.table.headers.findIndex(x => x.doac) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.doac)].doac?.med_name : ''}>{this.state.table.headers.findIndex(x => x.doac) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.doac)].doac?.med_name : ''}</option>
+                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValDoac`, e.target.value, this.state.InptValDoac1)}>
+                                          {
+                                             this.state.table.headers.find(x => x['doac']).doac.map((heads, key) => {
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                             })
+                                          }
                                        </select>
                                     </th> : <></>
                                  }
                                  {
                                     this.state.antiplatelets_chkBox ?
                                     <th colSpan={2}>
-                                       <select className='form-control'>
-                                          <option value={this.state.table.headers.findIndex(x => x.antiplatelets) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.antiplatelets)].antiplatelets?.med_name : ''}>{this.state.table.headers.findIndex(x => x.antiplatelets) !== -1 ? this.state.table.headers[this.state.table.headers.findIndex(x => x.antiplatelets)].antiplatelets?.med_name : ''}</option>
+                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAntiplatelets`, e.target.value, this.state.InptValAntiplatelets1)}>
+                                          {
+                                             this.state.table.headers.find(x => x['antiplatelets']).antiplatelets.map((heads, key) => {
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                             })
+                                          }
+                                       </select>
+                                    </th> : <></>
+                                 }
+                                 {
+                                    this.state.lmwh_chkBox ?
+                                    <th colSpan={2}>
+                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValLmwh`, e.target.value, this.state.InptValLmwh1)}>
+                                          {
+                                             this.state.table.headers.find(x => x['lmwh']).lmwh.map((heads, key) => {
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                             })
+                                          }
+                                       </select>
+                                    </th> : <></>
+                                 }
+                                 {
+                                    this.state.aspirin_chkBox ?
+                                    <th colSpan={2}>
+                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAspirin`, e.target.value, this.state.InptValAspirin1)}>
+                                          <option value={this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}>{this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}</option>
+                                       </select>
+                                    </th> : <></>
+                                 }
+                                 {
+                                    this.state.iv_heparin_chkBox ?
+                                    <th colSpan={2}>
+                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValIvHeparin`, e.target.value, this.state.InptValIvHeparin1)}>
+                                          <option value={this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}>{this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}</option>
                                        </select>
                                     </th> : <></>
                                  }
@@ -1266,6 +1541,8 @@ class Page4 extends React.Component {
                                     let antiplateletKey = key;
                                     let lmwhKey = key;
                                     let doacKey = key;
+                                    let aspirinKey = key;
+                                    let ivHeparinKey = key;
                                     return (
                                        <>
                                           <tr key={`date-key-${key}`} style={{ borderBottom: "1px solid #ccc" }}>
@@ -1286,11 +1563,11 @@ class Page4 extends React.Component {
                                                 </> 
                                                 : <></>
                                              }
-                                             {this.state.lmwh_chkBox ?
+                                             {this.state.doac_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValDoac${doacKey+1}`} type="number" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
                                                    <td>
-                                                      <select id={`selectValLmh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmh${lmwhKey+1}`)} className='form-control'>
+                                                      <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
                                                          <option value={'twice daily'}>twice daily</option>
                                                          <option value={'once daily'}>once daily</option>
                                                       </select>
@@ -1308,11 +1585,33 @@ class Page4 extends React.Component {
                                                    </td>
                                                 </> : <></>
                                              }
-                                             {this.state.doac_chkBox ?
+                                             {this.state.lmwh_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValDoac${doacKey+1}`} type="number" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
                                                    <td>
-                                                      <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
+                                                      <select id={`selectValLmh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmh${lmwhKey+1}`)} className='form-control'>
+                                                         <option value={'twice daily'}>twice daily</option>
+                                                         <option value={'once daily'}>once daily</option>
+                                                      </select>
+                                                   </td>
+                                                </> : <></>
+                                             }
+                                             {this.state.aspirin_chkBox ?
+                                                <>
+                                                   <td><input id={`InptValAspirin${aspirinKey+1}`} type="number" value={this.state[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
+                                                   <td>
+                                                      <select id={`selectValAspirin${aspirinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAspirin${aspirinKey+1}`)} className='form-control'>
+                                                         <option value={'twice daily'}>twice daily</option>
+                                                         <option value={'once daily'}>once daily</option>
+                                                      </select>
+                                                   </td>
+                                                </> : <></>
+                                             }
+                                             {this.state.iv_heparin_chkBox ?
+                                                <>
+                                                   <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="number" value={this.state[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
+                                                   <td>
+                                                      <select id={`selectValIvHeparin${ivHeparinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
                                                          <option value={'twice daily'}>twice daily</option>
                                                          <option value={'once daily'}>once daily</option>
                                                       </select>
@@ -1345,6 +1644,14 @@ class Page4 extends React.Component {
                            <div className='form-group'>
                               <label htmlFor='lmwh-label'>LMWH</label>
                               <input type='checkbox' checked={this.state.lmwh_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ lmwh_chkBox: e.target.checked })} value={this.state.lmwh_chkBox} />
+                           </div>
+                           <div className='form-group'>
+                              <label htmlFor='aspirin-label'>ASPIRIN</label>
+                              <input type='checkbox' checked={this.state.aspirin_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ aspirin_chkBox: e.target.checked })} value={this.state.aspirin_chkBox} />
+                           </div>
+                           <div className='form-group'>
+                              <label htmlFor='iv_heparin-label'>IV Heparin</label>
+                              <input type='checkbox' checked={this.state.iv_heparin_chkBox ? true : false} style={{ marginLeft: '5px' }} onChange={(e) => this.setState({ iv_heparin_chkBox: e.target.checked })} value={this.state.iv_heparin_chkBox} />
                            </div>
                         </div>
                         <div className='col-6'>

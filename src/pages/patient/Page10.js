@@ -97,18 +97,10 @@ class Page10 extends React.Component {
 
     redirectBackNurse() {
         this.submitForm();
-        if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/Nurse1')
-        } else {
-           this.props.history.push('/Nurse/Nurse1')
-        }
     }
 
    redirectNextPage() {
-        this.submitForm();
-        if(this.state.patient_id !== "") {
-         this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
-      }
+    this.submitForm();
    }
 
     submitForm() {
@@ -190,11 +182,24 @@ class Page10 extends React.Component {
         ) {
             this.setState({ error15: 'This field is required' });
         } else if (document.getElementById('not_sure').checked === true) {
-            this.page10();
-            this.props.history.push('/User/Page11');
+            if(this.state.patient_id !== "") {
+                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
+            } else if(this.state.redirectButton) {
+                this.page10();
+                this.props.history.push('/Nurse/Nurse1')
+            } else {
+                this.page10();
+                this.props.history.push('/User/Page11');
+            }
         } else {
-            this.page10();
-            this.props.history.push('/User/Page11');
+            if(this.state.patient_id !== "") {
+                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
+            } else if(this.state.redirectButton) {
+                this.page10();
+                this.props.history.push('/Nurse/Nurse1')
+            } else {this.page10();
+                this.props.history.push('/User/Page11');
+            }
         }
     }
 

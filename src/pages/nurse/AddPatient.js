@@ -73,6 +73,7 @@ class AddPatient extends React.Component {
          indicationSubValFlagShown: false,
          indicationSubValSecondFlag: false,
          indicationSubValSecondFlagShown: false,
+         patientAlreadyExist: false,
          
          poc_inr_date: '',
          poc_creat_date: '',
@@ -141,6 +142,7 @@ class AddPatient extends React.Component {
       this.handleFlagsRedirection = this.handleFlagsRedirection.bind(this);
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
+      this.checkPatientExists = this.checkPatientExists.bind(this);
       this.page5Post = this.page5Post.bind(this);
       this.getUserData = this.getUserData.bind(this);
       this.saveDraft = this.saveDraft.bind(this);
@@ -179,14 +181,29 @@ class AddPatient extends React.Component {
       }
    }
    
-   saveDraft() {
-      if(this.state.patient_ids.includes(this.state.patient_id)) {
+   checkPatientExists(value) {
+      console.log(value);
+      if(this.state.patient_ids.includes(value)) {
+         this.setState({ patientAlreadyExist: true });
          alert('sorry this patient_id already exists!');
       } else {
-         localStorage.setItem('patient_id', this.state.patient_id);
-         console.log('Nure page1 - submitForm - state: ', this.state);
-         this.page5(this.state);
-         this.props.history.push('/Nurse/patient_search');
+         this.setState({
+            patientAlreadyExist: false
+         });
+      }
+   }
+
+   saveDraft() {
+      if (this.validator.allValid()) {
+         if(this.state.patientAlreadyExist) { alert('Sorry this patient_id already exist!') } else {
+            localStorage.setItem('patient_id', this.state.patient_id);
+            console.log('Nure page1 - submitForm - state: ', this.state);
+            this.page5Post(this.state);
+            this.props.history.push('/Nurse/patient_search');
+         }
+      } else {
+         this.validator.showMessages();
+         this.forceUpdate();
       }
    }
 
@@ -637,6 +654,7 @@ class AddPatient extends React.Component {
                            className="form-control"
                            value={this.state.patient_id}
                            onChange={(e) => this.setState({ patient_id: e.target.value })}
+                           onBlur={(e) => this.checkPatientExists(e.target.value)}
                         />
                      </div>
                         {this.validator.message('patient_id', this.state.patient_id, 'required')}

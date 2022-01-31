@@ -115,15 +115,19 @@ class Page11 extends React.Component {
         let errors = {};
         const questions = ['q1', 'q2', 'q3', 'q4'];
 
-        for (let i = 0; i < 4; i++) {
-            let Q = questions[i];
-
-            if (this.state[Q] === 'Yes') {
-                const qDosage = `${Q}_dosage`;
-                const qFreq = `${Q}_freq`;
-
-                if (this.state[qDosage] === '') errors[qDosage] = 'Dosage is required';
-                if (this.state[qFreq] === '') errors[qFreq] = 'Frequency is required';
+        if(this.state.q1 === '' && this.state.q2 === '' && this.state.q3 === '' && this.state.q4 === '') {
+            errors['med'] = 'please select either of the medicines';
+        } else {
+            for (let i = 0; i < 4; i++) {
+                let Q = questions[i];
+    
+                if (this.state[Q] === 'Yes') {
+                    const qDosage = `${Q}_dosage`;
+                    const qFreq = `${Q}_freq`;
+    
+                    if (this.state[qDosage] === '') errors[qDosage] = 'Dosage is required';
+                    if (this.state[qFreq] === '') errors[qFreq] = 'Frequency is required';
+                }
             }
         }
 
@@ -134,26 +138,26 @@ class Page11 extends React.Component {
 
     redirectBackNurse() {
         this.submitForm();
-        if(this.state.nurse_add) {
-            this.props.history.push('/Nurse/Nurse1')
-        } else {
-           this.props.history.push('/Nurse/Nurse1')
-        }
     }
     
     redirectNextPage() {
         this.submitForm();
-        if(this.props.location.state !== undefined) {
-            this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
-        }
     }
 
     //
     submitForm() {
         if (this.validate()) {
             console.log('Patient page 11 - submit - state: ', this.state);
-            this.page11();
-            this.props.history.push('/User/Page12');
+            if(this.props.location.state !== undefined) {
+                this.page11();
+                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
+            } else if(this.state.redirectButton) {
+                this.page11();
+                this.props.history.push('/Nurse/Nurse1');
+            } else {
+                this.page11();
+                this.props.history.push('/User/Page12');
+            }
         } else {
             console.log('Patient page11 - submit - error: ', this.state);
         }
@@ -197,8 +201,10 @@ class Page11 extends React.Component {
     //
 
     renderQuestionCheckBox(id, name, label) {
+        const { errors } = this.state;
         return (
-            <div className="checkbox">
+            <React.Fragment>
+                <div className="checkbox">
                 <label className="blue h5" style={{ fontSize: 18, fontWeight: 400 }}>
                     {label}
                 </label>
@@ -212,6 +218,8 @@ class Page11 extends React.Component {
                     onClick={this.checkBoxToggle}
                 />
             </div>
+            {errors['med'] ? <div className="text-danger mb-lg-3"> {!$.isEmptyObject(errors) && errors['med']}</div> : ""}
+            </React.Fragment>
         );
     }
 
@@ -318,6 +326,22 @@ class Page11 extends React.Component {
         const toggleId = `${id}-toggle`;
         const dosageState = `${id}_dosage`;
         const freqState = `${id}_freq`;
+
+        
+        if($('#q2')[0].checked === true) {
+            $('#q3')[0].disabled = true;
+            $('#q4')[0].disabled = true;
+        } else if($('#q3')[0].checked === true) {
+            $('#q2')[0].disabled = true;
+            $('#q4')[0].disabled = true;
+        } else if($('#q4')[0].checked === true) {
+            $('#q2')[0].disabled = true;
+            $('#q3')[0].disabled = true;
+        } else {
+            $('#q2')[0].disabled = false;
+            $('#q3')[0].disabled = false;
+            $('#q4')[0].disabled = false;
+        }
 
         if (checked) {
             $(`#${toggleId}`).show(500);
@@ -491,7 +515,6 @@ class Page11 extends React.Component {
             });
         }
         this.initialLoadPreSets();
-
         $('input[name=q]').click(function () {
             if ($('input[name=q]:checked').length > 2) {
                 this.checked = false;
