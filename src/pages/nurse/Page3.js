@@ -33,6 +33,8 @@ class Page5 extends React.Component {
             understand: '',
             explained: '',
             loader: 1,
+            lmwh_flag: false,
+            risk_factor: ''
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -47,9 +49,15 @@ class Page5 extends React.Component {
             Accept: 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('token'),
         };
+        console.log(this.props.location)
 
         try {
             let patient_id = localStorage.getItem('patient_id');
+            if(this.props.location.state !== undefined) {
+                this.setState({
+                    lmwh_flag: this.props.location.state.is_lmwh_selected
+                });
+            }
             axios
                 .get(domain + `/api/nurse/page3LoadData/:${patient_id}`, {
                     headers: headers,
@@ -79,7 +87,7 @@ class Page5 extends React.Component {
     submitForm() {
         if (this.validator.allValid()) {
             this.page3(this.state);
-            this.props.history.push('/Nurse/Nurse4');
+            this.props.history.push('/Nurse/Nurse6');
         } else {
             this.validator.showMessages();
             this.forceUpdate();
@@ -156,57 +164,47 @@ class Page5 extends React.Component {
                             {this.createRadio('who-2', 'who', 'Nurse', this.handleRadioChange)}
                         </div>
                         <div className="row">
-                            {this.createRadio('who-3', 'who', 'Family Member', this.handleRadioChange)}
+                            {this.createRadio('who-3', 'who', 'Pharmacist', this.handleRadioChange)}
                             {this.createRadio('who-4', 'who', 'Other', this.handleRadioChange)}
                         </div>
                         {this.validator.message('', this.state.who, 'required')}
                         <br />
                         <h4>Patient accompanied by:</h4>
                         <div className="row">
-                            {this.createRadio('accompanied-1', 'accompanied', 'Spouse', this.handleRadioChange)}
-                            {this.createRadio('accompanied-2', 'accompanied', 'Son / Daughter', this.handleRadioChange)}
+                            {this.createRadio('accompanied-1', 'accompanied', 'Alone', this.handleRadioChange)}
+                            {this.createRadio('accompanied-2', 'accompanied', 'Spouse or partner', this.handleRadioChange)}
                         </div>
                         <div className="row">
-                            {this.createRadio('accompanied-3', 'accompanied', 'Alone', this.handleRadioChange)}
+                            {this.createRadio('accompanied-3', 'accompanied', 'Patient\'s adult child', this.handleRadioChange)}
                             {this.createRadio('accompanied-4', 'accompanied', 'Other', this.handleRadioChange)}
                         </div>
                         {this.validator.message('', this.state.accompanied, 'required')}
                         <br />
                         <hr />
+                        {
+                            this.state.lmwh_flag ?
+                            <>
+                                <br />
+                                <h4>LMWH:</h4>
+                                {this.createRadio(
+                                    'lmwh-1',
+                                    'lmwh',
+                                    'Instruction given with LMWH',
+                                    this.handleRadioChange,
+                                    'padding-0'
+                                )}
+                                {this.createRadio(
+                                    'lmwh-2',
+                                    'lmwh',
+                                    'Has previously self-injected LMWH',
+                                    this.handleRadioChange,
+                                    'padding-0'
+                                )}
+                                {this.validator.message('', this.state.lmwh, 'required')}
+                            </> : ''
+                        }
                         <br />
-                        {this.createRadio(
-                            'lmwh-1',
-                            'lmwh',
-                            'Instruction given with LMWH',
-                            this.handleRadioChange,
-                            'padding-0'
-                        )}
-                        {this.createRadio(
-                            'lmwh-2',
-                            'lmwh',
-                            'Has previously self-inject LMWH',
-                            this.handleRadioChange,
-                            'padding-0'
-                        )}
-                        {this.createRadio(
-                            'lmwh-3',
-                            'lmwh',
-                            'No bridging required',
-                            this.handleRadioChange,
-                            'padding-0'
-                        )}
-                        {this.validator.message('', this.state.lmwh, 'required')}
-                        <br />
-                        {this.createRadio(
-                            'explained-1',
-                            'explained',
-                            'Risk / Benefits explained',
-                            this.handleRadioChange,
-                            'padding-0'
-                        )}
-                        {this.validator.message('', this.state.explained, 'required')}
-                        <br /> <br />
-                        <h4>Administration</h4>
+                        <h4>LMWH Administration</h4>
                         <div className="row">
                             {this.createRadio('admin-1', 'admin', 'Self', this.handleRadioChange)}
                             {this.createRadio('admin-2', 'admin', 'Family', this.handleRadioChange)}
@@ -216,13 +214,31 @@ class Page5 extends React.Component {
                         </div>
                         {this.validator.message('', this.state.admin, 'required')}
                         <br />
+                        <h4>Risk/Benefits</h4>
+                        {this.createRadio(
+                            'explained-1',
+                            'explained',
+                            'Risks/benefits of peri-procedural antithrombotic management plan explained, andopportunity to ask questions provided.',
+                            this.handleRadioChange,
+                            'padding-0'
+                        )}
+                        {this.validator.message('', this.state.explained, 'required')}
+                        <br /> <br />
+                        <br />
                         <h4>Understanding</h4>
                         <div className="row">
-                            {this.createRadio('understand-1', 'understand', 'Good', this.handleRadioChange)}
-                            {this.createRadio('understand-2', 'understand', 'Fair', this.handleRadioChange)}
+                            {this.createRadio('understand-1', 'understand', 'Good [patient or caregiver able to accurately state details of plan]', this.handleRadioChange)}
+                            {this.createRadio('understand-2', 'understand', 'Fair [patient or caregiver able to state details of plan when prompted to refer to documentation]', this.handleRadioChange)}
                         </div>
                         <div className="row">
-                            {this.createRadio('understand-3', 'understand', 'Poor', this.handleRadioChange)}
+                            {this.createRadio('understand-3', 'understand', 'Poor [patient or caregiver unable to state details of plan even when prompted to refer to documentation]', this.handleRadioChange)}
+                        </div>
+                        <div className='row'>
+                            {
+                                document.getElementById('understand-3').checked ? <textarea value={this.state.risk_factor} className='form-control' onChange={(e) => this.setState({ risk_factor: e.target.value })}></textarea> : ''
+                            }
+                            
+                            {this.validator.message('', this.state.risk_factor, 'required')}
                         </div>
                         {this.validator.message('', this.state.understand, 'required')}
                         <br /> <br />

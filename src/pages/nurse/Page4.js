@@ -466,7 +466,7 @@ class Page4 extends React.Component {
    }
 
    getDataApiAlgo(tableValue, respData) {
-      console.log('iam here');
+      // console.log(tableValue, respData);
       let table_data = {
          vka: '',
          lmwh: '',
@@ -482,20 +482,18 @@ class Page4 extends React.Component {
       let tableHeader = [];
       if(tableData.vka !== '') {
          let keyIdx = tableData.vka.findIndex(x => x.d6);
-         let keyIdx1 = tableData.vka.findIndex(x => x.warfain);
+         let keyIdx1 = tableData.vka.findIndex(x => x.warfain !== '0');
          let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          table_data.vka = tableData.vka;
-         if(keyId !== '') {
-            if(tableData.vka[0].warfain !== 'No') {
-               this.setState({ 
-                  [keyId]: tableData.vka[keyIdx].lab,
-                  [keyId1]: tableData.vka[keyIdx1].warfain.split(' ')[0]
-               });
-               this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain.split(' ')[0], tableData.vka.length);
-               this.setInitialLabState('labVal', tableData.vka[keyIdx].lab, tableData.vka.length);
-               this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
-            }
+         if(tableData.vka[7].warfain !== '') {
+            this.setState({ 
+               [keyId]: tableData.vka[keyIdx].lab,
+               [keyId1]: tableData.vka[keyIdx1].warfain
+            });
+            this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
+            this.setInitialLabState('labVal', tableData.vka[keyIdx].lab, tableData.vka.length);
+            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
          }
       }
 
@@ -567,16 +565,17 @@ class Page4 extends React.Component {
 
       table_data.headers = tableData.headers;
 
-      console.log(tableData, table_data);
+      // console.log(tableData, table_data);
       
       this.setState({
          approved_by: respData.approved_by,
          table: table_data,
-         vka_chkBox: respData.is_vka_selected,
-         doac_chkBox: respData.is_doac_selected,
-         antiplatelets_chkBox: respData.is_antiplatelets_selected,
-         aspirin_chkBox: respData.is_aspirin_selected,
-         iv_heparin_chkBox: respData.is_iv_heparin_selected
+         vka_chkBox: respData.is_vka_selected !== "0" ? true : false,
+         doac_chkBox: respData.is_doac_selected !== "0" ? true : false,
+         antiplatelets_chkBox: respData.is_antiplatelets_selected !== "0" ? true : false,
+         lmwh_chkBox: respData.is_lmwh_selected !== "0" ? true : false,
+         aspirin_chkBox: respData.is_aspirin_selected !== "0" ? true : false,
+         iv_heparin_chkBox: respData.is_iv_heparin_selected !== "0" ? true : false
       });
    }
 
@@ -589,7 +588,13 @@ class Page4 extends React.Component {
    handleSaveNApprove(tableData) {
       
       if (this.state.table === 'none') return;
+      // const { table } = this.state;
+      // let headerVkaActiveIdx = table.headers.find(x => x['vka']).vka?.findIndex(x => x.med_name === this.state.active_vka);
+      // let headerDoacActiveIdx = table.headers.find(x => x['doac']).doac?.findIndex(x => x.med_name === this.state.active_doac);
+      // let headerLmwhActiveIdx = table.headers.find(x => x['lmwh']).lmwh?.findIndex(x => x.med_name === this.state.active_lmwh);
 
+      // console.log(table.headers, table.headers.findIndex(x => x['vka']));
+      // console.log(headerVkaActiveIdx, headerDoacActiveIdx, headerLmwhActiveIdx, this.state.active_vka, this.state.active_doac, this.state.active_lmwh);
       const data = {
          jsonTable: JSON.stringify({ ...this.state.table }),
          patient_id: localStorage.getItem('patient_id'),
@@ -601,11 +606,15 @@ class Page4 extends React.Component {
          is_antiplatelets_selected: this.state.antiplatelets_chkBox, 
          is_lmwh_selected: this.state.lmwh_chkBox, 
          is_aspirin_selected: this.state.aspirin_chkBox, 
-         is_iv_heparin_selected: this.state.iv_heparin_chkBox
+         is_iv_heparin_selected: this.state.iv_heparin_chkBox,
+         activeVKA: this.state.active_vka,
+         activeDOAC: this.state.active_doac,
+         activeLMWH: this.state.active_lmwh
       };
-      console.log('>>> JSON data: ', data);
+      // console.log(data, table, tableData);
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);
-      this.props.history.push('/Nurse/Nurse5');
+      server(`nurse/saveRecommendations/:${data.patient_id}`, data);
+      this.props.history.push({ pathname: '/Nurse/Nurse3', state: { 'is_lmwh_selected': this.state.lmwh_chkBox } });
    }
 
    handleSaveDraft(tableData) {
@@ -616,11 +625,21 @@ class Page4 extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
          last_modified: new Date().toLocaleDateString(),
          approved_by: tableData.approved_by,
-         status: 'Draft'
+         status: 'Draft',
+         is_vka_selected: this.state.vka_chkBox, 
+         is_doac_selected: this.state.doac_chkBox, 
+         is_antiplatelets_selected: this.state.antiplatelets_chkBox, 
+         is_lmwh_selected: this.state.lmwh_chkBox, 
+         is_aspirin_selected: this.state.aspirin_chkBox, 
+         is_iv_heparin_selected: this.state.iv_heparin_chkBox,
+         activeVKA: this.state.active_vka,
+         activeDOAC: this.state.active_doac,
+         activeLMWH: this.state.active_lmwh
       };
       console.log('>>> JSON data: ', data);
       server(`nurse/medicationJsonData/:${data.patient_id}`, data);
-      this.props.history.push('/Nurse/Nurse5');
+      server(`nurse/saveRecommendations/:${data.patient_id}`, data);
+      this.props.history.push({ pathname: '/Nurse/Nurse3', state: { 'is_lmwh_selected': this.state.lmwh_chkBox } });
    }
 
    fillactiveanticogmeds() {
@@ -715,10 +734,10 @@ class Page4 extends React.Component {
             med_dosage_sunday: this.state.sintrom_sunday
          });
       }
-      console.log(activeMeds);
+      // console.log(activeMeds);
       this.setState({ activeAnticogMeds: activeMeds });
 
-      console.log(this.props.location);
+      // console.log(this.props.location);
       if(this.props.location.state) {
          if(activeMeds.length === 0) {
             console.log('reloading !!!')
@@ -783,10 +802,10 @@ class Page4 extends React.Component {
             med_dosage_time: this.state.brillinta_dosage_time.substr(idx+1)
          });
       }
-      console.log(activeMeds);
+      // console.log(activeMeds);
       this.setState({ activeAntiplatMeds: activeMeds });
 
-      console.log(this.props.location);
+      // console.log(this.props.location);
       if(this.props.location.state) {
          if(activeMeds.length === 0) {
             console.log('reloading !!!')
@@ -820,7 +839,7 @@ class Page4 extends React.Component {
       }
 
       this.setState({ indication_for_anticoagulation: anticoagulation });
-      console.log(this.props.location);
+      // console.log(this.props.location);
       if(this.props.location.state) {
          if(anticoagulation === '') {
             console.log('reloading !!!')
@@ -844,7 +863,7 @@ class Page4 extends React.Component {
          diabetes: D,
          stroke_or_mini_stroke: S2,
       } = this.state;
-      console.log(`CHADS score: C=${C}  H=${H}  A=${A}  D=${D}  S2=${S2}`);
+      // console.log(`CHADS score: C=${C}  H=${H}  A=${A}  D=${D}  S2=${S2}`);
 
       if (C === 'Yes') score += 1;
       if (H === 'Yes') score += 1;
@@ -876,7 +895,7 @@ class Page4 extends React.Component {
       } else if(key.toLowerCase().endsWith('antiplatelets')) {
          this.setInitialState(key, dose, 11);
       }
-      console.log(key, value, dose);
+      // console.log(key, value, dose);
    }
 
    setInitialLabState(key, value, length) {
@@ -920,7 +939,7 @@ class Page4 extends React.Component {
       
       this.setState({ dynamicFlags:flags });
 
-      console.log(this.props.location);
+      // console.log(this.props.location);
       if(this.props.location.state) {
          if(flags.length === 0) {
             console.log('reloading !!!')
@@ -952,30 +971,30 @@ class Page4 extends React.Component {
             {d5: 'D1'}
          ]
       };
+      console.log('> Nurse Page 4 => data: ', this.state.date_of_procedure);
       const inidcators = await thromboAlgos();
-      const tableData = await thromboMedicationAlgo(inidcators);
-      console.log('> Nurse Page 4 => inidcators: ', inidcators);
+      const tableData = await thromboMedicationAlgo(inidcators, this.state.date_of_procedure);
       console.log('> Nurse Page 4 => tableData: ', tableData);
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
       let tableHeader = [];
       if(tableData.vka !== undefined) {
          let keyIdx = tableData.vka.data.findIndex(x => x.d6);
-         let keyIdx1 = tableData.vka.data.findIndex(x => x.warfain);
+         let keyIdx1 = tableData.vka.data.findIndex(x => x.warfain !== '0');
          let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          tableHeader.push({ 'vka': tableData.vka.header });
          table_data.vka = tableData.vka.data;
-         if(keyId !== '') {
-            if(tableData.vka.data[0].warfain !== 'No') {
-               this.setState({ active_vka: tableData.vka.header[0].med_name });
-               this.setState({ 
-                  [keyId]: tableData.vka.data[keyIdx].lab,
-                  [keyId1]: tableData.vka.data[keyIdx1].warfain.split(' ')[0]
-               });
-               this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain.split(' ')[0], tableData.vka.data.length);
-               this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
-               this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
-            }
+         console.log(tableData.vka.data[0].warfain);
+         if(tableData.vka.data[7].warfain !== '') {
+            console.log(tableData.vka.data[5].warfain);
+            this.setState({ active_vka: tableData.vka.header[0].med_name });
+            this.setState({ 
+               [keyId]: tableData.vka.data[keyIdx].lab,
+               [keyId1]: tableData.vka.data[keyIdx1].warfain
+            });
+            this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data.length);
+            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
+            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
          }
       }
 
@@ -1057,18 +1076,17 @@ class Page4 extends React.Component {
 
       table_data.headers = tableHeader;
       table_data.date[5].d_0 = this.state.date_of_procedure;
-
       this.setState({ 
          table: table_data, 
-         vka_chkBox: tableData.vka.data[0].warfain !== 'No' ? true: false,
+         vka_chkBox: tableData.vka.data[7].warfain !== '' ? true: false,
          lmwh_chkBox: tableData.lmwh.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac !== undefined ? true : false,
-         antiplatelets_chkBox: tableData.antiplatelets !== undefined ? true : false,
+         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]].data[0].dosage !== '' ? true : false,
+         antiplatelets_chkBox: tableData.antiplatelets.data[0].antiplatelets !== '' ? true : false,
          aspirin_chkBox: tableData.aspirin.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false
       });
 
-      console.log(this.state.table);
+      // console.log(this.state.table);
 
       if(this.state.date_of_procedure) {
          this.onDateChange(this.state.date_of_procedure);
@@ -1089,7 +1107,7 @@ class Page4 extends React.Component {
    onDateChange(e) {
       const value = e.target ? e.target.value : e;
       let newState = { ...this.state };
-      console.log(newState, value);
+      // console.log(newState, value);
       newState.table.date[0]['d_5'] = moment(value, 'YYYY-MM-DD').subtract(5, 'd').format('YYYY-MM-DD');
       newState.table.date[1]['d_4'] = moment(value, 'YYYY-MM-DD').subtract(4, 'd').format('YYYY-MM-DD');
       newState.table.date[2]['d_3'] = moment(value, 'YYYY-MM-DD').subtract(3, 'd').format('YYYY-MM-DD');
@@ -1110,7 +1128,7 @@ class Page4 extends React.Component {
    //
 
    render() {
-      const { table } = this.state;
+      // const { table } = this.state;
       // console.log(table)
       return (
          <>
@@ -1457,7 +1475,6 @@ class Page4 extends React.Component {
                )}
                <div className="container">
                   <h2 className="text-center myHeading">Dosage Schedule</h2>
-                  <h3 className="text-center myHeading">(Drug names)</h3>
                   <br />
                   <br />
 
@@ -1553,7 +1570,7 @@ class Page4 extends React.Component {
                                              {
                                                 this.state.vka_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValVka${vkaKey+1}`} type="number" value={this.state[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValVka${vkaKey+1}`} type="text" value={this.state[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValVka${vkaKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValVka${vkaKey+1}`)} className='form-control'>
                                                          <option value={'twice daily'}>twice daily</option>
@@ -1667,6 +1684,8 @@ class Page4 extends React.Component {
                               Save & Approve
                            </button>
                         </div>
+
+                        <div className="col-4"></div>
 
                         <div className="col-4">
                            <button onClick={() => this.handleSaveDraft(this.state)} className="btn btn-secondary btn-block">

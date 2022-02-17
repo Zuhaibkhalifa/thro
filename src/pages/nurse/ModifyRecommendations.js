@@ -9,12 +9,11 @@ import Header from './NurseHeader';
 import { Modal } from 'react-bootstrap';
 import Logo from '../../assets/img/3.png';
 import { domain } from '../../App';
-import printJS from 'print-js';
 
 //
 
 let data;
-class Page6 extends React.Component {
+class ModifyRecommendations extends React.Component {
    constructor(props) {
       super(props);
       this.validator = new SimpleReactValidator({
@@ -218,7 +217,6 @@ class Page6 extends React.Component {
          activeLMWH: ''
       };
 
-      this.submitForm = this.submitForm.bind(this);
       this.handleModalShowHide = this.handleModalShowHide.bind(this);
    }
 
@@ -273,7 +271,7 @@ class Page6 extends React.Component {
          let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          table_data.vka = tableData.vka;
-         if(tableData.vka[7].warfain !== '') {
+         if(keyId !== '') {
             this.setState({ 
                [keyId]: tableData.vka[keyIdx].lab,
                [keyId1]: tableData.vka[keyIdx1].warfain
@@ -394,10 +392,6 @@ class Page6 extends React.Component {
 
    handleModalShowHide() {
       this.setState({ showHide: !this.state.showHide });
-   }
-
-   submitForm() {
-      printJS('dataTable', 'html');
    }
 
    //
@@ -602,15 +596,15 @@ class Page6 extends React.Component {
                   }
                   <div className="row" style={{ marginTop: '60px' }}>
                      <div className="col-4">
-                        <Link to="/Nurse/Nurse5" className="btn btn-outline-primary  btn-block">
+                        <Link to="/Nurse/Recommendations" className="btn btn-outline-primary  btn-block">
                            Back
                         </Link>
                      </div>
 
                      <div className="col-4">
-                        <button onClick={this.submitForm} className="btn btn-primary btn-block">
-                           Print
-                        </button>
+                        <Link to="/Nurse/Nurse4" className="btn btn-outline-info  btn-block">
+                           Modify
+                        </Link>
                      </div>
 
                      <div className="col-4">
@@ -626,4 +620,4 @@ class Page6 extends React.Component {
       );
    }
 }
-export default Page6;
+export default ModifyRecommendations;

@@ -27,23 +27,23 @@ class Recommendations extends Component {
              };
             let patient_id = localStorage.getItem('patient_id');
             axios
-                .get(domain + `/api/nurse/medicationJsonData/:${patient_id}`, {
+                .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
                     headers: headers,
                 })
                 .then((response) => {
                 console.log('Nurse6 - res: ', response);
                 if (response.data.success === 'not_found') {
                     this.setState({ loader: '' });
-                    this.props.history.push('/Nurse/Nurse3');
+                    this.props.history.push('/Nurse/Nurse4');
                 }
 
                 let data = response.data.success[0];
-                console.log('Recommendations - Response: ', JSON.parse(data.jsonTable));
+                console.log('Recommendations - Response: ');
                 this.setState({
                     approved_by: data.approved_by,
                     status: data.status,
                     last_modified: data.last_modified,
-                    recommendations: '/Nurse/Nurse4',
+                    recommendations: '/Nurse/modify-recommendation',
                     loader: ''
                 });
             });
@@ -97,7 +97,7 @@ class Recommendations extends Component {
                      <div className="col-4"></div>
 
                      <div className="col-4">
-                        <Link to="/Nurse/Nurse3" className="btn btn-outline-primary  btn-block">
+                        <Link to="/Nurse/Nurse4" className="btn btn-outline-primary  btn-block">
                            Next
                         </Link>
                      </div>

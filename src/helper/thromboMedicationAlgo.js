@@ -13,6 +13,11 @@ export default async function thromboMedicationAlgo(__indicators) {
    const tableData = detectCase(data);
    console.log('thromboMedicationAlgo - detectCase - table: ', tableData);
 
+   function getDayOfProcedure(date) {
+      const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+      return days[new Date(date).getDay()];
+   }
+
    // Get all the data needed for Thrombo Algo
    async function getDrugData() {
       const headers = {
@@ -57,7 +62,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function detectCase(meds) {
       let data = {};
-      data['vka'] = mapToVKACases(meds.vka, indicators);
+      data['vka'] = mapToVKACases(meds.vka, indicators, meds.date_of_procedure);
       data['lmwh'] = lmwhCases(meds.lmwh, indicators);
       data['doac'] = doacCases(meds.doac, indicators);
       console.log(meds);
@@ -140,25 +145,29 @@ export default async function thromboMedicationAlgo(__indicators) {
       return data;
    }
 
-   function mapToVKACases(meds, indicators) {
-      let med_data = meds.find(x => x.med_name !== "");
+   function mapToVKACases(meds, indicators, date_of_procedure) {
+      const procedure_day = getDayOfProcedure(date_of_procedure);
+      let medIndx = meds.findIndex(x => x.med_dosage !== '');
+      let med_data = medIndx !== -1 ? meds[medIndx] : '';
+      let dataKey = med_data?.med_name.toLowerCase().split(' ')[0]+'_'+procedure_day;
+      console.log('date :', date_of_procedure, 'day :', procedure_day, 'dataKey :', dataKey, 'med_data :', med_data);
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {};
 
-      if(med_data !== undefined) {
+      if(med_data !== '') {
          let medData = [];
          let data = [
-            { warfain: 'No', lab: '' },
-            { warfain: 'No', lab: '' },
-            { warfain: 'No', lab: '' },
-            { warfain: 'No', lab: '' },
-            { warfain: 'No', lab: '' },
-            { warfain: 'usual dosage * 2', lab: '' },
-            { warfain: 'usual dosage * 2', lab: '' },
-            { warfain: 'usual dosage', lab: '' },
-            { warfain: 'usual dosage', lab: '' },
-            { warfain: 'usual dosage', lab: '' },
-            { warfain: 'usual dosage', lab: '' },
+            { warfain: '0', lab: '' },
+            { warfain: '0', lab: '' },
+            { warfain: '0', lab: '' },
+            { warfain: '0', lab: '' },
+            { warfain: '0', lab: '' },
+            { warfain: med_data.med_dosage[dataKey]+' * 2', lab: '' },
+            { warfain: med_data.med_dosage[dataKey]+' * 2', lab: '' },
+            { warfain: med_data.med_dosage[dataKey], lab: '' },
+            { warfain: med_data.med_dosage[dataKey], lab: '' },
+            { warfain: med_data.med_dosage[dataKey], lab: '' },
+            { warfain: med_data.med_dosage[dataKey], lab: '' },
             { d6: 'First weekday after D5', warfain: '', lab: 'Goto Lab for INR test' },
          ];
 
@@ -209,19 +218,19 @@ export default async function thromboMedicationAlgo(__indicators) {
 
       // case a.3
       else if (IR === 0 && PBR === 0 && SBR === 1) {
-         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+         table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
          return table;
       }
 
       // case a.4
       else if (IR === 0 && PBR === 1 && SBR === 1) {
-         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+         table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
          return table;
       }
 
       // case b
       else if (SBR === 3) {
-         table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'warfain', 'usual dosage');
+         table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'warfain', med_data.med_dosage[dataKey]);
 
          table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
          table.data[11].lab = 'Goto lab for INR test';
@@ -238,7 +247,7 @@ export default async function thromboMedicationAlgo(__indicators) {
       else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl >= 30) {
          table = lmwh(table);
          table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+         table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
 
          return table;
       }
@@ -255,7 +264,7 @@ export default async function thromboMedicationAlgo(__indicators) {
       else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl >= 30) {
          table = lmwh(table);
          table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-         table = modifyData(table, [5, 6], 'warfain', 'usual dosage');
+         table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
 
          return table;
       }
@@ -271,7 +280,7 @@ export default async function thromboMedicationAlgo(__indicators) {
       // case e.1
       else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
          table = heparin(table);
-         table = modifyData(table, [5, 6, 7], 'warfain', 'usual dosage');
+         table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey]);
          table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR');
 
          return table;
@@ -288,7 +297,7 @@ export default async function thromboMedicationAlgo(__indicators) {
       // case e.3     FLAG
       else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
          table = heparin(table);
-         table = modifyData(table, [5, 6, 7], 'warfain', 'usual dosage');
+         table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey]);
          table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR');
 
          return table;
