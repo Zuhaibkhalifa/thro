@@ -235,7 +235,7 @@ class Page5 extends React.Component {
                         </div>
                         <div className='row'>
                             {
-                                document.getElementById('understand-3').checked ? <textarea value={this.state.risk_factor} className='form-control' onChange={(e) => this.setState({ risk_factor: e.target.value })}></textarea> : ''
+                                document.getElementById('understand-3')?.checked ? <textarea value={this.state.risk_factor} className='form-control' onChange={(e) => this.setState({ risk_factor: e.target.value })}></textarea> : ''
                             }
                             
                             {this.validator.message('', this.state.risk_factor, 'required')}
