@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactSpinner from 'react-bootstrap-spinner';
 import EditIcon from '@mui/icons-material/Edit';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import classes from './styles.module.css';
 
 import $ from 'jquery';
@@ -140,6 +141,7 @@ class Page1 extends React.Component {
          edoxabon_dosage_time: '',
          ulcer_in_stomach_or_bowel: '',
          referred_by: '',
+         assessment_date: ''
       };
 
       // Bind " this " ref of class to Methods
@@ -153,6 +155,8 @@ class Page1 extends React.Component {
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
       this.handleLabUsed = this.handleLabUsed.bind(this);
+      this.handleAnticoagulationRefreshClick = this.handleAnticoagulationRefreshClick.bind(this);
+      this.handleAntipleteletsRefreshClick = this.handleAntipleteletsRefreshClick.bind(this);
    }
 
    componentDidMount() {
@@ -201,6 +205,7 @@ class Page1 extends React.Component {
                      $('#weight_selected1').val(data.weight_unit);
                      $('#procedure').val(data.type_of_procedure);
                      $('#date_of_procedure').val(data.date_of_procedure);
+                     $('#date_of_assessment').val(data.assessment_date);
                      $('#age').val(data.age);
 
                      this.setState({
@@ -292,7 +297,8 @@ class Page1 extends React.Component {
                         high_blood_pressure: data.high_blood_pressure,
                         diabetes: data.diabetes,
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
-                        bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months
+                        bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months,
+                        assessment_date: data.assessment_date
                      });
                      this.forceUpdate();
                      this.fillactiveanticogmeds();
@@ -546,7 +552,7 @@ class Page1 extends React.Component {
       let flags = [];
 
       if (liver === 'Yes') flags.push('Liver Diseases');
-      if (transfusion === 'Yes') flags.push(`Transfusion did on ${transfusion_date}`);
+      if (transfusion === 'Yes' && transfusion_date !== null) flags.push(`Transfusion did on ${transfusion_date}`);
       if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
       if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('bleeding_requiring_treatment_last_three_months');
       if(cognitive_heart_fail === 'Yes') flags.push('cognitive_heart_failure');
@@ -607,7 +613,6 @@ class Page1 extends React.Component {
          weightSelected: this.state.weightSelected,
          indication_for_anticoagulation: this.state.indication_for_anticoagulation,
          chads_score_and_distribution: this.state.chads_score_and_distribution,
-
          poc_creat_text: this.state.poc_creat_text,
          poc_creat_date: this.state.poc_creat_date,
          hb_text: this.state.hb_text,
@@ -616,14 +621,14 @@ class Page1 extends React.Component {
          plt_date: this.state.plt_date,
          poc_inr_text: this.state.poc_inr_text,
          poc_inr_date: this.state.poc_inr_date,
-
          details_on_recomemendation: this.state.details_on_recomemendation,
          understanding: this.state.understanding,
          who_is_completing_this_form: this.state.completed_by,
          reviewed_by: this.state.reviewed_by,
          patient_id: localStorage.getItem('patient_id'),
          referred_by: this.state.referred_by,
-         dictation: this.state.dictation
+         dictation: this.state.dictation,
+         assessment_date: this.state.assessment_date
       };
       let patient_id = localStorage.getItem('patient_id');
       server(`nurse/page5/:${patient_id}`, param);
@@ -665,6 +670,175 @@ class Page1 extends React.Component {
       let redirect = '/User/Page8';
       this.page5(this.state);
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
+   }
+
+   handleAnticoagulationRefreshClick() {
+      const headers = {
+         'Content-Type': 'application/json',
+         Accept: 'application/json',
+         Authorization: 'Bearer ' + localStorage.getItem('token'),
+      };
+
+      try {
+         let patient_id = '';
+         if (localStorage.getItem('patient_id') === ('' || null)) {
+            localStorage.setItem('patient_id', this.props.location.state.patient_id);
+            patient_id = localStorage.getItem('patient_id');
+            this.setState({ patient_id: patient_id });
+         } else {
+            if (this.props.location.state !== undefined) {
+               patient_id =
+                  localStorage.getItem('patient_id') !== this.props.location.state.patient_id
+                     ? localStorage.setItem('patient_id', this.props.location.state.patient_id)
+                     : localStorage.getItem('patient_id');
+               patient_id = localStorage.getItem('patient_id');
+               this.setState({ patient_id: patient_id });
+            } else {
+               patient_id = localStorage.getItem('patient_id');
+               this.setState({ patient_id: patient_id });
+            }
+         }
+         axios
+            .get(domain + `/api/nurse/anticoagulation-meds/:${patient_id}`, {
+               // originally was page5LoadData
+               headers: headers,
+            })
+            .then(
+               (response) => {
+                  console.log('Nurse page 1 - anticoagulation - meds - Response from Server: ', response);
+                  console.log(
+                     'Nurse page 1 - constructor - Response from Server - data.success[0]: ',
+                     response.data.success[0]
+                  );
+                  data = response.data.success[0];
+                  this.setState({ loader: '' });
+                  if (data !== undefined) {
+                     this.setState({
+                        dalteparin: data.dalteparin,
+                        dalteparin_dosage: data.dalteparin_dosage,
+                        dalteparin_freq: data.dalteparin_freq,
+                        enoxaparin: data.enoxaparin,
+                        enoxaparin_dosage: data.enoxaparin_dosage,
+                        enoxaparin_freq: data.enoxaparin_freq,
+                        tinzaparin: data.tinzaparin,
+                        tinzaparin_dosage: data.tinzaparin_dosage,
+                        tinzaparin_freq: data.tinzaparin_freq,
+                        pradaxa: data.pradaxa,
+                        pradaxa_dosage: data.pradaxa_dosage,
+                        xarelto: data.xarelto,
+                        xarelto_dosage: data.xarelto_dosage,
+                        xarelto_dosage_time: data.xarelto_dosage_time,
+                        eliquis: data.eliquis,
+                        eliquis_dosage: data.eliquis_dosage,
+                        eliquis_dosage_time: data.eliquis_dosage_time,
+                        edoxabon: data.edoxabon,
+                        edoxabon_dosage: data.edoxabon_dosage,
+                        edoxabon_dosage_time: data.edoxabon_dosage_time,
+                        coumadin: data.coumadin,
+                        coumadin_monday: data.coumadin_monday,
+                        coumadin_tuesday: data.coumadin_tuesday,
+                        coumadin_wednesday: data.coumadin_wednesday,
+                        coumadin_thursday: data.coumadin_thursday,
+                        coumadin_friday: data.coumadin_friday,
+                        coumadin_saturday: data.coumadin_saturday,
+                        coumadin_sunday: data.coumadin_sunday,
+                        sintrom: data.sintrom,
+                        sintrom_monday: data.sintrom_monday,
+                        sintrom_tuesday: data.sintrom_tuesday,
+                        sintrom_wednesday: data.sintrom_wednesday,
+                        sintrom_thursday: data.sintrom_thursday,
+                        sintrom_friday: data.sintrom_friday,
+                        sintrom_saturday: data.sintrom_saturday,
+                        sintrom_sunday: data.sintrom_sunday
+                     });
+                     this.forceUpdate();
+                     this.fillactiveanticogmeds();
+                  }
+               },
+               (error) => {
+                  this.setState({ loader: '' });
+                  console.log(error);
+               }
+            );
+      } catch (error) {
+         this.setState({ loader: '' });
+      }
+
+      this.forceUpdate();
+
+   }
+
+   handleAntipleteletsRefreshClick() {
+      const headers = {
+         'Content-Type': 'application/json',
+         Accept: 'application/json',
+         Authorization: 'Bearer ' + localStorage.getItem('token'),
+      };
+
+      try {
+         let patient_id = '';
+         if (localStorage.getItem('patient_id') === ('' || null)) {
+            localStorage.setItem('patient_id', this.props.location.state.patient_id);
+            patient_id = localStorage.getItem('patient_id');
+            this.setState({ patient_id: patient_id });
+         } else {
+            if (this.props.location.state !== undefined) {
+               patient_id =
+                  localStorage.getItem('patient_id') !== this.props.location.state.patient_id
+                     ? localStorage.setItem('patient_id', this.props.location.state.patient_id)
+                     : localStorage.getItem('patient_id');
+               patient_id = localStorage.getItem('patient_id');
+               this.setState({ patient_id: patient_id });
+            } else {
+               patient_id = localStorage.getItem('patient_id');
+               this.setState({ patient_id: patient_id });
+            }
+         }
+         axios
+            .get(domain + `/api/nurse/antiplatelets-meds/:${patient_id}`, {
+               // originally was page5LoadData
+               headers: headers,
+            })
+            .then(
+               (response) => {
+                  console.log('Nurse page 1 - antiplatelets - meds - Response from Server: ', response);
+                  console.log(
+                     'Nurse page 1 - constructor - Response from Server - data.success[0]: ',
+                     response.data.success[0]
+                  );
+                  data = response.data.success[0];
+                  this.setState({ loader: '' });
+                  if (data !== undefined) {
+                     this.setState({                        
+                        aspirin: data.aspirin,
+                        aspirin_dosage: data.aspirin_dosage,
+                        aspirin_dosage_time: data.aspirin_dosage_time,
+                        plavix: data.plavix,
+                        plavix_dosage: data.plavix_dosage,
+                        plavix_dosage_time: data.plavix_dosage_time,
+                        brillinta: data.brillinta,
+                        brillinta_dosage: data.brillinta_dosage,
+                        brillinta_dosage_time: data.brillinta_dosage_timie,
+                        effient: data.effient,
+                        effient_dosage: data.effient_dosage,
+                        effient_dosage_time: data.effient_dosage_time,
+                        not_using_drugs: data.not_using_drugs
+                     });
+                     this.forceUpdate();
+                     this.fillactiveantiplatmeds();
+                  }
+               },
+               (error) => {
+                  this.setState({ loader: '' });
+                  console.log(error);
+               }
+            );
+      } catch (error) {
+         this.setState({ loader: '' });
+      }
+
+      this.forceUpdate();
+
    }
 
    handleAntiPlatRedirection() {
@@ -717,6 +891,22 @@ class Page1 extends React.Component {
 
                      <div className="col-6 text-left">
                         <textarea type="text" disabled className="form-control" defaultValue={this.state.procedure} />
+                     </div>
+                  </div>
+                  <br />
+                  <div className="row">
+                     <div className="col-6">
+                        <label htmlFor="usr">Date of Assessment</label>
+                     </div>
+
+                     <div className="col-6 text-left">
+                        <input
+                           type="date"
+                           id="date_of_assessment"
+                           className="form-control"
+                           defaultValue={this.state.assessment_date}
+                           onChange={(e) => this.setState({ assessment_date: e.target.value })}
+                        />
                      </div>
                   </div>
                   <br />
@@ -887,7 +1077,12 @@ class Page1 extends React.Component {
                                                 <td>{meds.med_dosage_friday}</td>
                                                 <td>{meds.med_dosage_saturday}</td>
                                                 <td>{meds.med_dosage_sunday}</td>
-                                                <td><EditIcon onClick={() => this.handleAntiCogRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} /></td>
+                                                <td>
+                                                   <span>
+                                                      <EditIcon onClick={() => this.handleAntiCogRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} />
+                                                      <RefreshIcon onClick={() => this.handleAnticoagulationRefreshClick(meds.med_name)} className={`${classes['anticpg_edit']}`} />
+                                                   </span>
+                                                </td>
                                              </tr>
                                           })
                                        : 
@@ -900,7 +1095,12 @@ class Page1 extends React.Component {
                                           <td></td>
                                           <td></td>
                                           <td></td>
-                                          <td><EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} /></td>
+                                          <td>
+                                             <span>
+                                                <EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} />
+                                                <RefreshIcon onClick={() => this.handleAnticoagulationRefreshClick('')} className={`${classes['anticpg_edit']}`} />
+                                             </span>
+                                          </td>
                                        </tr>
                                     }
 
@@ -923,7 +1123,12 @@ class Page1 extends React.Component {
                                                 <td>{meds.med_dosage}</td>
                                                 <td>{meds.med_dosage_time}</td>
                                                 <td>{meds.med_dosage_freequency}</td>
-                                                <td><EditIcon onClick={() => this.handleAntiCogRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} /></td>
+                                                <td>
+                                                   <span>
+                                                      <EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} />
+                                                      <RefreshIcon onClick={() => this.handleAnticoagulationRefreshClick('')} className={`${classes['anticpg_edit']}`} />
+                                                   </span>
+                                                </td>
                                              </tr>
                                           })
                                        : 
@@ -932,7 +1137,12 @@ class Page1 extends React.Component {
                                           <td></td>
                                           <td></td>
                                           <td></td>
-                                          <td><EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} /></td>
+                                          <td>
+                                             <span>
+                                                <EditIcon onClick={() => this.handleAntiCogRedirection('')} className={`${classes['anticpg_edit']}`} />
+                                                <RefreshIcon onClick={() => this.handleAnticoagulationRefreshClick('')} className={`${classes['anticpg_edit']}`} />
+                                             </span>
+                                          </td>
                                        </tr>
                                     }
 
@@ -976,7 +1186,12 @@ class Page1 extends React.Component {
                                           <td>{meds.med_dosage}</td>
                                           <td>{meds.med_dosage_freequency}</td>
                                           <td>{meds.med_dosage_time}</td>
-                                          <td><EditIcon onClick={() => this.handleAntiPlatRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} /></td>
+                                          <td>
+                                             <span>
+                                                <EditIcon onClick={() => this.handleAntiPlatRedirection(meds.med_name)} className={`${classes['anticpg_edit']}`} />
+                                                <RefreshIcon onClick={() => this.handleAntipleteletsRefreshClick(meds.med_name)} className={`${classes['anticpg_edit']}`} />
+                                             </span>
+                                          </td>
                                        </tr>
                                     })
                                  : 
@@ -985,7 +1200,12 @@ class Page1 extends React.Component {
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><EditIcon onClick={() => this.handleAntiPlatRedirection('')} className={`${classes['anticpg_edit']}`} /></td>
+                                    <td>
+                                       <span>
+                                          <EditIcon onClick={() => this.handleAntiPlatRedirection('')} className={`${classes['anticpg_edit']}`} />
+                                          <RefreshIcon onClick={() => this.handleAntipleteletsRefreshClick('')} className={`${classes['anticpg_edit']}`} />
+                                       </span>
+                                    </td>
                                  </tr>
                               }
                            </table>

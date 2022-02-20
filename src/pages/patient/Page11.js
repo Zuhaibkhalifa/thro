@@ -158,6 +158,17 @@ class Page11 extends React.Component {
                 this.page11();
                 this.props.history.push('/User/Page12');
             }
+        } else if(this.state.q5 === "Yes") {
+            if(this.props.location.state !== undefined) {
+                this.page11();
+                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
+            } else if(this.state.redirectButton) {
+                this.page11();
+                this.props.history.push('/Nurse/Nurse1');
+            } else {
+                this.page11();
+                this.props.history.push('/User/Page12');
+            }
         } else {
             console.log('Patient page11 - submit - error: ', this.state);
         }

@@ -214,13 +214,18 @@ class ModifyRecommendations extends React.Component {
          iv_heparin_chkBox: false,
          activeVKA: '',
          activeDOAC: '',
-         activeLMWH: ''
+         activeLMWH: '',
+         recom_id: ''
       };
 
       this.handleModalShowHide = this.handleModalShowHide.bind(this);
    }
 
    async componentDidMount() {
+      console.log('recommendations', this.props.location);
+      if(this.props.location.state !== undefined) {
+         this.setState({ recom_id: this.props.location.state.recommendation_id });
+      }
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -240,8 +245,9 @@ class ModifyRecommendations extends React.Component {
                   return;
                }
 
-               data = response.data.success[0];
-               console.log('NURSE 6 - Response: ', JSON.parse(data.jsonTable));
+               let recm_indx = response.data.success.findIndex(x => x.id === this.state.recom_id);
+               data = recm_indx !== -1 ? response.data.success[recm_indx] : response.data.success[0];
+               console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data.success[recm_indx]);
                this.setState({ loader: '' });
                this.getDatafromAlgo(JSON.parse(data.jsonTable), data);
             });
@@ -358,12 +364,11 @@ class ModifyRecommendations extends React.Component {
          antiplatelets_chkBox: respData.is_antiplatelets_selected !== "0" ? true : false,
          aspirin_chkBox: respData.is_aspirin_selected !== "0" ? true : false,
          iv_heparin_chkBox: respData.is_iv_heparin_selected !== "0" ? true : false,
+         lmwh_chkBox: respData.is_lmwh_selected !== "0" ? true : false,
          activeVKA: respData.activeVKA,
          activeDOAC: respData.activeDOAC,
          activeLMWH: respData.activeLMWH
       });
-
-      console.log(tableData, respData);
    }
 
    setInitialState(key, value, length) {

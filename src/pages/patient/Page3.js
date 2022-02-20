@@ -59,7 +59,7 @@ class Page3 extends React.Component {
                     let optradio2 = document.getElementById('optradio2');
                     let optradio3 = document.getElementById('optradio3');
 
-                    if(this.state.q1_ans !== '') {
+                    if(this.state.q1_ans !== '' && (optradio1 && optradio2 && optradio3)) {
                         if(this.state.q1_ans === 'Yes') optradio1.checked = true;
                         else if(this.state.q1_ans === 'No') optradio2.checked = true;
                         else optradio3.checked = true;
@@ -78,9 +78,6 @@ class Page3 extends React.Component {
 
     redirectNextPage() {
         this.submitForm();
-        if(this.props.location.state !== undefined) {
-           this.props.history.push({ pathname:'/User/Page7', state:{ patient_id: this.state.patient_id } });
-        }
     }
 
     handleChange_weight(value) {
@@ -91,7 +88,6 @@ class Page3 extends React.Component {
         if (this.validator.allValid()) {
             if(this.state.redirectButton) {
                 this.page3(this.state);
-                this.props.history.push('/Nurse/Nurse1');
             } else {
                 this.page3(this.state);
                 this.props.history.push('/User/Page4');    
@@ -112,6 +108,11 @@ class Page3 extends React.Component {
 
         var a = server('patient/page3', param);
         console.log('Patient Page 3 - page3 server - response: ', a);
+        if(this.props.location.state !== undefined) {
+           this.props.history.push({ pathname:'/User/Page7', state:{ patient_id: this.state.patient_id } });
+        } else {
+            this.props.history.push('/Nurse/Nurse1');
+        }
     }
 
     inputChangedHandler(e) {

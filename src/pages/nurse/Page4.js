@@ -306,7 +306,8 @@ class Page4 extends React.Component {
          approved_by: '',
          active_lmwh: '',
          active_doac: '',
-         active_vka: ''
+         active_vka: '',
+         add_new_recom: ''
       };
 
       // this.submitForm = this.submitForm.bind(this);
@@ -324,6 +325,10 @@ class Page4 extends React.Component {
    }
 
    componentDidMount() {
+      console.log(this.props.location);
+      if(this.props.location !== undefined) {
+         this.setState({ add_new_recom: this.props.location.add_new });
+      }
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -332,133 +337,113 @@ class Page4 extends React.Component {
       try {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
+         this.getDatafromAlgo();
          axios
-            .get(domain + `/api/nurse/medicationJsonData/:${patient_id}`, {
-               headers: headers,
-            })
-            .then((response) => {
-               // console.log(response.data.success[0]);
-               console.log('response is here: ', response);
-               let data = response.data.success[0];
-               if(response.data.success !== 'not_found') {
-                  if(data.jsonTable !== '') {
-                     this.getDataApiAlgo(JSON.parse(data.jsonTable), data);
-                  } else {
-                     this.getDatafromAlgo();
-                  }
-               } else {
-                  this.getDatafromAlgo();
-               }
+         .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
+            // originally was page5LoadData
+            headers: headers,
+         }).then((response) => {
+            console.log(response);
+            let data = response.data.success[0];
+            this.setState({
+               referred_by: data.physicianName,
+               age: data.age,
+               procedure: data.type_of_procedure,
+               date_of_procedure: data.date_of_procedure,
+               sex: data.gender,
+               weight: data.weight,
+               understanding: data.understanding,
+               completed_by: data.who_is_completing_this_form,
+               reviewed_by: data.reviewed_by,
+               genderSelected: data.gender,
+               indication_for_anticoagulation: data.indication_for_anticoagulation,
+               chads_score_and_distribution: data.chads_score_and_distribution,
 
-               axios
-               .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
-                  // originally was page5LoadData
-                  headers: headers,
-               }).then((response) => {
-                  console.log(response);
-                  let data = response.data.success[0];
-                  this.setState({
-                     referred_by: data.physicianName,
-                     age: data.age,
-                     procedure: data.type_of_procedure,
-                     date_of_procedure: data.date_of_procedure,
-                     sex: data.gender,
-                     weight: data.weight,
-                     understanding: data.understanding,
-                     completed_by: data.who_is_completing_this_form,
-                     reviewed_by: data.reviewed_by,
-                     genderSelected: data.gender,
-                     indication_for_anticoagulation: data.indication_for_anticoagulation,
-                     chads_score_and_distribution: data.chads_score_and_distribution,
+               poc_creat_text: data.poc_creat_text,
+               poc_creat_date: data.poc_creat_date,
+               hb_text: data.hb_text,
+               hb_date: data.hb_date,
+               plt_text: data.plt_text,
+               plt_date: data.plt_date,
+               poc_inr_text: data.poc_inr_text,
+               poc_inr_date: data.poc_inr_date,
+               dictation: data.dictation,
 
-                     poc_creat_text: data.poc_creat_text,
-                     poc_creat_date: data.poc_creat_date,
-                     hb_text: data.hb_text,
-                     hb_date: data.hb_date,
-                     plt_text: data.plt_text,
-                     plt_date: data.plt_date,
-                     poc_inr_text: data.poc_inr_text,
-                     poc_inr_date: data.poc_inr_date,
-                     dictation: data.dictation,
+               details_on_recomemendation: data.details_on_recomemendation,
 
-                     details_on_recomemendation: data.details_on_recomemendation,
+               weightSelected: data.weight_unit,
+               dalteparin: data.dalteparin,
+               dalteparin_dosage: data.dalteparin_dosage,
+               dalteparin_freq: data.dalteparin_freq,
+               enoxaparin: data.enoxaparin,
+               enoxaparin_dosage: data.enoxaparin_dosage,
+               enoxaparin_freq: data.enoxaparin_freq,
+               tinzaparin: data.tinzaparin,
+               tinzaparin_dosage: data.tinzaparin_dosage,
+               tinzaparin_freq: data.tinzaparin_freq,
+               aspirin: data.aspirin,
+               aspirin_dosage: data.aspirin_dosage,
+               aspirin_dosage_time: data.aspirin_dosage_time,
+               plavix: data.plavix,
+               plavix_dosage: data.plavix_dosage,
+               plavix_dosage_time: data.plavix_dosage_time,
+               brillinta: data.brillinta,
+               brillinta_dosage: data.brillinta_dosage,
+               brillinta_dosage_time: data.brillinta_dosage_timie,
+               effient: data.effient,
+               effient_dosage: data.effient_dosage,
+               effient_dosage_time: data.effient_dosage_time,
+               not_using_drugs: data.not_using_drugs,
+               ulcer_in_stomach_or_bowel_last_three_months: data.ulcer_in_stomach_or_bowel_last_three_months,
+               had_transfusion_in_last_three_months_when: data.had_transfusion_in_last_three_months_when,
+               had_transfusion_in_last_three_months: data.had_transfusion_in_last_three_months,
 
-                     weightSelected: data.weight_unit,
-                     dalteparin: data.dalteparin,
-                     dalteparin_dosage: data.dalteparin_dosage,
-                     dalteparin_freq: data.dalteparin_freq,
-                     enoxaparin: data.enoxaparin,
-                     enoxaparin_dosage: data.enoxaparin_dosage,
-                     enoxaparin_freq: data.enoxaparin_freq,
-                     tinzaparin: data.tinzaparin,
-                     tinzaparin_dosage: data.tinzaparin_dosage,
-                     tinzaparin_freq: data.tinzaparin_freq,
-                     aspirin: data.aspirin,
-                     aspirin_dosage: data.aspirin_dosage,
-                     aspirin_dosage_time: data.aspirin_dosage_time,
-                     plavix: data.plavix,
-                     plavix_dosage: data.plavix_dosage,
-                     plavix_dosage_time: data.plavix_dosage_time,
-                     brillinta: data.brillinta,
-                     brillinta_dosage: data.brillinta_dosage,
-                     brillinta_dosage_time: data.brillinta_dosage_timie,
-                     effient: data.effient,
-                     effient_dosage: data.effient_dosage,
-                     effient_dosage_time: data.effient_dosage_time,
-                     not_using_drugs: data.not_using_drugs,
-                     ulcer_in_stomach_or_bowel_last_three_months: data.ulcer_in_stomach_or_bowel_last_three_months,
-                     had_transfusion_in_last_three_months_when: data.had_transfusion_in_last_three_months_when,
-                     had_transfusion_in_last_three_months: data.had_transfusion_in_last_three_months,
+               liver_disease: data.liver_disease,
+               lab_location_for_inr_test: data.lab_location_for_inr_test,
 
-                     liver_disease: data.liver_disease,
-                     lab_location_for_inr_test: data.lab_location_for_inr_test,
+               pradaxa: data.pradaxa,
+               pradaxa_dosage: data.pradaxa_dosage,
+               xarelto: data.xarelto,
+               xarelto_dosage: data.xarelto_dosage,
+               xarelto_dosage_time: data.xarelto_dosage_time,
+               eliquis: data.eliquis,
+               eliquis_dosage: data.eliquis_dosage,
+               eliquis_dosage_time: data.eliquis_dosage_time,
+               edoxabon: data.edoxabon,
+               edoxabon_dosage: data.edoxabon_dosage,
+               edoxabon_dosage_time: data.edoxabon_dosage_time,
+               coumadin: data.coumadin,
+               coumadin_monday: data.coumadin_monday,
+               coumadin_tuesday: data.coumadin_tuesday,
+               coumadin_wednesday: data.coumadin_wednesday,
+               coumadin_thursday: data.coumadin_thursday,
+               coumadin_friday: data.coumadin_friday,
+               coumadin_saturday: data.coumadin_saturday,
+               coumadin_sunday: data.coumadin_sunday,
+               sintrom: data.sintrom,
+               sintrom_monday: data.sintrom_monday,
+               sintrom_tuesday: data.sintrom_tuesday,
+               sintrom_wednesday: data.sintrom_wednesday,
+               sintrom_thursday: data.sintrom_thursday,
+               sintrom_friday: data.sintrom_friday,
+               sintrom_saturday: data.sintrom_saturday,
+               sintrom_sunday: data.sintrom_sunday,
 
-                     pradaxa: data.pradaxa,
-                     pradaxa_dosage: data.pradaxa_dosage,
-                     xarelto: data.xarelto,
-                     xarelto_dosage: data.xarelto_dosage,
-                     xarelto_dosage_time: data.xarelto_dosage_time,
-                     eliquis: data.eliquis,
-                     eliquis_dosage: data.eliquis_dosage,
-                     eliquis_dosage_time: data.eliquis_dosage_time,
-                     edoxabon: data.edoxabon,
-                     edoxabon_dosage: data.edoxabon_dosage,
-                     edoxabon_dosage_time: data.edoxabon_dosage_time,
-                     coumadin: data.coumadin,
-                     coumadin_monday: data.coumadin_monday,
-                     coumadin_tuesday: data.coumadin_tuesday,
-                     coumadin_wednesday: data.coumadin_wednesday,
-                     coumadin_thursday: data.coumadin_thursday,
-                     coumadin_friday: data.coumadin_friday,
-                     coumadin_saturday: data.coumadin_saturday,
-                     coumadin_sunday: data.coumadin_sunday,
-                     sintrom: data.sintrom,
-                     sintrom_monday: data.sintrom_monday,
-                     sintrom_tuesday: data.sintrom_tuesday,
-                     sintrom_wednesday: data.sintrom_wednesday,
-                     sintrom_thursday: data.sintrom_thursday,
-                     sintrom_friday: data.sintrom_friday,
-                     sintrom_saturday: data.sintrom_saturday,
-                     sintrom_sunday: data.sintrom_sunday,
-
-                     ulcer_in_stomach_or_bowel: data.ulcer_in_stomach_or_bowel,
-                     cognitive_heart_failure: data.cognitive_heart_failure,
-                     high_blood_pressure: data.high_blood_pressure,
-                     diabetes: data.diabetes,
-                     stroke_or_mini_stroke: data.stroke_or_mini_stroke,
-                     bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months
-                  });
-                  this.forceUpdate();
-                  this.fillactiveanticogmeds();
-                  this.fillactiveantiplatmeds();
-                  this.set_DynamicFlags();
-                  this.set_anticoagulation(response.data.success.anticoagulation);
-                  this.set_CHADS_score();
-               });
-               this.setState({ loader: '' });
+               ulcer_in_stomach_or_bowel: data.ulcer_in_stomach_or_bowel,
+               cognitive_heart_failure: data.cognitive_heart_failure,
+               high_blood_pressure: data.high_blood_pressure,
+               diabetes: data.diabetes,
+               stroke_or_mini_stroke: data.stroke_or_mini_stroke,
+               bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months
             });
-
-         
+            this.forceUpdate();
+            this.fillactiveanticogmeds();
+            this.fillactiveantiplatmeds();
+            this.set_DynamicFlags();
+            this.set_anticoagulation(response.data.success.anticoagulation);
+            this.set_CHADS_score();
+         });
+         this.setState({ loader: '' });
       } catch (error) {
          console.error(error);
          this.setState({ loader: '' });
@@ -491,8 +476,9 @@ class Page4 extends React.Component {
                [keyId]: tableData.vka[keyIdx].lab,
                [keyId1]: tableData.vka[keyIdx1].warfain
             });
-            this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
-            this.setInitialLabState('labVal', tableData.vka[keyIdx].lab, tableData.vka.length);
+            // this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
+            this.setVKAVal(tableData, tableData.vka[keyIdx1].warfain);
+            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.length);
             this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
          }
       }
@@ -874,6 +860,22 @@ class Page4 extends React.Component {
       this.setState({ chads_score_and_distribution: score });
    }
 
+   setVKAVal(meds, value) {
+      this.setState({
+         InptValVka1: 0,
+         InptValVka2: 0,
+         InptValVka3: 0,
+         InptValVka4: 0,
+         InptValVka5: 0,
+         InptValVka6: value,
+         InptValVka7: meds.vka.data[6].warfain,
+         InptValVka8: meds.vka.data[7].warfain,
+         InptValVka9: meds.vka.data[8].warfain,
+         InptValVka10: meds.vka.data[9].warfain,
+         InptValVka11: meds.vka.data[10].warfain,
+      });
+   }
+
    setInitialState(key, value, length) {
       for(let i=0; i<length; i++) {
          this.setState({
@@ -929,7 +931,7 @@ class Page4 extends React.Component {
       let flags = [];
 
       if (liver === 'Yes') flags.push('Liver Diseases');
-      if (transfusion === 'Yes') flags.push(`Transfusion did on ${transfusion_date}`);
+      if (transfusion === 'Yes' && transfusion_date !== null) flags.push(`Transfusion did on ${transfusion_date}`);
       if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
       if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('bleeding_requiring_treatment_last_three_months');
       if(cognitive_heart_fail === 'Yes') flags.push('cognitive_heart_failure');
@@ -992,7 +994,8 @@ class Page4 extends React.Component {
                [keyId]: tableData.vka.data[keyIdx].lab,
                [keyId1]: tableData.vka.data[keyIdx1].warfain
             });
-            this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data.length);
+            // this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data.length);
+            this.setVKAVal(tableData, tableData.vka.data[keyIdx1].warfain);
             this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
             this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
          }
@@ -1485,7 +1488,11 @@ class Page4 extends React.Component {
                            <table style={{ display: "inline-table" }} className="table-responsive table-bordered">
                               <tr style={{ borderBottom: "1px solid #ccc" }}>
                                  <th>Date</th>
-                                 <th>Lab</th>
+                                 {
+                                    this.state.vka_chkBox ?
+                                       <th>Lab</th>
+                                    : <></>
+                                 }
                                  {
                                     this.state.vka_chkBox ? 
                                     <th colSpan={2}>
@@ -1564,9 +1571,12 @@ class Page4 extends React.Component {
                                        <>
                                           <tr key={`date-key-${key}`} style={{ borderBottom: "1px solid #ccc" }}>
                                              <td><input type='date' disabled={dataKey !== 'd_0' ? true : false} onChange={(e) => this.onDateChange(e)} value={date[dataKey]} className='form-control' /></td>
-                                             <td>
-                                                <input id={`labVal${vkaKey+1}`} type="text" onChange={(e) => this.handleLabValueChange(e, `labVal${vkaKey+1}`)} value={this.state[`labVal${vkaKey+1}`]} className='form-control' />
-                                             </td>
+                                             {
+                                                this.state.vka_chkBox ?
+                                                <td>
+                                                   <input id={`labVal${vkaKey+1}`} type="text" onChange={(e) => this.handleLabValueChange(e, `labVal${vkaKey+1}`)} value={this.state[`labVal${vkaKey+1}`]} className='form-control' />
+                                                </td> : <></>
+                                             }
                                              {
                                                 this.state.vka_chkBox ?
                                                 <>

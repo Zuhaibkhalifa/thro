@@ -145,6 +145,13 @@ export default async function thromboMedicationAlgo(__indicators) {
       return data;
    }
 
+   function getVKAMedsDoses(meds, date) {
+      let day = getDayOfProcedure(date);
+      let dkey = meds?.med_name.toLowerCase().split(' ')[0]+'_'+day;
+      
+      return meds.med_dosage[dkey];
+   }
+
    function mapToVKACases(meds, indicators, date_of_procedure) {
       const procedure_day = getDayOfProcedure(date_of_procedure);
       let medIndx = meds.findIndex(x => x.med_dosage !== '');
@@ -163,11 +170,11 @@ export default async function thromboMedicationAlgo(__indicators) {
             { warfain: '0', lab: '' },
             { warfain: '0', lab: '' },
             { warfain: med_data.med_dosage[dataKey]+' * 2', lab: '' },
-            { warfain: med_data.med_dosage[dataKey]+' * 2', lab: '' },
-            { warfain: med_data.med_dosage[dataKey], lab: '' },
-            { warfain: med_data.med_dosage[dataKey], lab: '' },
-            { warfain: med_data.med_dosage[dataKey], lab: '' },
-            { warfain: med_data.med_dosage[dataKey], lab: '' },
+            { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+1))+' * 2', lab: '' },
+            { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+2)), lab: '' },
+            { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+3)), lab: '' },
+            { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+4)), lab: '' },
+            { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+5)), lab: '' },
             { d6: 'First weekday after D5', warfain: '', lab: 'Goto Lab for INR test' },
          ];
 

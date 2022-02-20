@@ -64,25 +64,25 @@ class Page13 extends React.Component {
                 })
                 .then((response) => {
                     console.log(response);
-                    let servrData = response.data.success[0];
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.bleeding_requiring_treatment,
-                            q1_ans_option: servrData.bleeding_requiring_treatment_last_three_months,
-                            q2_ans: servrData.bleeding_from_stomach,
-                            q2_ans_option: servrData.bleeding_from_stomach_last_three_months,
-                            q3_ans: servrData.ulcer_in_stomach_or_bowel,
-                            q3_ans_option: servrData.ulcer_in_stomach_or_bowel_last_three_months,
-                            q4_ans: servrData.liver_disease,
-                            q5_ans: servrData.kidney_disease,
-                            q6_ans: servrData.not_sure,
-                            q7_ans: servrData.had_transfusion_in_last_three_months,
-                            q7_ans_option: servrData.had_transfusion_in_last_three_months_when
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
+                    // let servrData = response.data.success[0];
+                    // if(servrData) {
+                    //     this.setState({ 
+                    //         loader: '',
+                    //         q1_ans: servrData.bleeding_requiring_treatment,
+                    //         q1_ans_option: servrData.bleeding_requiring_treatment_last_three_months,
+                    //         q2_ans: servrData.bleeding_from_stomach,
+                    //         q2_ans_option: servrData.bleeding_from_stomach_last_three_months,
+                    //         q3_ans: servrData.ulcer_in_stomach_or_bowel,
+                    //         q3_ans_option: servrData.ulcer_in_stomach_or_bowel_last_three_months,
+                    //         q4_ans: servrData.liver_disease,
+                    //         q5_ans: servrData.kidney_disease,
+                    //         q6_ans: servrData.not_sure,
+                    //         q7_ans: servrData.had_transfusion_in_last_three_months,
+                    //         q7_ans_option: servrData.had_transfusion_in_last_three_months_when
+                    //     });
+                    // } else {
+                    // }
+                    this.setState({ loader: '' });
                 });
         } catch (error) {
             console.error(error);
@@ -156,9 +156,9 @@ class Page13 extends React.Component {
     redirectNextPage() {
         this.submitForm();
         console.log(this.props);
-        if(this.state.patient_id !== "") {
-            this.props.history.push({ pathname:'/User/Page14', state:{ patient_id: this.state.patient_id } });
-        }
+        // if(this.state.patient_id !== "") {
+        //     this.props.history.push({ pathname:'/User/Page14', state:{ patient_id: this.state.patient_id } });
+        // }
     }
 
     submitForm() {
@@ -234,8 +234,31 @@ class Page13 extends React.Component {
             });
         } else {
             console.log('Page 13 - Submit - state: ', this.state);
-            this.page13();
-            this.props.history.push('/User/Page14');
+            if(this.state.q6_ans === "Yes" && this.state.q7_ans === "Yes") {
+                console.log(this.state.q6_ans === "Yes" && this.state.q7_ans === "Yes");
+                this.setState({
+                    q1_ans: 'No',
+                    q1_ans_option: 'No',
+                    q2_ans: 'No',
+                    q2_ans_option: 'No',
+                    q3_ans: 'No',
+                    q3_ans_option: 'No',
+                    q4_ans: 'No',
+                    q5_ans: 'No',
+                    q6_ans: 'No',
+                    q7_ans: 'No',
+                    q7_ans_option: 'No',
+                    transfusionDate: { minDate: '', maxDate: '' },
+                    newState: 'added now'
+                });
+                this.page13();
+                console.log(this.state);
+                this.forceUpdate();
+                this.props.history.push('/User/Page14');
+            } else {
+                this.page13();
+                this.props.history.push('/User/Page14');
+            }
         }
     }
 
@@ -313,7 +336,6 @@ class Page13 extends React.Component {
                                     name="prasugrel_dosage_freq"
                                     id="oneone_freq1"
                                     className="pull-right"
-                                    defaultChecked={this.state.q1_ans_option === 'Yes'}
                                     onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <br />
@@ -323,7 +345,6 @@ class Page13 extends React.Component {
                                     name="prasugrel_dosage_freq"
                                     id="oneone_freq2"
                                     className="pull-right"
-                                    defaultChecked={this.state.q1_ans_option === 'No'}
                                     onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
 
@@ -334,8 +355,7 @@ class Page13 extends React.Component {
                                     name="prasugrel_dosage_freq"
                                     id="oneone_freq3"
                                     className="pull-right"
-                                    defaultChecked={this.state.q1_ans_option === 'Not Sure'}
-                                    onChange={(e) => this.setState({ q1_ans_option: 'Not Sure' })}
+                                    onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
                             <div className="text-danger">
@@ -364,7 +384,6 @@ class Page13 extends React.Component {
                                     name="bleeding_dosage_freq"
                                     id="twotwo_freq1"
                                     className="pull-right"
-                                    defaultChecked={this.state.q2_ans_option === 'Yes'}
                                     onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <br />
@@ -374,7 +393,6 @@ class Page13 extends React.Component {
                                     name="bleeding_dosage_freq"
                                     id="twotwo_freq2"
                                     className="pull-right"
-                                    defaultChecked={this.state.q2_ans_option === 'No'}
                                     onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
 
@@ -385,8 +403,7 @@ class Page13 extends React.Component {
                                     name="bleeding_dosage_freq"
                                     id="twotwo_freq3"
                                     className="pull-right"
-                                    defaultChecked={this.state.q2_ans_option === 'Not Sure'}
-                                    onChange={(e) => this.setState({ q2_ans_option: 'Not Sure' })}
+                                    onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <div className="text-danger">
                                     {' '}
@@ -415,7 +432,6 @@ class Page13 extends React.Component {
                                     name="ulcer_dosage_freq"
                                     id="threethree_freq1"
                                     className="pull-right"
-                                    defaultChecked={this.state.q3_ans_option === 'Yes'}
                                     onChange={(e) => this.setState({ q3_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <br />
@@ -425,7 +441,6 @@ class Page13 extends React.Component {
                                     name="ulcer_dosage_freq"
                                     id="threethree_freq2"
                                     className="pull-right"
-                                    defaultChecked={this.state.q3_ans_option === 'No'}
                                     onChange={(e) => this.setState({ q3_ans_option: e.target.checked ? 'Yes' : 'No' })}
                                 />
 
@@ -436,7 +451,6 @@ class Page13 extends React.Component {
                                     name="ulcer_dosage_freq"
                                     id="threethree_freq3"
                                     className="pull-right"
-                                    defaultChecked={this.state.q3_ans_option === 'Not Sure'}
                                     onChange={(e) => this.setState({ q3_ans_option: 'Not Sure' })}
                                 />
                                 <div className="text-danger">
@@ -453,7 +467,6 @@ class Page13 extends React.Component {
                                     className="pull-right"
                                     id="four"
                                     name="rdo"
-                                    defaultChecked={this.state.q4_ans === 'Yes'}
                                     onChange={(e) => this.setState({ q4_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
@@ -464,7 +477,6 @@ class Page13 extends React.Component {
                                     className="pull-right"
                                     id="six"
                                     name="rdo"
-                                    defaultChecked={this.state.q5_ans === 'Yes'}
                                     onChange={(e) => this.setState({ q5_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                             </div>
@@ -476,7 +488,6 @@ class Page13 extends React.Component {
                                     id="seven"
                                     name="rdo"
                                     onClick={this.toggleOptions}
-                                    defaultChecked={this.state.q1_ans === 'Yes'}
                                     onChange={(e) => this.setState({ q6_ans: e.target.checked ? 'Yes' : 'No' })}
                                 />
                                 <div className="text-danger">
@@ -518,7 +529,7 @@ class Page13 extends React.Component {
                                 className="pull-right"
                                 value="Not Sure"
                                 onClick={this.toggleOptions2}
-                                onChange={(e) => this.setState({ q7_ans: 'Not Sure' })}
+                                onChange={(e) => this.setState({ q7_ans: e.target.checked ? 'Yes' : 'No' })}
                             />
 
                             {this.validator.message('Question', this.state.q7_ans, 'required')}

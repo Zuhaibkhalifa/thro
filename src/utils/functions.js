@@ -6,6 +6,7 @@ import { domain } from './../App';
 
 export const server = (url, param) => {
     var token = localStorage.getItem('token');
+    let status = false; 
 
     const headers = {
         'Content-Type': 'application/json',
@@ -19,6 +20,7 @@ export const server = (url, param) => {
         })
         .then((response) => {
             console.log('./function.js - Server func - Success response: ', response);
+            status = true;
             return 'done';
         })
         .catch((err) => {
@@ -34,13 +36,15 @@ export const server = (url, param) => {
                 // client received an error response (5xx, 4xx)
             } else if (err.request) {
                 // client never received a response, or request never left
+                status = false;
+                return 'error';
             } else {
-                // anything else
+                status = false;
+                return 'error';
             }
-            return 'error';
         });
 
-    //  return page;
+     return status;
 };
 
 export const getServer = async (url) => {

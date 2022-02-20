@@ -41,8 +41,8 @@ const Recommendations = React.lazy(() => import('./pages/nurse/Recommendations')
 const ModifyRecommendations = React.lazy(() => import('./pages/nurse/ModifyRecommendations'));
 
 // global Domain
-export const domain = 'https://thrombolink-server.herokuapp.com';
-// export const domain = "http://localhost:8000"; 
+// export const domain = 'https://thrombolink-server.herokuapp.com';
+export const domain = "http://localhost:8000"; 
 
 const App = () => {
    return (

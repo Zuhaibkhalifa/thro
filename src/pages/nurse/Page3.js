@@ -34,7 +34,9 @@ class Page5 extends React.Component {
             explained: '',
             loader: 1,
             lmwh_flag: false,
-            risk_factor: ''
+            risk_factor: '',
+            briefing_date: '',
+            is_first_time: ''
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -76,6 +78,9 @@ class Page5 extends React.Component {
                         admin: data ? data.administration : "undefined",
                         understand: data ? data.understanding : "undefined",
                         explained: data ? data.explained : "undefined",
+                        briefing_date: data ? data.briefing_date : "undefined",
+                        is_first_time: data ? data.is_first_time : "undefined",
+                        lmwh_flag: this.state.lmwh_flag !== '' ? data?.is_lmwh_selected === "1" ? true : false : this.state.lmwh_flag
                     });
                 });
         } catch (error) {
@@ -102,7 +107,9 @@ class Page5 extends React.Component {
             administration: this.state.admin,
             understanding: this.state.understand,
             explained: this.state.explained,
-            patient_id: localStorage.getItem('patient_id')
+            patient_id: localStorage.getItem('patient_id'),
+            briefing_date: this.state.briefing_date,
+            is_first_time: this.state.is_first_time
         };
 
         console.log('Nurse page 5 - param: ', params);
@@ -158,6 +165,22 @@ class Page5 extends React.Component {
                         <h3>Bridging Summary</h3>
                         <br />
                         <br />
+                        <div className="row">
+                            <div className="col-6">
+                                <label htmlFor="usr">Patient Briefing Date</label>
+                            </div>
+
+                            <div className="col-6 text-left">
+                                <input
+                                type="date"
+                                id="date_of_assessment"
+                                className="form-control"
+                                defaultValue={this.state.briefing_date}
+                                onChange={(e) => this.setState({ briefing_date: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <br />
                         <h4>Who is completing this form?</h4>
                         <div className="row">
                             {this.createRadio('who-1', 'who', 'MD', this.handleRadioChange)}
@@ -201,18 +224,25 @@ class Page5 extends React.Component {
                                     'padding-0'
                                 )}
                                 {this.validator.message('', this.state.lmwh, 'required')}
+                                <h4>Previous Experience with Self-Injection</h4>
+                                <div className="row">
+                                    {this.createRadio('is_first_time-1', 'is_first_time', 'Yes', this.handleRadioChange)}
+                                    {this.createRadio('is_first_time-2', 'is_first_time', 'No', this.handleRadioChange)}
+                                </div>
+                                {this.validator.message('', this.state.is_first_time, 'required')}
+                                <br />
+                                <h4>LMWH Administration</h4>
+                                <div className="row">
+                                    {this.createRadio('admin-1', 'admin', 'Self', this.handleRadioChange)}
+                                    {this.createRadio('admin-2', 'admin', 'Family', this.handleRadioChange)}
+                                </div>
+                                <div className="row">
+                                    {this.createRadio('admin-3', 'admin', 'CCAC', this.handleRadioChange)}
+                                </div>
+                                {this.validator.message('', this.state.admin, 'required')}
+                                <br />
                             </> : ''
                         }
-                        <br />
-                        <h4>LMWH Administration</h4>
-                        <div className="row">
-                            {this.createRadio('admin-1', 'admin', 'Self', this.handleRadioChange)}
-                            {this.createRadio('admin-2', 'admin', 'Family', this.handleRadioChange)}
-                        </div>
-                        <div className="row">
-                            {this.createRadio('admin-3', 'admin', 'CCAC', this.handleRadioChange)}
-                        </div>
-                        {this.validator.message('', this.state.admin, 'required')}
                         <br />
                         <h4>Risk/Benefits</h4>
                         {this.createRadio(
@@ -253,7 +283,7 @@ class Page5 extends React.Component {
 
                             <div className="col-4">
                                 <button onClick={this.submitForm} className="btn btn-primary btn-block">
-                                    Forward
+                                    Next
                                 </button>
                             </div>
                         </div>

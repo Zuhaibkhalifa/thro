@@ -215,7 +215,8 @@ class Page6 extends React.Component {
          iv_heparin_chkBox: false,
          activeVKA: '',
          activeDOAC: '',
-         activeLMWH: ''
+         activeLMWH: '',
+         recom_id: ''
       };
 
       this.submitForm = this.submitForm.bind(this);
@@ -223,6 +224,10 @@ class Page6 extends React.Component {
    }
 
    async componentDidMount() {
+      if(this.props.location.state !== undefined) {
+         this.setState({ recom_id: this.props.location.state.recommendation_id });
+      }
+      console.log('recommendations', this.state.location);
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -242,8 +247,9 @@ class Page6 extends React.Component {
                   return;
                }
 
-               data = response.data.success[0];
-               console.log('NURSE 6 - Response: ', JSON.parse(data.jsonTable));
+               let recm_indx = response.data.success.findIndex(x => x.id === this.state.recom_id);
+               data = recm_indx !== -1 ? response.data.success[recm_indx] : response.data.success[0];
+               console.log('NURSE 6 - Response: ', JSON.parse(data.jsonTable), this.props.location, recm_indx, response.data.success[recm_indx]);
                this.setState({ loader: '' });
                this.getDatafromAlgo(JSON.parse(data.jsonTable), data);
             });
@@ -278,7 +284,8 @@ class Page6 extends React.Component {
                [keyId]: tableData.vka[keyIdx].lab,
                [keyId1]: tableData.vka[keyIdx1].warfain
             });
-            this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
+            // this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
+            this.setVKAVal(tableData, tableData.vka[keyIdx1].warfain);
             this.setInitialLabState('labVal', tableData.vka[keyIdx].lab, tableData.vka.length);
             this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
          }
@@ -360,6 +367,7 @@ class Page6 extends React.Component {
          antiplatelets_chkBox: respData.is_antiplatelets_selected !== "0" ? true : false,
          aspirin_chkBox: respData.is_aspirin_selected !== "0" ? true : false,
          iv_heparin_chkBox: respData.is_iv_heparin_selected !== "0" ? true : false,
+         lmwh_chkBox: respData.is_lmwh_selected !== "0" ? true : false,
          activeVKA: respData.activeVKA,
          activeDOAC: respData.activeDOAC,
          activeLMWH: respData.activeLMWH
@@ -374,6 +382,22 @@ class Page6 extends React.Component {
             [key+(i+1)]: value
          });
       }
+   }
+
+   setVKAVal(meds, value) {
+      this.setState({
+         InptValVka1: 0,
+         InptValVka2: 0,
+         InptValVka3: 0,
+         InptValVka4: 0,
+         InptValVka5: 0,
+         InptValVka6: value,
+         InptValVka7: meds.vka[6].warfain,
+         InptValVka8: meds.vka[7].warfain,
+         InptValVka9: meds.vka[8].warfain,
+         InptValVka10: meds.vka[9].warfain,
+         InptValVka11: meds.vka[10].warfain,
+      });
    }
 
    setInitialLabState(key, value, length) {
@@ -456,7 +480,10 @@ class Page6 extends React.Component {
                         <table id="dataTable" style={{ display: "inline-table", textAlign: 'center' }} className="table-responsive table-bordered">
                            <tr style={{ borderBottom: "1px solid #ccc" }}>
                               <th rowSpan={2}>Date</th>
-                              <th>Lab</th>
+                              {
+                                 this.state.vka_chkBox ?
+                                 <th>Lab</th> : <></>
+                              }
                               {
                                  this.state.vka_chkBox ? 
                                  <th colSpan={2}>
@@ -553,7 +580,10 @@ class Page6 extends React.Component {
                                     <>
                                        <tr key={`date-${date[dataKey]}-key-${key}`} style={{ borderBottom: "1px solid #ccc" }}>
                                           <td>{date[dataKey]}</td>
-                                          <td>{this.state[`labVal${vkaKey+1}`]}</td>
+                                          {
+                                             this.state.vka_chkBox ?
+                                             <td>{this.state[`labVal${vkaKey+1}`]}</td> : <></>
+                                          }
                                           {
                                              this.state.vka_chkBox ?
                                              <>
@@ -602,7 +632,7 @@ class Page6 extends React.Component {
                   }
                   <div className="row" style={{ marginTop: '60px' }}>
                      <div className="col-4">
-                        <Link to="/Nurse/Nurse5" className="btn btn-outline-primary  btn-block">
+                        <Link to="/Nurse/Recommendations" className="btn btn-outline-primary  btn-block">
                            Back
                         </Link>
                      </div>

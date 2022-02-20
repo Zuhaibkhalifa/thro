@@ -10,10 +10,8 @@ class Recommendations extends Component {
         super();
 
         this.state = {
-            status: '',
-            last_modified: '',
-            approved_by: '',
-            recommendations: '',
+            recommendations: [],
+            link: '',
             loader: ''
         };
     }
@@ -37,13 +35,11 @@ class Recommendations extends Component {
                     this.props.history.push('/Nurse/Nurse4');
                 }
 
-                let data = response.data.success[0];
+                let data = response.data.success;
                 console.log('Recommendations - Response: ');
                 this.setState({
-                    approved_by: data.approved_by,
-                    status: data.status,
-                    last_modified: data.last_modified,
-                    recommendations: '/Nurse/modify-recommendation',
+                    recommendations: data,
+                    link: '/Nurse/modify-recommendation',
                     loader: ''
                 });
             });
@@ -73,19 +69,28 @@ class Recommendations extends Component {
 
                     <table style={{ display: "inline-table", textAlign: 'center' }} className="table-responsive table-bordered">
                         <tr style={{ borderBottom: "1px solid #ccc" }}>
+                            <th style={{ display: 'none' }}>#Id</th>
                             <th>SL No</th>
                             <th>Last Modified</th>
                             <th>Approved By</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
-                        <tr style={{ borderBottom: "1px solid #ccc" }}>
-                            <td>1</td>
-                            <td>{this.state.last_modified}</td>
-                            <td>{this.state.approved_by}</td>
-                            <td>{this.state.status}</td>
-                            <td><Link to={this.state.recommendations}>{this.state.recommendations}</Link></td>
-                        </tr>
+                        {
+                            this.state.recommendations.length !== 0 ?
+                            this.state.recommendations.map((ele, indx) => {
+                                return (
+                                    <tr key={indx} style={{ borderBottom: "1px solid #ccc" }}>
+                                        <td style={{ display: 'none' }}>{ele.id}</td>
+                                        <td>{++indx}</td>
+                                        <td>{ele.last_modified}</td>
+                                        <td>{ele.approved_by}</td>
+                                        <td>{ele.status}</td>
+                                        <td><Link to={{ pathname: this.state.link, state: { 'recommendation_id': ele.id } }}>{this.state.link}</Link></td>
+                                    </tr>
+                                )
+                            }) : ""
+                        }
                     </table>
                     <div className="row" style={{ marginTop: '60px' }}>
                      <div className="col-4">
@@ -94,11 +99,15 @@ class Recommendations extends Component {
                         </Link>
                      </div>
 
-                     <div className="col-4"></div>
+                     <div className="col-4">
+                        <Link to="/Nurse/Nurse3" className="btn btn-outline-primary  btn-block">
+                           Next
+                        </Link>
+                    </div>
 
                      <div className="col-4">
-                        <Link to="/Nurse/Nurse4" className="btn btn-outline-primary  btn-block">
-                           Next
+                        <Link to={{ pathname: '/Nurse/Nurse4', state: { 'add_new': true } }} className="btn btn-outline-primary  btn-block">
+                           Add New
                         </Link>
                      </div>
                   </div>
