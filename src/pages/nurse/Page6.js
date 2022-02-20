@@ -481,14 +481,13 @@ class Page6 extends React.Component {
                            <tr style={{ borderBottom: "1px solid #ccc" }}>
                               <th rowSpan={2}>Date</th>
                               {
-                                 this.state.vka_chkBox ?
-                                 <th>Lab</th> : <></>
-                              }
-                              {
                                  this.state.vka_chkBox ? 
-                                 <th colSpan={2}>
-                                    {this.state.activeVKA !== '' ? this.state.activeVKA : this.state.table.headers.find(x => x['vka']).vka[0].med_name}
-                                 </th> : <></>
+                                 <>
+                                    <th rowSpan={2}>Lab</th>
+                                    <th colSpan={2}>
+                                       {this.state.activeVKA !== '' ? this.state.activeVKA : this.state.table.headers.find(x => x['vka']).vka[0].med_name}
+                                    </th>
+                                 </> : <></>
                               }
                               {
                                  this.state.doac_chkBox ?
@@ -522,10 +521,10 @@ class Page6 extends React.Component {
                               }
                            </tr>
                            <tr style={{ borderBottom: "1px solid #ccc" }}>
-                              <th></th>
                               {
                                  this.state.vka_chkBox ? 
                                  <>
+                                    <th></th>
                                     <th>dosage</th>
                                     <th>frequency</th>
                                  </> : <></>
@@ -582,11 +581,8 @@ class Page6 extends React.Component {
                                           <td>{date[dataKey]}</td>
                                           {
                                              this.state.vka_chkBox ?
-                                             <td>{this.state[`labVal${vkaKey+1}`]}</td> : <></>
-                                          }
-                                          {
-                                             this.state.vka_chkBox ?
                                              <>
+                                                <td>{this.state[`labVal${vkaKey+1}`]}</td> : <></>
                                                 <td>{this.state[`InptValVka${vkaKey+1}`]}</td>
                                                 <td>{this.state[`selectValVka${vkaKey+1}`]}</td>
                                              </> 
