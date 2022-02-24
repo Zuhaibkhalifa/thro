@@ -92,7 +92,7 @@ class Page5 extends React.Component {
     submitForm() {
         if (this.validator.allValid()) {
             this.page3(this.state);
-            this.props.history.push('/Nurse/Nurse6');
+            this.props.history.push('/Nurse/Dictation');
         } else {
             this.validator.showMessages();
             this.forceUpdate();
