@@ -6,141 +6,119 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { domain } from '../../App';
 import { server } from '../../utils/functions';
+import Header from './NurseHeader';
+import ReactSpinner from 'react-bootstrap-spinner';
+import { Modal } from 'react-bootstrap';
+import Logo from '../../assets/img/3.png';
 
 class Dictation extends Component {
     constructor() {
         super();
         this.state = {
             editorState: '',
-            downloadableContent: ''
+            downloadableContent: '',
+            loader: '', 
+            showHide: '', 
+            patient_id: localStorage.getItem('patient_id'),
         };
 
         this.handleEditorChange = this.handleEditorChange.bind(this);
         this.downloadTxtFile = this.downloadTxtFile.bind(this);
-        this.submitForm = this.submitForm.bind(this);
-        this.set_anticoagulation = this.set_anticoagulation.bind(this);
         this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
         this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
-    }
-
-    set_anticoagulation(data) {
-        // Pulled the data drom Patient/Page4 from server
-        // and then genereating the data over here,
-        // to display in  indication_for_anticoagulation field
-        let anticoagulation = '';
-  
-        let anticoagulationMap = {
-           venous_thromboelism: 'Venous Thromboembolism (VTE)',
-           dvt: 'DVT',
-           pe: 'PE',
-           atrial_fibrillation_of_flutter: 'Atrial Fibrillation of flutter',
-           heart_valve_replacement: 'Heart Valve Replacement',
-           blood_clot_in_heart: 'Blood clot in heart',
-           arterial_peripheral_thrombosis: 'Arterial Peripheral Thrombosis',
-           peripheral_arterial_disease: 'Peripheral arterial Disease',
-           other: 'Some Other',
-           none: 'None',
-        };
-  
-        for (var key in data) {
-           if (data[key] === 'Yes') anticoagulation += anticoagulationMap[key] + ',  ';
-           if (key === 'other') anticoagulation += data[key] === null ? '' : data[key] + ',  ';
-        }
-  
-        console.log(this.props.location);
-        return anticoagulation;
+        this.handleModalShowHide = this.handleModalShowHide.bind(this);
     }
 
     fillactiveanticogmeds(data) {
         let activeMeds = [];
-        if(data.dalteparin) {
-           let idx = data.dalteparin_freq.indexOf(' ');
+        if(data?.dalteparin) {
+           let idx = data?.dalteparin_freq.indexOf(' ');
            activeMeds.push({
-              med_name: data.dalteparin,
-              med_dosage: data.dalteparin_dosage,
-              med_dosage_time: data.dalteparin_freq.substr(idx+1),
-              med_dosage_freequency: data.dalteparin_freq.substr(idx+1),
+              med_name: data?.dalteparin,
+              med_dosage: data?.dalteparin_dosage,
+              med_dosage_time: data?.dalteparin_freq.substr(idx+1),
+              med_dosage_freequency: data?.dalteparin_freq.substr(idx+1),
            });
         }
-        if(data.enoxaparin) {
-           let idx = data.enoxaparin_freq.indexOf(' ');
+        if(data?.enoxaparin) {
+           let idx = data?.enoxaparin_freq.indexOf(' ');
            activeMeds.push({
-              med_name: data.enoxaparin,
-              med_dosage: data.enoxaparin_dosage,
-              med_dosage_time: data.enoxaparin_freq.substr(idx+1),
-              med_dosage_freequency: data.enoxaparin_freq.substr(idx+1),
+              med_name: data?.enoxaparin,
+              med_dosage: data?.enoxaparin_dosage,
+              med_dosage_time: data?.enoxaparin_freq.substr(idx+1),
+              med_dosage_freequency: data?.enoxaparin_freq.substr(idx+1),
            });
         }
         
-        if(data.tinzaparin) {
-           let idx = data.tinzaparin_freq.indexOf(' ');
+        if(data?.tinzaparin) {
+           let idx = data?.tinzaparin_freq.indexOf(' ');
            activeMeds.push({
-              med_name: data.tinzaparin,
-              med_dosage: data.tinzaparin_dosage,
-              med_dosage_time: data.tinzaparin_freq.substr(idx+1),
-              med_dosage_freequency: data.tinzaparin_freq.substr(idx+1),
+              med_name: data?.tinzaparin,
+              med_dosage: data?.tinzaparin_dosage,
+              med_dosage_time: data?.tinzaparin_freq.substr(idx+1),
+              med_dosage_freequency: data?.tinzaparin_freq.substr(idx+1),
            });
         }
-        if(data.pradaxa) {
-           let idx = data.pradaxa_dosage.indexOf(' ', data.pradaxa_dosage.indexOf(' ')+1);
+        if(data?.pradaxa) {
+           let idx = data?.pradaxa_dosage.indexOf(' ', data?.pradaxa_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.pradaxa,
-              med_dosage: data.pradaxa_dosage,
-              med_dosage_time: data.pradaxa_dosage.substr(idx+1),
+              med_name: data?.pradaxa,
+              med_dosage: data?.pradaxa_dosage,
+              med_dosage_time: data?.pradaxa_dosage.substr(idx+1),
               med_dosage_freequency: "am / pm",
            });
         } 
-        if(data.xarelto) {
-           let idx = data.xarelto_dosage.indexOf(' ', data.xarelto_dosage.indexOf(' ')+1);
+        if(data?.xarelto) {
+           let idx = data?.xarelto_dosage.indexOf(' ', data?.xarelto_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.xarelto,
-              med_dosage: data.xarelto_dosage,
-              med_dosage_time: data.xarelto_dosage.substr(idx+1),
-              med_dosage_freequency: data.xarelto_dosage_time
+              med_name: data?.xarelto,
+              med_dosage: data?.xarelto_dosage,
+              med_dosage_time: data?.xarelto_dosage.substr(idx+1),
+              med_dosage_freequency: data?.xarelto_dosage_time
            });
         } 
-        if(data.eliquis) {
-           let idx = data.eliquis_dosage.indexOf(' ', data.eliquis_dosage.indexOf(' ')+1);
+        if(data?.eliquis) {
+           let idx = data?.eliquis_dosage.indexOf(' ', data?.eliquis_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.eliquis,
-              med_dosage: data.eliquis_dosage,
-              med_dosage_time: data.eliquis_dosage.substr(idx+1),
-              med_dosage_freequency: data.eliquis_dosage_time
+              med_name: data?.eliquis,
+              med_dosage: data?.eliquis_dosage,
+              med_dosage_time: data?.eliquis_dosage.substr(idx+1),
+              med_dosage_freequency: data?.eliquis_dosage_time
            });
         }
-        if(data.edoxabon) {
-           let idx= data.edoxabon_dosage.indexOf(' ', data.edoxabon_dosage.indexOf(' ')+1);
+        if(data?.edoxabon) {
+           let idx= data?.edoxabon_dosage.indexOf(' ', data?.edoxabon_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.edoxabon,
-              med_dosage: data.edoxabon_dosage,
-              med_dosage_time: data.edoxabon_dosage.substr(idx+1),
-              med_dosage_freequency: data.edoxabon_dosage_time
+              med_name: data?.edoxabon,
+              med_dosage: data?.edoxabon_dosage,
+              med_dosage_time: data?.edoxabon_dosage.substr(idx+1),
+              med_dosage_freequency: data?.edoxabon_dosage_time
            });
         }
         
-        if(data.coumadin) {
+        if(data?.coumadin) {
            activeMeds.push({
-              med_name: data.coumadin,
-              med_dosage_monday: data.coumadin_monday,
-              med_dosage_tuesday: data.coumadin_tuesday,
-              med_dosage_wednesday: data.coumadin_wednesday,
-              med_dosage_thursday: data.coumadin_thursday,
-              med_dosage_friday: data.coumadin_friday,
-              med_dosage_saturday: data.coumadin_saturday,
-              med_dosage_sunday: data.coumadin_sunday
+              med_name: data?.coumadin,
+              med_dosage_monday: data?.coumadin_monday,
+              med_dosage_tuesday: data?.coumadin_tuesday,
+              med_dosage_wednesday: data?.coumadin_wednesday,
+              med_dosage_thursday: data?.coumadin_thursday,
+              med_dosage_friday: data?.coumadin_friday,
+              med_dosage_saturday: data?.coumadin_saturday,
+              med_dosage_sunday: data?.coumadin_sunday
            });
         } 
         
-        if(data.sintrom) {
+        if(data?.sintrom) {
            activeMeds.push({
-              med_name: data.sintrom,
-              med_dosage_monday: data.sintrom_monday,
-              med_dosage_tuesday: data.sintrom_tuesday,
-              med_dosage_wednesday: data.sintrom_wednesday,
-              med_dosage_thursday: data.sintrom_thursday,
-              med_dosage_friday: data.sintrom_friday,
-              med_dosage_saturday: data.sintrom_saturday,
-              med_dosage_sunday: data.sintrom_sunday
+              med_name: data?.sintrom,
+              med_dosage_monday: data?.sintrom_monday,
+              med_dosage_tuesday: data?.sintrom_tuesday,
+              med_dosage_wednesday: data?.sintrom_wednesday,
+              med_dosage_thursday: data?.sintrom_thursday,
+              med_dosage_friday: data?.sintrom_friday,
+              med_dosage_saturday: data?.sintrom_saturday,
+              med_dosage_sunday: data?.sintrom_sunday
            });
         }
         console.log(activeMeds);
@@ -149,44 +127,51 @@ class Dictation extends Component {
   
      fillactiveantiplatmeds(data) {
         let activeMeds = [];
-        if(data.effient) {
-           let idx= data.effient_dosage.indexOf(' ', data.effient_dosage.indexOf(' ')+1);
+        if(data?.effient) {
+           let idx= data?.effient_dosage.indexOf(' ', data?.effient_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.effient,
-              med_dosage: data.effient_dosage,
-              med_dosage_freequency: data.effient_dosage_time,
-              med_dosage_time: data.effient_dosage_time.substr(idx+1)
+              med_name: data?.effient,
+              med_dosage: data?.effient_dosage,
+              med_dosage_freequency: data?.effient_dosage_time,
+              med_dosage_time: data?.effient_dosage_time.substr(idx+1)
            });
         } 
-        if(data.aspirin) {
-           let idx= data.aspirin_dosage.indexOf(' ', data.aspirin_dosage.indexOf(' ')+1);
+        if(data?.aspirin) {
+           let idx= data?.aspirin_dosage.indexOf(' ', data?.aspirin_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.aspirin,
-              med_dosage: data.aspirin_dosage,
-              med_dosage_freequency: data.aspirin_dosage_time,
-              med_dosage_time: data.aspirin_dosage_time.substr(idx+1)
+              med_name: data?.aspirin,
+              med_dosage: data?.aspirin_dosage,
+              med_dosage_freequency: data?.aspirin_dosage_time,
+              med_dosage_time: data?.aspirin_dosage_time.substr(idx+1)
            });
         } 
-        if(data.plavix) {
-           let idx= data.plavix_dosage.indexOf(' ', data.plavix_dosage.indexOf(' ')+1);
+        if(data?.plavix) {
+           let idx= data?.plavix_dosage.indexOf(' ', data?.plavix_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.plavix,
-              med_dosage: data.plavix_dosage,
-              med_dosage_freequency: data.plavix_dosage_time,
-              med_dosage_time: data.plavix_dosage_time.substr(idx+1)
+              med_name: data?.plavix,
+              med_dosage: data?.plavix_dosage,
+              med_dosage_freequency: data?.plavix_dosage_time,
+              med_dosage_time: data?.plavix_dosage_time.substr(idx+1)
            });
         }
-        if(data.brillinta) {
-           let idx= data.brillinta_dosage.indexOf(' ', data.brillinta_dosage.indexOf(' ')+1);
+        if(data?.brillinta) {
+           let idx= data?.brillinta_dosage.indexOf(' ', data?.brillinta_dosage.indexOf(' ')+1);
            activeMeds.push({
-              med_name: data.brillinta,
-              med_dosage: data.brillinta_dosage,
-              med_dosage_freequency: data.brillinta_dosage_time,
-              med_dosage_time: data.brillinta_dosage_time.substr(idx+1)
+              med_name: data?.brillinta,
+              med_dosage: data?.brillinta_dosage,
+              med_dosage_freequency: data?.brillinta_dosage_time,
+              med_dosage_time: data?.brillinta_dosage_time.substr(idx+1)
            });
         }
         console.log(activeMeds);
         return activeMeds;
+    }
+    
+    handleModalShowHide() {
+        this.setState({ showHide: !this.state.showHide });
+        const data = { 'content': this.state.editorState, patient_id: localStorage.getItem('patient_id') };
+        console.log('server post data ', data, this.state);
+        server(`nurse/saveDictations/:${data?.patient_id}`, data);
     }
 
     componentDidMount() {
@@ -204,45 +189,47 @@ class Dictation extends Component {
                 .then((response) => {
                 console.log('Dictation Note - res: ', response);
                 const data = response.data?.success[0];
-                const anticoag = this.set_anticoagulation(response.data?.anticoagulation);
                 const antiCogDrugs = this.fillactiveanticogmeds(data);
+                const antiPlatDrugs = this.fillactiveantiplatmeds(data);
                 const content = `
                     <p style="font-weight: bold;">Episode information</p>
                     <br />
-                    <p>Date of visit: ${data.assessment_date}</p>
+                    <p>Date of visit: ${data?.assessment_date}</p>
                     <br />
-                    <p>Physician: ${data.physicianName}</p>
+                    <p>Physician: ${data?.physicianName}</p>
                     <br />
-                    <p>Form completed by: ${data.who_is_completing_this_form}</p>
+                    <p>Form completed by: ${data?.who_is_completing_this_form}</p>
                     <br />
-                    <p>Proposed date of procedure: ${data.date_of_procedure_patient}</p>
+                    <p>Proposed date of procedure: ${data?.date_of_procedure_patient}</p>
                     <br />
-                    <p>Proposed procedure: ${data.type_of_procedure}</p>
+                    <p>Proposed procedure: ${data?.type_of_procedure}</p>
                     <br />
-                    <p>Surgeon/interventionalist: ${data.physicianName}</p>
+                    <p>Surgeon/interventionalist: ${data?.physicianName}</p>
                     <br />
                     <p style="font-weight: bold;">Patient information</p>
                     <br />
-                    <p>Age: ${data.age}</p>
+                    <p>Age: ${data?.age}</p>
                     <br />
-                    <p>Sex: ${data.gender}</p>
+                    <p>Sex: ${data?.gender}</p>
                     <br />
-                    <p>Weight (${data.weight_unit}): ${data.weight}</p>
+                    <p>Weight (${data?.weight_unit}): ${data?.weight}</p>
                     <br />
-                    <p>Indication(s) for anticoagulation: ${anticoag}</p>
+                    <p>Indication(s) for anticoagulation: ${data?.indication_for_anticoagulation}</p>
                     <br />
-                    <p>Weight (${data.weight_unit}): ${data.weight}</p>
+                    <p>Weight (${data?.weight_unit}): ${data?.weight}</p>
                     <br />
                     <ul>
+                        Current antithrombotic therapy:
                         ${
                             antiCogDrugs.length !== 0 ? 
                             antiCogDrugs.map((drug, index) => {
                                 return (`
-                                    <p key=${index}>
+                                    <li><p key=${index}>
                                         <span>${drug.med_name}</span>
                                         ${
                                             drug.med_name.startsWith('Coumadin') ? 
                                             `
+                                                <br />
                                                 <span>Monday: </span> <span>${drug.med_dosage_monday}</span>
                                                 <br />
                                                 <span>Tuesday: </span> <span>${drug.med_dosage_tuesday}</span>
@@ -277,12 +264,87 @@ class Dictation extends Component {
                                             `<span>${drug.med_dosage}</span> 
                                             <span>${drug.med_dosage_freequency}</span>`   
                                         }
-                                    </p>`)
+                                    </p></li>`)
                             }) : ""
                         }
                     </ul>
+                    <br />
+                    <ul>
+                        <br />
+                        ${
+                            antiPlatDrugs.length !== 0 ? 
+                            antiPlatDrugs.map((drug, index) => {
+                                return (`
+                                    <li><p key=${index}>
+                                        <span>${drug.med_name}</span>
+                                        ${
+                                            `<span>${drug.med_dosage}</span> 
+                                            <span>${drug.med_dosage_freequency}</span>`   
+                                        }
+                                    </p></li>`)
+                            }) : ""
+                        }
+                    </ul>
+                    <br />
+                    <p>Bleeding risk factors: (${data?.weight_unit}): ${data?.weight}</p>
+                    <br />
+                    <p style="font-weight: bold;">Investigations</p>
+                    <br />
+                    <p>Creatinine: ${data?.poc_creat_text} - ${data?.poc_creat_date}</p>
+                    <br />
+                    <p>Estimated Creatinine clearance: ${data?.poc_creat_text} - ${data?.poc_creat_date}</p>
+                    <br />
+                    ${data?.activeVKA ? `<p>INR: ${data?.poc_inr_text} - ${data?.poc_inr_date}</p>` : ''}
+                    <br />
+                    <p style="font-weight: bold;">Preiprocedural recommendation</p>
+                    <br />
+                    <p>Warfain: 
+                        <br />
+                        <span>Last dose before procedure: </span>
+                        <br />
+                        <span>Resumption after procedure: </span>
+                    </p>
+                    <br />
+                    <p>LMWH: 
+                        <br />
+                        <span>Last dose before procedure: </span>
+                        <br />
+                        <span>Resumption after procedure: </span>
+                    </p>
+                    <br />
+                    <p>DOAC: 
+                        <br />
+                        <span>Last dose before procedure: </span>
+                        <br />
+                        <span>Resumption after procedure: </span>
+                    </p>
+                    <br />
+                    <p>Antipleteles: 
+                        <br />
+                        <span>Last dose before procedure: </span>
+                        <br />
+                        <span>Resumption after procedure: </span>
+                    </p>
+                    <br />
+                    <p>Aspirin: 
+                        <br />
+                        <span>Last dose before procedure: </span>
+                        <br />
+                        <span>Resumption after procedure: </span>
+                    </p>
+                    <br />
+                    <p style="font-weight: bold;">Patient Logistics & Understanding</p>
+                    <br />
+                    <p>
+                        The patient was contacted on [briefing date] to review their plan. The risks and benefits 
+                        of the recommendation were explained and the patient was given the opportunity to ask questions.
+                        [If on LMWH]Instructions were provided with their low molecular weight heparin. 
+                        The injections will be administered by 
+                        ${data?.administration}. 
+                        The patient [has | has not] had previous experience with self-injection.
+                    </p>
                 `;
-                if (response.data.success !== 'not_found') {
+                if (response.data?.success !== 'not_found') {
                     this.setState({ 
                         editorState: content 
                     });
@@ -293,17 +355,12 @@ class Dictation extends Component {
         }
     }
 
-    submitForm() {
-        this.props.history.push('Nurse/Nurse6');
-        // server('Nurse/saveDictations', { 'content': this.state.editorRawContent });
-    }
-
-    handleEditorChange(contentState) {
+    handleEditorChange(contentState, delta, source, editor) {
         this.setState({ 
             editorState: contentState,
-            downloadableContent: contentState?.replace(/<[^>]+>/g, '')
+            downloadableContent: editor.getText()
         });
-        console.log('RAW Content ', contentState);
+        console.log('RAW Content ', editor.getText());
     }
 
     downloadTxtFile() {
@@ -322,6 +379,43 @@ class Dictation extends Component {
 
         return (
             <>
+                <Header />
+                {this.state.loader === 1 ? (
+                <div className="centered">
+                    <ReactSpinner type="border" color="blue" size="5" />
+                </div>
+                ) : (
+                ''
+                )}
+                <Modal show={this.state.showHide}>
+                    <Modal.Body className="blue-bg">
+                        {' '}
+                        <div className="row">
+                            <div className="col-6 offset-3">
+                                <img src={Logo} alt="logo" className="img-fluid" style={{ height: 200 }} />
+                            </div>
+                        </div>{' '}
+                        <p className="white">
+                            Thank you for completing the Bridging Form, Please keep a copy of the Medication Schedule for your
+                            records.
+                        </p>
+                        <div className="row">
+                            <div className="col-6"></div>
+                            <div className="col-6">
+                                <Link to="/">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary btn-block big-btn-white"
+                                    data-dismiss="modal"
+                                    onClick={this.handleModalShowHide}
+                                >
+                                    OK
+                                </button>
+                                </Link>
+                            </div>
+                        </div>
+                    </Modal.Body>
+                </Modal>
                 <div className='container'>
                     <h4 className="text-center myHeading">Dictation Note</h4>
                     <div className='row'>
@@ -333,13 +427,13 @@ class Dictation extends Component {
                                     editorClassName="editor-class"
                                     toolbarClassName="toolbar-class"
                                 /> */}
-                                <ReactQuill theme="snow" value={editorState} onChange={this.handleEditorChange}/>
+                                <ReactQuill id='text-editor' theme="snow" value={editorState} onChange={this.handleEditorChange}/>
                             </div>
                         </div>
                     </div>
                     <div className="row" style={{ marginTop: '60px' }}>
                         <div className="col-3">
-                            <Link to="/Nurse/Nurse3" className="btn btn-outline-primary  btn-block">
+                            <Link to={{ pathName: "/Nurse/Nurse3", state: { 'lmwh_flag': false } }} className="btn btn-outline-primary  btn-block">
                                 Back
                             </Link>
                         </div>
@@ -357,8 +451,8 @@ class Dictation extends Component {
                         </div>
 
                         <div className="col-3">
-                            <button className="btn btn-outline-primary  btn-block" onClick={this.submitForm}>
-                                Next
+                            <button className="btn btn-outline-primary  btn-block" onClick={this.handleModalShowHide}>
+                                Accept
                             </button>
                         </div>
                     </div>

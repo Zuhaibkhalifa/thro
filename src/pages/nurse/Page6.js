@@ -2,12 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
-
 import axios from 'axios';
-
 import Header from './NurseHeader';
-import { Modal } from 'react-bootstrap';
-import Logo from '../../assets/img/3.png';
 import { domain } from '../../App';
 import printJS from 'print-js';
 
@@ -25,7 +21,6 @@ class Page6 extends React.Component {
       this.state = { 
          email: '', 
          loader: '', 
-         showHide: '', 
          table: '',
          patient_id: localStorage.getItem('patient_id'),
 
@@ -211,16 +206,16 @@ class Page6 extends React.Component {
          vka_chkBox: false,
          doac_chkBox: false,
          antiplatelets_chkBox: false,
+         lmwh_chkBox: false,
          aspirin_chkBox: false,
          iv_heparin_chkBox: false,
          activeVKA: '',
          activeDOAC: '',
          activeLMWH: '',
-         recom_id: ''
+         recom_id: '',
       };
-
+      this.print = this.print.bind(this);
       this.submitForm = this.submitForm.bind(this);
-      this.handleModalShowHide = this.handleModalShowHide.bind(this);
    }
 
    async componentDidMount() {
@@ -372,8 +367,6 @@ class Page6 extends React.Component {
          activeDOAC: respData.activeDOAC,
          activeLMWH: respData.activeLMWH
       });
-
-      console.log(tableData, respData);
    }
 
    setInitialState(key, value, length) {
@@ -416,11 +409,11 @@ class Page6 extends React.Component {
       }
    }
 
-   handleModalShowHide() {
-      this.setState({ showHide: !this.state.showHide });
+   submitForm() {
+      this.props.history.push({ pathname: '/Nurse/Nurse3', state: { 'is_lmwh_selected': this.state.lmwh_chkBox } });
    }
 
-   submitForm() {
+   print() {
       printJS('dataTable', 'html');
    }
 
@@ -439,36 +432,6 @@ class Page6 extends React.Component {
                ''
             )}
 
-            <Modal show={this.state.showHide}>
-               <Modal.Body className="blue-bg">
-                  {' '}
-                  <div className="row">
-                     <div className="col-6 offset-3">
-                        <img src={Logo} alt="logo" className="img-fluid" style={{ height: 200 }} />
-                     </div>
-                  </div>{' '}
-                  <p className="white">
-                     Thank you for completing the Bridging Form, Please keep a copy of the Medication Schedule for your
-                     records.
-                  </p>
-                  <div className="row">
-                     <div className="col-6"></div>
-                     <div className="col-6">
-                        <Link to="/">
-                           <button
-                              type="button"
-                              className="btn btn-secondary btn-block big-btn-white"
-                              data-dismiss="modal"
-                              onClick={this.handleModalShowHide}
-                           >
-                              OK
-                           </button>
-                        </Link>
-                     </div>
-                  </div>
-               </Modal.Body>
-            </Modal>
-
             <div className="container">
                <h2 className="text-center myHeading">Dosage Schedule</h2>
                <br />
@@ -485,38 +448,38 @@ class Page6 extends React.Component {
                                  <>
                                     <th rowSpan={2}>Lab</th>
                                     <th colSpan={2}>
-                                       {this.state.activeVKA !== '' ? this.state.activeVKA : this.state.table.headers.find(x => x['vka']).vka[0].med_name}
+                                       {this.state.activeVKA !== '' ? this.state.activeVKA : this.state.table.headers?.find(x => x['vka']).vka[0].med_name}
                                     </th>
                                  </> : <></>
                               }
                               {
                                  this.state.doac_chkBox ?
                                  <th colSpan={2}>
-                                    {this.state.activeDOAC !== '' ? this.state.activeDOAC : this.state.table.headers.find(x => x['doac']).doac[0].med_name}
+                                    {this.state.activeDOAC !== '' ? this.state.activeDOAC : this.state.table.headers?.find(x => x['doac']).doac[0].med_name}
                                  </th> : <></>
                               }
                               {
                                  this.state.antiplatelets_chkBox ?
                                  <th colSpan={2}>
-                                    {this.state.table.headers.find(x => x['antiplatelets']).antiplatelets[0].med_name}
+                                    {this.state.table.headers?.find(x => x['antiplatelets']).antiplatelets[0].med_name}
                                  </th> : <></>
                               }
                               {
                                  this.state.lmwh_chkBox ?
                                  <th colSpan={2}>
-                                    {this.state.activeLMWH !== '' ? this.state.activeLMWH : this.state.table.headers.find(x => x['lmwh']).lmwh[0].med_name}
+                                    {this.state.activeLMWH !== '' ? this.state.activeLMWH : this.state.table.headers?.find(x => x['lmwh']).lmwh[0].med_name}
                                  </th> : <></>
                               }
                               {
                                  this.state.aspirin_chkBox ?
                                  <th colSpan={2}>
-                                    {this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}
+                                    {this.state.table.headers?.find(x => x['aspirin']).aspirin[0].med_name}
                                  </th> : <></>
                               }
                               {
                                  this.state.iv_heparin_chkBox ?
                                  <th colSpan={2}>
-                                    {this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}
+                                    {this.state.table.headers?.find(x => x['iv_heparin']).iv_heparin}
                                  </th> : <></>
                               }
                            </tr>
@@ -628,19 +591,19 @@ class Page6 extends React.Component {
                   }
                   <div className="row" style={{ marginTop: '60px' }}>
                      <div className="col-4">
-                        <Link to="/Nurse/Recommendations" className="btn btn-outline-primary  btn-block">
+                        <Link to={{ pathname: "/Nurse/Nurse4", state: { 'add_new_recom': false, 'recom_id': this.state.recom_id } }} className="btn btn-outline-primary  btn-block">
                            Back
                         </Link>
                      </div>
 
                      <div className="col-4">
-                        <button onClick={this.submitForm} className="btn btn-primary btn-block">
+                        <button onClick={this.print} className="btn btn-primary btn-block">
                            Print
                         </button>
                      </div>
 
                      <div className="col-4">
-                        <button onClick={this.handleModalShowHide} className="btn btn-primary btn-block">
+                        <button onClick={this.submitForm} className="btn btn-primary btn-block">
                            Accept
                         </button>
                      </div>

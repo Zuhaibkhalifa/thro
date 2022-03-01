@@ -307,7 +307,8 @@ class Page4 extends React.Component {
          active_lmwh: '',
          active_doac: '',
          active_vka: '',
-         add_new_recom: ''
+         add_new_recom: '',
+         recom_id: ''
       };
 
       // this.submitForm = this.submitForm.bind(this);
@@ -327,7 +328,7 @@ class Page4 extends React.Component {
    componentDidMount() {
       console.log(this.props.location);
       if(this.props.location !== undefined) {
-         this.setState({ add_new_recom: this.props.location.add_new });
+         this.setState({ add_new_recom: this.props.location.add_new, recom_id: this.props.location.recommendation_id });
       }
       const headers = {
          'Content-Type': 'application/json',
@@ -337,110 +338,130 @@ class Page4 extends React.Component {
       try {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
-         this.getDatafromAlgo();
+
+         if(this.state.add_new_recom) {
+            axios
+            .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
+               headers: headers,
+            })
+            .then((response) => {
+               console.log('Nurse6 - res: ', response);
+               if (response.data?.success === 'not_found') {
+                  this.setState({ table: undefined });
+                  return;
+               }
+
+               let recm_indx = response.data?.success.findIndex(x => x.id === this.state.recom_id);
+               let data = recm_indx !== -1 ? response.data?.success[recm_indx] : response.data?.success[0];
+               console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx]);
+               this.setState({ loader: '' });
+               this.getDataApiAlgo(JSON.parse(data?.jsonTable), data);
+            });
+         } else { this.getDatafromAlgo() }
+            
          axios
          .get(domain + `/api/nurse/page5LoadData/:${patient_id}`, {
             // originally was page5LoadData
             headers: headers,
          }).then((response) => {
             console.log(response);
-            let data = response.data.success[0];
+            let data = response.data?.success[0];
             this.setState({
-               referred_by: data.physicianName,
-               age: data.age,
-               procedure: data.type_of_procedure,
-               date_of_procedure: data.date_of_procedure,
-               sex: data.gender,
-               weight: data.weight,
-               understanding: data.understanding,
-               completed_by: data.who_is_completing_this_form,
-               reviewed_by: data.reviewed_by,
-               genderSelected: data.gender,
-               indication_for_anticoagulation: data.indication_for_anticoagulation,
-               chads_score_and_distribution: data.chads_score_and_distribution,
+               referred_by: data?.physicianName,
+               age: data?.age,
+               procedure: data?.type_of_procedure,
+               date_of_procedure: data?.date_of_procedure,
+               sex: data?.gender,
+               weight: data?.weight,
+               understanding: data?.understanding,
+               completed_by: data?.who_is_completing_this_form,
+               reviewed_by: data?.reviewed_by,
+               genderSelected: data?.gender,
+               indication_for_anticoagulation: data?.indication_for_anticoagulation,
+               chads_score_and_distribution: data?.chads_score_and_distribution,
 
-               poc_creat_text: data.poc_creat_text,
-               poc_creat_date: data.poc_creat_date,
-               hb_text: data.hb_text,
-               hb_date: data.hb_date,
-               plt_text: data.plt_text,
-               plt_date: data.plt_date,
-               poc_inr_text: data.poc_inr_text,
-               poc_inr_date: data.poc_inr_date,
-               dictation: data.dictation,
+               poc_creat_text: data?.poc_creat_text,
+               poc_creat_date: data?.poc_creat_date,
+               hb_text: data?.hb_text,
+               hb_date: data?.hb_date,
+               plt_text: data?.plt_text,
+               plt_date: data?.plt_date,
+               poc_inr_text: data?.poc_inr_text,
+               poc_inr_date: data?.poc_inr_date,
+               dictation: data?.dictation,
 
-               details_on_recomemendation: data.details_on_recomemendation,
+               details_on_recomemendation: data?.details_on_recomemendation,
 
-               weightSelected: data.weight_unit,
-               dalteparin: data.dalteparin,
-               dalteparin_dosage: data.dalteparin_dosage,
-               dalteparin_freq: data.dalteparin_freq,
-               enoxaparin: data.enoxaparin,
-               enoxaparin_dosage: data.enoxaparin_dosage,
-               enoxaparin_freq: data.enoxaparin_freq,
-               tinzaparin: data.tinzaparin,
-               tinzaparin_dosage: data.tinzaparin_dosage,
-               tinzaparin_freq: data.tinzaparin_freq,
-               aspirin: data.aspirin,
-               aspirin_dosage: data.aspirin_dosage,
-               aspirin_dosage_time: data.aspirin_dosage_time,
-               plavix: data.plavix,
-               plavix_dosage: data.plavix_dosage,
-               plavix_dosage_time: data.plavix_dosage_time,
-               brillinta: data.brillinta,
-               brillinta_dosage: data.brillinta_dosage,
-               brillinta_dosage_time: data.brillinta_dosage_timie,
-               effient: data.effient,
-               effient_dosage: data.effient_dosage,
-               effient_dosage_time: data.effient_dosage_time,
-               not_using_drugs: data.not_using_drugs,
-               ulcer_in_stomach_or_bowel_last_three_months: data.ulcer_in_stomach_or_bowel_last_three_months,
-               had_transfusion_in_last_three_months_when: data.had_transfusion_in_last_three_months_when,
-               had_transfusion_in_last_three_months: data.had_transfusion_in_last_three_months,
+               weightSelected: data?.weight_unit,
+               dalteparin: data?.dalteparin,
+               dalteparin_dosage: data?.dalteparin_dosage,
+               dalteparin_freq: data?.dalteparin_freq,
+               enoxaparin: data?.enoxaparin,
+               enoxaparin_dosage: data?.enoxaparin_dosage,
+               enoxaparin_freq: data?.enoxaparin_freq,
+               tinzaparin: data?.tinzaparin,
+               tinzaparin_dosage: data?.tinzaparin_dosage,
+               tinzaparin_freq: data?.tinzaparin_freq,
+               aspirin: data?.aspirin,
+               aspirin_dosage: data?.aspirin_dosage,
+               aspirin_dosage_time: data?.aspirin_dosage_time,
+               plavix: data?.plavix,
+               plavix_dosage: data?.plavix_dosage,
+               plavix_dosage_time: data?.plavix_dosage_time,
+               brillinta: data?.brillinta,
+               brillinta_dosage: data?.brillinta_dosage,
+               brillinta_dosage_time: data?.brillinta_dosage_timie,
+               effient: data?.effient,
+               effient_dosage: data?.effient_dosage,
+               effient_dosage_time: data?.effient_dosage_time,
+               not_using_drugs: data?.not_using_drugs,
+               ulcer_in_stomach_or_bowel_last_three_months: data?.ulcer_in_stomach_or_bowel_last_three_months,
+               had_transfusion_in_last_three_months_when: data?.had_transfusion_in_last_three_months_when,
+               had_transfusion_in_last_three_months: data?.had_transfusion_in_last_three_months,
 
-               liver_disease: data.liver_disease,
-               lab_location_for_inr_test: data.lab_location_for_inr_test,
+               liver_disease: data?.liver_disease,
+               lab_location_for_inr_test: data?.lab_location_for_inr_test,
 
-               pradaxa: data.pradaxa,
-               pradaxa_dosage: data.pradaxa_dosage,
-               xarelto: data.xarelto,
-               xarelto_dosage: data.xarelto_dosage,
-               xarelto_dosage_time: data.xarelto_dosage_time,
-               eliquis: data.eliquis,
-               eliquis_dosage: data.eliquis_dosage,
-               eliquis_dosage_time: data.eliquis_dosage_time,
-               edoxabon: data.edoxabon,
-               edoxabon_dosage: data.edoxabon_dosage,
-               edoxabon_dosage_time: data.edoxabon_dosage_time,
-               coumadin: data.coumadin,
-               coumadin_monday: data.coumadin_monday,
-               coumadin_tuesday: data.coumadin_tuesday,
-               coumadin_wednesday: data.coumadin_wednesday,
-               coumadin_thursday: data.coumadin_thursday,
-               coumadin_friday: data.coumadin_friday,
-               coumadin_saturday: data.coumadin_saturday,
-               coumadin_sunday: data.coumadin_sunday,
-               sintrom: data.sintrom,
-               sintrom_monday: data.sintrom_monday,
-               sintrom_tuesday: data.sintrom_tuesday,
-               sintrom_wednesday: data.sintrom_wednesday,
-               sintrom_thursday: data.sintrom_thursday,
-               sintrom_friday: data.sintrom_friday,
-               sintrom_saturday: data.sintrom_saturday,
-               sintrom_sunday: data.sintrom_sunday,
+               pradaxa: data?.pradaxa,
+               pradaxa_dosage: data?.pradaxa_dosage,
+               xarelto: data?.xarelto,
+               xarelto_dosage: data?.xarelto_dosage,
+               xarelto_dosage_time: data?.xarelto_dosage_time,
+               eliquis: data?.eliquis,
+               eliquis_dosage: data?.eliquis_dosage,
+               eliquis_dosage_time: data?.eliquis_dosage_time,
+               edoxabon: data?.edoxabon,
+               edoxabon_dosage: data?.edoxabon_dosage,
+               edoxabon_dosage_time: data?.edoxabon_dosage_time,
+               coumadin: data?.coumadin,
+               coumadin_monday: data?.coumadin_monday,
+               coumadin_tuesday: data?.coumadin_tuesday,
+               coumadin_wednesday: data?.coumadin_wednesday,
+               coumadin_thursday: data?.coumadin_thursday,
+               coumadin_friday: data?.coumadin_friday,
+               coumadin_saturday: data?.coumadin_saturday,
+               coumadin_sunday: data?.coumadin_sunday,
+               sintrom: data?.sintrom,
+               sintrom_monday: data?.sintrom_monday,
+               sintrom_tuesday: data?.sintrom_tuesday,
+               sintrom_wednesday: data?.sintrom_wednesday,
+               sintrom_thursday: data?.sintrom_thursday,
+               sintrom_friday: data?.sintrom_friday,
+               sintrom_saturday: data?.sintrom_saturday,
+               sintrom_sunday: data?.sintrom_sunday,
 
-               ulcer_in_stomach_or_bowel: data.ulcer_in_stomach_or_bowel,
-               cognitive_heart_failure: data.cognitive_heart_failure,
-               high_blood_pressure: data.high_blood_pressure,
-               diabetes: data.diabetes,
-               stroke_or_mini_stroke: data.stroke_or_mini_stroke,
-               bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months
+               ulcer_in_stomach_or_bowel: data?.ulcer_in_stomach_or_bowel,
+               cognitive_heart_failure: data?.cognitive_heart_failure,
+               high_blood_pressure: data?.high_blood_pressure,
+               diabetes: data?.diabetes,
+               stroke_or_mini_stroke: data?.stroke_or_mini_stroke,
+               bleeding_requiring_treatment_last_three_months: data?.bleeding_requiring_treatment_last_three_months
             });
             this.forceUpdate();
             this.fillactiveanticogmeds();
             this.fillactiveantiplatmeds();
             this.set_DynamicFlags();
-            this.set_anticoagulation(response.data.success.anticoagulation);
+            this.set_anticoagulation(response.data?.success.anticoagulation);
             this.set_CHADS_score();
          });
          this.setState({ loader: '' });
@@ -598,9 +619,9 @@ class Page4 extends React.Component {
          activeLMWH: this.state.active_lmwh
       };
       // console.log(data, table, tableData);
-      server(`nurse/medicationJsonData/:${data.patient_id}`, data);
-      server(`nurse/saveRecommendations/:${data.patient_id}`, data);
-      this.props.history.push({ pathname: '/Nurse/Nurse3', state: { 'is_lmwh_selected': this.state.lmwh_chkBox } });
+      server(`nurse/medicationJsonData/:${data?.patient_id}`, data);
+      server(`nurse/saveRecommendations/:${data?.patient_id}`, data);
+      this.props.history.push({ pathname: '/Nurse/Nurse6', state: { 'is_lmwh_selected': this.state.lmwh_chkBox, 'recom_id': this.state.recom_id } });
    }
 
    handleSaveDraft(tableData) {
@@ -623,9 +644,9 @@ class Page4 extends React.Component {
          activeLMWH: this.state.active_lmwh
       };
       console.log('>>> JSON data: ', data);
-      server(`nurse/medicationJsonData/:${data.patient_id}`, data);
-      server(`nurse/saveRecommendations/:${data.patient_id}`, data);
-      this.props.history.push({ pathname: '/Nurse/Nurse3', state: { 'is_lmwh_selected': this.state.lmwh_chkBox } });
+      server(`nurse/medicationJsonData/:${data?.patient_id}`, data);
+      server(`nurse/saveRecommendations/:${data?.patient_id}`, data);
+      this.props.history.push({ pathname: '/Nurse/Nurse6', state: { 'is_lmwh_selected': this.state.lmwh_chkBox, 'recom_id': this.state.recom_id } });
    }
 
    fillactiveanticogmeds() {
@@ -980,8 +1001,8 @@ class Page4 extends React.Component {
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
       let tableHeader = [];
       if(tableData.vka !== undefined) {
-         let keyIdx = tableData.vka.data.findIndex(x => x.d6);
-         let keyIdx1 = tableData.vka.data.findIndex(x => x.warfain !== '0');
+         let keyIdx = tableData.vka.data?.findIndex(x => x.d6);
+         let keyIdx1 = tableData.vka.data?.findIndex(x => x.warfain !== '0');
          let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          tableHeader.push({ 'vka': tableData.vka.header });
@@ -994,15 +1015,15 @@ class Page4 extends React.Component {
                [keyId]: tableData.vka.data[keyIdx].lab,
                [keyId1]: tableData.vka.data[keyIdx1].warfain
             });
-            // this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data.length);
+            // this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data?.length);
             this.setVKAVal(tableData, tableData.vka.data[keyIdx1].warfain);
-            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data.length);
-            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data.length);
+            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data?.length);
+            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data?.length);
          }
       }
 
       if(tableData.lmwh !== undefined) {
-         let keyIdx1 = tableData.lmwh.data.findIndex(x => x.dosage);
+         let keyIdx1 = tableData.lmwh.data?.findIndex(x => x.dosage);
          let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
          tableHeader.push({ 'lmwh': tableData.lmwh.header });
          table_data.lmwh = tableData.lmwh.data;
@@ -1012,8 +1033,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0] 
                });
-               this.setInitialState('InptValLmwh', tableData.lmwh.data[keyIdx1].dosage.split(' ')[0], tableData.lmwh.data.length);
-               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.data.length);
+               this.setInitialState('InptValLmwh', tableData.lmwh.data[keyIdx1].dosage.split(' ')[0], tableData.lmwh.data?.length);
+               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.data?.length);
             }
          }
       }
@@ -1022,7 +1043,7 @@ class Page4 extends React.Component {
          
          let dataKey = Object.keys(tableData.doac);
          for(let datKey in dataKey) {
-            let keyIdx1 = tableData.doac[dataKey[datKey]].data.findIndex(x => x.dosage);
+            let keyIdx1 = tableData.doac[dataKey[datKey]].data?.findIndex(x => x.dosage);
             let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
             tableHeader.push({ 'doac': tableData.doac[dataKey[datKey]].header });
             if(keyId1 !== '') {
@@ -1032,15 +1053,15 @@ class Page4 extends React.Component {
                   this.setState({
                      [keyId1]: tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0] 
                   });
-                  this.setInitialState('InptValDoac', tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0], tableData.doac[dataKey[datKey]].data.length);
-                  this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac[dataKey[datKey]].data.length);
+                  this.setInitialState('InptValDoac', tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0], tableData.doac[dataKey[datKey]].data?.length);
+                  this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac[dataKey[datKey]].data?.length);
                }
             }
          }
       }
 
       if(tableData.antiplatelets !== undefined) {
-         let keyIdx1 = tableData.antiplatelets.data.findIndex(x => x.antiplatelets);
+         let keyIdx1 = tableData.antiplatelets.data?.findIndex(x => x.antiplatelets);
          let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
          tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header });
          table_data.antiplatelets = tableData.antiplatelets.data;
@@ -1049,14 +1070,14 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0] 
                });
-               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.data.length);
-               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.data.length);
+               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.data?.length);
+               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.data?.length);
             }
          }
       }
 
       if(tableData.aspirin !== undefined) {
-         let keyIdx1 = tableData.aspirin.data.findIndex(x => x.aspirin);
+         let keyIdx1 = tableData.aspirin.data?.findIndex(x => x.aspirin);
          let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
          tableHeader.push({ 'aspirin': tableData.aspirin.header });
          table_data.aspirin = tableData.aspirin.data;
@@ -1065,8 +1086,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0] 
                });
-               this.setInitialState('InptValAspirin', tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.data.length);
-               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.data.length);
+               this.setInitialState('InptValAspirin', tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.data?.length);
+               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.data?.length);
             }
          }
       }
@@ -1104,7 +1125,7 @@ class Page4 extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
       };
       // console.log('>>> JSON data: ', data);
-      server(`nurse/medicationJsonData/:${data.patient_id}`, data);
+      server(`nurse/medicationJsonData/:${data?.patient_id}`, data);
    }
 
    onDateChange(e) {

@@ -1,13 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
-
 import axios from 'axios';
-
 import Header from './NurseHeader';
-import { Modal } from 'react-bootstrap';
-import Logo from '../../assets/img/3.png';
 import { domain } from '../../App';
 
 //
@@ -217,8 +212,6 @@ class ModifyRecommendations extends React.Component {
          activeLMWH: '',
          recom_id: ''
       };
-
-      this.handleModalShowHide = this.handleModalShowHide.bind(this);
    }
 
    async componentDidMount() {
@@ -395,10 +388,6 @@ class ModifyRecommendations extends React.Component {
       }
    }
 
-   handleModalShowHide() {
-      this.setState({ showHide: !this.state.showHide });
-   }
-
    //
 
    render() {
@@ -413,37 +402,6 @@ class ModifyRecommendations extends React.Component {
             ) : (
                ''
             )}
-
-            <Modal show={this.state.showHide}>
-               <Modal.Body className="blue-bg">
-                  {' '}
-                  <div className="row">
-                     <div className="col-6 offset-3">
-                        <img src={Logo} alt="logo" className="img-fluid" style={{ height: 200 }} />
-                     </div>
-                  </div>{' '}
-                  <p className="white">
-                     Thank you for completing the Bridging Form, Please keep a copy of the Medication Schedule for your
-                     records.
-                  </p>
-                  <div className="row">
-                     <div className="col-6"></div>
-                     <div className="col-6">
-                        <Link to="/">
-                           <button
-                              type="button"
-                              className="btn btn-secondary btn-block big-btn-white"
-                              data-dismiss="modal"
-                              onClick={this.handleModalShowHide}
-                           >
-                              OK
-                           </button>
-                        </Link>
-                     </div>
-                  </div>
-               </Modal.Body>
-            </Modal>
-
             <div className="container">
                <h2 className="text-center myHeading">Dosage Schedule</h2>
                <br />
@@ -599,25 +557,6 @@ class ModifyRecommendations extends React.Component {
                         </table>
                      </> : ""
                   }
-                  <div className="row" style={{ marginTop: '60px' }}>
-                     <div className="col-4">
-                        <Link to="/Nurse/Recommendations" className="btn btn-outline-primary  btn-block">
-                           Back
-                        </Link>
-                     </div>
-
-                     <div className="col-4">
-                        <Link to="/Nurse/Nurse4" className="btn btn-outline-info  btn-block">
-                           Modify
-                        </Link>
-                     </div>
-
-                     <div className="col-4">
-                        <button onClick={this.handleModalShowHide} className="btn btn-primary btn-block">
-                           Accept
-                        </button>
-                     </div>
-                  </div>
                </div>
                <br />
             </div>

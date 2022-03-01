@@ -39,7 +39,7 @@ class Recommendations extends Component {
                 console.log('Recommendations - Response: ');
                 this.setState({
                     recommendations: data,
-                    link: '/Nurse/modify-recommendation',
+                    link: '/Nurse/Nurse4',
                     loader: ''
                 });
             });
@@ -86,31 +86,12 @@ class Recommendations extends Component {
                                         <td>{ele.last_modified}</td>
                                         <td>{ele.approved_by}</td>
                                         <td>{ele.status}</td>
-                                        <td><Link to={{ pathname: this.state.link, state: { 'recommendation_id': ele.id } }}>{this.state.link}</Link></td>
+                                        <td><Link to={{ pathname: this.state.link, state: { 'recommendation_id': ele.id, 'add_new': true } }}>{this.state.link}</Link></td>
                                     </tr>
                                 )
                             }) : ""
                         }
                     </table>
-                    <div className="row" style={{ marginTop: '60px' }}>
-                     <div className="col-4">
-                        <Link to="/Nurse/Nurse1" className="btn btn-outline-primary  btn-block">
-                           Back
-                        </Link>
-                     </div>
-
-                     <div className="col-4">
-                        <Link to="/Nurse/Nurse3" className="btn btn-outline-primary  btn-block">
-                           Next
-                        </Link>
-                    </div>
-
-                     <div className="col-4">
-                        <Link to={{ pathname: '/Nurse/Nurse4', state: { 'add_new': true } }} className="btn btn-outline-primary  btn-block">
-                           Add New
-                        </Link>
-                     </div>
-                  </div>
                 </div>
             </>
         );

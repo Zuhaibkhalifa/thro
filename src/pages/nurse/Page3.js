@@ -274,7 +274,7 @@ class Page5 extends React.Component {
                         <br /> <br />
                         <div className="row">
                             <div className="col-4">
-                                <Link to="/Nurse/Recommendations" className="btn btn-outline-primary  btn-block">
+                                <Link to={{ pathname: "/Nurse/Nurse6", state: { 'recom_id': '', 'lmwh_chkBox': false } }} className="btn btn-outline-primary  btn-block">
                                     Back
                                 </Link>
                             </div>
