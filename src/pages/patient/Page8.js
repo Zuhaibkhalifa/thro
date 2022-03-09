@@ -104,7 +104,7 @@ class Page8 extends React.Component {
       }
    }
 
-   submitForm() {
+   async submitForm() {
       console.log('Patient 8 - submit');
       if (!$("input[name='optradio']:checked").val()) {
          this.setState({ error1: 'This field is required!, Please select any one of the above options' });
@@ -200,8 +200,9 @@ class Page8 extends React.Component {
          console.log(this.state);
          
          if(this.state.redirectButton) {
-            this.props.history.push('/Nurse/Nurse1');
-            this.page8(this.state);
+            const res = await this.page8(this.state);
+            if(res) this.props.history.push('/Nurse/Nurse1');
+            else alert('something went wrong! please try again!');            
          } else {
             this.page8(this.state);
             this.dynamicRouting();
@@ -220,7 +221,7 @@ class Page8 extends React.Component {
       }
    }
 
-   page8() {
+   async page8() {
       let param = {};
       if (document.getElementById('pradaxa_rdo').checked === true) {
          param = {
@@ -252,8 +253,10 @@ class Page8 extends React.Component {
       }
 
       console.log('Patient 8 - page8 - param: ', param);
-      server('patient/page8', param);
+      const response = await server('patient/page8', param);
       // this.props.history.push('');
+      console.log(response);
+      return response;
    }
 
    

@@ -48,7 +48,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
       if (indicators.surgeryBleedingRisk === 0) {
          if(_algodata.doac.length !== 0 ) {
-            let meds = _algodata.doac?.find(x => x.med_name !== "");
+            let meds = _algodata.doac?.find(x => x.med_dosage !== "");
             if(meds !== undefined) {
                indicators.surgeryBleedingRisk = 2;
             } else {
@@ -76,7 +76,8 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function lmwhCases(meds, indicators) {
       let med_data = meds.findIndex(x => x.med_name !== "");
-      console.log('no data found', med_data);
+      let medIndx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
+      console.log('lmwh index', med_data);
       if(med_data !== -1) {
          let medData = [];
          meds.forEach(med => {
@@ -84,13 +85,19 @@ export default async function thromboMedicationAlgo(__indicators) {
                'med_name': med.med_name
             });
          });
-         if(meds[med_data].med_dosage.toLowerCase() === ('once daily').toLowerCase()) {
-            return LMWH_twice(meds[med_data], indicators, medData);
-         } else if(meds[med_data].med_dosage.toLowerCase() === ('twice daily').toLowerCase()) {
-            return LMWH_once(meds[med_data], indicators, medData);
+         let tempArry = [...medData];
+         let tempItem = tempArry.splice(medIndx, 1)[0];
+         tempArry.splice(0, 0, tempItem);
+         console.log('>> lmwh data', meds[med_data].med_dosage_time.toLowerCase(), meds, med_data, tempArry);
+         if(meds[med_data].med_dosage_time.toLowerCase() === ('once daily').toLowerCase()) {
+            console.log('>> lmwh once');
+            return LMWH_once(meds[med_data], indicators, tempArry);
+         } else if(meds[med_data].med_dosage_time.toLowerCase() === ('twice daily').toLowerCase()) {
+            console.log('>> lmwh twice');
+            return LMWH_twice(meds[med_data], indicators, tempArry);
          } else {
             let table = {
-               header: medData,
+               header: tempArry,
                data: [
                   { 'dosage': meds[med_data].med_dosage, lmwh: 'Am Pm' },
                   { 'dosage': meds[med_data].med_dosage, lmwh: 'Am Pm' },
@@ -115,6 +122,7 @@ export default async function thromboMedicationAlgo(__indicators) {
    function doacCases(meds, indicators) {
       let data = {};
       let medIndx = meds.findIndex(x => x.med_name !== "");
+      let medIdx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
       
       if(medIndx !== -1) {
          let medData = [];
@@ -125,20 +133,23 @@ export default async function thromboMedicationAlgo(__indicators) {
                });
             }
          });
+         let tempArry = [...medData];
+         let tempItem = tempArry.splice(medIdx, 1)[0];
+         tempArry.splice(0, 0, tempItem);
          if(meds[medIndx].med_name === "Pradaxa (Dabigatran)") {
-            data['dabigatran'] = Dabigatran(meds[medIndx], indicators, medData);
+            data['dabigatran'] = Dabigatran(meds[medIndx], indicators, tempArry);
          } else if(meds[medIndx].med_name === "Eliquis (Apixaban)") {
-            data['apixaban'] = Apixaban(meds[medIndx], indicators, medData);
+            data['apixaban'] = Apixaban(meds[medIndx], indicators, tempArry);
          } else if(meds[medIndx].med_name === "Xarelto (Rivaroxaban)") {
             if(meds[medIndx].med_dosage_time.toLowerCase() === ('once daily').toLowerCase() && (meds[medIndx].med_dosage === '15' || meds[medIndx].med_dosage === '20')) {
-               data['rivaroxaban'] = Rivaroxaban_20_or_15_once(meds[medIndx], indicators, medData);
+               data['rivaroxaban'] = Rivaroxaban_20_or_15_once(meds[medIndx], indicators, tempArry);
             } else if(meds[medIndx].med_dosage_time.toLowerCase() === ('once daily').toLowerCase() && meds[medIndx].med_dosage === '10') {
-               data['rivaroxaban'] = Rivaroxaban_10_once(meds[medIndx], indicators, medData);
+               data['rivaroxaban'] = Rivaroxaban_10_once(meds[medIndx], indicators, tempArry);
             } else if(meds[medIndx].med_dosage_time.toLowerCase() === ('twice daily').toLowerCase() && meds[medIndx].med_dosage === '15') {
-               data['rivaroxaban'] = Rivaroxaban_15_twice(meds[medIndx], indicators, medData);
+               data['rivaroxaban'] = Rivaroxaban_15_twice(meds[medIndx], indicators, tempArry);
             }
          } else if(meds[medIndx].med_name === "Edoxabon (Lixiana)") {
-            data['edoxaban'] = Edoxaban(meds[medIndx], indicators, medData);
+            data['edoxaban'] = Edoxaban(meds[medIndx], indicators, tempArry);
          }
       }
       
@@ -154,7 +165,7 @@ export default async function thromboMedicationAlgo(__indicators) {
 
    function mapToVKACases(meds, indicators, date_of_procedure) {
       const procedure_day = getDayOfProcedure(date_of_procedure);
-      let medIndx = meds.findIndex(x => x.med_dosage !== '');
+      let medIndx = meds.findIndex(x => x.med_name !== '');
       let med_data = medIndx !== -1 ? meds[medIndx] : '';
       let dataKey = med_data?.med_name.toLowerCase().split(' ')[0]+'_'+procedure_day;
       console.log('date :', date_of_procedure, 'day :', procedure_day, 'dataKey :', dataKey, 'med_data :', med_data);
@@ -319,7 +330,7 @@ export default async function thromboMedicationAlgo(__indicators) {
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {};
       if(med_data !== undefined) {
-         let med_Indx = meds.findIndex(x => x.med_name !== "");
+         let med_Indx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
          let data = [
             { aspirin: meds[med_Indx].med_dosage, lab: '' },
             { aspirin: meds[med_Indx].med_dosage, lab: '' },
@@ -469,6 +480,7 @@ export default async function thromboMedicationAlgo(__indicators) {
          meds.splice(medAspIndx, 1);
       }
       let med_data = meds.find(x => x.med_name !== "");
+      let medIdx = meds.find(x => x.med_dosage !== "") !== -1 ? meds.find(x => x.med_dosage !== "") : 0;
       const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
       let table = {};
       if(med_data !== undefined) {
@@ -478,7 +490,10 @@ export default async function thromboMedicationAlgo(__indicators) {
                'med_name': med.med_name
             });
          });
-         let med_Indx = meds.findIndex(x => x.med_name !== "");
+         let tempArry = [...medData];
+         let tempItem = tempArry.splice(medIdx, 1)[0];
+         tempArry.splice(0, 0, tempItem);
+         let med_Indx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
          let data = [
             { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
             { antiplatelets: meds[med_Indx].med_dosage, lab: '' },
@@ -494,7 +509,7 @@ export default async function thromboMedicationAlgo(__indicators) {
             { d6: 'First weekday after D5', lab: 'Goto Lab for INR test' },
          ];
 
-         table['header'] = medData;
+         table['header'] = tempArry;
          table['data'] = data;
       }
 

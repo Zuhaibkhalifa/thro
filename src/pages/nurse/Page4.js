@@ -339,7 +339,7 @@ class Page4 extends React.Component {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
 
-         if(this.state.add_new_recom) {
+         if(this.state.add_new_recom === false) {
             axios
             .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
                headers: headers,
@@ -593,6 +593,11 @@ class Page4 extends React.Component {
    }
 
    handleSaveNApprove(tableData) {
+      if(!this.validator.allValid()) {
+         this.validator.showMessages();
+         this.forceUpdate();
+         return;
+      }
       
       if (this.state.table === 'none') return;
       // const { table } = this.state;
@@ -625,6 +630,11 @@ class Page4 extends React.Component {
    }
 
    handleSaveDraft(tableData) {
+      if(!this.validator.allValid()) {
+         this.validator.showMessages();
+         this.forceUpdate();
+         return;
+      }
       if (this.state.table === 'none') return;
 
       const data = {
@@ -997,7 +1007,7 @@ class Page4 extends React.Component {
       console.log('> Nurse Page 4 => data: ', this.state.date_of_procedure);
       const inidcators = await thromboAlgos();
       const tableData = await thromboMedicationAlgo(inidcators, this.state.date_of_procedure);
-      console.log('> Nurse Page 4 => tableData: ', tableData);
+      console.log('> Nurse Page 4 => tableData: ', tableData, tableData.lmwh !== undefined, tableData.lmwh);
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
       let tableHeader = [];
       if(tableData.vka !== undefined) {
@@ -1023,7 +1033,7 @@ class Page4 extends React.Component {
       }
 
       if(tableData.lmwh !== undefined) {
-         let keyIdx1 = tableData.lmwh.data?.findIndex(x => x.dosage);
+         let keyIdx1 = tableData.lmwh.data?.findIndex(x => x.dosage !== '');
          let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
          tableHeader.push({ 'lmwh': tableData.lmwh.header });
          table_data.lmwh = tableData.lmwh.data;
@@ -1102,11 +1112,11 @@ class Page4 extends React.Component {
       table_data.date[5].d_0 = this.state.date_of_procedure;
       this.setState({ 
          table: table_data, 
-         vka_chkBox: tableData.vka.data[7].warfain !== '' ? true: false,
-         lmwh_chkBox: tableData.lmwh.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]].data[0].dosage !== '' ? true : false,
-         antiplatelets_chkBox: tableData.antiplatelets.data[0].antiplatelets !== '' ? true : false,
-         aspirin_chkBox: tableData.aspirin.data[0].aspirin !== '' ? true : false,
+         vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
+         lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
+         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]]?.data[0].dosage !== '' ? true : false,
+         antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
+         aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false
       });
 
@@ -1604,8 +1614,10 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValVka${vkaKey+1}`} type="text" value={this.state[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValVka${vkaKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValVka${vkaKey+1}`)} className='form-control'>
-                                                         <option value={'twice daily'}>twice daily</option>
-                                                         <option value={'once daily'}>once daily</option>
+                                                         <option value={'do not take'}>do not take</option>
+                                                         <option value={'evening'}>evening</option>
+                                                         <option value={'morning'}>morning</option>
+                                                         <option value={'morning and evening'}>morning and evening</option>
                                                       </select>
                                                    </td>
                                                 </> 
@@ -1616,8 +1628,11 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValDoac${doacKey+1}`} type="number" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
-                                                         <option value={'twice daily'}>twice daily</option>
-                                                         <option value={'once daily'}>once daily</option>
+                                                         <option value={'do not take'}>do not take</option>
+                                                         <option value={'evening'}>evening</option>
+                                                         <option value={'morning'}>morning</option>
+                                                         <option value={'morning and evening'}>morning and evening</option>
+                                                         
                                                       </select>
                                                    </td>
                                                 </> : <></>
@@ -1627,8 +1642,11 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="number" value={this.state[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAntiplatelets${antiplateletKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAntiplatelets${antiplateletKey+1}`)} className='form-control'>
-                                                         <option value={'twice daily'}>twice daily</option>
-                                                         <option value={'once daily'}>once daily</option>
+                                                         <option value={'do not take'}>do not take</option>
+                                                         <option value={'evening'}>evening</option>
+                                                         <option value={'morning'}>morning</option>
+                                                         <option value={'morning and evening'}>morning and evening</option>
+                                                         
                                                       </select>
                                                    </td>
                                                 </> : <></>
@@ -1638,8 +1656,11 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValLmh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmh${lmwhKey+1}`)} className='form-control'>
-                                                         <option value={'twice daily'}>twice daily</option>
-                                                         <option value={'once daily'}>once daily</option>
+                                                         <option value={'do not take'}>do not take</option>
+                                                         <option value={'evening'}>evening</option>
+                                                         <option value={'morning'}>morning</option>
+                                                         <option value={'morning and evening'}>morning and evening</option>
+                                                         
                                                       </select>
                                                    </td>
                                                 </> : <></>
@@ -1649,8 +1670,11 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValAspirin${aspirinKey+1}`} type="number" value={this.state[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAspirin${aspirinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAspirin${aspirinKey+1}`)} className='form-control'>
-                                                         <option value={'twice daily'}>twice daily</option>
-                                                         <option value={'once daily'}>once daily</option>
+                                                         <option value={'do not take'}>do not take</option>
+                                                         <option value={'evening'}>evening</option>
+                                                         <option value={'morning'}>morning</option>
+                                                         <option value={'morning and evening'}>morning and evening</option>
+                                                         
                                                       </select>
                                                    </td>
                                                 </> : <></>
@@ -1660,8 +1684,11 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="number" value={this.state[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValIvHeparin${ivHeparinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
-                                                         <option value={'twice daily'}>twice daily</option>
-                                                         <option value={'once daily'}>once daily</option>
+                                                         <option value={'do not take'}>do not take</option>
+                                                         <option value={'evening'}>evening</option>
+                                                         <option value={'morning'}>morning</option>
+                                                         <option value={'morning and evening'}>morning and evening</option>
+                                                         
                                                       </select>
                                                    </td>
                                                 </> : <></>
@@ -1706,6 +1733,7 @@ class Page4 extends React.Component {
                            <div className='form-group'>
                               <label htmlFor='approvedBy'>Approved By</label>
                               <input type='text' className='form-control' value={this.state.approved_by} onChange={(e) => this.handleApprovedBy(e)} />
+                              {this.validator.message('This field is required', this.state.approved_by, 'required')}
                            </div>
                         </div>
                      </div>

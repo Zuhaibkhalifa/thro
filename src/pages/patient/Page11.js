@@ -145,7 +145,7 @@ class Page11 extends React.Component {
     }
 
     //
-    submitForm() {
+    async submitForm() {
         if (this.validate()) {
             console.log('Patient page 11 - submit - state: ', this.state);
             if(this.props.location.state !== undefined) {
@@ -160,11 +160,13 @@ class Page11 extends React.Component {
             }
         } else if(this.state.q5 === "Yes") {
             if(this.props.location.state !== undefined) {
-                this.page11();
-                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
+                const resp = await this.page11();
+                if(resp) this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
+                else alert('Something went wrong. Please try again.');
             } else if(this.state.redirectButton) {
-                this.page11();
-                this.props.history.push('/Nurse/Nurse1');
+                const resp = await this.page11();
+                if(resp) this.props.history.push('/Nurse/Nurse1');
+                else alert('Something went wrong. Please try again.');
             } else {
                 this.page11();
                 this.props.history.push('/User/Page12');
@@ -174,7 +176,7 @@ class Page11 extends React.Component {
         }
     }
 
-    page11() {
+    async page11() {
         const state = this.state;
         let param = {};
         param.patient_id = this.state.patient_id;
@@ -206,7 +208,8 @@ class Page11 extends React.Component {
         }
 
         console.log('Patient page 11 - page11 - param: ', param);
-        server('patient/page11', param);
+        const response = await server('patient/page11', param);
+        return response;
     }
 
     //

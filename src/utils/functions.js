@@ -6,7 +6,6 @@ import { domain } from './../App';
 
 export const server = (url, param) => {
     var token = localStorage.getItem('token');
-    let status = false; 
 
     const headers = {
         'Content-Type': 'application/json',
@@ -14,37 +13,32 @@ export const server = (url, param) => {
         Authorization: 'Bearer ' + token,
     };
 
-    axios
+    return axios
         .post(domain + '/api/' + url, param, {
             headers: headers,
         })
         .then((response) => {
             console.log('./function.js - Server func - Success response: ', response);
-            status = true;
-            return 'done';
+            return response;
         })
-        .catch((err) => {
-            // what now?
-            console.log('./function.js - Server func - response Error: ', err);
+    .catch((err) => {
+        // what now?
+        console.log('./function.js - Server func - response Error: ', err);
 
-            if (err.response) {
-                console.log(
-                    './function.js - Server func - response Error msg: ',
-                    err.response.data.message
-                );
-                //   this.setState({errorMsg:err.response.data.message});
-                // client received an error response (5xx, 4xx)
-            } else if (err.request) {
-                // client never received a response, or request never left
-                status = false;
-                return 'error';
-            } else {
-                status = false;
-                return 'error';
-            }
-        });
-
-     return status;
+        if (err.response) {
+            console.log(
+                './function.js - Server func - response Error msg: ',
+                err.response.data.message
+            );
+            //   this.setState({errorMsg:err.response.data.message});
+            // client received an error response (5xx, 4xx)
+        } else if (err.request) {
+            // client never received a response, or request never left
+            return err.request;
+        } else {
+            return err;
+        }
+    });
 };
 
 export const getServer = async (url) => {

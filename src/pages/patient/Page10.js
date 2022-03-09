@@ -103,7 +103,7 @@ class Page10 extends React.Component {
     this.submitForm();
    }
 
-    submitForm() {
+    async submitForm() {
         if (
             document.getElementById('drugs1').checked === false &&
             document.getElementById('acenocoumarol1').checked === false &&
@@ -185,8 +185,9 @@ class Page10 extends React.Component {
             if(this.state.patient_id !== "") {
                 this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
             } else if(this.state.redirectButton) {
-                this.page10();
-                this.props.history.push('/Nurse/Nurse1')
+                const resp = await this.page10();
+                if(resp) this.props.history.push('/Nurse/Nurse1');
+                else alert('Something went wrong. Please try again.');
             } else {
                 this.page10();
                 this.props.history.push('/User/Page11');
@@ -195,8 +196,9 @@ class Page10 extends React.Component {
             if(this.state.patient_id !== "") {
                 this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
             } else if(this.state.redirectButton) {
-                this.page10();
-                this.props.history.push('/Nurse/Nurse1')
+                const resp = await this.page10();
+                if(resp) this.props.history.push('/Nurse/Nurse1');
+                else alert('Something went wrong. Please try again.');
             } else {this.page10();
                 this.props.history.push('/User/Page11');
             }
@@ -230,7 +232,7 @@ class Page10 extends React.Component {
         $('#q2_ans_days2').hide(1000);
     }
 
-    page10() {
+    async page10() {
         var param = {
             coumadin: this.state.q1_ans,
             coumadin_monday: this.state.q1_ans_monday,
@@ -250,8 +252,9 @@ class Page10 extends React.Component {
             sintrom_sunday: this.state.q2_ans_sunday,
             patient_id: this.state.patient_id
         };
-        server('patient/page10', param);
+        const response = await server('patient/page10', param);
         //  this.props.history.push('');
+        return response;
     }
 
     render() {

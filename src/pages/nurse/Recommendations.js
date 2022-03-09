@@ -18,6 +18,7 @@ class Recommendations extends Component {
 
     componentDidMount() {
         try {
+            document.body.style.backgroundColor = "#FFFFFF";
             const headers = {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -92,6 +93,23 @@ class Recommendations extends Component {
                             }) : ""
                         }
                     </table>
+                    <div className="row" style={{ marginTop: '60px' }}>
+                        <div className="col-3">
+                            <Link to={{ pathname: "/Nurse/Nurse1", state: { 'lmwh_flag': false } }} className="btn btn-outline-primary  btn-block">
+                                Back
+                            </Link>
+                        </div>
+
+                        <div className="col-3"></div>
+                        
+                        <div className="col-3"></div>
+
+                        <div className="col-3">
+                            <Link to={{ pathname: "/Nurse/Nurse4", state: { 'add_new_recom': true } }} className="btn btn-outline-primary  btn-block">
+                                Accept
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </>
         );

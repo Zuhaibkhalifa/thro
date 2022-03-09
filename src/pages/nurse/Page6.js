@@ -222,7 +222,7 @@ class Page6 extends React.Component {
       if(this.props.location.state !== undefined) {
          this.setState({ recom_id: this.props.location.state.recommendation_id });
       }
-      console.log('recommendations', this.state.location);
+      console.log('recommendations', this.props.location);
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -243,7 +243,7 @@ class Page6 extends React.Component {
                }
 
                let recm_indx = response.data.success.findIndex(x => x.id === this.state.recom_id);
-               data = recm_indx !== -1 ? response.data.success[recm_indx] : response.data.success[0];
+               data = recm_indx !== -1 ? response.data.success[recm_indx] : response.data.success.find(x => x.last_modified === new Date().toLocaleDateString());
                console.log('NURSE 6 - Response: ', JSON.parse(data.jsonTable), this.props.location, recm_indx, response.data.success[recm_indx]);
                this.setState({ loader: '' });
                this.getDatafromAlgo(JSON.parse(data.jsonTable), data);
@@ -591,7 +591,7 @@ class Page6 extends React.Component {
                   }
                   <div className="row" style={{ marginTop: '60px' }}>
                      <div className="col-4">
-                        <Link to={{ pathname: "/Nurse/Nurse4", state: { 'add_new_recom': false, 'recom_id': this.state.recom_id } }} className="btn btn-outline-primary  btn-block">
+                        <Link to={{ pathname: "/Nurse/Nurse4", state: { 'add_new_recom': true, 'recom_id': this.state.recom_id } }} className="btn btn-outline-primary  btn-block">
                            Back
                         </Link>
                      </div>

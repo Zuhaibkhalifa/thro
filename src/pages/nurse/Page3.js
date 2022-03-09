@@ -80,7 +80,7 @@ class Page5 extends React.Component {
                         explained: data ? data.explained : "undefined",
                         briefing_date: data ? data.briefing_date : "undefined",
                         is_first_time: data ? data.is_first_time : "undefined",
-                        lmwh_flag: this.state.lmwh_flag !== '' ? data?.is_lmwh_selected === "1" ? true : false : this.state.lmwh_flag
+                        lmwh_flag: this.state.lmwh_flag === '' ? data?.is_lmwh_selected === "1" ? true : false : this.state.lmwh_flag
                     });
                 });
         } catch (error) {

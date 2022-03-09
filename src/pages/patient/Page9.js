@@ -93,7 +93,7 @@ class Page9 extends React.Component {
       this.submitForm();
    }
 
-   submitForm() {
+   async submitForm() {
       console.log('Patient 9 - submit', this.state);
       const emptyErrors = {
          error1: '',
@@ -179,8 +179,9 @@ class Page9 extends React.Component {
          console.log('Patient 9 - submit - state: ', this.state);
          
          if(this.state.redirectButton) {
-            this.page9(this.state);
-            this.props.history.push('/Nurse/Nurse1');
+            const resp = await this.page9(this.state);
+            if (resp) this.props.history.push('/Nurse/Nurse1');
+            else alert('something went wrong, please try again.');
          } else {
             this.page9(this.state);
             this.dynamicRouting();
@@ -199,7 +200,7 @@ class Page9 extends React.Component {
       }
    }
 
-   page9() {
+   async page9() {
       var param = {};
       param.patient_id = this.state.patient_id;
       if (document.getElementById('q4').checked === true) {
@@ -224,8 +225,9 @@ class Page9 extends React.Component {
       }
 
       console.log('Patient 9 - page9 - param: ', param);
-      server('patient/page9', param);
+      const response = await server('patient/page9', param);
       //this.props.history.push('');
+      return response;
    }
    func() {
       document.getElementById('de').style.display = 'none';
