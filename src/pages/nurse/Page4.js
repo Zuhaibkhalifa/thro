@@ -328,7 +328,7 @@ class Page4 extends React.Component {
    componentDidMount() {
       console.log(this.props.location);
       if(this.props.location !== undefined) {
-         this.setState({ add_new_recom: this.props.location.add_new, recom_id: this.props.location.recommendation_id });
+         this.setState({ add_new_recom: this.props.location.state.add_new, recom_id: this.props.location.state.recommendation_id });
       }
       const headers = {
          'Content-Type': 'application/json',
@@ -339,13 +339,13 @@ class Page4 extends React.Component {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
 
-         if(this.state.add_new_recom === false) {
+         if(this.state.add_new_recom !== true) {
             axios
             .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
                headers: headers,
             })
             .then((response) => {
-               console.log('Nurse6 - res: ', response);
+               console.log('Nurse6 - res: ', response, this.state);
                if (response.data?.success === 'not_found') {
                   this.setState({ table: undefined });
                   return;
@@ -753,14 +753,6 @@ class Page4 extends React.Component {
       }
       // console.log(activeMeds);
       this.setState({ activeAnticogMeds: activeMeds });
-
-      // console.log(this.props.location);
-      if(this.props.location.state) {
-         if(activeMeds.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
    }
 
    handleLabValueChange(e, key) {
@@ -821,14 +813,6 @@ class Page4 extends React.Component {
       }
       // console.log(activeMeds);
       this.setState({ activeAntiplatMeds: activeMeds });
-
-      // console.log(this.props.location);
-      if(this.props.location.state) {
-         if(activeMeds.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
    }
 
    set_anticoagulation(data) {
@@ -856,13 +840,6 @@ class Page4 extends React.Component {
       }
 
       this.setState({ indication_for_anticoagulation: anticoagulation });
-      // console.log(this.props.location);
-      if(this.props.location.state) {
-         if(anticoagulation === '') {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
    }
 
    set_CHADS_score() {
@@ -971,14 +948,6 @@ class Page4 extends React.Component {
       if(diabetic === 'Yes') flags.push('diabetes');
       
       this.setState({ dynamicFlags:flags });
-
-      // console.log(this.props.location);
-      if(this.props.location.state) {
-         if(flags.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
    }
 
    async getDatafromAlgo() {
@@ -1530,7 +1499,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValVka`, e.target.value, this.state.InptValVka1)}>
                                           {
                                              this.state.table.headers.find(x => x['vka']).vka.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
                                              })
                                           }
                                        </select>
@@ -1542,7 +1511,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValDoac`, e.target.value, this.state.InptValDoac1)}>
                                           {
                                              this.state.table.headers.find(x => x['doac']).doac.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
                                              })
                                           }
                                        </select>
@@ -1554,7 +1523,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAntiplatelets`, e.target.value, this.state.InptValAntiplatelets1)}>
                                           {
                                              this.state.table.headers.find(x => x['antiplatelets']).antiplatelets.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
                                              })
                                           }
                                        </select>
@@ -1566,7 +1535,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValLmwh`, e.target.value, this.state.InptValLmwh1)}>
                                           {
                                              this.state.table.headers.find(x => x['lmwh']).lmwh.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
                                              })
                                           }
                                        </select>
@@ -1576,7 +1545,7 @@ class Page4 extends React.Component {
                                     this.state.aspirin_chkBox ?
                                     <th colSpan={2}>
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAspirin`, e.target.value, this.state.InptValAspirin1)}>
-                                          <option value={this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}>{this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}</option>
+                                          <option value={this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}>{this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}&#174;</option>
                                        </select>
                                     </th> : <></>
                                  }
@@ -1584,7 +1553,7 @@ class Page4 extends React.Component {
                                     this.state.iv_heparin_chkBox ?
                                     <th colSpan={2}>
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValIvHeparin`, e.target.value, this.state.InptValIvHeparin1)}>
-                                          <option value={this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}>{this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}</option>
+                                          <option value={this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}>{this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}&#174;</option>
                                        </select>
                                     </th> : <></>
                                  }

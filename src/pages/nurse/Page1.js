@@ -126,6 +126,12 @@ class Page1 extends React.Component {
          ulcer_in_stomach_or_bowel_last_three_months: '',
          had_transfusion_in_last_three_months_when: '',
          had_transfusion_in_last_three_months: '',
+         being_treated_cancer: '',
+         cancer: '',
+         radiation: '',
+         chemotherapy: '',
+         chemotherapy_ongoing: '',
+         chemotherapy_finished: '',
          liver_disease: '',
          lab_location_for_inr_test: '',
          pradaxa: '',
@@ -263,6 +269,13 @@ class Page1 extends React.Component {
 
                         liver_disease: data.liver_disease,
                         lab_location_for_inr_test: data.lab_location_for_inr_test,
+                        
+                        being_treated_cancer: data.being_treated_cancer,
+                        cancer: data.cancer,
+                        radiation: data.radiation,
+                        chemotherapy: data.chemotherapy,
+                        chemotherapy_ongoing: data.chemotherapy_ongoing,
+                        chemotherapy_finished: data.chemotherapy_finished,
 
                         pradaxa: data.pradaxa,
                         pradaxa_dosage: data.pradaxa_dosage,
@@ -548,17 +561,24 @@ class Page1 extends React.Component {
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
+         being_treated_cancer: being_treated_cancer,
+         cancer: cancer,
+         radiation: radiation,
+         chemotherapy: chemotherapy,
+         chemotherapy_ongoing: chemotherapy_ongoing,
+         chemotherapy_finished: chemotherapy_finished,
       } = this.state;
       let flags = [];
 
-      if (liver === 'Yes') flags.push('Liver Diseases');
-      if (transfusion === 'Yes' && transfusion_date !== null) flags.push(`Transfusion did on ${transfusion_date}`);
-      if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
-      if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('bleeding_requiring_treatment_last_three_months');
-      if(cognitive_heart_fail === 'Yes') flags.push('cognitive_heart_failure');
-      if(high_blood_pressures === 'Yes') flags.push('high_blood_pressure');
-      if(stroke_mini_stroke === 'Yes') flags.push('stroke_or_mini_stroke');
-      if(diabetic === 'Yes') flags.push('diabetes');
+      if (liver === 'Yes') flags.push('Liver diseases');
+      if (transfusion === 'Yes' && transfusion_date !== null) flags.push(`Transfusion within the last 3 months ${transfusion_date}`);
+      if (ulcer === 'Yes') flags.push(`Ulcer within the last 3 months`);
+      if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('Bleeding within the last 3 months');
+      if(cognitive_heart_fail === 'Yes') flags.push('Congestive heart failure');
+      if(high_blood_pressures === 'Yes') flags.push('High blood pressure');
+      if(stroke_mini_stroke === 'Yes') flags.push('Stroke or ministroke within the last 3 months');
+      if(diabetic === 'Yes') flags.push('Diabetes');
+      if(being_treated_cancer === 'Yes') flags.push('Undergoing cancer therapy');
       
       this.setState({ dynamicFlags:flags });
 
