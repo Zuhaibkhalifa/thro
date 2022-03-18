@@ -356,8 +356,7 @@ class Dictation extends Component {
                         of the recommendation were explained and the patient was given the opportunity to ask questions.
                         <br />
                         ${data.is_lmwh_selected !== "0" ? `Instructions were provided with their low molecular weight heparin. 
-                        The injections will be administered by` : ''}
-                        ${data?.administration}. 
+                        The injections will be administered by ${data?.administration}.` : ''} 
                         The patient ${data.is_first_time} had previous experience with self-injection.
                     </p>
                 `;
