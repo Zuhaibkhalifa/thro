@@ -120,16 +120,16 @@ class Page4 extends React.Component {
                             this.onRadioBtn2();
                         }
                     }
-                    if(this.state.q2_ans === 'Yes') mainOption2.checked = true;
-                    if(this.state.q3_ans === 'Yes') hvr.checked = true;
-                    if(this.state.q4_ans === 'Yes') mainOption3.checked = true;
-                    if(this.state.q5_ans === 'Yes') mainOption4.checked = true;
-                    if(this.state.q6_ans === 'Yes') mainOption5.checked = true;
-                    if(this.state.q7_ans === 'Yes') {
+                    if(mainOption2 && this.state.q2_ans === 'Yes') mainOption2.checked = true;
+                    if(hvr && this.state.q3_ans === 'Yes') hvr.checked = true;
+                    if(mainOption3 && this.state.q4_ans === 'Yes') mainOption3.checked = true;
+                    if(mainOption4 && this.state.q5_ans === 'Yes') mainOption4.checked = true;
+                    if(mainOption5 && this.state.q6_ans === 'Yes') mainOption5.checked = true;
+                    if(optradio7 && this.state.q7_ans === 'Yes') {
                         optradio7.checked = true;
                         reason.value = this.state.q7_sub_ans;
                     }
-                    if(this.state.q8_ans === 'Yes') {
+                    if(optradio8 && this.state.q8_ans === 'Yes') {
                         optradio8.checked = true;
                         document.getElementById('de').style.display = 'none';
                         document.getElementById('vte').disabled = true;

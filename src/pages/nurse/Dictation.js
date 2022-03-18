@@ -36,8 +36,8 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.dalteparin,
               med_dosage: data?.dalteparin_dosage,
-              med_dosage_time: data?.dalteparin_freq.substr(idx+1),
-              med_dosage_freequency: data?.dalteparin_freq.substr(idx+1),
+              med_dosage_time: data?.dalteparin_freq?.substr(idx+1),
+              med_dosage_freequency: data?.dalteparin_freq?.substr(idx+1),
            });
         }
         if(data?.enoxaparin) {
@@ -45,8 +45,8 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.enoxaparin,
               med_dosage: data?.enoxaparin_dosage,
-              med_dosage_time: data?.enoxaparin_freq.substr(idx+1),
-              med_dosage_freequency: data?.enoxaparin_freq.substr(idx+1),
+              med_dosage_time: data?.enoxaparin_freq?.substr(idx+1),
+              med_dosage_freequency: data?.enoxaparin_freq?.substr(idx+1),
            });
         }
         
@@ -55,8 +55,8 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.tinzaparin,
               med_dosage: data?.tinzaparin_dosage,
-              med_dosage_time: data?.tinzaparin_freq.substr(idx+1),
-              med_dosage_freequency: data?.tinzaparin_freq.substr(idx+1),
+              med_dosage_time: data?.tinzaparin_freq?.substr(idx+1),
+              med_dosage_freequency: data?.tinzaparin_freq?.substr(idx+1),
            });
         }
         if(data?.pradaxa) {
@@ -64,7 +64,7 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.pradaxa,
               med_dosage: data?.pradaxa_dosage,
-              med_dosage_time: data?.pradaxa_dosage.substr(idx+1),
+              med_dosage_time: data?.pradaxa_dosage?.substr(idx+1),
               med_dosage_freequency: "am / pm",
            });
         } 
@@ -73,7 +73,7 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.xarelto,
               med_dosage: data?.xarelto_dosage,
-              med_dosage_time: data?.xarelto_dosage.substr(idx+1),
+              med_dosage_time: data?.xarelto_dosage?.substr(idx+1),
               med_dosage_freequency: data?.xarelto_dosage_time
            });
         } 
@@ -82,7 +82,7 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.eliquis,
               med_dosage: data?.eliquis_dosage,
-              med_dosage_time: data?.eliquis_dosage.substr(idx+1),
+              med_dosage_time: data?.eliquis_dosage?.substr(idx+1),
               med_dosage_freequency: data?.eliquis_dosage_time
            });
         }
@@ -91,7 +91,7 @@ class Dictation extends Component {
            activeMeds.push({
               med_name: data?.edoxabon,
               med_dosage: data?.edoxabon_dosage,
-              med_dosage_time: data?.edoxabon_dosage.substr(idx+1),
+              med_dosage_time: data?.edoxabon_dosage?.substr(idx+1),
               med_dosage_freequency: data?.edoxabon_dosage_time
            });
         }
@@ -133,7 +133,7 @@ class Dictation extends Component {
               med_name: data?.effient,
               med_dosage: data?.effient_dosage,
               med_dosage_freequency: data?.effient_dosage_time,
-              med_dosage_time: data?.effient_dosage_time.substr(idx+1)
+              med_dosage_time: data?.effient_dosage_time?.substr(idx+1)
            });
         } 
         if(data?.aspirin) {
@@ -142,7 +142,7 @@ class Dictation extends Component {
               med_name: data?.aspirin,
               med_dosage: data?.aspirin_dosage,
               med_dosage_freequency: data?.aspirin_dosage_time,
-              med_dosage_time: data?.aspirin_dosage_time.substr(idx+1)
+              med_dosage_time: data?.aspirin_dosage_time?.substr(idx+1)
            });
         } 
         if(data?.plavix) {
@@ -151,7 +151,7 @@ class Dictation extends Component {
               med_name: data?.plavix,
               med_dosage: data?.plavix_dosage,
               med_dosage_freequency: data?.plavix_dosage_time,
-              med_dosage_time: data?.plavix_dosage_time.substr(idx+1)
+              med_dosage_time: data?.plavix_dosage_time?.substr(idx+1)
            });
         }
         if(data?.brillinta) {
@@ -160,7 +160,7 @@ class Dictation extends Component {
               med_name: data?.brillinta,
               med_dosage: data?.brillinta_dosage,
               med_dosage_freequency: data?.brillinta_dosage_time,
-              med_dosage_time: data?.brillinta_dosage_time.substr(idx+1)
+              med_dosage_time: data?.brillinta_dosage_time?.substr(idx+1)
            });
         }
         console.log(activeMeds);
@@ -189,6 +189,7 @@ class Dictation extends Component {
                 .then((response) => {
                 console.log('Dictation Note - res: ', response);
                 const data = response.data?.success[0];
+                const medicationData = JSON.parse(data?.jsonTable);
                 const antiCogDrugs = this.fillactiveanticogmeds(data);
                 const antiPlatDrugs = this.fillactiveantiplatmeds(data);
                 const content = `
@@ -218,8 +219,8 @@ class Dictation extends Component {
                     <br />
                     <p>Weight (${data?.weight_unit}): ${data?.weight}</p>
                     <br />
+                    <p style="font-weight: bold;">Current antithrombotic therapy:</p>
                     <ul>
-                        Current antithrombotic therapy:
                         ${
                             antiCogDrugs.length !== 0 ? 
                             antiCogDrugs.map((drug, index) => {
@@ -261,8 +262,8 @@ class Dictation extends Component {
                                                 <span>Sunday: </span> <span>${drug.med_dosage_sunday}</span>
                                             `
                                             : 
-                                            `<span>${drug.med_dosage}</span> 
-                                            <span>${drug.med_dosage_freequency}</span>`   
+                                            `<span> ${drug.med_dosage}</span> 
+                                            <span> ${drug.med_dosage_freequency}</span>`   
                                         }
                                     </p></li>`)
                             }) : ""
@@ -278,8 +279,8 @@ class Dictation extends Component {
                                     <li><p key=${index}>
                                         <span>${drug.med_name}</span>
                                         ${
-                                            `<span>${drug.med_dosage}</span> 
-                                            <span>${drug.med_dosage_freequency}</span>`   
+                                            `<span> ${drug.med_dosage}</span> 
+                                            <span> ${drug.med_dosage_freequency}</span>`   
                                         }
                                     </p></li>`)
                             }) : ""
@@ -292,56 +293,72 @@ class Dictation extends Component {
                     <br />
                     <p>Creatinine: ${data?.poc_creat_text} - ${data?.poc_creat_date}</p>
                     <br />
-                    <p>Estimated Creatinine clearance: ${data?.poc_creat_text} - ${data?.poc_creat_date}</p>
+                    <p>Estimated Creatinine clearance: ${data?.poc_creat_text}</p>
                     <br />
-                    ${data?.activeVKA ? `<p>INR: ${data?.poc_inr_text} - ${data?.poc_inr_date}</p>` : ''}
+                    ${data?.is_vka_selected !== "0" ? `<p>INR: ${data?.poc_inr_text} - ${data?.poc_inr_date}</p>` : ''}
                     <br />
                     <p style="font-weight: bold;">Preiprocedural recommendation</p>
                     <br />
-                    <p>Warfain: 
-                        <br />
-                        <span>Last dose before procedure: </span>
-                        <br />
-                        <span>Resumption after procedure: </span>
-                    </p>
+                    ${
+                        data.is_vka_selected !== "0" ? 
+                        `<p style="font-weight: bold;">Warfain: ${data.activeVKA}
+                            <br />
+                            <span>Last dose before procedure: ${data.medicationData.vka[4].warfain}</span>
+                            <br />
+                            <span>Resumption after procedure:  ${data.medicationData.vka[6].warfain}</span>
+                        </p>` : ''
+                    }
                     <br />
-                    <p>LMWH: 
-                        <br />
-                        <span>Last dose before procedure: </span>
-                        <br />
-                        <span>Resumption after procedure: </span>
-                    </p>
+                    ${
+                        data.is_lmwh_selected !== "0" ? 
+                        `<p style="font-weight: bold;">LMWH: ${data.activeLMWH}
+                            <br />
+                            <span>Last dose before procedure: ${data.medicationData.lmwh[4].dosage}</span>
+                            <br />
+                            <span>Resumption after procedure:  ${data.medicationData.lmwh[6].dosage}</span>
+                        </p>` : ''
+                    }
                     <br />
-                    <p>DOAC: 
-                        <br />
-                        <span>Last dose before procedure: </span>
-                        <br />
-                        <span>Resumption after procedure: </span>
-                    </p>
+                    ${
+                        data.is_doac_selected !== "0" ? 
+                        `<p style="font-weight: bold;">DOAC: ${data.activeDOAC}
+                            <br />
+                            <span>Last dose before procedure: ${data.medicationData.doac[4].dosage}</span>
+                            <br />
+                            <span>Resumption after procedure:  ${data.medicationData.doac[6].dosage}</span>
+                        </p>` : ''
+                    }
                     <br />
-                    <p>Antipleteles: 
-                        <br />
-                        <span>Last dose before procedure: </span>
-                        <br />
-                        <span>Resumption after procedure: </span>
-                    </p>
+                    ${
+                        data.is_antiplatelets_selected !== "0" ? 
+                        `<p style="font-weight: bold;">Antiplatelets: ${data.headers[3].antiplatelets[0].med_name}
+                            <br />
+                            <span>Last dose before procedure: ${data.medicationData.antiplatelets[4].antiplatelets}</span>
+                            <br />
+                            <span>Resumption after procedure:  ${data.medicationData.antiplatelets[6].antiplatelets}</span>
+                        </p>` : ''
+                    }
                     <br />
-                    <p>Aspirin: 
-                        <br />
-                        <span>Last dose before procedure: </span>
-                        <br />
-                        <span>Resumption after procedure: </span>
-                    </p>
+                    ${
+                        data.is_aspirin_selected !== "0" ? 
+                        `<p style="font-weight: bold;">Aspirin: Aspirin (ASA)
+                            <br />
+                            <span>Last dose before procedure: ${data.medicationData.aspirin[4].aspirin}</span>
+                            <br />
+                            <span>Resumption after procedure:  ${data.medicationData.aspirin[6].aspirin}</span>
+                        </p>` : ''
+                    }
                     <br />
                     <p style="font-weight: bold;">Patient Logistics & Understanding</p>
                     <br />
                     <p>
-                        The patient was contacted on [briefing date] to review their plan. The risks and benefits 
+                        The patient was contacted on ${data?.briefing_date} to review their plan. The risks and benefits 
                         of the recommendation were explained and the patient was given the opportunity to ask questions.
-                        [If on LMWH]Instructions were provided with their low molecular weight heparin. 
-                        The injections will be administered by 
+                        <br />
+                        ${data.is_lmwh_selected !== "0" ? `Instructions were provided with their low molecular weight heparin. 
+                        The injections will be administered by` : ''}
                         ${data?.administration}. 
-                        The patient [has | has not] had previous experience with self-injection.
+                        The patient ${data.is_first_time} had previous experience with self-injection.
                     </p>
                 `;
                 if (response.data?.success !== 'not_found') {

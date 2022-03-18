@@ -87,7 +87,7 @@ class Recommendations extends Component {
                                         <td>{ele.last_modified}</td>
                                         <td>{ele.approved_by}</td>
                                         <td>{ele.status}</td>
-                                        <td><Link to={{ pathname: this.state.link, state: { 'recommendation_id': ele.id, 'add_new': true } }}>{this.state.link}</Link></td>
+                                        <td><Link to={{ pathname: this.state.link, state: { 'recommendation_id': ele.id, 'add_new': false } }}>{this.state.link}</Link></td>
                                     </tr>
                                 )
                             }) : ""
@@ -105,8 +105,8 @@ class Recommendations extends Component {
                         <div className="col-3"></div>
 
                         <div className="col-3">
-                            <Link to={{ pathname: "/Nurse/Nurse4", state: { 'add_new_recom': true } }} className="btn btn-outline-primary  btn-block">
-                                Accept
+                            <Link to={{ pathname: "/Nurse/Nurse4", state: { 'add_new': true } }} className="btn btn-outline-primary  btn-block">
+                                Add new
                             </Link>
                         </div>
                     </div>

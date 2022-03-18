@@ -92,12 +92,36 @@ class Page4 extends React.Component {
          not_using_drugs: '',
          bleeding_requiring_treatment_last_three_months: '',
          cognitive_heart_failure: '',
+         mitral_stenosis: '',
+         blood_clot_blood_thinner_interrupted: '',
          diabetes: '',
          stroke_or_mini_stroke: '',
          high_blood_pressure: '',
          ulcer_in_stomach_or_bowel_last_three_months: '',
          had_transfusion_in_last_three_months_when: '',
          had_transfusion_in_last_three_months: '',
+         being_treated_cancer: '',
+         venous_thromboelism: '',
+         dvt: '',
+         dvt_how_long_ago: '',
+         pe: '',
+         pe_dvt_how_long_ago: '',
+         atrial_fibrillation_of_flutter: '',
+         mechanical_heart_valve: '',
+         tissue_heart_valve: '',
+         mechanical_heart_valve_Is_the_valve_bileaflet: '',
+         mechanical_heart_valve_Is_the_valve_ball_and_cage: '',
+         mechanical_heart_valve_Is_the_valve_tilting_disc: '',
+         mechanical_heart_valve_Is_the_valve_dont_know: '',
+         location_aortic: '',
+         location_mitral: '',
+         cirrhosis_of_liver: '',
+         antiphospholipid_antibody_syndrome: '',
+         cancer: '',
+         radiation: '',
+         chemotherapy: '',
+         chemotherapy_ongoing: '',
+         chemotherapy_finished: '',
          liver_disease: '',
          lab_location_for_inr_test: '',
          pradaxa: '',
@@ -308,7 +332,8 @@ class Page4 extends React.Component {
          active_doac: '',
          active_vka: '',
          add_new_recom: '',
-         recom_id: ''
+         recom_id: '',
+         assessment_date: ''
       };
 
       // this.submitForm = this.submitForm.bind(this);
@@ -327,7 +352,7 @@ class Page4 extends React.Component {
 
    componentDidMount() {
       console.log(this.props.location);
-      if(this.props.location !== undefined) {
+      if(this.props.location.state !== undefined) {
          this.setState({ add_new_recom: this.props.location.state.add_new, recom_id: this.props.location.state.recommendation_id });
       }
       const headers = {
@@ -338,8 +363,9 @@ class Page4 extends React.Component {
       try {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
+         console.log(this.state.add_new_recom, this.props.location.state.add_new);
 
-         if(this.state.add_new_recom !== true) {
+         if(this.state.add_new_recom !== true && this.state.add_new_recom !== '') {
             axios
             .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
                headers: headers,
@@ -418,9 +444,35 @@ class Page4 extends React.Component {
                ulcer_in_stomach_or_bowel_last_three_months: data?.ulcer_in_stomach_or_bowel_last_three_months,
                had_transfusion_in_last_three_months_when: data?.had_transfusion_in_last_three_months_when,
                had_transfusion_in_last_three_months: data?.had_transfusion_in_last_three_months,
+                        
+               venous_thromboelism: data.venous_thromboelism,
+               dvt: data.dvt,
+               dvt_how_long_ago: data.dvt_how_long_ago,
+               pe: data.pe,
+               pe_dvt_how_long_ago: data.pe_dvt_how_long_ago,
+               atrial_fibrillation_of_flutter: data.atrial_fibrillation_of_flutter,
+               mechanical_heart_valve: data.mechanical_heart_valve,
+               tissue_heart_valve: data.tissue_heart_valve,
+               mechanical_heart_valve_Is_the_valve_bileaflet: data.mechanical_heart_valve_Is_the_valve_bileaflet,
+               mechanical_heart_valve_Is_the_valve_ball_and_cage: data.mechanical_heart_valve_Is_the_valve_ball_and_cage,
+               mechanical_heart_valve_Is_the_valve_tilting_disc: data.mechanical_heart_valve_Is_the_valve_tilting_disc,
+               mechanical_heart_valve_Is_the_valve_dont_know: data.mechanical_heart_valve_Is_the_valve_dont_know,
+               location_aortic: data.location_aortic,
+               location_mitral: data.location_mitral,
+               cirrhosis_of_liver: data.cirrhosis_of_liver,
+               antiphospholipid_antibody_syndrome: data.antiphospholipid_antibody_syndrome,
+               mitral_stenosis: data.mitral_stenosis,
+               blood_clot_blood_thinner_interrupted: data.blood_clot_blood_thinner_interrupted,
 
                liver_disease: data?.liver_disease,
                lab_location_for_inr_test: data?.lab_location_for_inr_test,
+                        
+               being_treated_cancer: data.being_treated_cancer,
+               cancer: data.cancer,
+               radiation: data.radiation,
+               chemotherapy: data.chemotherapy,
+               chemotherapy_ongoing: data.chemotherapy_ongoing,
+               chemotherapy_finished: data.chemotherapy_finished,
 
                pradaxa: data?.pradaxa,
                pradaxa_dosage: data?.pradaxa_dosage,
@@ -449,6 +501,7 @@ class Page4 extends React.Component {
                sintrom_friday: data?.sintrom_friday,
                sintrom_saturday: data?.sintrom_saturday,
                sintrom_sunday: data?.sintrom_sunday,
+               assessment_date: data.assessment_date,
 
                ulcer_in_stomach_or_bowel: data?.ulcer_in_stomach_or_bowel,
                cognitive_heart_failure: data?.cognitive_heart_failure,
@@ -498,9 +551,9 @@ class Page4 extends React.Component {
                [keyId1]: tableData.vka[keyIdx1].warfain
             });
             // this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
-            this.setVKAVal(tableData, tableData.vka[keyIdx1].warfain);
-            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.length);
-            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
+            this.setVKAVal(tableData.vka);
+            this.setInitialLabState('vka', 'labVal', tableData.vka.data, tableData.vka.length);
+            this.setInitialSelectState('vka', 'selectValVka', tableData.vka.data, tableData.vka.length);
          }
       }
 
@@ -513,8 +566,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.lmwh[keyIdx1].dosage.split(' ')[0] 
                });
-               this.setInitialState('InptValLmwh', tableData.lmwh[keyIdx1].dosage.split(' ')[0], tableData.lmwh.length);
-               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.length);
+               this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh, tableData.lmwh.length);
+               this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh, tableData.lmwh.length);
             }
          }
       }
@@ -528,8 +581,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.doac[keyIdx1].dosage.split(' ')[0] 
                });
-               this.setInitialState('InptValDoac', tableData.doac[keyIdx1].dosage.split(' ')[0], tableData.doac.length);
-               this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac.length);
+               this.setInitialState('doac', 'InptValDoac', tableData.doac, tableData.doac.length);
+               this.setInitialSelectState('doac', 'selectValDoac', tableData.doac, tableData.doac.length);
             }
          }
       }
@@ -543,8 +596,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0] 
                });
-               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.length);
-               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.length);
+               this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
+               this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
             }
          }
       }
@@ -559,15 +612,15 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.aspirin[keyIdx1].aspirin.split(' ')[0] 
                });
-               this.setInitialState('InptValAspirin', tableData.aspirin[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.length);
-               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.length);
+               this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin, tableData.aspirin.length);
+               this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin, tableData.aspirin.length);
             }
          }
       }
 
       if(table_data.iv_heparin !== '') {
-         this.setInitialState('InptValIvHeparin', '', 11);
-         this.setInitialSelectState('selectValIvHeparin', 'once daily', 11);
+         this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
+         this.setInitialSelectState('heparin', 'selectValIvHeparin', 'do not take', 11);
       }
 
       table_data.headers = tableData.headers;
@@ -868,59 +921,102 @@ class Page4 extends React.Component {
       this.setState({ chads_score_and_distribution: score });
    }
 
-   setVKAVal(meds, value) {
+   setVKAVal(value) {
       this.setState({
-         InptValVka1: 0,
-         InptValVka2: 0,
-         InptValVka3: 0,
-         InptValVka4: 0,
-         InptValVka5: 0,
-         InptValVka6: value,
-         InptValVka7: meds.vka.data[6].warfain,
-         InptValVka8: meds.vka.data[7].warfain,
-         InptValVka9: meds.vka.data[8].warfain,
-         InptValVka10: meds.vka.data[9].warfain,
-         InptValVka11: meds.vka.data[10].warfain,
+         InptValVka1: value[0]?.warfain,
+         InptValVka2: value[1]?.warfain,
+         InptValVka3: value[2]?.warfain,
+         InptValVka4: value[3]?.warfain,
+         InptValVka5: value[4]?.warfain,
+         InptValVka6: value[5]?.warfain,
+         InptValVka7: value[6]?.warfain,
+         InptValVka8: value[7]?.warfain,
+         InptValVka9: value[8]?.warfain,
+         InptValVka10: value[9]?.warfain,
+         InptValVka11: value[10]?.warfain,
       });
    }
 
-   setInitialState(key, value, length) {
+   setInitialState(medKey, key, value, length) {
+      console.log(value);
       for(let i=0; i<length; i++) {
-         this.setState({
-            [key+(i+1)]: value
-         });
+         if(medKey === 'doac') {
+            this.setState({
+               [key+(i+1)]: value[i].dosage?.split(' ')[0]
+            });
+         } else if(medKey === 'lmwh') {
+            this.setState({
+               [key+(i+1)]: value[i].dosage?.split(' ')[0]
+            });
+         } else if(medKey === 'antiplatelets') {
+            this.setState({
+               [key+(i+1)]: value[i].antiplatelets?.split(' ')[0]
+            });
+         } else if(medKey === 'aspirin') {
+            this.setState({
+               [key+(i+1)]: value[i].aspirin?.split(' ')[0]
+            });
+         } else if(medKey === 'heparin') {
+            this.setState({
+               [key+(i+1)]: value
+            });
+         }
       }
    }
 
    handleDropdownValChange(key, value, dose) {
       if(key.toLowerCase().endsWith('vka')) {
-         this.setInitialState(key, dose, 11);
+         // this.setInitialState('vka', key, dose, 11);
          this.setState({ active_vka: value });
       } else if(key.toLowerCase().endsWith('doac')) {
-         this.setInitialState(key, dose, 11);
+         // this.setInitialState('doac', key, dose, 11);
          this.setState({ active_doac: value });
       } else if(key.toLowerCase().endsWith('lmwh')) {
-         this.setInitialState(key, dose, 11);
+         // this.setInitialState('lmwh', key, dose, 11);
          this.setState({ active_lmwh: value });
       } else if(key.toLowerCase().endsWith('antiplatelets')) {
-         this.setInitialState(key, dose, 11);
+         // this.setInitialState('antiplatelets', key, dose, 11);
       }
       // console.log(key, value, dose);
    }
 
-   setInitialLabState(key, value, length) {
+   setInitialLabState(medKey, key, value, length) {
       for(let i=0; i<length; i++) {
-         this.setState({
-            [key+(i+1)]: value
-         });
+         if(medKey === 'vka') {
+            this.setState({
+               [key+(i+1)]: value[i]?.lab
+            });
+         } 
       }
    }
 
-   setInitialSelectState(key, value, length) {
+   setInitialSelectState(medKey, key, value, length) {
       for(let i=0; i<length; i++) {
-         this.setState({
-            [key+(i+1)]: value
-         });
+         if(medKey === 'vka') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'doac') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'lmwh') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'antiplatelets') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'aspirin') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'heparin') {
+            this.setState({
+               [key+(i+1)]: value
+            });
+         }
       }
    }
 
@@ -935,19 +1031,52 @@ class Page4 extends React.Component {
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
+         being_treated_cancer: being_treated_cancer,          
+         venous_thromboelism: venous_thromboelism,
+         dvt: dvt,
+         // dvt_how_long_ago: dvt_how_long_ago,
+         // pe: pe,
+         // pe_dvt_how_long_ago: pe_dvt_how_long_ago,
+         // atrial_fibrillation_of_flutter: atrial_fibrillation_of_flutter,
+         // mechanical_heart_valve: mechanical_heart_valve,
+         // tissue_heart_valve: tissue_heart_valve,
+         // mechanical_heart_valve_Is_the_valve_bileaflet: mechanical_heart_valve_Is_the_valve_bileaflet,
+         // mechanical_heart_valve_Is_the_valve_ball_and_cage: mechanical_heart_valve_Is_the_valve_ball_and_cage,
+         // mechanical_heart_valve_Is_the_valve_tilting_disc: mechanical_heart_valve_Is_the_valve_tilting_disc,
+         // mechanical_heart_valve_Is_the_valve_dont_know: mechanical_heart_valve_Is_the_valve_dont_know,
+         // location_aortic: location_aortic,
+         // location_mitral: location_mitral,
+         cirrhosis_of_liver: cirrhosis_of_liver,
+         antiphospholipid_antibody_syndrome: antiphospholipid_antibody_syndrome,
+         mitral_stenosis: mitral_stenosis,
+         blood_clot_blood_thinner_interrupted: blood_clot_blood_thinner_interrupted,
       } = this.state;
       let flags = [];
 
-      if (liver === 'Yes') flags.push('Liver Diseases');
-      if (transfusion === 'Yes' && transfusion_date !== null) flags.push(`Transfusion did on ${transfusion_date}`);
-      if (ulcer === 'Yes') flags.push(`Ulcer within last 3 months`);
-      if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('bleeding_requiring_treatment_last_three_months');
-      if(cognitive_heart_fail === 'Yes') flags.push('cognitive_heart_failure');
-      if(high_blood_pressures === 'Yes') flags.push('high_blood_pressure');
-      if(stroke_mini_stroke === 'Yes') flags.push('stroke_or_mini_stroke');
-      if(diabetic === 'Yes') flags.push('diabetes');
+      if (liver === 'Yes') flags.push('Liver diseases');
+      if (transfusion === 'Yes' && transfusion_date !== null) flags.push(`Transfusion within the last 3 months ${transfusion_date}`);
+      if (ulcer === 'Yes') flags.push(`Ulcer within the last 3 months`);
+      if(bleeding_requiring_treatment_in_last_three_months === 'Yes') flags.push('Bleeding within the last 3 months');
+      if(cognitive_heart_fail === 'Yes') flags.push('Congestive heart failure');
+      if(high_blood_pressures === 'Yes') flags.push('High blood pressure');
+      if(stroke_mini_stroke === 'Yes') flags.push('Stroke or ministroke within the last 3 months');
+      if(diabetic === 'Yes') flags.push('Diabetes');
+      if(being_treated_cancer === 'Yes') flags.push('Undergoing cancer therapy');
+      if(blood_clot_blood_thinner_interrupted === 'Yes') flags.push('Blood clot while blood thinner interrupted');
+      if(venous_thromboelism === 'Yes' || dvt === 'Yes') flags.push('DVT or PE in the last 3 months');
+      if(cirrhosis_of_liver === 'Yes') flags.push('Liver cirrhosis');
+      if(mitral_stenosis === 'Yes') flags.push('Mitral stenosis');
+      if(antiphospholipid_antibody_syndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
       
       this.setState({ dynamicFlags:flags });
+
+      console.log(this.props.location);
+      if(this.props.location.state) {
+         if(flags.length === 0) {
+            console.log('reloading !!!')
+            window.location.reload();
+         }
+      }
    }
 
    async getDatafromAlgo() {
@@ -995,9 +1124,9 @@ class Page4 extends React.Component {
                [keyId1]: tableData.vka.data[keyIdx1].warfain
             });
             // this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data?.length);
-            this.setVKAVal(tableData, tableData.vka.data[keyIdx1].warfain);
-            this.setInitialLabState('labVal', tableData.vka.data[keyIdx].lab, tableData.vka.data?.length);
-            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.data?.length);
+            this.setVKAVal(tableData.vka.data);
+            this.setInitialLabState('vka', 'labVal', tableData.vka.data, tableData.vka.data?.length);
+            this.setInitialSelectState('vka', 'selectValVka', tableData.vka.data, tableData.vka.data?.length);
          }
       }
 
@@ -1012,8 +1141,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0] 
                });
-               this.setInitialState('InptValLmwh', tableData.lmwh.data[keyIdx1].dosage.split(' ')[0], tableData.lmwh.data?.length);
-               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.data?.length);
+               this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
+               this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
             }
          }
       }
@@ -1032,8 +1161,8 @@ class Page4 extends React.Component {
                   this.setState({
                      [keyId1]: tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0] 
                   });
-                  this.setInitialState('InptValDoac', tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0], tableData.doac[dataKey[datKey]].data?.length);
-                  this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac[dataKey[datKey]].data?.length);
+                  this.setInitialState('doac', 'InptValDoac', tableData.doac[dataKey[datKey]].data, tableData.doac[dataKey[datKey]].data?.length);
+                  this.setInitialSelectState('doac', 'selectValDoac', tableData.doac[dataKey[datKey]].data, tableData.doac[dataKey[datKey]].data?.length);
                }
             }
          }
@@ -1049,8 +1178,8 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0] 
                });
-               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.data?.length);
-               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.data?.length);
+               this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
+               this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
             }
          }
       }
@@ -1065,16 +1194,16 @@ class Page4 extends React.Component {
                this.setState({
                   [keyId1]: tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0] 
                });
-               this.setInitialState('InptValAspirin', tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.data?.length);
-               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.data?.length);
+               this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
+               this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
             }
          }
       }
 
       if(table_data.iv_heparin === '') {
          tableHeader.push({ 'iv_heparin': 'Heparin' });
-         this.setInitialState('InptValIvHeparin', '', 11);
-         this.setInitialSelectState('selectValIvHeparin', 'once daily', 11);
+         this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
+         this.setInitialSelectState('heparin', 'selectValIvHeparin', 'once daily', 11);
       }
 
       table_data.headers = tableHeader;
@@ -1170,6 +1299,15 @@ class Page4 extends React.Component {
 
                         <div className="col-6 text-left">
                            <p type="text" disabled className="form-control">{this.state.procedure} </p>
+                        </div>
+                     </div>
+                     <div className="row">
+                        <div className="col-6">
+                           <label htmlFor="usr">Date of Assessment</label>
+                        </div>
+
+                        <div className="col-6 text-left">
+                           <p type="text" disabled className="form-control">{this.state.assessment_date} </p>
                         </div>
                      </div>
                      <br />
@@ -1583,6 +1721,7 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValVka${vkaKey+1}`} type="text" value={this.state[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValVka${vkaKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValVka${vkaKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValVka${vkaKey+1}`]}>{this.state[`selectValVka${vkaKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1597,6 +1736,7 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValDoac${doacKey+1}`} type="number" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValDoac${doacKey+1}`]}>{this.state[`selectValDoac${doacKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1611,6 +1751,7 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="number" value={this.state[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAntiplatelets${antiplateletKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAntiplatelets${antiplateletKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValAntiplatelets${antiplateletKey+1}`]}>{this.state[`selectValAntiplatelets${antiplateletKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1625,6 +1766,7 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValLmh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmh${lmwhKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValLmh${lmwhKey+1}`]}>{this.state[`selectValLmh${lmwhKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1639,6 +1781,7 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValAspirin${aspirinKey+1}`} type="number" value={this.state[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAspirin${aspirinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAspirin${aspirinKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValAspirin${aspirinKey+1}`]}>{this.state[`selectValAspirin${aspirinKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1653,6 +1796,7 @@ class Page4 extends React.Component {
                                                    <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="number" value={this.state[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValIvHeparin${ivHeparinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValIvHeparin${ivHeparinKey+1}`]}>{this.state[`selectValIvHeparin${ivHeparinKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>

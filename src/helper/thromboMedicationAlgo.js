@@ -3,6 +3,7 @@ import { domain } from '../App';
 
 export default async function thromboMedicationAlgo(_indicators) {
     const drugData = await getDrugData();
+    console.log('>> drug details - ', drugData);
     const indicators = check_sugery_bleeding_risk_outlier(_indicators, drugData);
     
     function getDayOfProcedure(date) {
@@ -34,8 +35,8 @@ export default async function thromboMedicationAlgo(_indicators) {
         data['vka'] = mapToVKACases(meds.vka, indicators, meds.date_of_procedure);
         data['lmwh'] = lmwhCases(meds.lmwh, indicators);
         data['doac'] = doacCases(meds.doac, indicators);
-        console.log(meds);
-        if(meds.antiplatelet.find(x => x.med_name === 'Aspirin (ASA)')) {
+        console.log(meds, meds.antiplatelet.findIndex(x => x.med_name === 'Aspirin (ASA)'));
+        if(meds.antiplatelet.findIndex(x => x.med_name === 'Aspirin (ASA)') !== -1) {
            data['aspirin'] = aspirin(meds.antiplatelet, indicators);
         }
         data['antiplatelets'] = antiplatelets(meds.antiplatelet, indicators);
@@ -62,11 +63,11 @@ export default async function thromboMedicationAlgo(_indicators) {
            const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
            let medData = [];
            let data = [
-              { warfain: '0', lab: '', frequency: '' },
-              { warfain: '0', lab: '', frequency: '' },
-              { warfain: '0', lab: '', frequency: '' },
-              { warfain: '0', lab: '', frequency: '' },
-              { warfain: '0', lab: '', frequency: '' },
+              { warfain: '0', lab: '', frequency: '', lab: '' },
+              { warfain: '0', lab: '', frequency: '', lab: '' },
+              { warfain: '0', lab: '', frequency: '', lab: '' },
+              { warfain: '0', lab: '', frequency: '', lab: '' },
+              { warfain: '0', lab: '', frequency: '', lab: '' },
               { warfain: med_data.med_dosage[dataKey]+' * 2', lab: '', frequency: '' },
               { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+1))+' * 2', lab: '', frequency: '' },
               { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+2)), lab: '', frequency: '' },
@@ -261,17 +262,17 @@ export default async function thromboMedicationAlgo(_indicators) {
               let table = {
                  header: tempArry,
                  data: [
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: '' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
-                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: '', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
+                    { 'dosage': meds[med_data].med_dosage, frequency: 'morning and evening', lab: '' },
                  ],
               };
   
@@ -312,17 +313,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning' },
-            { 'dosage': meds.med_dosage, frequency: '' },
-            { 'dosage': meds.med_dosage, frequency: 'evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: '', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
            ],
         };
   
@@ -367,17 +368,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning' },
-            { 'dosage': meds.med_dosage, frequency: '' },
-            { 'dosage': meds.med_dosage, frequency: 'evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: '', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
            ],
         };
   
@@ -451,17 +452,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let medData = [];
         let table = {
             data: [
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
-               { 'dosage': '', frequency: 'do not take' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
+               { 'dosage': '', frequency: 'do not take', lab: '' },
             ],
         };
 
@@ -484,17 +485,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
            ],
         };
   
@@ -541,17 +542,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
            ],
         };
   
@@ -750,28 +751,31 @@ export default async function thromboMedicationAlgo(_indicators) {
     }
     
    function aspirin(meds, indicators) {
-    console.log('>>   CASE Antiplatelets', meds);
-    let med_data = meds.find(x => x.med_name !== "");
+    console.log('>>   CASE Aspirin', meds);
+    let med_data = meds.findIndex(x => x.med_name === "Aspirin (ASA)");
+    console.log(meds, med_data);
     const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
     let table = {};
-    if(med_data !== undefined) {
+    if(med_data !== -1) {
        let med_Indx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
        let data = [
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
-          { aspirin: meds[med_Indx].med_dosage, frequency: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
+          { aspirin: meds[med_Indx].med_dosage, frequency: '', lab: '' },
        ];
 
        table['header'] = [meds[med_Indx]];
        table['data'] = data;
+
+       console.log('>> table data - ', table);
 
          // case a.1
          if (IR === 0 && PBR === 0 && SBR === 2) return table;
@@ -798,7 +802,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'aspirin', meds[med_Indx].med_dosage);
 
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-            table.data[11].lab = 'Goto lab for INR test';
+            table.data[10].lab = 'Goto lab for INR test';
 
             return table;
          }
@@ -900,17 +904,18 @@ export default async function thromboMedicationAlgo(_indicators) {
 
     function antiplatelets(meds, indicators) {
         console.log('>>   CASE Antiplatelets', meds);
-        let medAspIndx = meds.findIndex(x => x.med_name === "Aspirin (ASA)");
+        let tempMeds = meds;
+        let medAspIndx = tempMeds.findIndex(x => x.med_name === "Aspirin (ASA)");
         if(medAspIndx !== -1) {
-        meds.splice(medAspIndx, 1);
+        tempMeds.splice(medAspIndx, 1);
         }
-        let med_data = meds.find(x => x.med_name !== "");
-        let medIdx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
+        let med_data = tempMeds.find(x => x.med_name !== "");
+        let medIdx = tempMeds.findIndex(x => x.med_dosage !== "") !== -1 ? tempMeds.findIndex(x => x.med_dosage !== "") : 0;
         const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
         let table = {};
         if(med_data !== undefined) {
         let medData = [];
-        meds.forEach(med => {
+        tempMeds.forEach(med => {
             medData.push({
                 'med_name': med.med_name
             });
@@ -918,20 +923,20 @@ export default async function thromboMedicationAlgo(_indicators) {
         let tempArry = [...medData];
         let tempItem = tempArry.splice(medIdx, 1)[0];
         tempArry.splice(0, 0, tempItem);
-        let med_Indx = meds.findIndex(x => x.med_dosage !== "") !== -1 ? meds.findIndex(x => x.med_dosage !== "") : 0;
-        console.log(">> Antiplatelets array dose", tempArry, meds, med_Indx, meds[med_Indx]);
+        let med_Indx = tempMeds.findIndex(x => x.med_dosage !== "") !== -1 ? tempMeds.findIndex(x => x.med_dosage !== "") : 0;
+        console.log(">> Antiplatelets array dose", tempArry, tempMeds, med_Indx, tempMeds[med_Indx]);
         let data = [
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
-                { antiplatelets: meds[med_Indx].med_dosage, frequency: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
             ];
             table['header'] = tempArry;
             table['data'] = data;
@@ -964,7 +969,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'antiplatelets', 'usual dosage');
 
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-            table.data[11].lab = 'Goto lab for INR test';
+            table.data[10].lab = 'Goto lab for INR test';
 
             return table;
         }

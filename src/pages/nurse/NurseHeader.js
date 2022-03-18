@@ -9,7 +9,7 @@ class NurseHeader extends React.Component {
                 <div className="row">
                     <div className="col-3">
                         <div className="dropdown dropright">
-                            <NavLink to="/User/page2">
+                            <NavLink to="/">
                                 <button
                                     className="btn custom-dropdown"
                                     type="button"
@@ -18,7 +18,7 @@ class NurseHeader extends React.Component {
                                     aria-haspopup="true"
                                     aria-expanded="false"
                                 >
-                                    <i className="fa fa-exchange" />
+                                    <i className="fa fa-home" />
                                 </button>
                             </NavLink>
                             <div className="dropdown-menu" aria-labelledby="dropdown1">
@@ -35,7 +35,7 @@ class NurseHeader extends React.Component {
                         </div>
                     </div>
                     <div className="col-6">
-                        <h2 className="white text-center topbar-h6">Nurses Questionnaire</h2>
+                        <h2 className="white text-center topbar-h6">Patient Summary</h2>
                     </div>
                     <div className="col-3 text-right">
                         <div className="dropdown dropleft">

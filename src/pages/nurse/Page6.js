@@ -280,9 +280,9 @@ class Page6 extends React.Component {
                [keyId1]: tableData.vka[keyIdx1].warfain
             });
             // this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
-            this.setVKAVal(tableData, tableData.vka[keyIdx1].warfain);
-            this.setInitialLabState('labVal', tableData.vka[keyIdx].lab, tableData.vka.length);
-            this.setInitialSelectState('selectValVka', 'twice daily', tableData.vka.length);
+            this.setVKAVal(tableData.vka);
+            this.setInitialLabState('vka', 'labVal', tableData.vka, tableData.vka.length);
+            this.setInitialSelectState('vka', 'selectValVka', tableData.vka, tableData.vka.length);
          }
       }
 
@@ -295,8 +295,8 @@ class Page6 extends React.Component {
                this.setState({
                   [keyId1]: tableData.lmwh[keyIdx1].dosage.split(' ')[0] 
                });
-               this.setInitialState('InptValLmwh', tableData.lmwh[keyIdx1].dosage.split(' ')[0], tableData.lmwh.length);
-               this.setInitialSelectState('selectValLmwh', 'once daily', tableData.lmwh.length);
+               this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh, tableData.lmwh.length);
+               this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh, tableData.lmwh.length);
             }
          }
       }
@@ -310,8 +310,8 @@ class Page6 extends React.Component {
                this.setState({
                   [keyId1]: tableData.doac[keyIdx1].dosage.split(' ')[0] 
                });
-               this.setInitialState('InptValDoac', tableData.doac[keyIdx1].dosage.split(' ')[0], tableData.doac.length);
-               this.setInitialSelectState('selectValDoac', 'twice daily', tableData.doac.length);
+               this.setInitialState('doac', 'InptValDoac', tableData.doac, tableData.doac.length);
+               this.setInitialSelectState('doac', 'selectValDoac', tableData.doac, tableData.doac.length);
             }
          }
       }
@@ -325,8 +325,8 @@ class Page6 extends React.Component {
                this.setState({
                   [keyId1]: tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0] 
                });
-               this.setInitialState('InptValAntiplatelets', tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0], tableData.antiplatelets.length);
-               this.setInitialSelectState('selectValAntiplatelets', 'once daily', tableData.antiplatelets.length);
+               this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
+               this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
             }
          }
       }
@@ -341,15 +341,15 @@ class Page6 extends React.Component {
                this.setState({
                   [keyId1]: tableData.aspirin[keyIdx1].aspirin.split(' ')[0] 
                });
-               this.setInitialState('InptValAspirin', tableData.aspirin[keyIdx1].aspirin.split(' ')[0], tableData.aspirin.length);
-               this.setInitialSelectState('selectValAspirin', 'once daily', tableData.aspirin.length);
+               this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin, tableData.aspirin.length);
+               this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin, tableData.aspirin.length);
             }
          }
       }
 
       if(table_data.iv_heparin !== '') {
-         this.setInitialState('InptValIvHeparin', '', 11);
-         this.setInitialSelectState('selectValIvHeparin', 'once daily', 11);
+         this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
+         this.setInitialSelectState('heparin', 'selectValIvHeparin', 'do not take', 11);
       }
 
       table_data.headers = tableData.headers;
@@ -369,43 +369,86 @@ class Page6 extends React.Component {
       });
    }
 
-   setInitialState(key, value, length) {
+   setInitialState(medKey, key, value, length) {
+      console.log(value);
       for(let i=0; i<length; i++) {
-         this.setState({
-            [key+(i+1)]: value
-         });
+         if(medKey === 'doac') {
+            this.setState({
+               [key+(i+1)]: value[i].dosage?.split(' ')[0]
+            });
+         } else if(medKey === 'lmwh') {
+            this.setState({
+               [key+(i+1)]: value[i].dosage?.split(' ')[0]
+            });
+         } else if(medKey === 'antiplatelets') {
+            this.setState({
+               [key+(i+1)]: value[i].antiplatelets?.split(' ')[0]
+            });
+         } else if(medKey === 'aspirin') {
+            this.setState({
+               [key+(i+1)]: value[i].aspirin?.split(' ')[0]
+            });
+         } else if(medKey === 'heparin') {
+            this.setState({
+               [key+(i+1)]: value
+            });
+         }
       }
    }
 
-   setVKAVal(meds, value) {
+   setVKAVal(value) {
       this.setState({
-         InptValVka1: 0,
-         InptValVka2: 0,
-         InptValVka3: 0,
-         InptValVka4: 0,
-         InptValVka5: 0,
-         InptValVka6: value,
-         InptValVka7: meds.vka[6].warfain,
-         InptValVka8: meds.vka[7].warfain,
-         InptValVka9: meds.vka[8].warfain,
-         InptValVka10: meds.vka[9].warfain,
-         InptValVka11: meds.vka[10].warfain,
+         InptValVka1: value[0].warfain,
+         InptValVka2: value[1].warfain,
+         InptValVka3: value[2].warfain,
+         InptValVka4: value[3].warfain,
+         InptValVka5: value[4].warfain,
+         InptValVka6: value[5].warfain,
+         InptValVka7: value[6].warfain,
+         InptValVka8: value[7].warfain,
+         InptValVka9: value[8].warfain,
+         InptValVka10: value[9].warfain,
+         InptValVka11: value[10].warfain,
       });
    }
 
-   setInitialLabState(key, value, length) {
+   setInitialLabState(medKey, key, value, length) {
       for(let i=0; i<length; i++) {
-         this.setState({
-            [key+(i+1)]: value
-         });
+         if(medKey === 'vka') {
+            this.setState({
+               [key+(i+1)]: value[i]?.lab
+            });
+         } 
       }
    }
 
-   setInitialSelectState(key, value, length) {
+   setInitialSelectState(medKey, key, value, length) {
       for(let i=0; i<length; i++) {
-         this.setState({
-            [key+(i+1)]: value
-         });
+         if(medKey === 'vka') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'doac') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'lmwh') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'antiplatelets') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'aspirin') {
+            this.setState({
+               [key+(i+1)]: value[i]?.frequency
+            });
+         } else if(medKey === 'heparin') {
+            this.setState({
+               [key+(i+1)]: value
+            });
+         }
       }
    }
 

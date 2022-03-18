@@ -130,7 +130,8 @@ class AddPatient extends React.Component {
          antiplatMedDropDownValChanged: "",
          antiplatDosageDropDownValChanged: "",
          antiplat_dosage_time_dropdown_value: "",
-         antiplatDosageTimeDropDownValChanged: ""
+         antiplatDosageTimeDropDownValChanged: "",
+         assessment_date: ''
       };
 
       // Bind " this " ref of class to Methods
@@ -255,6 +256,7 @@ class AddPatient extends React.Component {
                      $('#weight_selected1').val(data.weight_unit);
                      $('#procedure').val(data.type_of_procedure);
                      $('#date_of_procedure').val(data.date_of_procedure);
+                     $('#date_of_assessment').val(data.assessment_date);
                      $('#age').val(data.age);
 
                      this.setState({
@@ -319,6 +321,7 @@ class AddPatient extends React.Component {
                         high_blood_pressure: data.high_blood_pressure,
                         diabetes: data.diabetes,
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
+                        assessment_date: data.assessment_date
                      });
                      this.fillactiveanticogmeds();
                      this.fillactiveantiplatmeds();
@@ -524,6 +527,7 @@ class AddPatient extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
          referred_by: this.state.referred_by,
          dictation: this.state.dictation,
+         assessment_date: this.state.assessment_date
       };
       let patient_id = localStorage.getItem('patient_id') ? localStorage.getItem('patient_id') : this.state.patient_id;
       console.log(param)
@@ -667,6 +671,21 @@ class AddPatient extends React.Component {
 
                      <div className="col-6 text-left">
                         <textarea type="text" disabled className="form-control" placeholder="for patient use only" defaultValue={this.state.procedure} />
+                     </div>
+                  </div>
+                  <div className="row">
+                     <div className="col-6">
+                        <label htmlFor="usr">Date of Assessment</label>
+                     </div>
+
+                     <div className="col-6 text-left">
+                        <input
+                           type="date"
+                           id="date_of_assessment"
+                           className="form-control"
+                           defaultValue={this.state.assessment_date}
+                           onChange={(e) => this.setState({ assessment_date: e.target.value })}
+                        />
                      </div>
                   </div>
                   <br />

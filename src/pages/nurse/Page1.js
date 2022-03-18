@@ -120,13 +120,31 @@ class Page1 extends React.Component {
          not_using_drugs: '',
          bleeding_requiring_treatment_last_three_months: '',
          cognitive_heart_failure: '',
+         mitral_stenosis: '',
          diabetes: '',
          stroke_or_mini_stroke: '',
          high_blood_pressure: '',
          ulcer_in_stomach_or_bowel_last_three_months: '',
          had_transfusion_in_last_three_months_when: '',
          had_transfusion_in_last_three_months: '',
+         blood_clot_blood_thinner_interrupted: '',
          being_treated_cancer: '',
+         venous_thromboelism: '',
+         dvt: '',
+         dvt_how_long_ago: '',
+         pe: '',
+         pe_dvt_how_long_ago: '',
+         atrial_fibrillation_of_flutter: '',
+         mechanical_heart_valve: '',
+         tissue_heart_valve: '',
+         mechanical_heart_valve_Is_the_valve_bileaflet: '',
+         mechanical_heart_valve_Is_the_valve_ball_and_cage: '',
+         mechanical_heart_valve_Is_the_valve_tilting_disc: '',
+         mechanical_heart_valve_Is_the_valve_dont_know: '',
+         location_aortic: '',
+         location_mitral: '',
+         cirrhosis_of_liver: '',
+         antiphospholipid_antibody_syndrome: '',
          cancer: '',
          radiation: '',
          chemotherapy: '',
@@ -269,6 +287,25 @@ class Page1 extends React.Component {
 
                         liver_disease: data.liver_disease,
                         lab_location_for_inr_test: data.lab_location_for_inr_test,
+                        
+                        venous_thromboelism: data.venous_thromboelism,
+                        dvt: data.dvt,
+                        dvt_how_long_ago: data.dvt_how_long_ago,
+                        pe: data.pe,
+                        pe_dvt_how_long_ago: data.pe_dvt_how_long_ago,
+                        atrial_fibrillation_of_flutter: data.atrial_fibrillation_of_flutter,
+                        mechanical_heart_valve: data.mechanical_heart_valve,
+                        tissue_heart_valve: data.tissue_heart_valve,
+                        mechanical_heart_valve_Is_the_valve_bileaflet: data.mechanical_heart_valve_Is_the_valve_bileaflet,
+                        mechanical_heart_valve_Is_the_valve_ball_and_cage: data.mechanical_heart_valve_Is_the_valve_ball_and_cage,
+                        mechanical_heart_valve_Is_the_valve_tilting_disc: data.mechanical_heart_valve_Is_the_valve_tilting_disc,
+                        mechanical_heart_valve_Is_the_valve_dont_know: data.mechanical_heart_valve_Is_the_valve_dont_know,
+                        location_aortic: data.location_aortic,
+                        location_mitral: data.location_mitral,
+                        cirrhosis_of_liver: data.cirrhosis_of_liver,
+                        antiphospholipid_antibody_syndrome: data.antiphospholipid_antibody_syndrome,
+                        mitral_stenosis: data.mitral_stenosis,
+                        blood_clot_blood_thinner_interrupted: data.blood_clot_blood_thinner_interrupted,
                         
                         being_treated_cancer: data.being_treated_cancer,
                         cancer: data.cancer,
@@ -561,12 +598,25 @@ class Page1 extends React.Component {
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
-         being_treated_cancer: being_treated_cancer,
-         cancer: cancer,
-         radiation: radiation,
-         chemotherapy: chemotherapy,
-         chemotherapy_ongoing: chemotherapy_ongoing,
-         chemotherapy_finished: chemotherapy_finished,
+         being_treated_cancer: being_treated_cancer,          
+         venous_thromboelism: venous_thromboelism,
+         dvt: dvt,
+         // dvt_how_long_ago: dvt_how_long_ago,
+         // pe: pe,
+         // pe_dvt_how_long_ago: pe_dvt_how_long_ago,
+         // atrial_fibrillation_of_flutter: atrial_fibrillation_of_flutter,
+         // mechanical_heart_valve: mechanical_heart_valve,
+         // tissue_heart_valve: tissue_heart_valve,
+         // mechanical_heart_valve_Is_the_valve_bileaflet: mechanical_heart_valve_Is_the_valve_bileaflet,
+         // mechanical_heart_valve_Is_the_valve_ball_and_cage: mechanical_heart_valve_Is_the_valve_ball_and_cage,
+         // mechanical_heart_valve_Is_the_valve_tilting_disc: mechanical_heart_valve_Is_the_valve_tilting_disc,
+         // mechanical_heart_valve_Is_the_valve_dont_know: mechanical_heart_valve_Is_the_valve_dont_know,
+         // location_aortic: location_aortic,
+         // location_mitral: location_mitral,
+         cirrhosis_of_liver: cirrhosis_of_liver,
+         antiphospholipid_antibody_syndrome: antiphospholipid_antibody_syndrome,
+         mitral_stenosis: mitral_stenosis,
+         blood_clot_blood_thinner_interrupted: blood_clot_blood_thinner_interrupted,
       } = this.state;
       let flags = [];
 
@@ -579,6 +629,11 @@ class Page1 extends React.Component {
       if(stroke_mini_stroke === 'Yes') flags.push('Stroke or ministroke within the last 3 months');
       if(diabetic === 'Yes') flags.push('Diabetes');
       if(being_treated_cancer === 'Yes') flags.push('Undergoing cancer therapy');
+      if(blood_clot_blood_thinner_interrupted === 'Yes') flags.push('Blood clot while blood thinner interrupted');
+      if(venous_thromboelism === 'Yes' || dvt === 'Yes') flags.push('DVT or PE in the last 3 months');
+      if(cirrhosis_of_liver === 'Yes') flags.push('Liver cirrhosis');
+      if(mitral_stenosis === 'Yes') flags.push('Mitral stenosis');
+      if(antiphospholipid_antibody_syndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
       
       this.setState({ dynamicFlags:flags });
 
