@@ -287,7 +287,7 @@ class Page9 extends React.Component {
 
 
    redirectNextPage() {
-      this.submitForm();
+      this.page9(this.state);
       if(this.state.patient_id !== "") {
          this.props.history.push({ pathname:'/User/Page10', state:{ patient_id: this.state.patient_id } });
       }
@@ -597,6 +597,7 @@ class Page9 extends React.Component {
 
    componentDidMount() {
       if(this.props.location.state !== undefined) {
+         console.log(this.props.location.state);
          this.setState({ 
              patient_id: this.props.location.state.patient_id, 
              redirectButton: true,

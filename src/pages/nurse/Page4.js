@@ -1069,14 +1069,6 @@ class Page4 extends React.Component {
       if(antiphospholipid_antibody_syndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
       
       this.setState({ dynamicFlags:flags });
-
-      console.log(this.props.location);
-      if(this.props.location.state) {
-         if(flags.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
    }
 
    async getDatafromAlgo() {
@@ -1148,23 +1140,17 @@ class Page4 extends React.Component {
       }
 
       if(tableData.doac !== undefined) {
-         
-         let dataKey = Object.keys(tableData.doac);
-         for(let datKey in dataKey) {
-            let keyIdx1 = tableData.doac[dataKey[datKey]].data?.findIndex(x => x.dosage);
-            let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
-            tableHeader.push({ 'doac': tableData.doac[dataKey[datKey]].header });
-            if(keyId1 !== '') {
-               this.setState({ active_doac: dataKey[0] });
-               table_data.doac = tableData.doac[dataKey[datKey]].data;
-               if(tableData.doac[dataKey[datKey]].data[0].dosage !=='') {
-                  this.setState({
-                     [keyId1]: tableData.doac[dataKey[datKey]].data[keyIdx1].dosage.split(' ')[0] 
-                  });
-                  this.setInitialState('doac', 'InptValDoac', tableData.doac[dataKey[datKey]].data, tableData.doac[dataKey[datKey]].data?.length);
-                  this.setInitialSelectState('doac', 'selectValDoac', tableData.doac[dataKey[datKey]].data, tableData.doac[dataKey[datKey]].data?.length);
-               }
-            }
+         let keyIdx1 = tableData.doac.data?.findIndex(x => x.dosage !== "");
+         let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
+         tableHeader.push({ 'doac': tableData.doac.header });
+         if(keyId1 !== '') {
+            this.setState({ active_doac: tableData.doac.header[0].med_name });
+            table_data.doac = tableData.doac.data;
+            this.setState({
+               [keyId1]: tableData.doac.data[keyIdx1].dosage.split(' ')[0] 
+            });
+            this.setInitialState('doac', 'InptValDoac', tableData.doac.data, tableData.doac.data?.length);
+            this.setInitialSelectState('doac', 'selectValDoac', tableData.doac.data, tableData.doac.data?.length);
          }
       }
 
@@ -1212,7 +1198,7 @@ class Page4 extends React.Component {
          table: table_data, 
          vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
          lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]]?.data[0].dosage !== '' ? true : false,
+         doac_chkBox: tableData.doac?.data[0].dosage !== '' ? true : false,
          antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
          aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false

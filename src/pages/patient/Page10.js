@@ -182,9 +182,7 @@ class Page10 extends React.Component {
         ) {
             this.setState({ error15: 'This field is required' });
         } else if (document.getElementById('not_sure').checked === true) {
-            if(this.state.patient_id !== "") {
-                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
-            } else if(this.state.redirectButton) {
+            if(this.state.redirectButton) {
                 const resp = await this.page10();
                 if(resp) this.props.history.push('/Nurse/Nurse1');
                 else alert('Something went wrong. Please try again.');
@@ -193,9 +191,7 @@ class Page10 extends React.Component {
                 this.props.history.push('/User/Page11');
             }
         } else {
-            if(this.state.patient_id !== "") {
-                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.state.patient_id } });
-            } else if(this.state.redirectButton) {
+            if(this.state.redirectButton) {
                 const resp = await this.page10();
                 if(resp) this.props.history.push('/Nurse/Nurse1');
                 else alert('Something went wrong. Please try again.');

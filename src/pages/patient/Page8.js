@@ -265,10 +265,10 @@ class Page8 extends React.Component {
    }
 
    redirectNextPage() {
-      this.submitForm();
-       if(this.props.location.state !== undefined) {
+      this.page8(this.state);
+      if(this.props.location.state !== undefined) {
           this.props.history.push({ pathname:'/User/Page9', state:{ patient_id: this.props.location.state.patient_id } });
-       }
+      }
    }
    
    valueChanged1() {

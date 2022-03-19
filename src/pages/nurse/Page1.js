@@ -468,13 +468,13 @@ class Page1 extends React.Component {
       console.log(activeMeds);
       this.setState({ activeAnticogMeds: activeMeds });
 
-      console.log(this.props.location);
-      if(this.props.location.state) {
-         if(activeMeds.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
+      // console.log(this.props.location);
+      // if(this.props.location.state) {
+      //    if(activeMeds.length === 0) {
+      //       console.log('reloading !!!')
+      //       window.location.reload();
+      //    }
+      // }
    }
 
    fillactiveantiplatmeds() {
@@ -518,13 +518,13 @@ class Page1 extends React.Component {
       console.log(activeMeds);
       this.setState({ activeAntiplatMeds: activeMeds });
 
-      console.log(this.props.location);
-      if(this.props.location.state) {
-         if(activeMeds.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
+      // console.log(this.props.location);
+      // if(this.props.location.state) {
+      //    if(activeMeds.length === 0) {
+      //       console.log('reloading !!!')
+      //       window.location.reload();
+      //    }
+      // }
    }
 
    set_anticoagulation(data) {
@@ -552,13 +552,13 @@ class Page1 extends React.Component {
       }
 
       this.setState({ indication_for_anticoagulation: anticoagulation });
-      console.log(this.props.location);
-      if(this.props.location.state) {
-         if(anticoagulation === '') {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
+      // console.log(this.props.location);
+      // if(this.props.location.state) {
+      //    if(anticoagulation === '') {
+      //       console.log('reloading !!!')
+      //       window.location.reload();
+      //    }
+      // }
    }
 
    set_CHADS_score() {
@@ -637,13 +637,13 @@ class Page1 extends React.Component {
       
       this.setState({ dynamicFlags:flags });
 
-      console.log(this.props.location);
-      if(this.props.location.state) {
-         if(flags.length === 0) {
-            console.log('reloading !!!')
-            window.location.reload();
-         }
-      }
+      // console.log(this.props.location);
+      // if(this.props.location.state) {
+      //    if(flags.length === 0) {
+      //       console.log('reloading !!!')
+      //       window.location.reload();
+      //    }
+      // }
    }
 
    handleChange_gender(value) {

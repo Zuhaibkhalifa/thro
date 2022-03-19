@@ -33,7 +33,7 @@ class Recommendations extends Component {
                 console.log('Nurse6 - res: ', response);
                 if (response.data.success === 'not_found') {
                     this.setState({ loader: '' });
-                    this.props.history.push('/Nurse/Nurse4');
+                    this.props.history.push({ pathname: "/Nurse/Nurse4", state: { 'add_new': true } });
                 }
 
                 let data = response.data.success;
