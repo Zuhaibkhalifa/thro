@@ -363,7 +363,7 @@ class Page4 extends React.Component {
       try {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
-         console.log(this.state.add_new_recom, this.props.location.state.add_new);
+         console.log(this.state.add_new_recom);
 
          if(this.state.add_new_recom !== true && this.state.add_new_recom !== '') {
             axios
@@ -1751,8 +1751,8 @@ class Page4 extends React.Component {
                                                 <>
                                                    <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
                                                    <td>
-                                                      <select id={`selectValLmh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmh${lmwhKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValLmh${lmwhKey+1}`]}>{this.state[`selectValLmh${lmwhKey+1}`]}</option>
+                                                      <select id={`selectValLmwh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmwh${lmwhKey+1}`)} className='form-control'>
+                                                         <option value={this.state[`selectValLmwh${lmwhKey+1}`]}>{this.state[`selectValLmwh${lmwhKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>

@@ -187,11 +187,11 @@ class Dictation extends Component {
                 headers: headers,
                 })
                 .then((response) => {
-                console.log('Dictation Note - res: ', response);
                 const data = response.data?.success[0];
                 const medicationData = JSON.parse(data?.jsonTable);
                 const antiCogDrugs = this.fillactiveanticogmeds(data);
                 const antiPlatDrugs = this.fillactiveantiplatmeds(data);
+                console.log('Dictation Note - res: ', response, medicationData);
                 const content = `
                     <p style="font-weight: bold;">Episode information</p>
                     <br />
@@ -301,51 +301,66 @@ class Dictation extends Component {
                     <br />
                     ${
                         data.is_vka_selected !== "0" ? 
-                        `<p style="font-weight: bold;">Warfain: ${data.activeVKA}
-                            <br />
-                            <span>Last dose before procedure: ${data.medicationData.vka[4].warfain}</span>
-                            <br />
-                            <span>Resumption after procedure:  ${data.medicationData.vka[6].warfain}</span>
+                        `<p style="font-weight: bold;">Warfain: ${data?.activeVKA}
+                            ${
+                                medicationData.vka !== "" ?
+                                `<br />
+                                <span>Last dose before procedure: ${medicationData?.vka[4]?.warfain}</span>
+                                <br />
+                                <span>Resumption after procedure:  ${medicationData?.vka[6]?.warfain}</span>` : ""
+                            }
                         </p>` : ''
                     }
                     <br />
                     ${
                         data.is_lmwh_selected !== "0" ? 
-                        `<p style="font-weight: bold;">LMWH: ${data.activeLMWH}
-                            <br />
-                            <span>Last dose before procedure: ${data.medicationData.lmwh[4].dosage}</span>
-                            <br />
-                            <span>Resumption after procedure:  ${data.medicationData.lmwh[6].dosage}</span>
+                        `<p style="font-weight: bold;">LMWH: ${data?.activeLMWH}
+                            ${
+                                medicationData.lmwh !== "" ?
+                                `<br />
+                                <span>Last dose before procedure: ${medicationData?.lmwh[4]?.dosage}</span>
+                                <br />
+                                <span>Resumption after procedure:  ${medicationData?.lmwh[6]?.dosage}</span>` : ""
+                            }
                         </p>` : ''
                     }
                     <br />
                     ${
                         data.is_doac_selected !== "0" ? 
-                        `<p style="font-weight: bold;">DOAC: ${data.activeDOAC}
-                            <br />
-                            <span>Last dose before procedure: ${data.medicationData.doac[4].dosage}</span>
-                            <br />
-                            <span>Resumption after procedure:  ${data.medicationData.doac[6].dosage}</span>
+                        `<p style="font-weight: bold;">DOAC: ${data?.activeDOAC}
+                            ${
+                                medicationData.doac !== "" ?
+                                `<br />
+                                <span>Last dose before procedure: ${medicationData?.doac[4]?.dosage}</span>
+                                <br />
+                                <span>Resumption after procedure:  ${medicationData?.doac[6]?.dosage}</span>` : ""
+                            }
                         </p>` : ''
                     }
                     <br />
                     ${
                         data.is_antiplatelets_selected !== "0" ? 
-                        `<p style="font-weight: bold;">Antiplatelets: ${data.headers[3].antiplatelets[0].med_name}
-                            <br />
-                            <span>Last dose before procedure: ${data.medicationData.antiplatelets[4].antiplatelets}</span>
-                            <br />
-                            <span>Resumption after procedure:  ${data.medicationData.antiplatelets[6].antiplatelets}</span>
+                        `<p style="font-weight: bold;">Antiplatelets: ${medicationData.headers[3].antiplatelets[0].med_name}
+                            ${
+                                medicationData.antiplatelets !== "" ?
+                                `<br />
+                                <span>Last dose before procedure: ${medicationData?.antiplatelets[4]?.antiplatelets}</span>
+                                <br />
+                                <span>Resumption after procedure:  ${medicationData?.antiplatelets[6]?.antiplatelets}</span>` : ""
+                            }
                         </p>` : ''
                     }
                     <br />
                     ${
                         data.is_aspirin_selected !== "0" ? 
                         `<p style="font-weight: bold;">Aspirin: Aspirin (ASA)
-                            <br />
-                            <span>Last dose before procedure: ${data.medicationData.aspirin[4].aspirin}</span>
-                            <br />
-                            <span>Resumption after procedure:  ${data.medicationData.aspirin[6].aspirin}</span>
+                            ${
+                                medicationData.aspirin !== "" ?
+                                `<br />
+                                <span>Last dose before procedure: ${medicationData?.aspirin[4]?.aspirin}</span>
+                                <br />
+                                <span>Resumption after procedure:  ${medicationData?.aspirin[6]?.aspirin}</span>` : ""
+                            }
                         </p>` : ''
                     }
                     <br />

@@ -31,14 +31,12 @@ export default async function thromboMedicationAlgo(_indicators) {
     const tableData = detectCase(drugData);
 
     function detectCase(meds) {
+         console.log(meds);
         let data = {};
         data['vka'] = mapToVKACases(meds.vka, indicators, meds.date_of_procedure);
         data['lmwh'] = lmwhCases(meds.lmwh, indicators);
         data['doac'] = doacCases(meds.doac, indicators);
-        console.log(meds, meds.antiplatelet.findIndex(x => x.med_name === 'Aspirin (ASA)'));
-        if(meds.antiplatelet.findIndex(x => x.med_name === 'Aspirin (ASA)') !== -1) {
-           data['aspirin'] = aspirin(meds.antiplatelet, indicators);
-        }
+        data['aspirin'] = aspirin(meds.aspirin, indicators);
         data['antiplatelets'] = antiplatelets(meds.antiplatelet, indicators);
   
         return data;
@@ -86,39 +84,39 @@ export default async function thromboMedicationAlgo(_indicators) {
            table['data'] = data;
     
             // case a.1
-            if (IR === 0 && PBR === 0 && ((SBR === 0) || (SBR === 1))) return table;
+            if (IR === 0 && PBR === 0 && SBR === 2) return table;
             // case a.2  FLAG
-            else if (IR === 0 && PBR === 1 && ((SBR === 0) || (SBR === 1))) {
+            else if (IR === 0 && PBR === 1 && SBR === 2) {
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
                 
                 return table;
             }
     
             // case a.3
-            else if (IR === 0 && PBR === 0 && ((SBR === 2) || (SBR === 3))) {
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
+            else if (IR === 0 && PBR === 0 && SBR === 1) {
+                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
                 
                 return table;
             }
     
             // case a.4
-            else if (IR === 0 && PBR === 1 && ((SBR === 2) || (SBR === 3))) {
+            else if (IR === 0 && PBR === 1 && SBR === 1) {
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
+                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
                 
                 return table;
             }
     
             // case b
             else if (SBR === -1) {
-                table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'warfain', med_data.med_dosage[dataKey]);
+                table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
     
                 return table;
             }
     
             // case c.1
-            else if (IR === 1 && PBR === 0 && ((SBR === 0) || (SBR === 1)) && CrCl >= 30) {
+            else if ((IR || PBR) && SBR === 3 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
                 table.data[4].frequency = 'morning';
@@ -130,7 +128,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             }
     
             // case c.2
-            else if (IR === 1 && PBR === 0 && ((SBR === 2) || (SBR === 3)) && CrCl >= 30) {
+            else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
                 table.data[4].frequency = 'morning';
@@ -138,13 +136,13 @@ export default async function thromboMedicationAlgo(_indicators) {
                 table.data[7].frequency = 'morning and evening';
                 table.data[8].frequency = 'morning and evening';
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
+                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case c.3    FLAG
-            else if (IR === 1 && PBR === 1 && ((SBR === 0) || (SBR === 1)) && CrCl >= 30) {
+            else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
                 table.data[4].frequency = 'morning';
@@ -157,7 +155,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             }
     
             // case c.4    FLAG
-            else if (IR === 1 && PBR === 1 && ((SBR === 2) || (SBR === 3)) && CrCl >= 30) {
+            else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
                 table.data[4].frequency = 'morning';
@@ -165,45 +163,45 @@ export default async function thromboMedicationAlgo(_indicators) {
                 table.data[7].frequency = 'morning and evening';
                 table.data[8].frequency = 'morning and evening';
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey]);
+                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case d.1
-            else if (IR === 1 && PBR === 0 && ((SBR === 0) || (SBR === 1)) && CrCl < 30) {
+            else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
                 table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
                 table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR');
+                table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case e.1
-            else if (IR === 1 && PBR === 0 && ((SBR === 2) || (SBR === 3)) && CrCl < 30) {
+            else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl < 30) {
                 table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
                 table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey]);
-                table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR');
+                table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case e.2     FLAG
-            else if (IR === 1 && PBR === 1 && ((SBR === 0) || (SBR === 1)) && CrCl < 30) {
+            else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
                 table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
                 table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR');
+                table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case e.3     FLAG
-            else if (IR === 1 && PBR === 1 && ((SBR === 2) || (SBR === 3)) && CrCl < 30) {
+            else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl < 30) {
                 table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
                 table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey]);
-                table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR');
+                table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
@@ -328,32 +326,32 @@ export default async function thromboMedicationAlgo(_indicators) {
         };
   
         // Case a.1
-        if (PBR === 0 && ((SBR === 0) || (SBR === 1)) && CrCl >= 50) return table;
+        if (PBR === 0 && SBR === 2 && CrCl >= 50) return table;
   
         // Case a.2    FLAG
-        if (PBR === 1 && ((SBR === 0) || (SBR === 1)) && CrCl >= 50) return table;
+        if (PBR === 1 && SBR === 2 && CrCl >= 50) return table;
   
         // Case a.3
-        if (PBR === 0 && ((SBR === 2) || (SBR === 3)) && CrCl >= 50) return modifyData(table, [6], 'frequency', '');
+        if (PBR === 0 && SBR === 1 && CrCl >= 50) return modifyData(table, [6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case a.4    FLAG
-        if (PBR === 1 && ((SBR === 2) || (SBR === 3)) && CrCl >= 50) return modifyData(table, [6], 'frequency', '');
+        if (PBR === 1 && SBR === 1 && CrCl >= 50) return modifyData(table, [6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.1
-        if (PBR === 0 && ((SBR === 0) || (SBR === 1)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '');
+        if (PBR === 0 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.2    FLAG
-        if (PBR === 1 && ((SBR === 0) || (SBR === 1)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '');
+        if (PBR === 1 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.3
-        if (PBR === 0 && ((SBR === 2) || (SBR === 3)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '');
+        if (PBR === 0 && SBR === 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.4    FLAG
-        if (PBR === 1 && ((SBR === 2) || (SBR === 3)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '');
+        if (PBR === 1 && SBR === 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case c.1    FLAG
         if (CrCl < 30) {
-           table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'frequency', '');
+           table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
            table.data['lmwh_note1'] = 'Relative contraindication to LMWH with CrCl <30. Periprocedural management plan should be individualized for this patient. And blank schedule appears';
   
            return table;
@@ -383,28 +381,28 @@ export default async function thromboMedicationAlgo(_indicators) {
         };
   
         // Case a.1
-        if (PBR === 0 && ((SBR === 0) || (SBR === 1)) && CrCl >= 50) return table;
+        if (PBR === 0 && SBR === 2 && CrCl >= 50) return table;
   
         // Case a.2    FLAG
-        if (PBR === 1 && ((SBR === 0) || (SBR === 1)) && CrCl >= 50) return table;
+        if (PBR === 1 && SBR === 2 && CrCl >= 50) return table;
   
         // Case a.3
-        if (PBR === 0 && ((SBR === 2) || (SBR === 3)) && CrCl >= 50) return modifyData(table, [6], 'frequency', '');
+        if (PBR === 0 && SBR === 1 && CrCl >= 50) return modifyData(table, [6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case a.4    FLAG
-        if (PBR === 1 && ((SBR === 2) || (SBR === 3)) && CrCl >= 50) return modifyData(table, [6], 'frequency', '');
+        if (PBR === 1 && SBR === 1 && CrCl >= 50) return modifyData(table, [6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.1
-        if (PBR === 0 && ((SBR === 0) || (SBR === 1)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '');
+        if (PBR === 0 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.2    FLAG
-        if (PBR === 1 && ((SBR === 0) || (SBR === 1)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '');
+        if (PBR === 1 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.3
-        if (PBR === 0 && ((SBR === 2) || (SBR === 3)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '');
+        if (PBR === 0 && SBR === 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case b.4    FLAG
-        if (PBR === 1 && ((SBR === 2) || (SBR === 3)) && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '');
+        if (PBR === 1 && SBR === 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 5, 6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
         // Case c.1    FLAG
         if (CrCl < 30) {
@@ -503,32 +501,32 @@ export default async function thromboMedicationAlgo(_indicators) {
   
         // case b.1
         if (SBR === 2 && CrCl >= 50) {
-           table = modifyData(table, [4, 5], 'frequency', '');
-           table = modifyData(table, [6], 'frequency', 'evening');
+           table = modifyData(table, [4, 5], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+           table = modifyData(table, [6], 'frequency', 'evening', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
            return table;
         }
   
         // case b.2
         if (SBR === 1 && CrCl >= 50) {
-           table = modifyData(table, [3, 4, 5, 6], 'frequency', '');
-           table = modifyData(table, [7], 'frequency', 'evening');
+           table = modifyData(table, [3, 4, 5, 6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+           table = modifyData(table, [7], 'frequency', 'evening', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
            return table;
         }
   
         // case c.1
         if (SBR === 2 && CrCl < 50) {
-           table = modifyData(table, [2, 3, 4, 5], 'frequency', '');
-           table = modifyData(table, [6], 'frequency', 'evening');
+           table = modifyData(table, [2, 3, 4, 5], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+           table = modifyData(table, [6], 'frequency', 'evening', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
            return table;
         }
   
         // case c.2
         if (SBR === 1 && CrCl < 50) {
-           table = modifyData(table, [1, 2, 3, 4, 5, 6], 'frequency', '');
-           table = modifyData(table, [7], 'frequency', 'evening');
+           table = modifyData(table, [1, 2, 3, 4, 5, 6], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+           table = modifyData(table, [7], 'frequency', 'evening', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
            return table;
         }
@@ -561,16 +559,16 @@ export default async function thromboMedicationAlgo(_indicators) {
   
         // case b.1
         if (SBR === 2) {
-           table = modifyData(table, [4, 5], 'frequency', '');
-           table = modifyData(table, [6], 'frequency', 'evening');
+           table = modifyData(table, [4, 5], 'frequency', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+           table = modifyData(table, [6], 'frequency', 'evening', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
            return table;
         }
   
         // case c.1
         if (SBR === 1) {
-           table = modifyData(table, [3, 4, 5, 6], 'dabigatran', '');
-           table = modifyData(table, [7], 'dabigatran', 'evening');
+           table = modifyData(table, [3, 4, 5, 6], 'dabigatran', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+           table = modifyData(table, [7], 'dabigatran', 'evening', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
   
            return table;
         }
@@ -607,22 +605,22 @@ export default async function thromboMedicationAlgo(_indicators) {
   
         // case b.1
         if (SBR === 2 && RDT === 'am') {
-           return modifyData(table, [4, 5, 6], 'rivaroxaban', '');
+           return modifyData(table, [4, 5, 6], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case b.1
         if (SBR === 2 && RDT === 'pm') {
-           return modifyData(table, [4, 5], 'rivaroxaban', '');
+           return modifyData(table, [4, 5], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case c.1
         if (SBR === 1 && RDT === 'am') {
-           return modifyData(table, [3, 4, 5, 6, 7], 'rivaroxaban', '');
+           return modifyData(table, [3, 4, 5, 6, 7], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case c.1
         if (SBR === 1 && RDT === 'pm') {
-           return modifyData(table, [3, 4, 5, 6], 'rivaroxaban', '');
+           return modifyData(table, [3, 4, 5, 6], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         return table;
@@ -657,22 +655,22 @@ export default async function thromboMedicationAlgo(_indicators) {
   
         // case b.1
         if (SBR === 2 && RDT === 'am') {
-           return modifyData(table, [5, 6], 'rivaroxaban', '');
+           return modifyData(table, [5, 6], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case b.1
         if (SBR === 2 && RDT === 'pm') {
-           return modifyData(table, [4, 5], 'rivaroxaban', '');
+           return modifyData(table, [4, 5], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case c.1
         if (SBR === 1 && RDT === 'am') {
-           return modifyData(table, [4, 5, 6, 7], 'rivaroxaban', '');
+           return modifyData(table, [4, 5, 6, 7], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case c.1
         if (SBR === 1 && RDT === 'pm') {
-           return modifyData(table, [3, 4, 5, 6], 'rivaroxaban', '');
+           return modifyData(table, [3, 4, 5, 6], 'rivaroxaban', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         return table;
@@ -731,20 +729,20 @@ export default async function thromboMedicationAlgo(_indicators) {
   
         // case b.1
         if (SBR === 2 && RDT === 'am') {
-           return modifyData(table, [4, 5, 6], 'edoxabon', '');
+           return modifyData(table, [4, 5, 6], 'edoxabon', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
         // case b.1
         if (SBR === 2 && RDT === 'pm') {
-           return modifyData(table, [4, 5], 'edoxabon', '');
+           return modifyData(table, [4, 5], 'edoxabon', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         // case c.1
         if (SBR === 1 && RDT === 'am') {
-           return modifyData(table, [3, 4, 5, 6, 7], 'edoxabon', '');
+           return modifyData(table, [3, 4, 5, 6, 7], 'edoxabon', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
         // case c.1
         if (SBR === 1 && RDT === 'pm') {
-           return modifyData(table, [3, 4, 5, 6], 'edoxabon', '');
+           return modifyData(table, [3, 4, 5, 6], 'edoxabon', '', meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
         }
   
         return table;
@@ -787,19 +785,19 @@ export default async function thromboMedicationAlgo(_indicators) {
 
          // case a.3
          else if (IR === 0 && PBR === 0 && SBR === 1) {
-            table = modifyData(table, [5, 6], 'aspirin', meds[med_Indx].med_dosage);
+            table = modifyData(table, [5, 6], 'aspirin', meds[med_Indx].med_dosage, meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
             return table;
          }
 
          // case a.4
          else if (IR === 0 && PBR === 1 && SBR === 1) {
-            table = modifyData(table, [5, 6], 'aspirin', meds[med_Indx].med_dosage);
+            table = modifyData(table, [5, 6], 'aspirin', meds[med_Indx].med_dosage, meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
             return table;
          }
 
          // case b
          else if (SBR === 3) {
-            table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'aspirin', meds[med_Indx].med_dosage);
+            table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'aspirin', meds[med_Indx].med_dosage, meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
             table.data[10].lab = 'Goto lab for INR test';
@@ -828,7 +826,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             table.data[7].frequency = 'morning and evening';
             table.data[8].frequency = 'morning and evening';
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-            table = modifyData(table, [5, 6], 'aspirin', 'usual dosage');
+            table = modifyData(table, [5, 6], 'aspirin', 'usual dosage', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
          }
@@ -855,7 +853,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             table.data[7].frequency = 'morning and evening';
             table.data[8].frequency = 'morning and evening';
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-            table = modifyData(table, [5, 6], 'aspirin', 'usual dosage');
+            table = modifyData(table, [5, 6], 'aspirin', 'usual dosage', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
          }
@@ -864,7 +862,7 @@ export default async function thromboMedicationAlgo(_indicators) {
          else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [7, 8, 9, 10], 'aspirin', 'Dose dependents on INR');
+            table = modifyData(table, [7, 8, 9, 10], 'aspirin', 'Dose dependents on INR', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
          }
@@ -873,8 +871,8 @@ export default async function thromboMedicationAlgo(_indicators) {
          else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [5, 6, 7], 'aspirin', 'usual dosage');
-            table = modifyData(table, [8, 9, 10], 'aspirin', 'Dose dependents on INR');
+            table = modifyData(table, [5, 6, 7], 'aspirin', 'usual dosage', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+            table = modifyData(table, [8, 9, 10], 'aspirin', 'Dose dependents on INR', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
          }
@@ -883,7 +881,7 @@ export default async function thromboMedicationAlgo(_indicators) {
          else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [7, 8, 9, 10], 'aspirin', 'Dose dependents on INR');
+            table = modifyData(table, [7, 8, 9, 10], 'aspirin', 'Dose dependents on INR', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
          }
@@ -892,8 +890,8 @@ export default async function thromboMedicationAlgo(_indicators) {
          else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [5, 6, 7], 'aspirin', 'usual dosage');
-            table = modifyData(table, [8, 9, 10], 'aspirin', 'Dose dependents on INR');
+            table = modifyData(table, [5, 6, 7], 'aspirin', 'usual dosage', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+            table = modifyData(table, [8, 9, 10], 'aspirin', 'Dose dependents on INR', meds[med_Indx]?.med_dosage_time === 'Once daily' ? 'morning' : meds[med_Indx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
          }
@@ -905,10 +903,10 @@ export default async function thromboMedicationAlgo(_indicators) {
     function antiplatelets(meds, indicators) {
         console.log('>>   CASE Antiplatelets', meds);
         let tempMeds = meds;
-        let medAspIndx = tempMeds.findIndex(x => x.med_name === "Aspirin (ASA)");
-        if(medAspIndx !== -1) {
-        tempMeds.splice(medAspIndx, 1);
-        }
+      //   let medAspIndx = tempMeds.findIndex(x => x.med_name === "Aspirin (ASA)");
+      //   if(medAspIndx !== -1) {
+      //   tempMeds.splice(medAspIndx, 1);
+      //   }
         let med_data = tempMeds.find(x => x.med_name !== "");
         let medIdx = tempMeds.findIndex(x => x.med_dosage !== "") !== -1 ? tempMeds.findIndex(x => x.med_dosage !== "") : 0;
         const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
@@ -926,17 +924,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let med_Indx = tempMeds.findIndex(x => x.med_dosage !== "") !== -1 ? tempMeds.findIndex(x => x.med_dosage !== "") : 0;
         console.log(">> Antiplatelets array dose", tempArry, tempMeds, med_Indx, tempMeds[med_Indx]);
         let data = [
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
-                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: '', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
+                { antiplatelets: tempMeds[med_Indx].med_dosage, frequency: tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', lab: '' },
             ];
             table['header'] = tempArry;
             table['data'] = data;
@@ -954,19 +952,19 @@ export default async function thromboMedicationAlgo(_indicators) {
 
         // case a.3
         else if (IR === 0 && PBR === 0 && SBR === 1) {
-            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage');
+            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
             return table;
         }
 
         // case a.4
         else if (IR === 0 && PBR === 1 && SBR === 1) {
-            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage');
+            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
             return table;
         }
 
         // case b
         else if (SBR === 3) {
-            table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'antiplatelets', 'usual dosage');
+            table = modifyData(table, [0, 1, 2, 3, 4, 5, 6], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
             table.data[10].lab = 'Goto lab for INR test';
@@ -995,7 +993,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             table.data[7].frequency = 'morning and evening';
             table.data[8].frequency = 'morning and evening';
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage');
+            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
         }
@@ -1022,7 +1020,7 @@ export default async function thromboMedicationAlgo(_indicators) {
             table.data[7].frequency = 'morning and evening';
             table.data[8].frequency = 'morning and evening';
             table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage');
+            table = modifyData(table, [5, 6], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
         }
@@ -1031,7 +1029,7 @@ export default async function thromboMedicationAlgo(_indicators) {
         else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [7, 8, 9, 10], 'antiplatelets', 'Dose dependents on INR');
+            table = modifyData(table, [7, 8, 9, 10], 'antiplatelets', 'Dose dependents on INR', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
         }
@@ -1040,8 +1038,8 @@ export default async function thromboMedicationAlgo(_indicators) {
         else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [5, 6, 7], 'antiplatelets', 'usual dosage');
-            table = modifyData(table, [8, 9, 10], 'antiplatelets', 'Dose dependents on INR');
+            table = modifyData(table, [5, 6, 7], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+            table = modifyData(table, [8, 9, 10], 'antiplatelets', 'Dose dependents on INR', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
         }
@@ -1050,7 +1048,7 @@ export default async function thromboMedicationAlgo(_indicators) {
         else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [7, 8, 9, 10], 'antiplatelets', 'Dose dependents on INR');
+            table = modifyData(table, [7, 8, 9, 10], 'antiplatelets', 'Dose dependents on INR', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
         }
@@ -1059,8 +1057,8 @@ export default async function thromboMedicationAlgo(_indicators) {
         else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
             table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
             table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-            table = modifyData(table, [5, 6, 7], 'antiplatelets', 'usual dosage');
-            table = modifyData(table, [8, 9, 10], 'antiplatelets', 'Dose dependents on INR');
+            table = modifyData(table, [5, 6, 7], 'antiplatelets', 'usual dosage', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+            table = modifyData(table, [8, 9, 10], 'antiplatelets', 'Dose dependents on INR', tempMeds[medIdx]?.med_dosage_time === 'Once daily' ? 'morning' : tempMeds[medIdx]?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
 
             return table;
         }
@@ -1069,9 +1067,12 @@ export default async function thromboMedicationAlgo(_indicators) {
     }
   
      //
-    function modifyData(table, targets, prop, value) {
+    function modifyData(table, targets, prop, value, freq_value) {
+       console.log(freq_value);
         targets.map((t) => {
-           return (table.data[t][prop] = value);
+           table.data[t][prop] = value;
+           table.data[t]['frequency'] = freq_value;
+           return table;
         });
         return table;
     }
