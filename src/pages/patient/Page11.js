@@ -433,7 +433,7 @@ class Page11 extends React.Component {
                             </p>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q1', 'q', 'Aspirin (ASA)')}
+                            {this.renderQuestionCheckBox('q1', 'q', 'Aspirin&#174; (ASA)')}
                             <div id="q1-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q1_dosage-1', 'q1_dosage', '81', 'dosage')}
                                 {this.renderQuestionRadioCustomOption('q1_dosage-cust', 'q1_dosage', 'dosage')}
@@ -445,7 +445,7 @@ class Page11 extends React.Component {
                             </div>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q2', 'q', 'Plavix (Clopidogrel)')}
+                            {this.renderQuestionCheckBox('q2', 'q', 'Plavix&#174; (Clopidogrel)')}
                             <div id="q2-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q2_dosage-1', 'q2_dosage', '75', 'dosage')}
                                 {this.renderQuestionRadioCustomOption('q2_dosage-cust', 'q2_dosage', 'dosage')}
@@ -457,7 +457,7 @@ class Page11 extends React.Component {
                             </div>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q3', 'q', 'Brillinta (Ticagrelor)')}
+                            {this.renderQuestionCheckBox('q3', 'q', 'Brillinta&#174; (Ticagrelor)')}
                             <div id="q3-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q3_dosage-1', 'q3_dosage', '60', 'dosage')}
                                 {this.renderQuestionRadioOption('q3_dosage-1', 'q3_dosage', '90', 'dosage')}
@@ -470,7 +470,7 @@ class Page11 extends React.Component {
                             </div>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q4', 'q', 'Effient (Prasugrel)')}
+                            {this.renderQuestionCheckBox('q4', 'q', 'Effient&#174; (Prasugrel)')}
                             <div id="q4-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q4_dosage-1', 'q4_dosage', '5', 'dosage')}
                                 {this.renderQuestionRadioOption('q4_dosage-1', 'q4_dosage', '10', 'dosage')}

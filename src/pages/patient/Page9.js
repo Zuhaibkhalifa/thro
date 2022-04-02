@@ -321,7 +321,7 @@ class Page9 extends React.Component {
 
                      {/* option 1 */}
                      <div className="checkbox">
-                        <label className="blue">Dalteparin (Fragmin)</label>
+                        <label className="blue">Dalteparin&#174; (Fragmin)</label>
                         <input
                            type="radio"
                            className="pull-right goption chk"
@@ -393,7 +393,7 @@ class Page9 extends React.Component {
 
                      {/* option 2 */}
                      <div className="checkbox">
-                        <label className="blue">Enoxaparin (Lovenox)</label>
+                        <label className="blue">Enoxaparin&#174; (Lovenox)</label>
                         <input
                            type="radio"
                            className="pull-right goption chk"
@@ -465,7 +465,7 @@ class Page9 extends React.Component {
 
                      {/* option 3 */}
                      <div className="checkbox">
-                        <label className="blue">Tinzaparin (Innohep)</label>
+                        <label className="blue">Tinzaparin&#174; (Innohep)</label>
                         <input
                            type="radio"
                            className="pull-right goption chk"

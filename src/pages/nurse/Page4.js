@@ -1624,7 +1624,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValVka`, e.target.value, this.state.InptValVka1)}>
                                           {
                                              this.state.table.headers.find(x => x['vka']).vka.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
                                              })
                                           }
                                        </select>
@@ -1636,7 +1636,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValDoac`, e.target.value, this.state.InptValDoac1)}>
                                           {
                                              this.state.table.headers.find(x => x['doac']).doac.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
                                              })
                                           }
                                        </select>
@@ -1648,7 +1648,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAntiplatelets`, e.target.value, this.state.InptValAntiplatelets1)}>
                                           {
                                              this.state.table.headers.find(x => x['antiplatelets']).antiplatelets.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
                                              })
                                           }
                                        </select>
@@ -1660,7 +1660,7 @@ class Page4 extends React.Component {
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValLmwh`, e.target.value, this.state.InptValLmwh1)}>
                                           {
                                              this.state.table.headers.find(x => x['lmwh']).lmwh.map((heads, key) => {
-                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}&#174;</option>
+                                                return <option key={`med-header-${key}-${heads.med_name}`} value={heads.med_name}>{heads.med_name}</option>
                                              })
                                           }
                                        </select>
@@ -1670,7 +1670,7 @@ class Page4 extends React.Component {
                                     this.state.aspirin_chkBox ?
                                     <th colSpan={2}>
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAspirin`, e.target.value, this.state.InptValAspirin1)}>
-                                          <option value={this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}>{this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}&#174;</option>
+                                          <option value={this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}>{this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}</option>
                                        </select>
                                     </th> : <></>
                                  }
@@ -1678,7 +1678,7 @@ class Page4 extends React.Component {
                                     this.state.iv_heparin_chkBox ?
                                     <th colSpan={2}>
                                        <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValIvHeparin`, e.target.value, this.state.InptValIvHeparin1)}>
-                                          <option value={this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}>{this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}&#174;</option>
+                                          <option value={this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}>{this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}</option>
                                        </select>
                                     </th> : <></>
                                  }
