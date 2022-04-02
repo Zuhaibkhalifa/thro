@@ -1199,7 +1199,7 @@ class Page4 extends React.Component {
          table: table_data, 
          vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
          lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac?.data[0].dosage !== '' ? true : false,
+         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]]?.data[0].dosage !== '' ? true : false,
          antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
          aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false
