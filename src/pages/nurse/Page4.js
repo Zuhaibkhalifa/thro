@@ -1139,7 +1139,7 @@ class Page4 extends React.Component {
          }
       }
 
-      if(tableData.doac !== undefined) {
+      if(Object.keys(tableData.doac)[0] !== 'data') {
          let doacKey = Object.keys(tableData.doac)[0];
          let keyIdx1 = tableData.doac[doacKey].data?.findIndex(x => x.dosage !== "");
          let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
