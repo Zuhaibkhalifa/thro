@@ -417,20 +417,6 @@ class Page4 extends React.Component {
                                         })
                                     }
                                 />
-                                <br />
-                                <label className="radio-inline blue">Not Sure</label>
-                                <input
-                                    id="dvt_option5"
-                                    type="radio"
-                                    name="dvt_sub_opt"
-                                    className="pull-right"
-                                    onChange={(e) =>
-                                        this.setState({
-                                            q1_sub_q1_ans_inner1: e.target.checked ? 'Not Sure' : '',
-                                        })
-                                    }
-                                />
-                                <div className="text-danger"> {this.state.error3 !== '' ? this.state.error3 : ''}</div>
                             </div>
 
                             <br />
@@ -487,16 +473,6 @@ class Page4 extends React.Component {
                                     })
                                 }
                             />
-                            <br />
-                            <label className="radio-inline blue">Not Sure</label>
-                            <input
-                                id="pe_option5"
-                                type="radio"
-                                name="pe_sub_option"
-                                className="pull-right"
-                                onChange={(e) => this.setState({ q1_sub_q2_ans_inner2: e.target.checked ? 'Not Sure' : '' })}
-                            />
-                            <div className="text-danger"> {this.state.error4 !== '' ? this.state.error4 : ''}</div>
                         </div>
 
                         <br />

@@ -1140,17 +1140,18 @@ class Page4 extends React.Component {
       }
 
       if(tableData.doac !== undefined) {
-         let keyIdx1 = tableData.doac.data?.findIndex(x => x.dosage !== "");
+         let doacKey = Object.keys(tableData.doac)[0];
+         let keyIdx1 = tableData.doac[doacKey].data?.findIndex(x => x.dosage !== "");
          let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
-         tableHeader.push({ 'doac': tableData.doac.header });
+         tableHeader.push({ 'doac': tableData.doac[doacKey].header });
          if(keyId1 !== '') {
-            this.setState({ active_doac: tableData.doac.header[0].med_name });
-            table_data.doac = tableData.doac.data;
+            this.setState({ active_doac: tableData.doac[doacKey].header[0].med_name });
+            table_data.doac = tableData.doac[doacKey].data;
             this.setState({
-               [keyId1]: tableData.doac.data[keyIdx1].dosage.split(' ')[0] 
+               [keyId1]: tableData.doac[doacKey].data[keyIdx1].dosage.split(' ')[0] 
             });
-            this.setInitialState('doac', 'InptValDoac', tableData.doac.data, tableData.doac.data?.length);
-            this.setInitialSelectState('doac', 'selectValDoac', tableData.doac.data, tableData.doac.data?.length);
+            this.setInitialState('doac', 'InptValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
+            this.setInitialSelectState('doac', 'selectValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
          }
       }
 

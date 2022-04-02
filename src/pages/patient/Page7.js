@@ -332,17 +332,6 @@ class Page7 extends React.Component {
                                 value="More than 3 months ago"
                                 onChange={(e) => this.setState({ q5_sub: e.target.value })}
                             />
-                            <br />
-                            <label className="radio-inline blue">Not Sure</label>
-                            <input
-                                type="radio"
-                                name="dvt"
-                                id="dvt4"
-                                value="Not Sure"
-                                className="pull-right"
-                                onChange={this.handleRadioChange}
-                            />
-                            <div className="text-danger"> {this.state.error2 !== '' ? this.state.error2 : ''}</div>
                         </div>
 
                         <label className="radio-inline blue">None Of Above</label>
