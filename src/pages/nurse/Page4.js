@@ -351,10 +351,6 @@ class Page4 extends React.Component {
    }
 
    componentDidMount() {
-      console.log(this.props.location);
-      if(this.props.location.state !== undefined) {
-         this.setState({ add_new_recom: this.props.location.state.add_new, recom_id: this.props.location.state.recommendation_id });
-      }
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -363,9 +359,10 @@ class Page4 extends React.Component {
       try {
          let patient_id = localStorage.getItem('patient_id');
          this.setState({ patient_id: patient_id });
-         console.log(this.state.add_new_recom);
-
-         if(this.state.add_new_recom !== true && this.state.add_new_recom !== '') {
+         console.log('recommendation : - ', this.state);
+         if(this.props.location.state !== undefined) {
+            console.log('location state has some values...', this.props.location.state);
+            this.setState({ add_new_recom: this.props.location.state.add_new, recom_id: this.props.location.state.recommendation_id });
             axios
             .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
                headers: headers,
@@ -1195,11 +1192,12 @@ class Page4 extends React.Component {
 
       table_data.headers = tableHeader;
       table_data.date[5].d_0 = this.state.date_of_procedure;
+      // console.log(tableData.doac[Object.keys(tableData.doac)[0]]);
       this.setState({ 
          table: table_data, 
          vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
          lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]]?.data[0].dosage !== '' ? true : false,
+         doac_chkBox: tableData.doac?.data[0].dosage !== '' ? true : false,
          antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
          aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false
