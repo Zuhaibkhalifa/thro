@@ -376,9 +376,13 @@ class Page4 extends React.Component {
 
                let recm_indx = response.data?.success.findIndex(x => x.id === this.state.recom_id);
                let data = recm_indx !== -1 ? response.data?.success[recm_indx] : response.data?.success[0];
-               console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx]);
+               console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx], Object.values(data?.jsonTable).length);
                this.setState({ loader: '' });
-               this.getDataApiAlgo(JSON.parse(data?.jsonTable), data);
+               if(Object.values(JSON.parse(data?.jsonTable)).length !== 0) {
+                  this.getDataApiAlgo(JSON.parse(data?.jsonTable), data);
+               } else {
+                  this.getDatafromAlgo();
+               }
             });
          } else { this.getDatafromAlgo() }
             
@@ -1197,7 +1201,7 @@ class Page4 extends React.Component {
          table: table_data, 
          vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
          lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac?.data[0].dosage !== '' ? true : false,
+         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]] !== "data" ? true : false,
          antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
          aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false
