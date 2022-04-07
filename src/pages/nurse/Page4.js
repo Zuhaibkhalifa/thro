@@ -363,27 +363,29 @@ class Page4 extends React.Component {
          if(this.props.location.state !== undefined) {
             console.log('location state has some values...', this.props.location.state);
             this.setState({ add_new_recom: this.props.location.state.add_new, recom_id: this.props.location.state.recommendation_id });
-            axios
-            .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
-               headers: headers,
-            })
-            .then((response) => {
-               console.log('Nurse6 - res: ', response, this.state);
-               if (response.data?.success === 'not_found') {
-                  this.setState({ table: undefined });
-                  return;
-               }
+            if(this.props.location.state.add_new !== true) {
+               axios
+               .get(domain + `/api/nurse/getRecommendations/:${patient_id}`, {
+                  headers: headers,
+               })
+               .then((response) => {
+                  console.log('Nurse6 - res: ', response, this.state);
+                  if (response.data?.success === 'not_found') {
+                     this.setState({ table: undefined });
+                     return;
+                  }
 
-               let recm_indx = response.data?.success.findIndex(x => x.id === this.state.recom_id);
-               let data = recm_indx !== -1 ? response.data?.success[recm_indx] : response.data?.success[0];
-               console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx], Object.values(data?.jsonTable).length);
-               this.setState({ loader: '' });
-               if(Object.values(JSON.parse(data?.jsonTable)).length !== 0) {
-                  this.getDataApiAlgo(JSON.parse(data?.jsonTable), data);
-               } else {
-                  this.getDatafromAlgo();
-               }
-            });
+                  let recm_indx = response.data?.success.findIndex(x => x.id === this.state.recom_id);
+                  let data = recm_indx !== -1 ? response.data?.success[recm_indx] : response.data?.success[0];
+                  console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx], Object.values(data?.jsonTable).length);
+                  this.setState({ loader: '' });
+                  if(Object.values(JSON.parse(data?.jsonTable)).length !== 0) {
+                     this.getDataApiAlgo(JSON.parse(data?.jsonTable), data);
+                  } else {
+                     this.getDatafromAlgo();
+                  }
+               });
+            } else { this.getDatafromAlgo() }
          } else { this.getDatafromAlgo() }
             
          axios
