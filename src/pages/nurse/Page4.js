@@ -1198,12 +1198,12 @@ class Page4 extends React.Component {
 
       table_data.headers = tableHeader;
       table_data.date[5].d_0 = this.state.date_of_procedure;
-      // console.log(tableData.doac[Object.keys(tableData.doac)[0]]);
+      console.log(Object.keys(tableData.doac));
       this.setState({ 
          table: table_data, 
          vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
          lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
-         doac_chkBox: tableData.doac[Object.keys(tableData.doac)[0]] !== "data" ? true : false,
+         doac_chkBox: Object.keys(tableData.doac)[0] !== "data" ? true : false,
          antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
          aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
          iv_heparin_chkBox: false
@@ -1724,7 +1724,7 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.doac_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValDoac${doacKey+1}`} type="number" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValDoac${doacKey+1}`} type="text" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
                                                          <option value={this.state[`selectValDoac${doacKey+1}`]}>{this.state[`selectValDoac${doacKey+1}`]}</option>
@@ -1739,7 +1739,7 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.antiplatelets_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="number" value={this.state[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="text" value={this.state[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAntiplatelets${antiplateletKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAntiplatelets${antiplateletKey+1}`)} className='form-control'>
                                                          <option value={this.state[`selectValAntiplatelets${antiplateletKey+1}`]}>{this.state[`selectValAntiplatelets${antiplateletKey+1}`]}</option>
@@ -1754,7 +1754,7 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.lmwh_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="number" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="text" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValLmwh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmwh${lmwhKey+1}`)} className='form-control'>
                                                          <option value={this.state[`selectValLmwh${lmwhKey+1}`]}>{this.state[`selectValLmwh${lmwhKey+1}`]}</option>
@@ -1769,7 +1769,7 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.aspirin_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValAspirin${aspirinKey+1}`} type="number" value={this.state[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValAspirin${aspirinKey+1}`} type="text" value={this.state[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAspirin${aspirinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAspirin${aspirinKey+1}`)} className='form-control'>
                                                          <option value={this.state[`selectValAspirin${aspirinKey+1}`]}>{this.state[`selectValAspirin${aspirinKey+1}`]}</option>
@@ -1784,7 +1784,7 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.iv_heparin_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="number" value={this.state[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="text" value={this.state[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValIvHeparin${ivHeparinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
                                                          <option value={this.state[`selectValIvHeparin${ivHeparinKey+1}`]}>{this.state[`selectValIvHeparin${ivHeparinKey+1}`]}</option>
