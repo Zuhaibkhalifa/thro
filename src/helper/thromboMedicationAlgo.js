@@ -61,17 +61,17 @@ export default async function thromboMedicationAlgo(_indicators) {
            const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
            let medData = [];
            let data = [
-              { warfain: '0', lab: '', frequency: '', lab: '' },
-              { warfain: '0', lab: '', frequency: '', lab: '' },
-              { warfain: '0', lab: '', frequency: '', lab: '' },
-              { warfain: '0', lab: '', frequency: '', lab: '' },
-              { warfain: '0', lab: '', frequency: '', lab: '' },
-              { warfain: (parseInt(med_data.med_dosage[dataKey])*2).toString(), lab: '', frequency: '' },
-              { warfain: parseInt(getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+1))*2).toString(), lab: '', frequency: '' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+2)), lab: '', frequency: '' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+3)), lab: '', frequency: '' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+4)), lab: '', frequency: '' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+5)), lab: '', frequency: '' },
+              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
+              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
+              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
+              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
+              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
+              { warfain: (parseInt(med_data.med_dosage[dataKey])*2).toString(), lab: '', frequency: 'morning' },
+              { warfain: parseInt(getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+1))*2).toString(), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+2)), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+3)), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+4)), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+5)), lab: '', frequency: 'morning' },
               { d6: 'First weekday after D5', lab: 'Goto Lab for INR test' },
            ];
   
