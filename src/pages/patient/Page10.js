@@ -275,7 +275,7 @@ class Page10 extends React.Component {
                         <p className="blue">
                             <b>Are you currently on any of these drugs?</b>
                         </p>
-                        <label className="radio-inline blue">Coumadin&#174; (Warfarin)</label>
+                        <label className="radio-inline blue">Coumadin &#174; (Warfarin)</label>
                         <input
                             type="radio"
                             name="drugs"
@@ -447,7 +447,7 @@ class Page10 extends React.Component {
                             </div>
                         </div>
                         <br />
-                        <label className="radio-inline blue">Sintrom&#174; (Acenocoumarol)</label>
+                        <label className="radio-inline blue">Sintrom &#174; (Acenocoumarol)</label>
                         <input
                             type="radio"
                             name="drugs"

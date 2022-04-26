@@ -293,7 +293,7 @@ class Dictation extends Component {
                     <br />
                     <p>Creatinine: ${data?.poc_creat_text} - ${data?.poc_creat_date}</p>
                     <br />
-                    <p>Estimated Creatinine clearance: ${data?.poc_creat_text}</p>
+                    <p>Estimated Creatinine clearance: ${data?.crcl}</p>
                     <br />
                     ${data?.is_vka_selected !== "0" ? `<p>INR: ${data?.poc_inr_text} - ${data?.poc_inr_date}</p>` : ''}
                     <br />
@@ -372,7 +372,10 @@ class Dictation extends Component {
                         <br />
                         ${data.is_lmwh_selected !== "0" ? `Instructions were provided with their low molecular weight heparin. 
                         The injections will be administered by ${data?.administration}.` : ''} 
-                        The patient ${data.is_first_time} had previous experience with self-injection.
+                        The patient ${data.is_first_time ? "has" : "has not"} had previous experience with self-injection.
+                        The patient has a ${data.understanding} understanding of the plan for their care.<br />
+                        It has been a pleasure to be involved in the care of this patient.<br />
+                        Dr. ${data.approved_by}
                     </p>
                 `;
                 if (response.data?.success !== 'not_found') {

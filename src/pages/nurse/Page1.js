@@ -165,7 +165,8 @@ class Page1 extends React.Component {
          edoxabon_dosage_time: '',
          ulcer_in_stomach_or_bowel: '',
          referred_by: '',
-         assessment_date: ''
+         assessment_date: '',
+         CrCl: 0
       };
 
       // Bind " this " ref of class to Methods
@@ -181,6 +182,7 @@ class Page1 extends React.Component {
       this.handleLabUsed = this.handleLabUsed.bind(this);
       this.handleAnticoagulationRefreshClick = this.handleAnticoagulationRefreshClick.bind(this);
       this.handleAntipleteletsRefreshClick = this.handleAntipleteletsRefreshClick.bind(this);
+      this.CrCl = this.CrCl.bind(this);
    }
 
    componentDidMount() {
@@ -348,7 +350,8 @@ class Page1 extends React.Component {
                         diabetes: data.diabetes,
                         stroke_or_mini_stroke: data.stroke_or_mini_stroke,
                         bleeding_requiring_treatment_last_three_months: data.bleeding_requiring_treatment_last_three_months,
-                        assessment_date: data.assessment_date
+                        assessment_date: data.assessment_date,
+                        crcl: data.crcl
                      });
                      this.forceUpdate();
                      this.fillactiveanticogmeds();
@@ -356,7 +359,9 @@ class Page1 extends React.Component {
                      this.set_DynamicFlags();
                      this.set_anticoagulation(response.data.success.anticoagulation);
                      this.set_CHADS_score();
+                     const crcl = this.CrCl(data.age, data.weight, data.weight_unit, data.gender, data.poc_creat_text)
 
+                     this.setState({ CrCl: crcl });
                   } else {
                      this.setState({ loader: '' });
                   }
@@ -703,7 +708,8 @@ class Page1 extends React.Component {
          patient_id: localStorage.getItem('patient_id'),
          referred_by: this.state.referred_by,
          dictation: this.state.dictation,
-         assessment_date: this.state.assessment_date
+         assessment_date: this.state.assessment_date,
+         crcl: this.state.CrCl
       };
       let patient_id = localStorage.getItem('patient_id');
       server(`nurse/page5/:${patient_id}`, param);
@@ -920,6 +926,23 @@ class Page1 extends React.Component {
       let redirect = '/User/Page11';
       this.page5(this.state);
       this.props.history.push({ pathname: redirect, state:{ patient_id: this.state.patient_id } });
+   }
+
+   CrCl(
+      age,
+      weight,
+      weightUnit,
+      gender,
+      creat
+   ) {
+      const multiplier = gender === 'Male' ? 1 : 0.85;
+      const weightKg = weightUnit === 'Kg' ? weight : weight / 2.205;
+
+      let result = 1.2 * (140 - age) * weightKg;
+      result = result / creat;
+      result = multiplier * result;
+
+      return ((result + Number.EPSILON) * 100) / 100;
    }
 
    render() {

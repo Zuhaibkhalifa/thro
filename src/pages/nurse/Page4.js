@@ -1123,7 +1123,7 @@ class Page4 extends React.Component {
             this.setInitialLabState('vka', 'labVal', tableData.vka.data, tableData.vka.data?.length);
             this.setInitialSelectState('vka', 'selectValVka', tableData.vka.data, tableData.vka.data?.length);
          }
-      }
+      } else tableHeader.push({ 'vka': tableData.vka.header });
 
       if(tableData.lmwh !== undefined) {
          let keyIdx1 = tableData.lmwh.data?.findIndex(x => x.dosage !== '');
@@ -1140,7 +1140,7 @@ class Page4 extends React.Component {
                this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
             }
          }
-      }
+      } else tableHeader.push({ 'lmwh': tableData.lmwh.header });
 
       if(Object.keys(tableData.doac)[0] !== 'data') {
          let doacKey = Object.keys(tableData.doac)[0];
@@ -1156,7 +1156,7 @@ class Page4 extends React.Component {
             this.setInitialState('doac', 'InptValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
             this.setInitialSelectState('doac', 'selectValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
          }
-      }
+      } else tableHeader.push({ 'doac': tableData.doac.header });
 
       if(tableData.antiplatelets !== undefined) {
          let keyIdx1 = tableData.antiplatelets.data?.findIndex(x => x.antiplatelets);
@@ -1172,7 +1172,7 @@ class Page4 extends React.Component {
                this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
             }
          }
-      }
+      } else tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header });
 
       if(tableData.aspirin !== undefined) {
          let keyIdx1 = tableData.aspirin.data?.findIndex(x => x.aspirin);
@@ -1188,7 +1188,7 @@ class Page4 extends React.Component {
                this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
             }
          }
-      }
+      } else tableHeader.push({ 'aspirin': tableData.aspirin.header });
 
       if(table_data.iv_heparin === '') {
          tableHeader.push({ 'iv_heparin': 'Heparin' });

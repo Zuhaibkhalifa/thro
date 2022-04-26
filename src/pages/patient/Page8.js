@@ -384,7 +384,7 @@ class Page8 extends React.Component {
                      <p className="blue">
                         <b>Are you currently on any of these drugs?</b>
                      </p>
-                     <label className="radio-inline blue">Pradaxa&#174; (Dabigatran)</label>
+                     <label className="radio-inline blue">Pradaxa &#174; (Dabigatran)</label>
                      <input
                         type="radio"
                         name="optradio"
@@ -443,7 +443,7 @@ class Page8 extends React.Component {
                      </div>
 
                      <br />
-                     <label className="radio-inline blue">Xarelto&#174; (Rivaroxaban)</label>
+                     <label className="radio-inline blue">Xarelto &#174; (Rivaroxaban)</label>
                      <input
                         type="radio"
                         name="optradio"
@@ -569,7 +569,7 @@ class Page8 extends React.Component {
                         <div className="text-danger"> {this.state.error3 !== '' ? this.state.error3 : ''}</div>
                      </div>
 
-                     <label className="radio-inline blue">Eliquis&#174; (Apixaban)</label>
+                     <label className="radio-inline blue">Eliquis &#174; (Apixaban)</label>
                      <input
                         type="radio"
                         name="optradio"
@@ -614,7 +614,7 @@ class Page8 extends React.Component {
                      </div>
                      <div className="text-danger"> {this.state.error4 !== '' ? this.state.error4 : ''}</div>
 
-                     <label className="radio-inline blue">Edoxabon&#174; (Lixiana)</label>
+                     <label className="radio-inline blue">Edoxabon &#174; (Lixiana)</label>
                      <input
                         type="radio"
                         name="optradio"
