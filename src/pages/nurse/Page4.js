@@ -698,7 +698,7 @@ class Page4 extends React.Component {
       if (this.state.table === 'none') return;
 
       const data = {
-         jsonTable: JSON.stringify({ ...this.state.table }),
+         jsonTable: JSON.stringify({ table: {...this.state.table}, cell: this.state.cell }),
          patient_id: localStorage.getItem('patient_id'),
          last_modified: new Date().toLocaleDateString(),
          approved_by: tableData.approved_by,
