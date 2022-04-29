@@ -147,185 +147,187 @@ class Page4 extends React.Component {
          aspirin_chkBox: false,
          iv_heparin_chkBox: false,
 
-         labVal1: '',
-         labVal2: '',
-         labVal3: '',
-         labVal4: '',
-         labVal5: '',
-         labVal6: '',
-         labVal7: '',
-         labVal8: '',
-         labVal9: '',
-         labVal10: '',
-         labVal11: '',
+         cell: {
+            labVal1: '',
+            labVal2: '',
+            labVal3: '',
+            labVal4: '',
+            labVal5: '',
+            labVal6: '',
+            labVal7: '',
+            labVal8: '',
+            labVal9: '',
+            labVal10: '',
+            labVal11: '',
 
-         selectValVka1: '',
-         selectValVka2: '',
-         selectValVka3: '',
-         selectValVka4: '',
-         selectValVka5: '',
-         selectValVka6: '',
-         selectValVka7: '',
-         selectValVka8: '',
-         selectValVka9: '',
-         selectValVka10: '',
-         selectValVka11: '',
+            selectValVka1: '',
+            selectValVka2: '',
+            selectValVka3: '',
+            selectValVka4: '',
+            selectValVka5: '',
+            selectValVka6: '',
+            selectValVka7: '',
+            selectValVka8: '',
+            selectValVka9: '',
+            selectValVka10: '',
+            selectValVka11: '',
 
-         InptValVka1: 0,
-         InptValVka2: 0,
-         InptValVka3: 0,
-         InptValVka4: 0,
-         InptValVka5: 0,
-         InptValVka6: 0,
-         InptValVka7: 0,
-         InptValVka8: 0,
-         InptValVka9: 0,
-         InptValVka10: 0,
-         InptValVka11: 0,
+            InptValVka1: 0,
+            InptValVka2: 0,
+            InptValVka3: 0,
+            InptValVka4: 0,
+            InptValVka5: 0,
+            InptValVka6: 0,
+            InptValVka7: 0,
+            InptValVka8: 0,
+            InptValVka9: 0,
+            InptValVka10: 0,
+            InptValVka11: 0,
 
-         selectValAspirin1: '',
-         selectValAspirin2: '',
-         selectValAspirin3: '',
-         selectValAspirin4: '',
-         selectValAspirin5: '',
-         selectValAspirin6: '',
-         selectValAspirin7: '',
-         selectValAspirin8: '',
-         selectValAspirin9: '',
-         selectValAspirin10: '',
-         selectValAspirin11: '',
+            selectValAspirin1: '',
+            selectValAspirin2: '',
+            selectValAspirin3: '',
+            selectValAspirin4: '',
+            selectValAspirin5: '',
+            selectValAspirin6: '',
+            selectValAspirin7: '',
+            selectValAspirin8: '',
+            selectValAspirin9: '',
+            selectValAspirin10: '',
+            selectValAspirin11: '',
 
-         InptValAspirin1: 0,
-         InptValAspirin2: 0,
-         InptValAspirin3: 0,
-         InptValAspirin4: 0,
-         InptValAspirin5: 0,
-         InptValAspirin6: 0,
-         InptValAspirin7: 0,
-         InptValAspirin8: 0,
-         InptValAspirin9: 0,
-         InptValAspirin10: 0,
-         InptValAspirin11: 0,
+            InptValAspirin1: 0,
+            InptValAspirin2: 0,
+            InptValAspirin3: 0,
+            InptValAspirin4: 0,
+            InptValAspirin5: 0,
+            InptValAspirin6: 0,
+            InptValAspirin7: 0,
+            InptValAspirin8: 0,
+            InptValAspirin9: 0,
+            InptValAspirin10: 0,
+            InptValAspirin11: 0,
 
-         selectValIvHeparin1: '',
-         selectValIvHeparin2: '',
-         selectValIvHeparin3: '',
-         selectValIvHeparin4: '',
-         selectValIvHeparin5: '',
-         selectValIvHeparin6: '',
-         selectValIvHeparin7: '',
-         selectValIvHeparin8: '',
-         selectValIvHeparin9: '',
-         selectValIvHeparin10: '',
-         selectValIvHeparin11: '',
+            selectValIvHeparin1: '',
+            selectValIvHeparin2: '',
+            selectValIvHeparin3: '',
+            selectValIvHeparin4: '',
+            selectValIvHeparin5: '',
+            selectValIvHeparin6: '',
+            selectValIvHeparin7: '',
+            selectValIvHeparin8: '',
+            selectValIvHeparin9: '',
+            selectValIvHeparin10: '',
+            selectValIvHeparin11: '',
 
-         InptValIvHeparin1: 0,
-         InptValIvHeparin2: 0,
-         InptValIvHeparin3: 0,
-         InptValIvHeparin4: 0,
-         InptValIvHeparin5: 0,
-         InptValIvHeparin6: 0,
-         InptValIvHeparin7: 0,
-         InptValIvHeparin8: 0,
-         InptValIvHeparin9: 0,
-         InptValIvHeparin10: 0,
-         InptValIvHeparin11: 0,
+            InptValIvHeparin1: 0,
+            InptValIvHeparin2: 0,
+            InptValIvHeparin3: 0,
+            InptValIvHeparin4: 0,
+            InptValIvHeparin5: 0,
+            InptValIvHeparin6: 0,
+            InptValIvHeparin7: 0,
+            InptValIvHeparin8: 0,
+            InptValIvHeparin9: 0,
+            InptValIvHeparin10: 0,
+            InptValIvHeparin11: 0,
 
-         selectValAntiplatelets1: '',
-         selectValAntiplatelets2: '',
-         selectValAntiplatelets3: '',
-         selectValAntiplatelets4: '',
-         selectValAntiplatelets5: '',
-         selectValAntiplatelets6: '',
-         selectValAntiplatelets7: '',
-         selectValAntiplatelets8: '',
-         selectValAntiplatelets9: '',
-         selectValAntiplatelets10: '',
-         selectValAntiplatelets11: '',
+            selectValAntiplatelets1: '',
+            selectValAntiplatelets2: '',
+            selectValAntiplatelets3: '',
+            selectValAntiplatelets4: '',
+            selectValAntiplatelets5: '',
+            selectValAntiplatelets6: '',
+            selectValAntiplatelets7: '',
+            selectValAntiplatelets8: '',
+            selectValAntiplatelets9: '',
+            selectValAntiplatelets10: '',
+            selectValAntiplatelets11: '',
 
-         InptValAntiplatelets1: 0,   
-         InptValAntiplatelets2: 0,
-         InptValAntiplatelets3: 0,
-         InptValAntiplatelets4: 0,
-         InptValAntiplatelets5: 0,
-         InptValAntiplatelets6: 0,
-         InptValAntiplatelets7: 0,
-         InptValAntiplatelets8: 0,
-         InptValAntiplatelets9: 0,
-         InptValAntiplatelets10: 0,
-         InptValAntiplatelets11: 0,
+            InptValAntiplatelets1: 0,   
+            InptValAntiplatelets2: 0,
+            InptValAntiplatelets3: 0,
+            InptValAntiplatelets4: 0,
+            InptValAntiplatelets5: 0,
+            InptValAntiplatelets6: 0,
+            InptValAntiplatelets7: 0,
+            InptValAntiplatelets8: 0,
+            InptValAntiplatelets9: 0,
+            InptValAntiplatelets10: 0,
+            InptValAntiplatelets11: 0,
 
-         selectValAntiplateletsVer21: '',
-         selectValAntiplateletsVer22: '',
-         selectValAntiplateletsVer23: '',
-         selectValAntiplateletsVer24: '',
-         selectValAntiplateletsVer25: '',
-         selectValAntiplateletsVer26: '',
-         selectValAntiplateletsVer27: '',
-         selectValAntiplateletsVer28: '',
-         selectValAntiplateletsVer29: '',
-         selectValAntiplateletsVer210: '',
-         selectValAntiplateletsVer211: '',
+            selectValAntiplateletsVer21: '',
+            selectValAntiplateletsVer22: '',
+            selectValAntiplateletsVer23: '',
+            selectValAntiplateletsVer24: '',
+            selectValAntiplateletsVer25: '',
+            selectValAntiplateletsVer26: '',
+            selectValAntiplateletsVer27: '',
+            selectValAntiplateletsVer28: '',
+            selectValAntiplateletsVer29: '',
+            selectValAntiplateletsVer210: '',
+            selectValAntiplateletsVer211: '',
 
-         InptValAntiplateletsVer21: 0,
-         InptValAntiplateletsVer22: 0,
-         InptValAntiplateletsVer23: 0,
-         InptValAntiplateletsVer24: 0,
-         InptValAntiplateletsVer25: 0,
-         InptValAntiplateletsVer26: 0,
-         InptValAntiplateletsVer27: 0,
-         InptValAntiplateletsVer28: 0,
-         InptValAntiplateletsVer29: 0,
-         InptValAntiplateletsVer210: 0,
-         InptValAntiplateletsVer211: 0,
+            InptValAntiplateletsVer21: 0,
+            InptValAntiplateletsVer22: 0,
+            InptValAntiplateletsVer23: 0,
+            InptValAntiplateletsVer24: 0,
+            InptValAntiplateletsVer25: 0,
+            InptValAntiplateletsVer26: 0,
+            InptValAntiplateletsVer27: 0,
+            InptValAntiplateletsVer28: 0,
+            InptValAntiplateletsVer29: 0,
+            InptValAntiplateletsVer210: 0,
+            InptValAntiplateletsVer211: 0,
 
-         selectValLmwh1: '',
-         selectValLmwh2: '',
-         selectValLmwh3: '',
-         selectValLmwh4: '',
-         selectValLmwh5: '',
-         selectValLmwh6: '',
-         selectValLmwh7: '',
-         selectValLmwh8: '',
-         selectValLmwh9: '',
-         selectValLmwh10: '',
-         selectValLmwh11: '',
+            selectValLmwh1: '',
+            selectValLmwh2: '',
+            selectValLmwh3: '',
+            selectValLmwh4: '',
+            selectValLmwh5: '',
+            selectValLmwh6: '',
+            selectValLmwh7: '',
+            selectValLmwh8: '',
+            selectValLmwh9: '',
+            selectValLmwh10: '',
+            selectValLmwh11: '',
 
-         InptValLmwh1: 0,
-         InptValLmwh2: 0,
-         InptValLmwh3: 0,
-         InptValLmwh4: 0,
-         InptValLmwh5: 0,
-         InptValLmwh6: 0,
-         InptValLmwh7: 0,
-         InptValLmwh8: 0,
-         InptValLmwh9: 0,
-         InptValLmwh10: 0,
-         InptValLmwh11: 0,
-        
-         selectValDoac1: '',
-         selectValDoac2: '',
-         selectValDoac3: '',
-         selectValDoac4: '',
-         selectValDoac5: '',
-         selectValDoac6: '',
-         selectValDoac7: '',
-         selectValDoac8: '',
-         selectValDoac9: '',
-         selectValDoac10: '',
-         selectValDoac11: '',
+            InptValLmwh1: 0,
+            InptValLmwh2: 0,
+            InptValLmwh3: 0,
+            InptValLmwh4: 0,
+            InptValLmwh5: 0,
+            InptValLmwh6: 0,
+            InptValLmwh7: 0,
+            InptValLmwh8: 0,
+            InptValLmwh9: 0,
+            InptValLmwh10: 0,
+            InptValLmwh11: 0,
+         
+            selectValDoac1: '',
+            selectValDoac2: '',
+            selectValDoac3: '',
+            selectValDoac4: '',
+            selectValDoac5: '',
+            selectValDoac6: '',
+            selectValDoac7: '',
+            selectValDoac8: '',
+            selectValDoac9: '',
+            selectValDoac10: '',
+            selectValDoac11: '',
 
-         InptValDoac1: 0,
-         InptValDoac2: 0,
-         InptValDoac3: 0,
-         InptValDoac4: 0,
-         InptValDoac5: 0,
-         InptValDoac6: 0,
-         InptValDoac7: 0,
-         InptValDoac8: 0,
-         InptValDoac9: 0,
-         InptValDoac10: 0,
-         InptValDoac11: 0,
+            InptValDoac1: 0,
+            InptValDoac2: 0,
+            InptValDoac3: 0,
+            InptValDoac4: 0,
+            InptValDoac5: 0,
+            InptValDoac6: 0,
+            InptValDoac7: 0,
+            InptValDoac8: 0,
+            InptValDoac9: 0,
+            InptValDoac10: 0,
+            InptValDoac11: 0,
+         },
 
          approved_by: '',
          active_lmwh: '',
@@ -380,7 +382,7 @@ class Page4 extends React.Component {
                   console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx], Object.values(data?.jsonTable).length);
                   this.setState({ loader: '' });
                   if(Object.values(JSON.parse(data?.jsonTable)).length !== 0) {
-                     this.getDataApiAlgo(JSON.parse(data?.jsonTable), data);
+                     this.getDataApiAlgo(JSON.parse(data?.jsonTable).table, data, JSON.parse(data?.jsonTable).cell);
                   } else {
                      this.getDatafromAlgo();
                   }
@@ -527,7 +529,7 @@ class Page4 extends React.Component {
       }
    }
 
-   getDataApiAlgo(tableValue, respData) {
+   getDataApiAlgo(tableValue, respData, cellData) {
       // console.log(tableValue, respData);
       let table_data = {
          vka: '',
@@ -543,92 +545,99 @@ class Page4 extends React.Component {
       const tableData = tableValue;
       let tableHeader = [];
       if(tableData.vka !== '') {
-         let keyIdx = tableData.vka.findIndex(x => x.d6);
-         let keyIdx1 = tableData.vka.findIndex(x => x.warfain !== '0');
-         let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
-         let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
+         // let keyIdx = tableData.vka.findIndex(x => x.d6);
+         // let keyIdx1 = tableData.vka.findIndex(x => x.warfain !== '0');
+         // let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
+         // let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          table_data.vka = tableData.vka;
-         if(tableData.vka[7].warfain !== '') {
-            this.setState({ 
-               [keyId]: tableData.vka[keyIdx].lab,
-               [keyId1]: tableData.vka[keyIdx1].warfain
-            });
-            // this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
-            this.setVKAVal(tableData.vka);
-            this.setInitialLabState('vka', 'labVal', tableData.vka.data, tableData.vka.length);
-            this.setInitialSelectState('vka', 'selectValVka', tableData.vka.data, tableData.vka.length);
-         }
+         // if(tableData.vka[7].warfain !== '') {
+         //    this.setState({ 
+         //       cell: {
+         //          [keyId]: tableData.vka[keyIdx].lab,
+         //          [keyId1]: tableData.vka[keyIdx1].warfain
+         //       }
+         //    });
+         //    this.setVKAVal(tableData.vka);
+         //    this.setInitialLabState('vka', 'labVal', tableData.vka.data, tableData.vka.length);
+         //    this.setInitialSelectState('vka', 'selectValVka', tableData.vka.data, tableData.vka.length);
+         // }
       }
 
       if(tableData.lmwh !== '') {
-         let keyIdx1 = tableData.lmwh.findIndex(x => x.dosage);
-         let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
+         // let keyIdx1 = tableData.lmwh.findIndex(x => x.dosage);
+         // let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
          table_data.lmwh = tableData.lmwh;
-         if(keyId1 !== '') {
-            if(tableData.lmwh[0].dosage !== '') {
-               this.setState({
-                  [keyId1]: tableData.lmwh[keyIdx1].dosage.split(' ')[0] 
-               });
-               this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh, tableData.lmwh.length);
-               this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh, tableData.lmwh.length);
-            }
-         }
+         // if(keyId1 !== '') {
+         //    if(tableData.lmwh[0].dosage !== '') {
+         //       this.setState({
+         //          cell: {
+         //             [keyId1]: tableData.lmwh[keyIdx1].dosage.split(' ')[0]
+         //          } 
+         //       });
+         //       this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh, tableData.lmwh.length);
+         //       this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh, tableData.lmwh.length);
+         //    }
+         // }
       }
 
       if(tableData.doac !== '') {
-         let keyIdx1 = tableData.doac.findIndex(x => x.dosage);
-         let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
-         if(keyId1 !== '') {
-            table_data.doac = tableData.doac;
-            if(tableData.doac[0].dosage !=='') {
-               this.setState({
-                  [keyId1]: tableData.doac[keyIdx1].dosage.split(' ')[0] 
-               });
-               this.setInitialState('doac', 'InptValDoac', tableData.doac, tableData.doac.length);
-               this.setInitialSelectState('doac', 'selectValDoac', tableData.doac, tableData.doac.length);
-            }
-         }
+         // let keyIdx1 = tableData.doac.findIndex(x => x.dosage);
+         // let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
+         // if(keyId1 !== '') {
+         //    table_data.doac = tableData.doac;
+         //    if(tableData.doac[0].dosage !=='') {
+         //       this.setState({
+         //          cell: {
+         //             [keyId1]: tableData.doac[keyIdx1].dosage.split(' ')[0]
+         //          } 
+         //       });
+         //       this.setInitialState('doac', 'InptValDoac', tableData.doac, tableData.doac.length);
+         //       this.setInitialSelectState('doac', 'selectValDoac', tableData.doac, tableData.doac.length);
+         //    }
+         // }
       }
 
       if(tableData.antiplatelets !== '') {
-         let keyIdx1 = tableData.antiplatelets.findIndex(x => x.antiplatelets);
-         let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
+         // let keyIdx1 = tableData.antiplatelets.findIndex(x => x.antiplatelets);
+         // let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
          table_data.antiplatelets = tableData.antiplatelets;
-         if(keyId1 !== '') {
-            if(tableData.antiplatelets[0].antiplatelets !== '') {
-               this.setState({
-                  [keyId1]: tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0] 
-               });
-               this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
-               this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
-            }
-         }
+         // if(keyId1 !== '') {
+         //    if(tableData.antiplatelets[0].antiplatelets !== '') {
+         //       this.setState({
+         //          cell: {
+         //             [keyId1]: tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0]
+         //          } 
+         //       });
+         //       this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
+         //       this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
+         //    }
+         // }
       }
 
       if(tableData.aspirin !== '') {
-         let keyIdx1 = tableData.aspirin.findIndex(x => x.aspirin);
-         let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
+         // let keyIdx1 = tableData.aspirin.findIndex(x => x.aspirin);
+         // let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
          tableHeader.push({ 'aspirin': tableData.aspirin.header });
          table_data.aspirin = tableData.aspirin;
-         if(keyId1 !== '') {
-            if(tableData.aspirin[0].aspirin !== '') {
-               this.setState({
-                  [keyId1]: tableData.aspirin[keyIdx1].aspirin.split(' ')[0] 
-               });
-               this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin, tableData.aspirin.length);
-               this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin, tableData.aspirin.length);
-            }
-         }
+         // if(keyId1 !== '') {
+         //    if(tableData.aspirin[0].aspirin !== '') {
+         //       this.setState({
+         //          cell: {
+         //             [keyId1]: tableData.aspirin[keyIdx1].aspirin.split(' ')[0]
+         //          } 
+         //       });
+         //       this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin, tableData.aspirin.length);
+         //       this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin, tableData.aspirin.length);
+         //    }
+         // }
       }
 
-      if(table_data.iv_heparin !== '') {
-         this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
-         this.setInitialSelectState('heparin', 'selectValIvHeparin', 'do not take', 11);
-      }
+      // if(table_data.iv_heparin !== '') {
+      //    this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
+      //    this.setInitialSelectState('heparin', 'selectValIvHeparin', 'do not take', 11);
+      // }
 
       table_data.headers = tableData.headers;
-
-      // console.log(tableData, table_data);
       
       this.setState({
          approved_by: respData.approved_by,
@@ -638,7 +647,8 @@ class Page4 extends React.Component {
          antiplatelets_chkBox: respData.is_antiplatelets_selected !== "0" ? true : false,
          lmwh_chkBox: respData.is_lmwh_selected !== "0" ? true : false,
          aspirin_chkBox: respData.is_aspirin_selected !== "0" ? true : false,
-         iv_heparin_chkBox: respData.is_iv_heparin_selected !== "0" ? true : false
+         iv_heparin_chkBox: respData.is_iv_heparin_selected !== "0" ? true : false,
+         cell: cellData
       });
    }
 
@@ -656,15 +666,9 @@ class Page4 extends React.Component {
       }
       
       if (this.state.table === 'none') return;
-      // const { table } = this.state;
-      // let headerVkaActiveIdx = table.headers.find(x => x['vka']).vka?.findIndex(x => x.med_name === this.state.active_vka);
-      // let headerDoacActiveIdx = table.headers.find(x => x['doac']).doac?.findIndex(x => x.med_name === this.state.active_doac);
-      // let headerLmwhActiveIdx = table.headers.find(x => x['lmwh']).lmwh?.findIndex(x => x.med_name === this.state.active_lmwh);
-
-      // console.log(table.headers, table.headers.findIndex(x => x['vka']));
-      // console.log(headerVkaActiveIdx, headerDoacActiveIdx, headerLmwhActiveIdx, this.state.active_vka, this.state.active_doac, this.state.active_lmwh);
+      
       const data = {
-         jsonTable: JSON.stringify({ ...this.state.table }),
+         jsonTable: JSON.stringify({ table: {...this.state.table}, cell: this.state.cell }),
          patient_id: localStorage.getItem('patient_id'),
          last_modified: new Date().toLocaleDateString(),
          approved_by: tableData.approved_by,
@@ -813,19 +817,28 @@ class Page4 extends React.Component {
 
    handleLabValueChange(e, key) {
       this.setState({
-         [key]: e.target.value
+         cell: {
+            ...this.state.cell,
+            [key]: e.target.value
+         }
       });
    }
 
    handleInptValueChange(e, key) {
       this.setState({
-         [key]: e.target.value
+         cell: {
+            ...this.state.cell,
+            [key]: e.target.value
+         }
       });
    }
 
    handleSelectValueChange(e, key) {
       this.setState({
-         [key]: e.target.value
+         cell: {
+            ...this.state.cell,
+            [key]: e.target.value
+         }
       });
    }
 
@@ -926,17 +939,20 @@ class Page4 extends React.Component {
 
    setVKAVal(value) {
       this.setState({
-         InptValVka1: value[0]?.warfain,
-         InptValVka2: value[1]?.warfain,
-         InptValVka3: value[2]?.warfain,
-         InptValVka4: value[3]?.warfain,
-         InptValVka5: value[4]?.warfain,
-         InptValVka6: value[5]?.warfain,
-         InptValVka7: value[6]?.warfain,
-         InptValVka8: value[7]?.warfain,
-         InptValVka9: value[8]?.warfain,
-         InptValVka10: value[9]?.warfain,
-         InptValVka11: value[10]?.warfain,
+         cell: {
+            ...this.state.cell,
+            InptValVka1: value[0]?.warfain,
+            InptValVka2: value[1]?.warfain,
+            InptValVka3: value[2]?.warfain,
+            InptValVka4: value[3]?.warfain,
+            InptValVka5: value[4]?.warfain,
+            InptValVka6: value[5]?.warfain,
+            InptValVka7: value[6]?.warfain,
+            InptValVka8: value[7]?.warfain,
+            InptValVka9: value[8]?.warfain,
+            InptValVka10: value[9]?.warfain,
+            InptValVka11: value[10]?.warfain
+         }
       });
    }
 
@@ -945,23 +961,38 @@ class Page4 extends React.Component {
       for(let i=0; i<length; i++) {
          if(medKey === 'doac') {
             this.setState({
-               [key+(i+1)]: value[i].dosage?.split(' ')[0]
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i].dosage?.split(' ')[0]
+               }
             });
          } else if(medKey === 'lmwh') {
             this.setState({
-               [key+(i+1)]: value[i].dosage?.split(' ')[0]
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i].dosage?.split(' ')[0]
+               }
             });
          } else if(medKey === 'antiplatelets') {
             this.setState({
-               [key+(i+1)]: value[i].antiplatelets?.split(' ')[0]
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i].antiplatelets?.split(' ')[0]
+               }
             });
          } else if(medKey === 'aspirin') {
             this.setState({
-               [key+(i+1)]: value[i].aspirin?.split(' ')[0]
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i].aspirin?.split(' ')[0]
+               }
             });
          } else if(medKey === 'heparin') {
             this.setState({
-               [key+(i+1)]: value
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value
+               }
             });
          }
       }
@@ -987,7 +1018,10 @@ class Page4 extends React.Component {
       for(let i=0; i<length; i++) {
          if(medKey === 'vka') {
             this.setState({
-               [key+(i+1)]: value[i]?.lab
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i]?.lab
+               }
             });
          } 
       }
@@ -997,27 +1031,45 @@ class Page4 extends React.Component {
       for(let i=0; i<length; i++) {
          if(medKey === 'vka') {
             this.setState({
-               [key+(i+1)]: value[i]?.frequency
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i]?.frequency
+               }
             });
          } else if(medKey === 'doac') {
             this.setState({
-               [key+(i+1)]: value[i]?.frequency
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i]?.frequency
+               }
             });
          } else if(medKey === 'lmwh') {
             this.setState({
-               [key+(i+1)]: value[i]?.frequency
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i]?.frequency
+               }
             });
          } else if(medKey === 'antiplatelets') {
             this.setState({
-               [key+(i+1)]: value[i]?.frequency
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i]?.frequency
+               }
             });
          } else if(medKey === 'aspirin') {
             this.setState({
-               [key+(i+1)]: value[i]?.frequency
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value[i]?.frequency
+               }
             });
          } else if(medKey === 'heparin') {
             this.setState({
-               [key+(i+1)]: value
+               cell: {
+                  ...this.state.cell,
+                  [key+(i+1)]: value
+               }
             });
          }
       }
@@ -1034,26 +1086,15 @@ class Page4 extends React.Component {
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
-         being_treated_cancer: being_treated_cancer,          
-         venous_thromboelism: venous_thromboelism,
-         dvt: dvt,
-         // dvt_how_long_ago: dvt_how_long_ago,
-         // pe: pe,
-         // pe_dvt_how_long_ago: pe_dvt_how_long_ago,
-         // atrial_fibrillation_of_flutter: atrial_fibrillation_of_flutter,
-         // mechanical_heart_valve: mechanical_heart_valve,
-         // tissue_heart_valve: tissue_heart_valve,
-         // mechanical_heart_valve_Is_the_valve_bileaflet: mechanical_heart_valve_Is_the_valve_bileaflet,
-         // mechanical_heart_valve_Is_the_valve_ball_and_cage: mechanical_heart_valve_Is_the_valve_ball_and_cage,
-         // mechanical_heart_valve_Is_the_valve_tilting_disc: mechanical_heart_valve_Is_the_valve_tilting_disc,
-         // mechanical_heart_valve_Is_the_valve_dont_know: mechanical_heart_valve_Is_the_valve_dont_know,
-         // location_aortic: location_aortic,
-         // location_mitral: location_mitral,
-         cirrhosis_of_liver: cirrhosis_of_liver,
-         antiphospholipid_antibody_syndrome: antiphospholipid_antibody_syndrome,
-         mitral_stenosis: mitral_stenosis,
-         blood_clot_blood_thinner_interrupted: blood_clot_blood_thinner_interrupted,
+         being_treated_cancer: cancer,          
+         venous_thromboelism: venousThromboelism,
+         dvt: d_v_t,
+         cirrhosis_of_liver: cirrhosisOfLiver,
+         antiphospholipid_antibody_syndrome: antiphospholipidAntibodySyndrome,
+         mitral_stenosis: mitralStenosis,
+         blood_clot_blood_thinner_interrupted: bloodClotBloodThinnerInterrupted,
       } = this.state;
+      
       let flags = [];
 
       if (liver === 'Yes') flags.push('Liver diseases');
@@ -1064,12 +1105,12 @@ class Page4 extends React.Component {
       if(high_blood_pressures === 'Yes') flags.push('High blood pressure');
       if(stroke_mini_stroke === 'Yes') flags.push('Stroke or ministroke within the last 3 months');
       if(diabetic === 'Yes') flags.push('Diabetes');
-      if(being_treated_cancer === 'Yes') flags.push('Undergoing cancer therapy');
-      if(blood_clot_blood_thinner_interrupted === 'Yes') flags.push('Blood clot while blood thinner interrupted');
-      if(venous_thromboelism === 'Yes' || dvt === 'Yes') flags.push('DVT or PE in the last 3 months');
-      if(cirrhosis_of_liver === 'Yes') flags.push('Liver cirrhosis');
-      if(mitral_stenosis === 'Yes') flags.push('Mitral stenosis');
-      if(antiphospholipid_antibody_syndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
+      if(cancer === 'Yes') flags.push('Undergoing cancer therapy');
+      if(bloodClotBloodThinnerInterrupted === 'Yes') flags.push('Blood clot while blood thinner interrupted');
+      if(venousThromboelism === 'Yes' || d_v_t === 'Yes') flags.push('DVT or PE in the last 3 months');
+      if(cirrhosisOfLiver === 'Yes') flags.push('Liver cirrhosis');
+      if(mitralStenosis === 'Yes') flags.push('Mitral stenosis');
+      if(antiphospholipidAntibodySyndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
       
       this.setState({ dynamicFlags:flags });
    }
@@ -1115,8 +1156,11 @@ class Page4 extends React.Component {
             console.log(tableData.vka.data[5].warfain);
             this.setState({ active_vka: tableData.vka.header[0].med_name });
             this.setState({ 
-               [keyId]: tableData.vka.data[keyIdx].lab,
-               [keyId1]: tableData.vka.data[keyIdx1].warfain
+               cell: {
+                  ...this.state.cell,
+                  [keyId]: tableData.vka.data[keyIdx].lab,
+                  [keyId1]: tableData.vka.data[keyIdx1].warfain
+               }
             });
             // this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data?.length);
             this.setVKAVal(tableData.vka.data);
@@ -1134,7 +1178,10 @@ class Page4 extends React.Component {
             if(tableData.lmwh.data[0].dosage !== '') {
                this.setState({ active_lmwh: tableData.lmwh.header[0].med_name });
                this.setState({
-                  [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0] 
+                  cell: {
+                     ...this.state.cell,
+                     [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0]
+                  } 
                });
                this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
                this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
@@ -1151,7 +1198,10 @@ class Page4 extends React.Component {
             this.setState({ active_doac: tableData.doac[doacKey].header[0].med_name });
             table_data.doac = tableData.doac[doacKey].data;
             this.setState({
-               [keyId1]: tableData.doac[doacKey].data[keyIdx1].dosage.split(' ')[0] 
+               cell: {
+                  ...this.state.cell,
+                  [keyId1]: tableData.doac[doacKey].data[keyIdx1].dosage.split(' ')[0]
+               } 
             });
             this.setInitialState('doac', 'InptValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
             this.setInitialSelectState('doac', 'selectValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
@@ -1166,7 +1216,10 @@ class Page4 extends React.Component {
          if(keyId1 !== '') {
             if(tableData.antiplatelets.data[0].antiplatelets !== '') {
                this.setState({
-                  [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0] 
+                  cell: {
+                     ...this.state.cell,
+                     [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0]
+                  } 
                });
                this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
                this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
@@ -1182,7 +1235,10 @@ class Page4 extends React.Component {
          if(keyId1 !== '') {
             if(tableData.aspirin.data[0].aspirin !== '') {
                this.setState({
-                  [keyId1]: tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0] 
+                  cell: {
+                     ...this.state.cell,
+                     [keyId1]: tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0]
+                  } 
                });
                this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
                this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
@@ -1209,7 +1265,7 @@ class Page4 extends React.Component {
          iv_heparin_chkBox: false
       });
 
-      // console.log(this.state.table);
+      console.log(this.state);
 
       if(this.state.date_of_procedure) {
          this.onDateChange(this.state.date_of_procedure);
@@ -1703,16 +1759,16 @@ class Page4 extends React.Component {
                                              {
                                                 this.state.vka_chkBox ?
                                                 <td>
-                                                   <input id={`labVal${vkaKey+1}`} type="text" onChange={(e) => this.handleLabValueChange(e, `labVal${vkaKey+1}`)} value={this.state[`labVal${vkaKey+1}`]} className='form-control' />
+                                                   <input id={`labVal${vkaKey+1}`} type="text" onChange={(e) => this.handleLabValueChange(e, `labVal${vkaKey+1}`)} value={this.state.cell[`labVal${vkaKey+1}`]} className='form-control' />
                                                 </td> : <></>
                                              }
                                              {
                                                 this.state.vka_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValVka${vkaKey+1}`} type="text" value={this.state[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValVka${vkaKey+1}`} type="text" value={this.state.cell[`InptValVka${vkaKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValVka${vkaKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValVka${vkaKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValVka${vkaKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValVka${vkaKey+1}`]}>{this.state[`selectValVka${vkaKey+1}`]}</option>
+                                                         <option value={this.state.cell[`selectValVka${vkaKey+1}`]}>{this.state.cell[`selectValVka${vkaKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1724,10 +1780,10 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.doac_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValDoac${doacKey+1}`} type="text" value={this.state[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValDoac${doacKey+1}`} type="text" value={this.state.cell[`InptValDoac${doacKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValDoac${doacKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValDoac${doacKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValDoac${doacKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValDoac${doacKey+1}`]}>{this.state[`selectValDoac${doacKey+1}`]}</option>
+                                                         <option value={this.state.cell[`selectValDoac${doacKey+1}`]}>{this.state.cell[`selectValDoac${doacKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1739,10 +1795,10 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.antiplatelets_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="text" value={this.state[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValAntiplatelets${antiplateletKey+1}`} type="text" value={this.state.cell[`InptValAntiplatelets${antiplateletKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAntiplatelets${antiplateletKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAntiplatelets${antiplateletKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAntiplatelets${antiplateletKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValAntiplatelets${antiplateletKey+1}`]}>{this.state[`selectValAntiplatelets${antiplateletKey+1}`]}</option>
+                                                         <option value={this.state.cell[`selectValAntiplatelets${antiplateletKey+1}`]}>{this.state.cell[`selectValAntiplatelets${antiplateletKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1754,10 +1810,10 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.lmwh_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="text" value={this.state[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValLmwh${lmwhKey+1}`} type="text" value={this.state.cell[`InptValLmwh${lmwhKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValLmwh${lmwhKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValLmwh${lmwhKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValLmwh${lmwhKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValLmwh${lmwhKey+1}`]}>{this.state[`selectValLmwh${lmwhKey+1}`]}</option>
+                                                         <option value={this.state.cell[`selectValLmwh${lmwhKey+1}`]}>{this.state.cell[`selectValLmwh${lmwhKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1769,10 +1825,10 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.aspirin_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValAspirin${aspirinKey+1}`} type="text" value={this.state[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValAspirin${aspirinKey+1}`} type="text" value={this.state.cell[`InptValAspirin${aspirinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValAspirin${aspirinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValAspirin${aspirinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValAspirin${aspirinKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValAspirin${aspirinKey+1}`]}>{this.state[`selectValAspirin${aspirinKey+1}`]}</option>
+                                                         <option value={this.state.cell[`selectValAspirin${aspirinKey+1}`]}>{this.state.cell[`selectValAspirin${aspirinKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>
@@ -1784,10 +1840,10 @@ class Page4 extends React.Component {
                                              }
                                              {this.state.iv_heparin_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="text" value={this.state[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
+                                                   <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="text" value={this.state.cell[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
                                                    <td>
                                                       <select id={`selectValIvHeparin${ivHeparinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
-                                                         <option value={this.state[`selectValIvHeparin${ivHeparinKey+1}`]}>{this.state[`selectValIvHeparin${ivHeparinKey+1}`]}</option>
+                                                         <option value={this.state.cell[`selectValIvHeparin${ivHeparinKey+1}`]}>{this.state.cell[`selectValIvHeparin${ivHeparinKey+1}`]}</option>
                                                          <option value={'do not take'}>do not take</option>
                                                          <option value={'evening'}>evening</option>
                                                          <option value={'morning'}>morning</option>

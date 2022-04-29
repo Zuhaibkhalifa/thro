@@ -603,25 +603,13 @@ class Page1 extends React.Component {
          had_transfusion_in_last_three_months: transfusion,
          had_transfusion_in_last_three_months_when: transfusion_date,
          ulcer_in_stomach_or_bowel_last_three_months: ulcer,
-         being_treated_cancer: being_treated_cancer,          
-         venous_thromboelism: venous_thromboelism,
-         dvt: dvt,
-         // dvt_how_long_ago: dvt_how_long_ago,
-         // pe: pe,
-         // pe_dvt_how_long_ago: pe_dvt_how_long_ago,
-         // atrial_fibrillation_of_flutter: atrial_fibrillation_of_flutter,
-         // mechanical_heart_valve: mechanical_heart_valve,
-         // tissue_heart_valve: tissue_heart_valve,
-         // mechanical_heart_valve_Is_the_valve_bileaflet: mechanical_heart_valve_Is_the_valve_bileaflet,
-         // mechanical_heart_valve_Is_the_valve_ball_and_cage: mechanical_heart_valve_Is_the_valve_ball_and_cage,
-         // mechanical_heart_valve_Is_the_valve_tilting_disc: mechanical_heart_valve_Is_the_valve_tilting_disc,
-         // mechanical_heart_valve_Is_the_valve_dont_know: mechanical_heart_valve_Is_the_valve_dont_know,
-         // location_aortic: location_aortic,
-         // location_mitral: location_mitral,
-         cirrhosis_of_liver: cirrhosis_of_liver,
-         antiphospholipid_antibody_syndrome: antiphospholipid_antibody_syndrome,
-         mitral_stenosis: mitral_stenosis,
-         blood_clot_blood_thinner_interrupted: blood_clot_blood_thinner_interrupted,
+         being_treated_cancer: cancer,          
+         venous_thromboelism: venousThromboelism,
+         dvt: d_v_t,
+         cirrhosis_of_liver: cirrhosisOfLiver,
+         antiphospholipid_antibody_syndrome: antiphospholipidAntibodySyndrome,
+         mitral_stenosis: mitralStenosis,
+         blood_clot_blood_thinner_interrupted: bloodClotBloodThinnerInterrupted,
       } = this.state;
       let flags = [];
 
@@ -633,12 +621,12 @@ class Page1 extends React.Component {
       if(high_blood_pressures === 'Yes') flags.push('High blood pressure');
       if(stroke_mini_stroke === 'Yes') flags.push('Stroke or ministroke within the last 3 months');
       if(diabetic === 'Yes') flags.push('Diabetes');
-      if(being_treated_cancer === 'Yes') flags.push('Undergoing cancer therapy');
-      if(blood_clot_blood_thinner_interrupted === 'Yes') flags.push('Blood clot while blood thinner interrupted');
-      if(venous_thromboelism === 'Yes' || dvt === 'Yes') flags.push('DVT or PE in the last 3 months');
-      if(cirrhosis_of_liver === 'Yes') flags.push('Liver cirrhosis');
-      if(mitral_stenosis === 'Yes') flags.push('Mitral stenosis');
-      if(antiphospholipid_antibody_syndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
+      if(cancer === 'Yes') flags.push('Undergoing cancer therapy');
+      if(bloodClotBloodThinnerInterrupted === 'Yes') flags.push('Blood clot while blood thinner interrupted');
+      if(venousThromboelism === 'Yes' || d_v_t === 'Yes') flags.push('DVT or PE in the last 3 months');
+      if(cirrhosisOfLiver === 'Yes') flags.push('Liver cirrhosis');
+      if(mitralStenosis === 'Yes') flags.push('Mitral stenosis');
+      if(antiphospholipidAntibodySyndrome === 'Yes') flags.push('Antiphospholipid antibody syndrome');
       
       this.setState({ dynamicFlags:flags });
 

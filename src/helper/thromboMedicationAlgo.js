@@ -61,11 +61,11 @@ export default async function thromboMedicationAlgo(_indicators) {
            const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
            let medData = [];
            let data = [
-              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
-              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
-              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
-              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
-              { warfain: '0', lab: '', frequency: 'do not take', lab: '' },
+              { warfain: '0', frequency: 'do not take', lab: '' },
+              { warfain: '0', frequency: 'do not take', lab: '' },
+              { warfain: '0', frequency: 'do not take', lab: '' },
+              { warfain: '0', frequency: 'do not take', lab: '' },
+              { warfain: '0', frequency: 'do not take', lab: '' },
               { warfain: (parseInt(med_data.med_dosage[dataKey])*2).toString(), lab: '', frequency: 'morning' },
               { warfain: parseInt(getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+1))*2).toString(), lab: '', frequency: 'morning' },
               { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+2)), lab: '', frequency: 'morning' },

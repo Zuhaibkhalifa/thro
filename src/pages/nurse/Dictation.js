@@ -187,11 +187,12 @@ class Dictation extends Component {
                 headers: headers,
                 })
                 .then((response) => {
-                const data = response.data?.success[0];
-                const medicationData = JSON.parse(data?.jsonTable);
+                const rspObj = Object.values(response.data?.success);
+                const data = rspObj[rspObj.length - 2];
+                const medicationData = JSON.parse(data?.jsonTable).table;
                 const antiCogDrugs = this.fillactiveanticogmeds(data);
                 const antiPlatDrugs = this.fillactiveantiplatmeds(data);
-                console.log('Dictation Note - res: ', response, medicationData);
+                console.log('Dictation Note - res: ', response, medicationData, data);
                 const content = `
                     <p style="font-weight: bold;">Episode information</p>
                     <br />
@@ -372,8 +373,7 @@ class Dictation extends Component {
                         <br />
                         ${data.is_lmwh_selected !== "0" ? `Instructions were provided with their low molecular weight heparin. 
                         The injections will be administered by ${data?.administration}.` : ''} 
-                        The patient ${data.is_first_time ? "has" : "has not"} had previous experience with self-injection.
-                        The patient has a ${data.understanding} understanding of the plan for their care.<br />
+                        The patient ${data.is_first_time ? "has" : "has not"} had previous experience with self-injection. The patient has a ${data.understanding.split(' ')[0]} understanding of the plan for their care.<br />
                         It has been a pleasure to be involved in the care of this patient.<br />
                         Dr. ${data.approved_by}
                     </p>
