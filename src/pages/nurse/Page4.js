@@ -378,8 +378,8 @@ class Page4 extends React.Component {
                   }
 
                   let recm_indx = response.data?.success.findIndex(x => x.id === this.state.recom_id);
-                  let data = recm_indx !== -1 ? response.data?.success[recm_indx] : response.data?.success[0];
-                  console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx], Object.values(data?.jsonTable).length);
+                  let data = recm_indx !== -1 ? response.data?.success[recm_indx] : response.data?.success[response.data?.success.length - 1];
+                  console.log('NURSE 6 - Response: ', this.props.location, recm_indx, response.data?.success[recm_indx], JSON.parse(data?.jsonTable).table, Object.values(data?.jsonTable).length);
                   this.setState({ loader: '' });
                   if(Object.values(JSON.parse(data?.jsonTable)).length !== 0) {
                      this.getDataApiAlgo(JSON.parse(data?.jsonTable).table, data, JSON.parse(data?.jsonTable).cell);
@@ -683,7 +683,7 @@ class Page4 extends React.Component {
          activeDOAC: this.state.active_doac,
          activeLMWH: this.state.active_lmwh
       };
-      // console.log(data, table, tableData);
+      // console.log(data, this.state.table, tableData);
       server(`nurse/medicationJsonData/:${data?.patient_id}`, data);
       server(`nurse/saveRecommendations/:${data?.patient_id}`, data);
       this.props.history.push({ pathname: '/Nurse/Nurse6', state: { 'is_lmwh_selected': this.state.lmwh_chkBox, 'recom_id': this.state.recom_id } });

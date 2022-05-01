@@ -114,12 +114,15 @@ class NurseSearch extends React.Component {
                         </div>
                         <div className="row"></div>
                         <div className="col-sm-12">
-                           <MUIDataTable
-                              title={'Patient List'}
-                              data={this.state.testData}
-                              columns={col}
-                              options={options}
-                           />
+                           {
+                              this.state.testData ?
+                              <MUIDataTable
+                                 title={'Patient List'}
+                                 data={this.state.testData}
+                                 columns={col}
+                                 options={options}
+                              /> : ""
+                           }
                         </div>
                      </div>
                      <br />

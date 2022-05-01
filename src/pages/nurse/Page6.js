@@ -271,91 +271,29 @@ class Page6 extends React.Component {
       const tableData = tableValue;
       let tableHeader = [];
       if(tableData.vka !== '') {
-         // let keyIdx = tableData.vka.findIndex(x => x.d6);
-         // let keyIdx1 = tableData.vka.findIndex(x => x.warfain !== '0');
-         // let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
-         // let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          table_data.vka = tableData.vka;
-         // if(tableData.vka[7].warfain !== '') {
-         //    this.setState({ 
-         //       [keyId]: tableData.vka[keyIdx].lab,
-         //       [keyId1]: tableData.vka[keyIdx1].warfain
-         //    });
-         //    // this.setInitialState('InptValVka', tableData.vka[keyIdx1].warfain, tableData.vka.length);
-         //    this.setVKAVal(tableData.vka);
-         //    this.setInitialLabState('vka', 'labVal', tableData.vka, tableData.vka.length);
-         //    this.setInitialSelectState('vka', 'selectValVka', tableData.vka, tableData.vka.length);
-         // }
       }
 
       if(tableData.lmwh !== '') {
-         // let keyIdx1 = tableData.lmwh.findIndex(x => x.dosage);
-         // let keyId1 = keyIdx1 !== -1 ? `InptValLmwh${keyIdx1+1}` : '';
          table_data.lmwh = tableData.lmwh;
-         // if(keyId1 !== '') {
-         //    if(tableData.lmwh[0].dosage !== '') {
-         //       this.setState({
-         //          [keyId1]: tableData.lmwh[keyIdx1].dosage.split(' ')[0] 
-         //       });
-         //       this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh, tableData.lmwh.length);
-         //       this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh, tableData.lmwh.length);
-         //    }
-         // }
       }
 
       if(tableData.doac !== '') {
-         // let keyIdx1 = tableData.doac.findIndex(x => x.dosage);
-         // let keyId1 = keyIdx1 !== -1 ? `InptValDoac${keyIdx1+1}` : '';
-         // if(keyId1 !== '') {
             table_data.doac = tableData.doac;
-         //    if(tableData.doac[0].dosage !=='') {
-         //       this.setState({
-         //          [keyId1]: tableData.doac[keyIdx1].dosage.split(' ')[0] 
-         //       });
-         //       this.setInitialState('doac', 'InptValDoac', tableData.doac, tableData.doac.length);
-         //       this.setInitialSelectState('doac', 'selectValDoac', tableData.doac, tableData.doac.length);
-         //    }
-         // }
       }
 
       if(tableData.antiplatelets !== '') {
-         // let keyIdx1 = tableData.antiplatelets.findIndex(x => x.antiplatelets);
-         // let keyId1 = keyIdx1 !== -1 ? `InptValAntiplatelets${keyIdx1+1}` : '';
          table_data.antiplatelets = tableData.antiplatelets;
-         // if(keyId1 !== '') {
-         //    if(tableData.antiplatelets[0].antiplatelets !== '') {
-         //       this.setState({
-         //          [keyId1]: tableData.antiplatelets[keyIdx1].antiplatelets.split(' ')[0] 
-         //       });
-         //       this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
-         //       this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets, tableData.antiplatelets.length);
-         //    }
-         // }
       }
 
       if(tableData.aspirin !== '') {
-         // let keyIdx1 = tableData.aspirin.findIndex(x => x.aspirin);
-         // let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
          tableHeader.push({ 'aspirin': tableData.aspirin.header });
          table_data.aspirin = tableData.aspirin;
-         // if(keyId1 !== '') {
-         //    if(tableData.aspirin[0].aspirin !== '') {
-         //       this.setState({
-         //          [keyId1]: tableData.aspirin[keyIdx1].aspirin.split(' ')[0] 
-         //       });
-         //       this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin, tableData.aspirin.length);
-         //       this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin, tableData.aspirin.length);
-         //    }
-         // }
       }
-
-      // if(table_data.iv_heparin !== '') {
-      //    this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
-      //    this.setInitialSelectState('heparin', 'selectValIvHeparin', 'do not take', 11);
-      // }
 
       table_data.headers = tableData.headers;
       
+      console.log('table data ==> ', tableData);
       this.setState({
          approved_by: respData.approved_by,
          table: table_data,
@@ -371,89 +309,6 @@ class Page6 extends React.Component {
          cell: cellData
       });
    }
-
-   // setInitialState(medKey, key, value, length) {
-   //    console.log(value);
-   //    for(let i=0; i<length; i++) {
-   //       if(medKey === 'doac') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i].dosage?.split(' ')[0]
-   //          });
-   //       } else if(medKey === 'lmwh') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i].dosage?.split(' ')[0]
-   //          });
-   //       } else if(medKey === 'antiplatelets') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i].antiplatelets?.split(' ')[0]
-   //          });
-   //       } else if(medKey === 'aspirin') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i].aspirin?.split(' ')[0]
-   //          });
-   //       } else if(medKey === 'heparin') {
-   //          this.setState({
-   //             [key+(i+1)]: value
-   //          });
-   //       }
-   //    }
-   // }
-
-   // setVKAVal(value) {
-   //    this.setState({
-   //       InptValVka1: value[0].warfain,
-   //       InptValVka2: value[1].warfain,
-   //       InptValVka3: value[2].warfain,
-   //       InptValVka4: value[3].warfain,
-   //       InptValVka5: value[4].warfain,
-   //       InptValVka6: value[5].warfain,
-   //       InptValVka7: value[6].warfain,
-   //       InptValVka8: value[7].warfain,
-   //       InptValVka9: value[8].warfain,
-   //       InptValVka10: value[9].warfain,
-   //       InptValVka11: value[10].warfain,
-   //    });
-   // }
-
-   // setInitialLabState(medKey, key, value, length) {
-   //    for(let i=0; i<length; i++) {
-   //       if(medKey === 'vka') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i]?.lab
-   //          });
-   //       } 
-   //    }
-   // }
-
-   // setInitialSelectState(medKey, key, value, length) {
-   //    for(let i=0; i<length; i++) {
-   //       if(medKey === 'vka') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i]?.frequency
-   //          });
-   //       } else if(medKey === 'doac') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i]?.frequency
-   //          });
-   //       } else if(medKey === 'lmwh') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i]?.frequency
-   //          });
-   //       } else if(medKey === 'antiplatelets') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i]?.frequency
-   //          });
-   //       } else if(medKey === 'aspirin') {
-   //          this.setState({
-   //             [key+(i+1)]: value[i]?.frequency
-   //          });
-   //       } else if(medKey === 'heparin') {
-   //          this.setState({
-   //             [key+(i+1)]: value
-   //          });
-   //       }
-   //    }
-   // }
 
    submitForm() {
       this.props.history.push({ pathname: '/Nurse/Nurse3', state: { 'is_lmwh_selected': this.state.lmwh_chkBox } });
