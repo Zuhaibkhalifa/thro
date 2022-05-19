@@ -5,9 +5,6 @@ import ReactSpinner from 'react-bootstrap-spinner';
 import $ from 'jquery';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
-
-import { domain } from '../../App';
 
 class Page12 extends React.Component {
     constructor(props) {
@@ -30,34 +27,6 @@ class Page12 extends React.Component {
         this.redirectNextPage = this.redirectNextPage.bind(this);
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-        try {
-            axios
-                .get(domain + '/api/patient/page12LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log(response);
-                    let servrData = response.data.success[0];
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.lab_location_for_inr_test
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error(error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
     showhide() {
         if (document.getElementById('other_show_hide').checked === true) {

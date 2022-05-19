@@ -2,9 +2,7 @@ import React from 'react';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
 import { server } from '../../utils/functions';
-import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
-import { domain } from '../../App';
 
 class Page2 extends React.Component {
     constructor(props) {
@@ -42,39 +40,6 @@ class Page2 extends React.Component {
 
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page2LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log('Patient Page 2 - Response: Success', response);
-                    let servrData = response.data.success[0]; 
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            weight: servrData.weight,
-                            weightSelected: servrData.weight_unit,
-                            physicianName: servrData.physicianName,
-                            genderSelected: servrData.gender,
-                            age: servrData.age
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error('Patient Page 2 - Response - Error: ', error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     

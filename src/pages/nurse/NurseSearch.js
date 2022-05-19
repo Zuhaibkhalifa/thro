@@ -85,6 +85,7 @@ class NurseSearch extends React.Component {
                }
             }
          });
+         localStorage.setItem('patient_id', servData[0].patient_id);
          this.setState({ testData: patientData, loader: 0 });
       });
    }
@@ -106,7 +107,7 @@ class NurseSearch extends React.Component {
                      <div className="row">
                         <div className="col-sm-12">
                            <button className="btn btn-primary" 
-                              style={{ float: 'right' }}
+                              style={{ float: 'right', marginBottom: "15px" }}
                               onClick={this.handleAddPatient}
                               >
                                  <i className="fa fa-plus"></i>Add Patient

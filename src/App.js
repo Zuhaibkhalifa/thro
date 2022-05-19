@@ -41,6 +41,8 @@ const Recommendations = React.lazy(() => import('./pages/nurse/Recommendations')
 const ModifyRecommendations = React.lazy(() => import('./pages/nurse/ModifyRecommendations'));
 const Dictation = React.lazy(() => import('./pages/nurse/Dictation'));
 
+const Test = React.lazy(() => import('./pages/Test'));
+
 // global Domain
 export const domain = 'https://thrombolink-server.herokuapp.com';
 // export const domain = "http://localhost:8000"; 
@@ -56,6 +58,7 @@ const App = () => {
             <PrivateRoute exact path="/User/Section" component={Section} />
             <Route exact path="/RecoverPasword/reset/:token" component={RecoverPasword} />
             {/* // patient // */}
+            <PrivateRoute exact path="/testing" component={Test} />
             <PrivateRoute path="/User/Page2" component={Page2} />
             <PrivateRoute path="/User/Page3" component={Page3} />
             <PrivateRoute path="/User/Page4" component={Page4} />

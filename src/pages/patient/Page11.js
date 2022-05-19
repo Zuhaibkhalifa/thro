@@ -3,10 +3,7 @@ import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
 import $ from 'jquery';
-import axios from 'axios';
 import Header from './Header';
-
-import { domain } from '../../App';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
 
@@ -83,30 +80,8 @@ class Page11 extends React.Component {
         this.validate = this.validate.bind(this);
         this.initialLoadPreSets = this.initialLoadPreSets.bind(this);
 
-        //
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page11LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log('Patient page 11 - reponse from Server: ', response);
-                    this.setState({ loader: '' });
-                });
-        } catch (error) {
-            console.error(error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     //
@@ -433,7 +408,7 @@ class Page11 extends React.Component {
                             </p>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q1', 'q', 'Aspirin &#174; (ASA)')}
+                            {this.renderQuestionCheckBox('q1', 'q', `Aspirin® (ASA)`)}
                             <div id="q1-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q1_dosage-1', 'q1_dosage', '81', 'dosage')}
                                 {this.renderQuestionRadioCustomOption('q1_dosage-cust', 'q1_dosage', 'dosage')}
@@ -445,7 +420,7 @@ class Page11 extends React.Component {
                             </div>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q2', 'q', 'Plavix &#174; (Clopidogrel)')}
+                            {this.renderQuestionCheckBox('q2', 'q', `Plavix®(Clopidogrel)`)}
                             <div id="q2-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q2_dosage-1', 'q2_dosage', '75', 'dosage')}
                                 {this.renderQuestionRadioCustomOption('q2_dosage-cust', 'q2_dosage', 'dosage')}
@@ -457,7 +432,7 @@ class Page11 extends React.Component {
                             </div>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q3', 'q', 'Brillinta &#174; (Ticagrelor)')}
+                            {this.renderQuestionCheckBox('q3', 'q', `Brillinta® (Ticagrelor)`)}
                             <div id="q3-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q3_dosage-1', 'q3_dosage', '60', 'dosage')}
                                 {this.renderQuestionRadioOption('q3_dosage-1', 'q3_dosage', '90', 'dosage')}
@@ -470,7 +445,7 @@ class Page11 extends React.Component {
                             </div>
 
                             {/*  */}
-                            {this.renderQuestionCheckBox('q4', 'q', 'Effient &#174; (Prasugrel)')}
+                            {this.renderQuestionCheckBox('q4', 'q', `Effient® (Prasugrel)`)}
                             <div id="q4-toggle" className="mb-xl-4">
                                 {this.renderQuestionRadioOption('q4_dosage-1', 'q4_dosage', '5', 'dosage')}
                                 {this.renderQuestionRadioOption('q4_dosage-1', 'q4_dosage', '10', 'dosage')}

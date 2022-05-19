@@ -5,13 +5,10 @@ import ReactSpinner from 'react-bootstrap-spinner';
 
 import Header from './Header';
 import $ from 'jquery';
-import axios from 'axios';
 
 import Logo from '../../assets/img/3.png';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-
-import { domain } from '../../App';
 
 class Page16 extends React.Component {
    constructor(props) {
@@ -34,30 +31,6 @@ class Page16 extends React.Component {
 
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
-
-      const headers = {
-         'Content-Type': 'application/json',
-         Accept: 'application/json',
-         Authorization: 'Bearer ' + localStorage.getItem('token'),
-      };
-      try {
-         axios
-            .get(domain + '/api/patient/page16LoadData', {
-               headers: headers,
-            })
-            .then((response) => {
-               console.log(response);
-
-               this.setState({ loader: '' });
-            }, (err) => {
-               this.setState({ loader: '' });
-               localStorage.clear();
-               this.props.history.push('/');
-           });
-      } catch (error) {
-         console.error(error);
-         this.setState({ loader: '' });
-      }
    }
    handleModalShowHide() {
       this.setState({ showHide: !this.state.showHide });

@@ -5,9 +5,6 @@ import ReactSpinner from 'react-bootstrap-spinner';
 import $ from 'jquery';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
-
-import { domain } from '../../App';
 
 class Page15 extends React.Component {
     constructor(props) {
@@ -40,40 +37,6 @@ class Page15 extends React.Component {
         this.redirectNextPage = this.redirectNextPage.bind(this);
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-        try {
-            axios
-                .get(domain + '/api/patient/page15LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log(response);
-                    let servrData = response.data.success[0];
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.being_treated_cancer,
-                            cancer: servrData.cancer,
-                            radiation: servrData.radiation,
-                            radiation_ongoing: servrData.radiation_ongoing,
-                            chemotherapy: servrData.chemotherapy,
-                            chemotherapy_ongoing: servrData.chemotherapy_ongoing,
-                            chemotherapy_finished: servrData.chemotherapy_finished, 
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error(error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     submitForm() {

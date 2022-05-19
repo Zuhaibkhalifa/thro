@@ -5,10 +5,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import $ from 'jquery';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
-
-import { domain } from '../../App';
 
 class Page4 extends React.Component {
     constructor(props) {
@@ -55,97 +52,8 @@ class Page4 extends React.Component {
         this.onRadioBtn2 = this.onRadioBtn2.bind(this);
         this.no_errors = this.no_errors.bind(this);
 
-        //
-
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-        //  this.test();
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page4LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log('Patient page 4 - Constructor - Success Response: ', response);
-                    let servrData = response.data.success[0];
-
-                    if(servrData) {
-                        this.setState({
-                            q1_ans: servrData.venous_thromboelism,
-                            q1_sub_q1_ans: servrData.dvt,
-                            q1_sub_q1_ans_inner1: servrData.dvt_how_long_ago,
-                            q1_sub_q2_ans: servrData.pe,
-                            q1_sub_q2_ans_inner2: servrData.pe_dvt_how_long_ago,
-                            q2_ans: servrData.atrial_fibrillation_of_flutter,
-                            q3_ans: servrData.heart_valve_replacement,
-                            q4_ans: servrData.blood_clot_in_heart,
-                            q5_ans: servrData.arterial_peripheral_thrombosis,
-                            q6_ans: servrData.peripheral_arterial_disease,
-                            q7_sub_ans: servrData.other,
-                            q8_ans: servrData.none,
-                            loader: ''
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-
-                    let vte = document.getElementById('vte');
-                    let dvt_option1 = document.getElementById('dvt_option1');
-                    let pe_option1 = document.getElementById('pe_option1');
-                    let mainOption2 = document.getElementById('mainOption2');
-                    let hvr = document.getElementById('hvr');
-                    let mainOption3 = document.getElementById('mainOption3');
-                    let mainOption4 = document.getElementById('mainOption4');
-                    let mainOption5 = document.getElementById('mainOption5');
-                    let optradio7 = document.getElementById('optradio7');
-                    let reason = document.getElementById('reason');
-                    let optradio8 = document.getElementById('optradio8');
-
-                    if(this.state.q1_ans === 'Yes') {
-                        vte.checked = true;
-                        this.showhidevte();
-                        if(this.state.q1_sub_q1_ans === 'Yes') {
-                            dvt_option1.checked = true;
-                            this.onRadioBtn1()
-                        }
-                        if(this.state.q1_sub_q2_ans === 'Yes') {
-                            pe_option1.checked = true;
-                            this.onRadioBtn2();
-                        }
-                    }
-                    if(mainOption2 && this.state.q2_ans === 'Yes') mainOption2.checked = true;
-                    if(hvr && this.state.q3_ans === 'Yes') hvr.checked = true;
-                    if(mainOption3 && this.state.q4_ans === 'Yes') mainOption3.checked = true;
-                    if(mainOption4 && this.state.q5_ans === 'Yes') mainOption4.checked = true;
-                    if(mainOption5 && this.state.q6_ans === 'Yes') mainOption5.checked = true;
-                    if(optradio7 && this.state.q7_ans === 'Yes') {
-                        optradio7.checked = true;
-                        reason.value = this.state.q7_sub_ans;
-                    }
-                    if(optradio8 && this.state.q8_ans === 'Yes') {
-                        optradio8.checked = true;
-                        document.getElementById('de').style.display = 'none';
-                        document.getElementById('vte').disabled = true;
-                        document.getElementById('mainOption2').disabled = true;
-                        document.getElementById('mainOption3').disabled = true;
-                        document.getElementById('mainOption4').disabled = true;
-                        document.getElementById('mainOption5').disabled = true;
-                        document.getElementById('optradio7').disabled = true;
-                        document.getElementById('hvr').disabled = true;
-                    }
-                });
-        } catch (error) {
-            console.error('Patient page 4 - Constructor - Response Error: ', error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     redirectBackNurse() {

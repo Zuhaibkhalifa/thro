@@ -1,11 +1,9 @@
 import React from 'react';
 import Header from './Header';
 import SimpleReactValidator from 'simple-react-validator';
-import axios from 'axios';
 import { server } from '../../utils/functions';
 import { goBack } from '../../utils/user';
 import ReactSpinner from 'react-bootstrap-spinner';
-import { domain } from '../../App';
 
 class Page3 extends React.Component {
     constructor(props) {
@@ -32,44 +30,6 @@ class Page3 extends React.Component {
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
 
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page3LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log('Patient Page 3 - Success Response: ', response);
-                    let servrData = response.data.success[0];
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.blood_clot_blood_thinner_interrupted 
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-
-                    let optradio1 = document.getElementById('optradio1');
-                    let optradio2 = document.getElementById('optradio2');
-                    let optradio3 = document.getElementById('optradio3');
-
-                    if(this.state.q1_ans !== '' && (optradio1 && optradio2 && optradio3)) {
-                        if(this.state.q1_ans === 'Yes') optradio1.checked = true;
-                        else if(this.state.q1_ans === 'No') optradio2.checked = true;
-                        else optradio3.checked = true;
-                    }
-                });
-        } catch (error) {
-            console.error('Patient Page 3 - Response - error: ', error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     redirectBackNurse() {

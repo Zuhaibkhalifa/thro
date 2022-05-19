@@ -3,18 +3,11 @@ import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
 import $ from 'jquery';
-import axios from 'axios';
 import Header from './Header';
 import moment from 'moment';
 
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import { domain } from '../../App';
-
-//
-
-//
-//
 
 class Page13 extends React.Component {
     constructor(props) {
@@ -50,45 +43,6 @@ class Page13 extends React.Component {
         //
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page13LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log(response);
-                    // let servrData = response.data.success[0];
-                    // if(servrData) {
-                    //     this.setState({ 
-                    //         loader: '',
-                    //         q1_ans: servrData.bleeding_requiring_treatment,
-                    //         q1_ans_option: servrData.bleeding_requiring_treatment_last_three_months,
-                    //         q2_ans: servrData.bleeding_from_stomach,
-                    //         q2_ans_option: servrData.bleeding_from_stomach_last_three_months,
-                    //         q3_ans: servrData.ulcer_in_stomach_or_bowel,
-                    //         q3_ans_option: servrData.ulcer_in_stomach_or_bowel_last_three_months,
-                    //         q4_ans: servrData.liver_disease,
-                    //         q5_ans: servrData.kidney_disease,
-                    //         q6_ans: servrData.not_sure,
-                    //         q7_ans: servrData.had_transfusion_in_last_three_months,
-                    //         q7_ans_option: servrData.had_transfusion_in_last_three_months_when
-                    //     });
-                    // } else {
-                    // }
-                    this.setState({ loader: '' });
-                });
-        } catch (error) {
-            console.error(error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     //
@@ -336,7 +290,7 @@ class Page13 extends React.Component {
                                     name="prasugrel_dosage_freq"
                                     id="oneone_freq1"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q1_ans_option: 'Yes' })}
                                 />
                                 <br />
                                 <label className="radio-inline blue">No</label>
@@ -345,7 +299,7 @@ class Page13 extends React.Component {
                                     name="prasugrel_dosage_freq"
                                     id="oneone_freq2"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q1_ans_option: 'No' })}
                                 />
 
                                 <br />
@@ -355,7 +309,7 @@ class Page13 extends React.Component {
                                     name="prasugrel_dosage_freq"
                                     id="oneone_freq3"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q1_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q1_ans_option: 'Yes' })}
                                 />
                             </div>
                             <div className="text-danger">
@@ -384,7 +338,7 @@ class Page13 extends React.Component {
                                     name="bleeding_dosage_freq"
                                     id="twotwo_freq1"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q2_ans_option: 'Yes' })}
                                 />
                                 <br />
                                 <label className="radio-inline blue">No</label>
@@ -393,7 +347,7 @@ class Page13 extends React.Component {
                                     name="bleeding_dosage_freq"
                                     id="twotwo_freq2"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q2_ans_option: 'No' })}
                                 />
 
                                 <br />
@@ -403,7 +357,7 @@ class Page13 extends React.Component {
                                     name="bleeding_dosage_freq"
                                     id="twotwo_freq3"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q2_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q2_ans_option: 'Yes' })}
                                 />
                                 <div className="text-danger">
                                     {' '}
@@ -432,7 +386,7 @@ class Page13 extends React.Component {
                                     name="ulcer_dosage_freq"
                                     id="threethree_freq1"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q3_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q3_ans_option: 'Yes' })}
                                 />
                                 <br />
                                 <label className="radio-inline blue">No</label>
@@ -441,7 +395,7 @@ class Page13 extends React.Component {
                                     name="ulcer_dosage_freq"
                                     id="threethree_freq2"
                                     className="pull-right"
-                                    onChange={(e) => this.setState({ q3_ans_option: e.target.checked ? 'Yes' : 'No' })}
+                                    onChange={(e) => this.setState({ q3_ans_option: 'No' })}
                                 />
 
                                 <br />
@@ -507,7 +461,7 @@ class Page13 extends React.Component {
                                 id="optradio_yes"
                                 className="pull-right"
                                 value="Yes"
-                                onChange={(e) => this.setState({ q7_ans: e.target.checked ? 'Yes' : 'No' })}
+                                onChange={(e) => this.setState({ q7_ans: 'Yes' })}
                             />
                             <br />
                             <label className="radio-inline blue">No</label>
@@ -517,7 +471,7 @@ class Page13 extends React.Component {
                                 id="optradio_no"
                                 className="pull-right"
                                 value="No"
-                                onChange={(e) => this.setState({ q7_ans: e.target.checked ? 'Yes' : 'No' })}
+                                onChange={(e) => this.setState({ q7_ans: 'No' })}
                             />
 
                             <br />

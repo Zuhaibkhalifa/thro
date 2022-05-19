@@ -7,9 +7,6 @@ import { server } from '../../utils/functions';
 import ReactSpinner from 'react-bootstrap-spinner';
 import _ from 'lodash';
 
-import { domain } from '../../App';
-import axios from 'axios';
-
 class Page9 extends React.Component {
    constructor(props) {
       super(props);
@@ -49,44 +46,6 @@ class Page9 extends React.Component {
 
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
-
-      const headers = {
-         'Content-Type': 'application/json',
-         Accept: 'application/json',
-         Authorization: 'Bearer ' + localStorage.getItem('token'),
-      };
-      try {
-         axios
-            .get(domain + '/api/patient/page9LoadData', {
-               headers: headers,
-            })
-            .then((response) => {
-               console.log(response);
-               let servrData = response.data.success[0];
-               if(servrData) {
-                  this.setState({
-                     loader: '',
-                     q1: servrData.dalteparin,
-                     q1_dosage: servrData.dalteparin_dosage,
-                     q1_freq: servrData.dalteparin_freq,
-                     q2: servrData.enoxaparin,
-                     q2_dosage: servrData.enoxaparin_dosage,
-                     q2_freq: servrData.enoxaparin_freq,
-                     q3: servrData.tinzaparin,
-                     q3_dosage: servrData.tinzaparin_dosage,
-                     q3_freq: servrData.tinzaparin_freq,
-                     q4: servrData.none,
-                  });
-               } else {
-                  this.setState({ loader: '' })
-              }
-            });
-      } catch (error) {
-         console.error(error);
-         this.setState({ loader: '' });
-         this.props.history.push('/');
-      }
-
    }
 
    redirectBackNurse() {

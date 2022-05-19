@@ -3,6 +3,15 @@ import { NavLink } from 'react-router-dom';
 
 class NurseHeader extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.redirectToTestPage = this.redirectToTestPage.bind(this);
+    }
+
+    redirectToTestPage() {
+        this.props.history.push({ pathname: '/testing', state: { add_new: true, recommendation_id: 0 } });
+    }
+
     render() {
         return (
             <div className="top-bar">
@@ -19,6 +28,14 @@ class NurseHeader extends React.Component {
                                     aria-expanded="false"
                                 >
                                     <i className="fa fa-home" />
+                                </button>
+                            </NavLink>
+                            <NavLink to="/testing">
+                                <button
+                                    className="btn btn-info"
+                                    type="button"
+                                >
+                                    testing page
                                 </button>
                             </NavLink>
                             <div className="dropdown-menu" aria-labelledby="dropdown1">

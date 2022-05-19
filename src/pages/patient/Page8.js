@@ -3,12 +3,10 @@ import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
 import $ from 'jquery';
-import axios from 'axios';
 import Header from './Header';
 
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import { domain } from '../../App';
 
 //
 
@@ -63,45 +61,6 @@ class Page8 extends React.Component {
 
       var element = document.getElementById('body');
       element.classList.add('blue-bg');
-
-      const headers = {
-         'Content-Type': 'application/json',
-         Accept: 'application/json',
-         Authorization: 'Bearer ' + localStorage.getItem('token'),
-      };
-      try {
-         axios
-            .get(domain + '/api/patient/page8LoadData', {
-               headers: headers,
-            })
-            .then((response) => {
-               console.log(response);
-               let servrData = response.data.success[0];
-               if(servrData) {
-                  this.setState({ 
-                     loader: '',
-                     q1_ans: servrData.pradaxa,
-                     q1_ans_dosage: servrData.pradaxa_dosage,
-                     q2_ans: servrData.xarelto,
-                     q2_ans_dosage: servrData.xarelto_dosage,
-                     q2_ans_dosage_timing: servrData.xarelto_dosage_time,
-                     q2_ans_dosage_meal_taken: servrData.eliquis,
-                     q3_ans: servrData.eliquis_dosage,
-                     q3_ans_dosage: servrData.eliquis_dosage_time,
-                     q4_ans: servrData.edoxabon,
-                     q4_ans_dosage: servrData.edoxabon_dosage,
-                     q4_ans_dosage_timing: servrData.edoxabon_dosage_time,
-                     q5_ans: '' 
-                  });
-               } else {
-                  this.setState({ loader: '' })
-              }
-            });
-      } catch (error) {
-         console.error(error);
-         this.setState({ loader: '' });
-         this.props.history.push('/');
-      }
    }
 
    async submitForm() {

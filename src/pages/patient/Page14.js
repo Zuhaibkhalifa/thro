@@ -4,9 +4,6 @@ import SimpleReactValidator from 'simple-react-validator';
 import ReactSpinner from 'react-bootstrap-spinner';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
-
-import { domain } from '../../App';
 
 class Page14 extends React.Component {
     constructor(props) {
@@ -29,35 +26,6 @@ class Page14 extends React.Component {
         this.redirectNextPage = this.redirectNextPage.bind(this);
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-        try {
-            axios
-                .get(domain + '/api/patient/page14LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log(response);
-                    let servrData = response.data.success[0];
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.cirrhosis_of_liver, 
-                            q2_ans: servrData.antiphospholipid_antibody_syndrome,  
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error(error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     submitForm() {

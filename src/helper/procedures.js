@@ -16,11 +16,11 @@ export default function procedures(procedure, handleProcedure, validation_messag
 
             <optgroup label="GI/abdominal">
                <option value="Abdominal surgery (mod)">Abdominal surgery (mod)</option>
-               <option value="Gastroscopy or colonoscopy without biopsy (mod)">
-                  Gastroscopy or colonoscopy without biopsy (mod)
+               <option value="Gastroscopy or colonoscopy without biopsy (low)">
+                  Gastroscopy or colonoscopy without biopsy (low)
                </option>
-               <option value="Gastroscopy or colonoscopy with biopsy (low)">
-                  Gastroscopy or colonoscopy with biopsy (low)
+               <option value="Gastroscopy or colonoscopy with biopsy (mod)">
+                  Gastroscopy or colonoscopy with biopsy (mod)
                </option>
                <option value="Intestinal anastomosis (high)">Intestinal anastomosis (high)</option>
                <option value="Extensive cancer surgery (e.g. liver/pancreas) (high)">

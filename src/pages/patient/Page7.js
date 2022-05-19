@@ -3,16 +3,10 @@ import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
 
 import $ from 'jquery';
-import axios from 'axios';
 import Header from './Header';
 
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-
-import { domain } from '../../App';
-
-//
-//
 
 class Page7 extends React.Component {
     constructor(props) {
@@ -44,45 +38,8 @@ class Page7 extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeNone = this.handleChangeNone.bind(this);
 
-        //
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page7LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log('Patient page7 - Get Data - Success response: ', response);
-                    let servrData = response.data.success[0];
-
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1: servrData.cognitive_heart_failure,
-                            q2: servrData.high_blood_pressure,
-                            q3: servrData.diabetes,
-                            q4: servrData.mitral_stenosis,
-                            q5: servrData.stroke_or_mini_stroke,
-                            q5_sub: servrData.stroke_how_long,
-                            q6: servrData.none_of_above, 
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error('Patient page7 - Get Data - Error response: ', error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     // Validation Rules in one place

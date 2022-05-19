@@ -4,10 +4,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
 import $ from 'jquery';
-import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
-
-import { domain } from '../../App';
 
 class Page10 extends React.Component {
     constructor(props) {
@@ -47,52 +44,6 @@ class Page10 extends React.Component {
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
         this.toggle = this.toggle.bind(this);
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-        try {
-            axios
-                .get(domain + '/api/patient/page10LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log(response);
-                    let servrData = response.data.success[0];
-
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.coumadin,
-                            q1_ans_monday: servrData.coumadin_monday,
-                            q1_ans_tuesday: servrData.coumadin_tuesday,
-                            q1_ans_wednesday: servrData.coumadin_wednesday,
-                            q1_ans_thursday: servrData.coumadin_thursday,
-                            q1_ans_friday: servrData.coumadin_friday,
-                            q1_ans_saturday: servrData.coumadin_saturday,
-                            q1_ans_sunday: servrData.coumadin_sunday,
-                            q1_ans_other: servrData.not_sure,
-                            q2_ans: servrData.sintrom,
-                            q2_ans_monday: servrData.sintrom_monday,
-                            q2_ans_tuesday: servrData.sintrom_tuesday,
-                            q2_ans_wednesday: servrData.sintrom_wednesday,
-                            q2_ans_thursday: servrData.sintrom_thursday,
-                            q2_ans_friday: servrData.sintrom_friday,
-                            q2_ans_saturday: servrData.sintrom_saturday,
-                            q2_ans_sunday: servrData.sintrom_sunday,
-                            q2_ans_other: servrData.not_sure 
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error(error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-        }
     }
 
     redirectBackNurse() {

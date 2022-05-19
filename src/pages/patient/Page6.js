@@ -4,10 +4,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import $ from 'jquery';
 import { goBack } from '../../utils/user';
 import { server } from '../../utils/functions';
-import axios from 'axios';
 import ReactSpinner from 'react-bootstrap-spinner';
-
-import { domain } from '../../App';
 
 class Page6 extends React.Component {
     constructor(props) {
@@ -45,63 +42,6 @@ class Page6 extends React.Component {
 
         var element = document.getElementById('body');
         element.classList.add('blue-bg');
-        //  this.test();
-
-        const headers = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-        };
-
-        try {
-            axios
-                .get(domain + '/api/patient/page6LoadData', {
-                    headers: headers,
-                })
-                .then((response) => {
-                    console.log('Patient page6 - get Data - Success response: ', response.success);
-                    let servrData = response.data.success[0];
-                    if(servrData) {
-                        this.setState({ 
-                            loader: '',
-                            q1_ans: servrData.mechanical_heart_valve,
-                            q2_ans: servrData.tissue_heart_valve,
-                            q3_ans: servrData.dont_know,
-                            q1_sub_ans1: servrData.mechanical_heart_valve_Is_the_valve_bileaflet,
-                            q1_sub_ans2: servrData.mechanical_heart_valve_Is_the_valve_ball_and_cage,
-                            q1_sub_ans3: servrData.mechanical_heart_valve_Is_the_valve_tilting_disc,
-                            q1_sub_ans4: servrData.mechanical_heart_valve_Is_the_valve_dont_know,
-                            q4_sub_ans1: servrData.location_aortic,
-                            q4_sub_ans2: servrData.location_mitral,
-                            q4_sub_ans3: servrData.location_other,
-                            q4_sub_ans4: servrData.location_dont_know 
-                        });
-                    } else {
-                        this.setState({ loader: '' })
-                    }
-                });
-        } catch (error) {
-            console.error('Patient page6 - get Data - Error response: ', error);
-            this.setState({ loader: '' });
-            this.props.history.push('/');
-
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.log('Patient page6 - get Data - Error response.data: ', error.response.data);
-                console.log('Patient page6 - get Data - Error response.status: ', error.response.status);
-                console.log('Patient page6 - get Data - Error response.headers: ', error.response.headers);
-            } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                console.log('Patient page6 - get Data - Error response.request: ', error.request);
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Patient page6 - get Data - Error message: ', error.message);
-            }
-            console.log('Patient page6 - get Data - Error config: ', error.config);
-        }
     }
 
     mainOption() {
