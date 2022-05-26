@@ -378,6 +378,11 @@ class Page1 extends React.Component {
       this.forceUpdate();
    }
 
+   handleCrCl(value) {
+      const crcl = this.CrCl(this.state.age, this.state.weight, this.state.weight_unit, this.state.gender, value)
+      this.setState({ CrCl: crcl, poc_creat_text: value });
+   }
+
    fillactiveanticogmeds() {
       let activeMeds = [];
       if(this.state.dalteparin) {
@@ -1354,11 +1359,7 @@ class Page1 extends React.Component {
                                     type="number"
                                     className="form-control"
                                     value={this.state.poc_creat_text}
-                                    onChange={(e) =>
-                                       this.setState({
-                                          poc_creat_text: e.target.value,
-                                       })
-                                    }
+                                    onChange={(e) => this.handleCrCl(e.target.value)}
                                     id="poc_creat"
                                  />
                               </div>
