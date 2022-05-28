@@ -1,17 +1,11 @@
 import React from 'react';
 import ReactSpinner from 'react-bootstrap-spinner';
 import SimpleReactValidator from 'simple-react-validator';
-
 import axios from 'axios';
-import moment from 'moment';
-
 import Header from './nurse/NurseHeader';
 import { server } from '../utils/functions';
 import { domain } from '../App';
-
-import thromboAlgos from '../helper/thromboAlgos';
 import procedures from './../helper/procedures';
-import thromboMedicationAlgo from '../helper/thromboMedicationAlgo';
 import TestResults from './TestResults';
 
 class Test extends React.Component {
@@ -158,7 +152,13 @@ class Test extends React.Component {
          antiPlatMed: '',
          showFields: false,
          showResults: false,
-         CrCl: 0
+         CrCl: 0,
+         indicators: {
+            indicationRisk: 0,
+            patientBleedingRisk: 0,
+            surgeryBleedingRisk: 0,
+            CrCl: 0,
+         }
       };
 
       this.handle_procedure = this.handle_procedure.bind(this);
@@ -166,6 +166,7 @@ class Test extends React.Component {
       this.fillactiveanticogmeds = this.fillactiveanticogmeds.bind(this);
       this.fillactiveantiplatmeds = this.fillactiveantiplatmeds.bind(this);
       this.CrCl = this.CrCl.bind(this);
+      this.handleIndicatorsChange = this.handleIndicatorsChange.bind(this);
    }
 
    componentDidMount() {
@@ -323,6 +324,14 @@ class Test extends React.Component {
    handleCrCl(value) {
       const crcl = this.CrCl(this.state.age, this.state.weight, this.state.weight_unit, this.state.gender, value)
       this.setState({ CrCl: crcl, poc_creat_text: value });
+   }
+
+   handleIndicatorsChange(e) {
+      const key = e.target.name;
+      const value = e.target.value;
+      let indicatorsData = { ...this.state.indicators };
+      indicatorsData[key] = parseInt(value);
+      this.setState({ indicators: indicatorsData, showResults: false });
    }
 
    fillactiveanticogmeds() {
@@ -614,7 +623,7 @@ class Test extends React.Component {
          referred_by: this.state.referred_by,
          dictation: this.state.dictation,
          assessment_date: this.state.assessment_date,
-         crcl: this.state.CrCl
+         crcl: this.state.indicators.CrCl
       };
       let patient_id = localStorage.getItem('patient_id');
       server(`nurse/page5/:${patient_id}`, param).then((value) => {
@@ -954,6 +963,62 @@ class Test extends React.Component {
 
                      <br />
                      <br />
+                     <div className='row'>
+                        <div className='col sm-3'>
+                           <div className='form-group'>
+                              <label htmlFor='IR'>IR : </label>
+                              <input 
+                                 className='form-control'
+                                 type='number'
+                                 name="indicationRisk"
+                                 placeholder='Indication Risk'
+                                 value={this.state.indicators.indicationRisk}
+                                 onChange={this.handleIndicatorsChange}
+                              />
+                           </div>
+                        </div>
+                        <div className='col sm-3'>
+                           <div className='form-group'>
+                              <label htmlFor='PBR'>PBR : </label>
+                              <input 
+                                 className='form-control'
+                                 type='number'
+                                 name="patientBleedingRisk"
+                                 placeholder='Patient Bleeding Risk'
+                                 value={this.state.indicators.patientBleedingRisk}
+                                 onChange={this.handleIndicatorsChange}
+                              />
+                           </div>
+                        </div>
+                        <div className='col sm-3'>
+                           <div className='form-group'>
+                              <label htmlFor='SBR'>SBR : </label>
+                              <input 
+                                 className='form-control'
+                                 type='number'
+                                 name="surgeryBleedingRisk"
+                                 placeholder='Sugery Bleeding Risk'
+                                 value={this.state.indicators.surgeryBleedingRisk}
+                                 onChange={this.handleIndicatorsChange}
+                              />
+                           </div>
+                        </div>
+                        <div className='col sm-3'>
+                           <div className='form-group'>
+                              <label htmlFor='CRCL'>CRCL : </label>
+                              <input 
+                                 className='form-control'
+                                 type='number'
+                                 name="CrCl"
+                                 placeholder='Creatnine Clearence'
+                                 value={this.state.indicators.CrCl}
+                                 onChange={this.handleIndicatorsChange}
+                              />
+                           </div>
+                        </div>
+                     </div>
+                     <br />
+                     <br />
 
                      <div className="row">
                         <div className="col-4"></div>
@@ -972,7 +1037,7 @@ class Test extends React.Component {
             <React.Fragment>
                {
                   this.state.showResults ? 
-                     <TestResults /> 
+                     <TestResults indicators={this.state.indicators} /> 
                   : ""
                }
             </React.Fragment>

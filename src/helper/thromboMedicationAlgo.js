@@ -3,13 +3,60 @@ import { domain } from '../App';
 
 export default async function thromboMedicationAlgo(_indicators) {
     const drugData = await getDrugData();
-    console.log('>> drug details - ', drugData);
+    console.log('>> drug details - ', drugData, _indicators);
     const indicators = check_sugery_bleeding_risk_outlier(_indicators, drugData);
+    console.log('indicators after ==> ', indicators);
     
-    function getDayOfProcedure(date) {
-        const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
-        return days[new Date(date).getDay()];
-    }
+   function getDayOfProcedure(date) {
+      const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+      return days[new Date(date).getDay()];
+   }
+
+   function daysInMonth(month, year, days, additionalValue) {
+      const currentDays = new Date(year, month, 0).getDate();
+      if(parseInt(days)+additionalValue < 0) {
+         if(parseInt(month) === 1) return 12;
+         else return 12+additionalValue;
+      } else {
+         if(currentDays === parseInt(days)) {
+            if((parseInt(month)+1) > 12) return 1;
+            else return month;
+         } else if(currentDays === (parseInt(days)+additionalValue)) return parseInt(month);
+         else if(currentDays < (parseInt(days)+additionalValue)) {
+            if((parseInt(month)+1) > 12) return 1;
+            else return parseInt(month)+1;
+         } else return parseInt(month); 
+      }
+   }
+
+   function resetDays(month, year, days, additionalValue) {
+      const currentDays = new Date(year, month, 0).getDate();
+      if(parseInt(days)+additionalValue < 0) {
+         return parseInt(currentDays)+additionalValue;
+      } else {
+         if(currentDays === parseInt(days)) return ((parseInt(days)+additionalValue) - currentDays) === 0 ? currentDays : ((parseInt(days)+additionalValue) - currentDays);
+         else if(currentDays === (parseInt(days)+additionalValue)) return ((parseInt(days)+additionalValue));
+         else if(currentDays < (parseInt(days)+additionalValue)) return ((parseInt(days)+additionalValue) - currentDays);
+         else return ((parseInt(days)+additionalValue)); 
+      }
+   }
+
+   function resetYear(year, month, days, additionalValue) {
+      const currentDays = new Date(year, month, 0).getDate();
+      if(parseInt(days)+additionalValue < 0) {
+         if(parseInt(month)-1 < 0) return parseInt(year)-1;
+         else return parseInt(year);
+      } else {
+         if(currentDays === parseInt(days)) {
+            if((parseInt(month)+1) > 12) return parseInt(year)+1;
+            else return parseInt(year);
+         } else if(currentDays === (parseInt(days)+additionalValue)) return parseInt(year);
+         else if(currentDays < (parseInt(days)+additionalValue)) {
+            if((parseInt(month)+1) > 12) return parseInt(year)+1;
+            else return parseInt(year);
+         } else return parseInt(year);
+      }
+   }
 
     function check_sugery_bleeding_risk_outlier(_indicators, _algodata) {
         const indicators = { ..._indicators };
@@ -45,6 +92,8 @@ export default async function thromboMedicationAlgo(_indicators) {
     function getVKAMedsDoses(meds, date) {
         let day = getDayOfProcedure(date);
         let dkey = meds?.med_name.toLowerCase().split(' ')[0]+'_'+day;
+
+        console.log('vka doses', meds, date, day, dkey);
         
         return meds.med_dosage[dkey];
     }
@@ -56,22 +105,25 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {};
   
         if(med_data !== '') {
-           let dataKey = med_data?.med_name.toLowerCase().split(' ')[0]+'_'+procedure_day;
-           console.log('date :', date_of_procedure, 'day :', procedure_day, 'dataKey :', dataKey, 'med_data :', med_data);
+         //   let dataKey = getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2)));
+           console.log('date :', date_of_procedure, 'day :', procedure_day, 'med_data :', med_data);
            const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;
+           
+           console.log('indicators ==> ', indicators);
+           
            let medData = [];
            let data = [
-              { warfain: '0', frequency: 'do not take', lab: '' },
-              { warfain: '0', frequency: 'do not take', lab: '' },
-              { warfain: '0', frequency: 'do not take', lab: '' },
-              { warfain: '0', frequency: 'do not take', lab: '' },
-              { warfain: '0', frequency: 'do not take', lab: '' },
-              { warfain: (parseInt(med_data.med_dosage[dataKey])*2).toString(), lab: '', frequency: 'morning' },
-              { warfain: parseInt(getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+1))*2).toString(), lab: '', frequency: 'morning' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+2)), lab: '', frequency: 'morning' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+3)), lab: '', frequency: 'morning' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+4)), lab: '', frequency: 'morning' },
-              { warfain: getVKAMedsDoses(med_data, date_of_procedure?.split('-')[0]+'-'+date_of_procedure?.split('-')[1]+'-'+(parseInt(date_of_procedure?.split('-')[2])+5)), lab: '', frequency: 'morning' },
+              { warfain: 'No', frequency: 'do not take', lab: '' },
+              { warfain: 'No', frequency: 'do not take', lab: '' },
+              { warfain: 'No', frequency: 'do not take', lab: '' },
+              { warfain: 'No', frequency: 'do not take', lab: '' },
+              { warfain: 'No', frequency: 'do not take', lab: '' },
+              { warfain: parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0)))*2).toString(), lab: '', frequency: 'morning' },
+              { warfain: parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1)))*2).toString(), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))), lab: '', frequency: 'morning' },
+              { warfain: getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))), lab: '', frequency: 'morning' },
               { d6: 'First weekday after D5', lab: 'Goto Lab for INR test' },
            ];
   
@@ -84,7 +136,10 @@ export default async function thromboMedicationAlgo(_indicators) {
            table['data'] = data;
     
             // case a.1
-            if (IR === 0 && PBR === 0 && SBR === 2) return table;
+            if (IR === 0 && PBR === 0 && SBR === 2) {
+               console.log('iam here ==> ', indicators, table);
+               return table;
+            }
             // case a.2  FLAG
             else if (IR === 0 && PBR === 1 && SBR === 2) {
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
@@ -94,40 +149,41 @@ export default async function thromboMedicationAlgo(_indicators) {
     
             // case a.3
             else if (IR === 0 && PBR === 0 && SBR === 1) {
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+               table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
                 
-                return table;
+               return table;
             }
     
             // case a.4
             else if (IR === 0 && PBR === 1 && SBR === 1) {
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
-                
+                table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               
                 return table;
             }
     
             // case b
-            else if (SBR === -1) {
-                table = modifyData(table, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
-                table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-    
-                return table;
+            else if (SBR === 3) {
+               table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+               table = modifyData(table, [0], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], -5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -5))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [1], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], -4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -4))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [2], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], -3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -3))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [3], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], -2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [4], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], -1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], -1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [8], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [9], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [10], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               
+               return table;
             }
     
             // case c.1
-            else if ((IR || PBR) && SBR === 3 && CrCl >= 30) {
-                table.data[2].frequency = 'morning and evening';
-                table.data[3].frequency = 'morning and evening';
-                table.data[4].frequency = 'morning';
-                table.data[6].frequency = 'evening';
-                table.data[7].frequency = 'morning and evening';
-                table.data[8].frequency = 'morning and evening';
-
-                return table;
-            }
-    
-            // case c.2
             else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
@@ -135,13 +191,18 @@ export default async function thromboMedicationAlgo(_indicators) {
                 table.data[6].frequency = 'evening';
                 table.data[7].frequency = 'morning and evening';
                 table.data[8].frequency = 'morning and evening';
-                table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
-    
+                table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [5], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [8], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [9], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [10], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               
                 return table;
             }
     
-            // case c.3    FLAG
+            // case c.2
             else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
@@ -150,11 +211,18 @@ export default async function thromboMedicationAlgo(_indicators) {
                 table.data[7].frequency = 'morning and evening';
                 table.data[8].frequency = 'morning and evening';
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-    
+                table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [8], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [9], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [10], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               
                 return table;
             }
     
-            // case c.4    FLAG
+            // case c.3    FLAG
             else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl >= 30) {
                 table.data[2].frequency = 'morning and evening';
                 table.data[3].frequency = 'morning and evening';
@@ -163,44 +231,82 @@ export default async function thromboMedicationAlgo(_indicators) {
                 table.data[7].frequency = 'morning and evening';
                 table.data[8].frequency = 'morning and evening';
                 table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
-                table = modifyData(table, [5, 6], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [5], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [8], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [9], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [10], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               
+                return table;
+            }
     
+            // case c.4    FLAG
+            else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl >= 30) {
+                table.data[2].frequency = 'morning and evening';
+                table.data[3].frequency = 'morning and evening';
+                table.data[4].frequency = 'morning';
+                table.data[6].frequency = 'evening';
+                table.data[7].frequency = 'morning and evening';
+                table.data[8].frequency = 'morning and evening';
+                table.data[3].lab = 'Go to lab for INR test (Thursday before if this is a Friday, Sat, or Sun)';
+                table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [8], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 3))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [9], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 4))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [10], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 5))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               
                 return table;
             }
     
             // case d.1
-            else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
-                table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
-                table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+            else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl < 30) {
+               table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
+               table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
+               table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [5], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [6], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case e.1
-            else if (IR === 1 && PBR === 0 && SBR === 2 && CrCl < 30) {
+            else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
                 table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
                 table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
                 table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case e.2     FLAG
-            else if (IR === 1 && PBR === 0 && SBR === 1 && CrCl < 30) {
-                table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
-                table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+            else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl < 30) {
+               table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
+               table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
+               table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [5], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [6], 'warfain', parseInt(getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1)))*2).toString(), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+               table = modifyData(table, [7, 8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;
             }
     
             // case e.3     FLAG
-            else if (IR === 1 && PBR === 1 && SBR === 2 && CrCl < 30) {
+            else if (IR === 1 && PBR === 1 && SBR === 1 && CrCl < 30) {
                 table.data['note1'] = 'Consider IV heparin (aPTT 1.5-2x control) when INR <2. Stop IV heparin 4-6 hours before surgery';
                 table.data['note2'] = 'Resume IV heparin at least 24 h after surgery, when hemostasis secured. Stop IV heparin when INR >=2';
-                table = modifyData(table, [5, 6, 7], 'warfain', med_data.med_dosage[dataKey], med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [0, 1, 2, 3, 4], 'warfain', 'No', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [5], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 0))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [6], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 1))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
+                table = modifyData(table, [7], 'warfain', getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))), med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
                 table = modifyData(table, [8, 9, 10], 'warfain', 'Dose dependents on INR', med_data?.med_dosage_time === 'Once daily' ? 'morning' : med_data?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening');
     
                 return table;

@@ -9,7 +9,7 @@ import Header from './nurse/NurseHeader';
 import { server } from '../utils/functions';
 import { domain } from '../App';
 
-import thromboAlgos from '../helper/thromboAlgos';
+// import thromboAlgos from '../helper/thromboAlgos';
 import thromboMedicationAlgo from '../helper/thromboMedicationAlgo';
 
 class TestResults extends React.Component {
@@ -337,7 +337,8 @@ class TestResults extends React.Component {
          assessment_date: '',
          antiCogMed: '',
          antiPlatMed: '',
-         showFields: false
+         showFields: false,
+         indicators: {}
       };
 
       this.onDateChange = this.onDateChange.bind(this);
@@ -347,6 +348,8 @@ class TestResults extends React.Component {
    }
 
    componentDidMount() {
+      console.log(this.props);
+      if(this.props?.indicators !== undefined) this.setState({ indicators: this.props.indicators });
       const headers = {
          'Content-Type': 'application/json',
          Accept: 'application/json',
@@ -482,7 +485,6 @@ class TestResults extends React.Component {
             });
             this.forceUpdate();
          });
-         console.log('recommendation : - ', this.state);
          this.getDatafromAlgo();
          this.setState({ loader: '' });
       } catch (error) {
@@ -674,8 +676,9 @@ class TestResults extends React.Component {
          ]
       };
       console.log('> Nurse Page 4 => data: ', this.state.date_of_procedure);
-      const inidcators = await thromboAlgos();
-      const tableData = await thromboMedicationAlgo(inidcators, this.state.date_of_procedure);
+      const indicators = this.props?.indicators;
+      console.log('indicators before ==> ', indicators);
+      const tableData = await thromboMedicationAlgo(indicators);
       console.log('> Nurse Page 4 => tableData: ', tableData, tableData.lmwh !== undefined, tableData.lmwh);
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
       let tableHeader = [];
