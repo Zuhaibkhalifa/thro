@@ -653,7 +653,7 @@ class AddPatient extends React.Component {
 
                      <div className="col-6 text-left">
                         <input
-                           type="text"
+                           type="number"
                            id="patient_id"
                            className="form-control"
                            value={this.state.patient_id}
