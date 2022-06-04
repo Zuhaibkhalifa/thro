@@ -291,9 +291,14 @@ class Page6 extends React.Component {
          table_data.aspirin = tableData.aspirin;
       }
 
+      if(tableData.iv_heparin !== '') {
+         tableHeader.push({ 'iv_heparin': tableData.iv_heparin.header });
+         table_data.iv_heparin = tableData.iv_heparin;
+      }
+
       table_data.headers = tableData.headers;
+      table_data.date[5].d_0 = this.state.date_of_procedure;
       
-      console.log('table data ==> ', tableData);
       this.setState({
          approved_by: respData.approved_by,
          table: table_data,
@@ -308,6 +313,7 @@ class Page6 extends React.Component {
          activeLMWH: respData.activeLMWH,
          cell: cellData
       });
+      console.log('table data ==> ', tableData, this.state, respData);
    }
 
    submitForm() {
@@ -380,7 +386,7 @@ class Page6 extends React.Component {
                               {
                                  this.state.iv_heparin_chkBox ?
                                  <th colSpan={2}>
-                                    {this.state.table.headers?.find(x => x['iv_heparin']).iv_heparin}
+                                    {this.state.table.headers?.find(x => x['iv_heparin']).med_name}
                                  </th> : <></>
                               }
                            </tr>

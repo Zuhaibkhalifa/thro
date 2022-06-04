@@ -556,35 +556,45 @@ class TestResults extends React.Component {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [key+(i+1)]: value[i].dosage?.split(' ')[0]
+                  [key+(i+1)]: value[i].dosage,
+                  "note1": value[i]?.note1,
+                  "note2": value[i]?.note2
                }
             });
          } else if(medKey === 'lmwh') {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [key+(i+1)]: value[i].dosage?.split(' ')[0]
+                  [key+(i+1)]: value[i].dosage,
+                  "note1": value[i]?.note1,
+                  "note2": value[i]?.note2
                }
             });
          } else if(medKey === 'antiplatelets') {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [key+(i+1)]: value[i].antiplatelets?.split(' ')[0]
+                  [key+(i+1)]: value[i].antiplatelets,
+                  "note1": value[i]?.note1,
+                  "note2": value[i]?.note2
                }
             });
          } else if(medKey === 'aspirin') {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [key+(i+1)]: value[i].aspirin?.split(' ')[0]
+                  [key+(i+1)]: value[i].aspirin,
+                  "note1": value[i]?.note1,
+                  "note2": value[i]?.note2
                }
             });
          } else if(medKey === 'heparin') {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [key+(i+1)]: value
+                  [key+(i+1)]: value[i]?.dosage,
+                  "note1": value[i]?.note1,
+                  "note2": value[i]?.note2,
                }
             });
          }
@@ -597,7 +607,9 @@ class TestResults extends React.Component {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [key+(i+1)]: value[i]?.lab
+                  [key+(i+1)]: value[i]?.lab,
+                  "note1": value[i]?.note1,
+                  "note2": value[i]?.note2,
                }
             });
          } 
@@ -675,17 +687,16 @@ class TestResults extends React.Component {
             {d5: 'D1'}
          ]
       };
-      console.log('> Nurse Page 4 => data: ', this.state.date_of_procedure);
       const indicators = this.props?.indicators;
       console.log('indicators before ==> ', indicators);
       const tableData = await thromboMedicationAlgo(indicators);
-      console.log('> Nurse Page 4 => tableData: ', tableData, tableData.lmwh !== undefined, tableData.lmwh);
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
+      console.log('> Nurse Page 4 => data: ', this.state.date_of_procedure, tableData);
       let tableHeader = [];
       if(tableData.vka !== undefined) {
-         let keyIdx = tableData.vka.data?.findIndex(x => x.d6);
+         let keyIdx = tableData.vka.data?.findIndex(x => x.d6 !== "");
          let keyIdx1 = tableData.vka.data?.findIndex(x => x.warfain !== '0');
-         let keyId = keyIdx !== -1 ? `labVal${keyIdx}` : '';
+         let keyId = keyIdx !== -1 ? `labValExtra` : 'labValExtra';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          tableHeader.push({ 'vka': tableData.vka.header });
          table_data.vka = tableData.vka.data;
@@ -696,10 +707,21 @@ class TestResults extends React.Component {
             this.setState({ 
                cell: {
                   ...this.state.cell,
-                  [keyId]: tableData.vka.data[keyIdx].lab,
+                  [keyId]: tableData.vka.data[keyIdx !== -1 ? keyIdx : 12]?.lab,
+                  "extraLab": tableData.vka.data[keyIdx !== -1 ? keyIdx : 12]?.d6,
                   [keyId1]: tableData.vka.data[keyIdx1].warfain
                }
             });
+            if(tableData.vka?.note1 !== undefined) {
+               this.setState({
+                  cell: 
+                  {
+                     ...this.state.cell,
+                     "note1": tableData.vka?.note1,
+                     "note2": tableData.vka?.note2
+                  }
+               });
+            }
             // this.setInitialState('InptValVka', tableData.vka.data[keyIdx1].warfain, tableData.vka.data?.length);
             this.setVKAVal(tableData.vka.data);
             this.setInitialLabState('vka', 'labVal', tableData.vka.data, tableData.vka.data?.length);
@@ -718,9 +740,22 @@ class TestResults extends React.Component {
                this.setState({
                   cell: {
                      ...this.state.cell,
-                     [keyId1]: tableData.lmwh.data[keyIdx1].dosage.split(' ')[0]
+                     [keyId1]: tableData.lmwh.data[keyIdx1].dosage
                   } 
                });
+               if(tableData.lmwh?.note1 !== undefined) {
+                  this.setState({
+                     cell: 
+                     {
+                        ...this.state.cell,
+                        "note1": tableData.lmwh?.note1,
+                        "note2": tableData.lmwh?.note2
+                     }
+                  });
+               }
+               this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
+               this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
+            } else {
                this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
                this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
             }
@@ -738,9 +773,20 @@ class TestResults extends React.Component {
             this.setState({
                cell: {
                   ...this.state.cell,
-                  [keyId1]: tableData.doac[doacKey].data[keyIdx1].dosage.split(' ')[0]
+                  [keyId1]: tableData.doac[doacKey].data[keyIdx1].dosage
                } 
             });
+            
+            if(tableData.doac[doacKey]?.note1 !== undefined) {
+               this.setState({
+                  cell: 
+                  {
+                     ...this.state.cell,
+                     "note1": tableData.doac[doacKey]?.note1,
+                     "note2": tableData.doac[doacKey]?.note2
+                  }
+               });
+            }
             this.setInitialState('doac', 'InptValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
             this.setInitialSelectState('doac', 'selectValDoac', tableData.doac[doacKey].data, tableData.doac[doacKey].data?.length);
          }
@@ -756,9 +802,19 @@ class TestResults extends React.Component {
                this.setState({
                   cell: {
                      ...this.state.cell,
-                     [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets.split(' ')[0]
+                     [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets
                   } 
                });
+               if(tableData.antiplatelets?.note1 !== undefined) {
+                  this.setState({
+                     cell: 
+                     {
+                        ...this.state.cell,
+                        "note1": tableData.antiplatelets?.note1,
+                        "note2": tableData.antiplatelets?.note2
+                     }
+                  });
+               }
                this.setInitialState('antiplatelets', 'InptValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
                this.setInitialSelectState('antiplatelets', 'selectValAntiplatelets', tableData.antiplatelets.data, tableData.antiplatelets.data?.length);
             }
@@ -766,25 +822,40 @@ class TestResults extends React.Component {
       } else tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header });
 
       if(tableData.aspirin !== undefined) {
-         let keyIdx1 = tableData.aspirin.data?.findIndex(x => x.aspirin);
+         console.log('aspirin >> ', tableData);
+         let keyIdx1 = tableData.aspirin.data?.findIndex(x => x.aspirin !== "");
          let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
          tableHeader.push({ 'aspirin': tableData.aspirin.header });
          table_data.aspirin = tableData.aspirin.data;
          if(keyId1 !== '') {
-            if(tableData.aspirin.data[0].aspirin !== '') {
+            if(tableData.aspirin.data[0]?.aspirin !== '') {
                this.setState({
                   cell: {
                      ...this.state.cell,
-                     [keyId1]: tableData.aspirin.data[keyIdx1].aspirin.split(' ')[0]
+                     [keyId1]: tableData.aspirin.data[keyIdx1].aspirin
                   } 
                });
+               if(tableData.aspirin?.note1 !== undefined) {
+                  this.setState({
+                     cell: 
+                     {
+                        ...this.state.cell,
+                        "note1": tableData.aspirin?.note1,
+                        "note2": tableData.aspirin?.note2
+                     }
+                  });
+               }
                this.setInitialState('aspirin', 'InptValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
                this.setInitialSelectState('aspirin', 'selectValAspirin', tableData.aspirin.data, tableData.aspirin.data?.length);
             }
          }
       } else tableHeader.push({ 'aspirin': tableData.aspirin.header });
 
-      if(table_data.iv_heparin === '') {
+      if(tableData.iv_heparin !== undefined) {
+         tableHeader.push({ 'iv_heparin': tableData.iv_heparin.header });
+         this.setInitialState('heparin', 'InptValIvHeparin', tableData.iv_heparin.data, 11);
+         this.setInitialSelectState('heparin', 'selectValIvHeparin', 'once daily', 11);
+      } else {
          tableHeader.push({ 'iv_heparin': 'Heparin' });
          this.setInitialState('heparin', 'InptValIvHeparin', '', 11);
          this.setInitialSelectState('heparin', 'selectValIvHeparin', 'once daily', 11);
@@ -793,14 +864,15 @@ class TestResults extends React.Component {
       table_data.headers = tableHeader;
       table_data.date[5].d_0 = this.state.date_of_procedure;
       console.log(Object.keys(tableData.doac));
+      console.log('> Nurse Page 4 => tableData: ', tableData, tableData.lmwh !== undefined, tableData.lmwh, tableData?.iv_heparin);
       this.setState({ 
          table: table_data, 
-         vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
-         lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
+         vka_chkBox: tableData.vka?.data.findIndex((x) => x.warfain !== "") !== -1 ? true: false,
+         lmwh_chkBox: tableData.lmwh?.data.findIndex((x) => x.dosage !== "") !== -1 ? true : false,
          doac_chkBox: Object.keys(tableData.doac)[0] !== "data" ? true : false,
-         antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
-         aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
-         iv_heparin_chkBox: false
+         antiplatelets_chkBox: tableData.antiplatelets?.data.findIndex((x) => x.antiplatelets !== "") !== -1 ? true : false,
+         aspirin_chkBox: tableData.aspirin?.data.findIndex((x) => x.aspirin !== "") !== -1 ? true : false,
+         iv_heparin_chkBox: tableData?.iv_heparin ? true : false
       });
 
       console.log(this.state);
@@ -1271,17 +1343,13 @@ class TestResults extends React.Component {
                                  {
                                     this.state.aspirin_chkBox ?
                                     <th colSpan={2}>
-                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValAspirin`, e.target.value, this.state.InptValAspirin1)}>
-                                          <option value={this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}>{this.state.table.headers.find(x => x['aspirin']).aspirin[0].med_name}</option>
-                                       </select>
+                                       <input className='form-control' value="Aspirin (ASA)" disabled />
                                     </th> : <></>
                                  }
                                  {
                                     this.state.iv_heparin_chkBox ?
                                     <th colSpan={2}>
-                                       <select className='form-control' onChange={(e) => this.handleDropdownValChange(`InptValIvHeparin`, e.target.value, this.state.InptValIvHeparin1)}>
-                                          <option value={this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}>{this.state.table.headers.find(x => x['iv_heparin']).iv_heparin}</option>
-                                       </select>
+                                       <input className='form-control' value="IV Heparin" disabled />
                                     </th> : <></>
                                  }
                               </tr>
@@ -1380,25 +1448,47 @@ class TestResults extends React.Component {
                                                    </td>
                                                 </> : <></>
                                              }
-                                             {this.state.iv_heparin_chkBox ?
+                                             {
+                                                this.state.iv_heparin_chkBox ?
                                                 <>
-                                                   <td><input id={`InptValIvHeparin${ivHeparinKey+1}`} type="text" value={this.state.cell[`InptValIvHeparin${ivHeparinKey+1}`]} onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control' /></td>
-                                                   <td>
-                                                      <select id={`selectValIvHeparin${ivHeparinKey+1}`} onChange={(e) => this.handleSelectValueChange(e, `selectValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
-                                                         <option value={this.state.cell[`selectValIvHeparin${ivHeparinKey+1}`]}>{this.state.cell[`selectValIvHeparin${ivHeparinKey+1}`]}</option>
-                                                         <option value={'do not take'}>do not take</option>
-                                                         <option value={'evening'}>evening</option>
-                                                         <option value={'morning'}>morning</option>
-                                                         <option value={'morning and evening'}>morning and evening</option>
-                                                         
-                                                      </select>
-                                                   </td>
+                                                   {
+                                                      ivHeparinKey === 0 ? 
+                                                         <td colSpan={2} rowSpan={5}>
+                                                            <textarea rows={8} cols={2} id={`InptValIvHeparin${ivHeparinKey+1}`} type="text" onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
+                                                               {this.state.cell[`InptValIvHeparin${ivHeparinKey+1}`]}
+                                                            </textarea>
+                                                         </td>
+                                                      : ""
+                                                   }
+                                                   {
+                                                      ivHeparinKey === 6 ? 
+                                                         <td colSpan={2} rowSpan={5}>
+                                                            <textarea rows={8} cols={2} id={`InptValIvHeparin${ivHeparinKey+1}`} type="text" onChange={(e) => this.handleInptValueChange(e, `InptValIvHeparin${ivHeparinKey+1}`)} className='form-control'>
+                                                               {this.state.cell[`InptValIvHeparin${ivHeparinKey+1}`]}
+                                                            </textarea>
+                                                         </td>
+                                                      : ""
+                                                   }
                                                 </> : <></>
                                              }
                                           </tr>
                                        </>
                                     )
                                  })
+                              }
+                              {
+                                 this.state.vka_chkBox && this.state.cell?.labValExtra ?
+                                 <tr>
+                                    <td>{this.state.cell?.extraLab}</td>
+                                    <td>{this.state.cell?.labValExtra}</td>
+                                 </tr> : ""
+                              }
+                              {
+                                 this.state.cell?.note1 ?
+                                 <tr>
+                                    <td>{this.state.cell?.note1}</td>
+                                    <td>{this.state.cell?.note2}</td>
+                                 </tr> : ""
                               }
                            </table>
                         </> : ""

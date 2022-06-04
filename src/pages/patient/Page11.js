@@ -121,19 +121,7 @@ class Page11 extends React.Component {
 
     //
     async submitForm() {
-        if (this.validate()) {
-            console.log('Patient page 11 - submit - state: ', this.state);
-            if(this.props.location.state !== undefined) {
-                this.page11();
-                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
-            } else if(this.state.redirectButton) {
-                this.page11();
-                this.props.history.push('/Nurse/Nurse1');
-            } else {
-                this.page11();
-                this.props.history.push('/User/Page12');
-            }
-        } else if(this.state.q5 === "Yes") {
+        if(this.state.q5 === "Yes") {
             if(this.props.location.state !== undefined) {
                 const resp = await this.page11();
                 if(resp) this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
@@ -142,6 +130,18 @@ class Page11 extends React.Component {
                 const resp = await this.page11();
                 if(resp) this.props.history.push('/Nurse/Nurse1');
                 else alert('Something went wrong. Please try again.');
+            } else {
+                this.page11();
+                this.props.history.push('/User/Page12');
+            }
+        } else if (this.validate()) {
+            console.log('Patient page 11 - submit - state: ', this.state);
+            if(this.props.location.state !== undefined) {
+                this.page11();
+                this.props.history.push({ pathname:'/Nurse/Nurse1', state:{ patient_id: this.props.location.state.patient_id } });
+            } else if(this.state.redirectButton) {
+                this.page11();
+                this.props.history.push('/Nurse/Nurse1');
             } else {
                 this.page11();
                 this.props.history.push('/User/Page12');
@@ -156,7 +156,7 @@ class Page11 extends React.Component {
         let param = {};
         param.patient_id = this.state.patient_id;
         if (state.q5 === 'Yes') {
-            param = { not_using_drugs: 'No, I am not on any of these medications' };
+            param = { patient_id: this.state.patient_id, not_using_drugs: 'No, I am not on any of these medications' };
         } else {
             param = {};
             param.patient_id = this.state.patient_id;
