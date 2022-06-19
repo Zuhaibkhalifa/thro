@@ -78,18 +78,16 @@ export default async function thromboMedicationAlgo(_indicators) {
     const tableData = detectCase(drugData);
 
     function detectCase(meds) {
-         console.log(meds);
-        let data = {};
-        let vkaData = mapToVKACases(meds.vka, indicators, meds.date_of_procedure, meds.lmwh);
-        console.log("vka data ==> ", vkaData);
-        if(vkaData[1] !== undefined) data['lmwh'] = vkaData[1]; else data['lmwh'] = lmwhCases(meds.lmwh, indicators);
-        if(vkaData[2] !== undefined) data['iv_heparin'] = vkaData[2];
-        data['vka'] = vkaData[0];
-        data['doac'] = doacCases(meds.doac, indicators);
-        data['aspirin'] = aspirin(meds.aspirin, indicators);
-        data['antiplatelets'] = antiplatelets(meds.antiplatelet, indicators);
-  
-        return data;
+      let data = {};
+      let vkaData = mapToVKACases(meds.vka, indicators, meds.date_of_procedure, meds.lmwh);
+      if(vkaData[1] !== undefined) data['lmwh'] = vkaData[1]; else data['lmwh'] = lmwhCases(meds.lmwh, indicators);
+      if(vkaData[2] !== undefined) data['iv_heparin'] = vkaData[2];
+      data['vka'] = vkaData[0];
+      data['doac'] = doacCases(meds.doac, indicators);
+      data['aspirin'] = aspirin(meds.aspirin, indicators);
+      data['antiplatelets'] = antiplatelets(meds.antiplatelet, indicators);
+
+      return data;
     }
 
     function getVKAMedsDoses(meds, date) {
@@ -103,10 +101,12 @@ export default async function thromboMedicationAlgo(_indicators) {
 
     function mapToVKACases(meds, indicators, date_of_procedure, lmwhMeds) {
         const procedure_day = getDayOfProcedure(date_of_procedure);
-        let medIndx = meds.findIndex(x => x.med_dosage !== '');
+        let medIndx = meds?.findIndex(x => x.med_dosage !== '');
         let med_data = medIndx !== -1 ? meds[medIndx] : '';
         let LMWHMeds = getLMWHData(lmwhMeds);
         let table = {};
+
+        console.log("warfain data ==> ", meds, medIndx);
   
         if(med_data !== '') {
          //   let dataKey = getVKAMedsDoses(med_data, parseInt(resetYear(date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(daysInMonth(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2))+'-'+parseInt(resetDays(date_of_procedure?.split('-')[1], date_of_procedure?.split('-')[0], date_of_procedure?.split('-')[2], 2)));
@@ -552,8 +552,8 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': '', frequency: '', lab: '' },
+            { 'dosage': '', frequency: '', lab: '' },
             { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
             { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
             { 'dosage': meds.med_dosage, frequency: 'morning', lab: '' },
@@ -561,8 +561,8 @@ export default async function thromboMedicationAlgo(_indicators) {
             { 'dosage': meds.med_dosage, frequency: 'evening', lab: '' },
             { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
             { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-            { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+            { 'dosage': '', frequency: '', lab: '' },
+            { 'dosage': '', frequency: '', lab: '' },
            ],
         };
   
@@ -579,10 +579,12 @@ export default async function thromboMedicationAlgo(_indicators) {
         if (PBR === 1 && SBR === 1 && CrCl >= 50) return modifyData(table, [6], 'dosage', '', '');
   
         // Case b.1
-        if (PBR === 0 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [6], 'dosage', '', '');
+        if (PBR === 0 && SBR === 2 && CrCl >= 30 && CrCl <= 49) {
+            return modifyData(table, [4, 6], 'dosage', '', '');
+        }
   
         // Case b.2    FLAG
-        if (PBR === 1 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [6], 'dosage', '', '');
+        if (PBR === 1 && SBR === 2 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 6], 'dosage', '', '');
   
         // Case b.3
         if (PBR === 0 && SBR === 1 && CrCl >= 30 && CrCl <= 49) return modifyData(table, [4, 6], 'dosage', '', '');
@@ -734,17 +736,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
            ],
         };
   
@@ -791,17 +793,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
-              { 'dosage': meds.med_dosage, frequency: 'morning and evening', lab: '' },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'Once daily' ? 'morning' : meds?.med_dosage === 'Twice daily' ? 'morning and evening' : 'evening', },
            ],
         };
   
@@ -830,22 +832,22 @@ export default async function thromboMedicationAlgo(_indicators) {
     function Rivaroxaban_20_or_15_once(meds, indicators, headers) {
         console.log('>>   CASE Rivaroxaban_20_or_15_once');
         const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
-        const { rivaroxaban_dosage_time: RDT } = meds.med_dosage_time ? meds.med_dosage_time : '';
+        const RDT = meds.med_dosage_time ? meds.med_dosage_time : '';
   
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
            ],
            note: {},
         };
@@ -880,22 +882,22 @@ export default async function thromboMedicationAlgo(_indicators) {
     function Rivaroxaban_10_once(meds, indicators, headers) {
         console.log('>>   CASE Rivaroxaban_10_once');
         const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
-        const { rivaroxaban_dosage_time: RDT } = meds.med_dosage_time ? meds.med_dosage_time : '';
+        const RDT = meds.med_dosage_time ? meds.med_dosage_time : '';
   
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
-              { 'dosage': meds.med_dosage, rivaroxaban: 'yes' },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
            ],
            note: {},
         };
@@ -932,17 +934,17 @@ export default async function thromboMedicationAlgo(_indicators) {
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
-              { 'dosage': meds.med_dosage, rivaroxaban: ' ' },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
            ],
            note: {},
         };
@@ -952,24 +954,24 @@ export default async function thromboMedicationAlgo(_indicators) {
     }
   
     function Edoxaban(meds, indicators, headers) {
-        console.log('>>   CASE Edoxaban');
         const { surgeryBleedingRisk: SBR } = indicators ? indicators : 0;
-        const { rivaroxaban_dosage_time: RDT } = meds.med_dosage_time ? meds.med_dosage_time : '';
+        const RDT = meds.med_dosage_time ? meds.med_dosage_time : '';
+        console.log('>>   CASE Edoxaban', meds, SBR === 2 && RDT === 'am', SBR, RDT);
   
         let table = {
            header: headers,
            data: [
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
-              { 'dosage': meds.med_dosage, edoxabon: 'yes' },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
+              { 'dosage': meds.med_dosage, frequency: meds?.med_dosage_time === 'am' ? 'morning' : meds?.med_dosage === 'pm' ? 'evening' : 'morning and evening', },
            ],
            note: {},
         };
@@ -980,19 +982,23 @@ export default async function thromboMedicationAlgo(_indicators) {
   
         // case b.1
         if (SBR === 2 && RDT === 'am') {
+           table = modifyData(table, [0, 1, 2, 3, 7, 8, 9, 10], 'dosage', meds.med_dosage, 'evening');
            return modifyData(table, [4, 5, 6], 'dosage', '', '');
         }
         // case b.1
         if (SBR === 2 && RDT === 'pm') {
+         table = modifyData(table, [0, 1, 2, 3, 6, 7, 8, 9, 10], 'dosage', meds.med_dosage, 'evening');
            return modifyData(table, [4, 5], 'dosage', '', '');
         }
   
         // case c.1
         if (SBR === 1 && RDT === 'am') {
+         table = modifyData(table, [0, 1, 2, 8, 9, 10], 'dosage', meds.med_dosage, 'morning');
            return modifyData(table, [3, 4, 5, 6, 7], 'dosage', '', '');
         }
         // case c.1
         if (SBR === 1 && RDT === 'pm') {
+         table = modifyData(table, [0, 1, 2, 7, 8, 9, 10], 'dosage', meds.med_dosage, 'evening');
            return modifyData(table, [3, 4, 5, 6], 'dosage', '', '');
         }
   
@@ -1173,10 +1179,6 @@ export default async function thromboMedicationAlgo(_indicators) {
     function antiplatelets(meds, indicators) {
         console.log('>>   CASE Antiplatelets', meds);
         let tempMeds = meds;
-      //   let medAspIndx = tempMeds.findIndex(x => x.med_name === "Aspirin (ASA)");
-      //   if(medAspIndx !== -1) {
-      //   tempMeds.splice(medAspIndx, 1);
-      //   }
         let med_data = tempMeds.find(x => x.med_name !== "");
         let medIdx = tempMeds.findIndex(x => x.med_dosage !== "") !== -1 ? tempMeds.findIndex(x => x.med_dosage !== "") : 0;
         const { indicationRisk: IR, patientBleedingRisk: PBR, surgeryBleedingRisk: SBR, CrCl } = indicators ? indicators : 0;

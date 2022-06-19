@@ -148,6 +148,9 @@ class Page4 extends React.Component {
          iv_heparin_chkBox: false,
 
          cell: {
+            note1: '',
+            note2: '',
+
             labVal1: '',
             labVal2: '',
             labVal3: '',
@@ -1065,35 +1068,39 @@ class Page4 extends React.Component {
       console.log('> Nurse Page 4 => data: ', this.state.date_of_procedure);
       const inidcators = await thromboAlgos();
       const tableData = await thromboMedicationAlgo(inidcators, this.state.date_of_procedure);
+      this.setState({
+         ...this.state,
+         "tableData": tableData
+      });
       console.log('> Nurse Page 4 => tableData: ', tableData, tableData.lmwh !== undefined, tableData.lmwh);
       // tableData.data[5].d = tableData.data[5].d ? this.state.date_of_procedure : tableData.data[5].d;
       let tableHeader = [];
       if(tableData.vka !== undefined) {
-         let keyIdx = tableData.vka.data?.findIndex(x => x.d6 !== "");
-         let keyIdx1 = tableData.vka.data?.findIndex(x => x.warfain !== '0');
+         let keyIdx = tableData.vka.data?.findIndex(x => x.d6);
+         let keyIdx1 = tableData.vka.data?.findIndex(x => Object.keys(x)[0] === "warfain" && x.warfain !== '');
          let keyId = keyIdx !== -1 ? `labValExtra` : 'labValExtra';
          let keyId1 = keyIdx1 !== -1 ? `InptValVka${keyIdx1+1}` : '';
          tableHeader.push({ 'vka': tableData.vka.header });
          table_data.vka = tableData.vka.data;
-         console.log(tableData.vka.data[0].warfain);
-         if(tableData.vka.data[7].warfain !== '') {
+         console.log("warfain indexs ==> ",keyIdx1, tableData.vka.data[0].warfain);
+         if(keyIdx1 !== -1) {
             console.log(tableData.vka.data[5].warfain);
             this.setState({ active_vka: tableData.vka.header[0].med_name });
             this.setState({ 
                cell: {
                   ...this.state.cell,
-                  [keyId]: tableData.vka.data[keyIdx !== -1 ? keyIdx : 12].lab,
-                  "extraLab": tableData.vka.data[keyIdx !== -1 ? keyIdx : 12].d6,
+                  [keyId]: tableData.vka.data[keyIdx !== -1 ? keyIdx : 12]?.lab,
+                  "extraLab": tableData.vka.data[keyIdx !== -1 ? keyIdx : 12]?.d6,
                   [keyId1]: tableData.vka.data[keyIdx1].warfain
                }
             });
-            if(tableData.vka?.note1 !== undefined) {
+            if(tableData.vka?.note1) {
                this.setState({
                   cell: 
                   {
                      ...this.state.cell,
-                     "note1": tableData.vka?.note1,
-                     "note2": tableData.vka?.note2
+                     note1: tableData.vka?.note1,
+                     note2: tableData.vka?.note2
                   }
                });
             }
@@ -1110,7 +1117,7 @@ class Page4 extends React.Component {
          tableHeader.push({ 'lmwh': tableData.lmwh.header });
          table_data.lmwh = tableData.lmwh.data;
          if(keyId1 !== '') {
-            if(tableData.lmwh.data[0].dosage !== '') {
+            if(keyIdx1 !== -1) {
                this.setState({ active_lmwh: tableData.lmwh.header[0].med_name });
                this.setState({
                   cell: {
@@ -1118,16 +1125,19 @@ class Page4 extends React.Component {
                      [keyId1]: tableData.lmwh.data[keyIdx1].dosage
                   } 
                });
-               if(tableData.lmwh?.note1 !== undefined) {
+               if(tableData.lmwh?.note1) {
                   this.setState({
                      cell: 
                      {
                         ...this.state.cell,
-                        "note1": tableData.lmwh?.note1,
-                        "note2": tableData.lmwh?.note2
+                        note1: tableData.lmwh?.note1,
+                        note2: tableData.lmwh?.note2
                      }
                   });
                }
+               this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
+               this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
+            } else {
                this.setInitialState('lmwh', 'InptValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
                this.setInitialSelectState('lmwh', 'selectValLmwh', tableData.lmwh.data, tableData.lmwh.data?.length);
             }
@@ -1149,13 +1159,13 @@ class Page4 extends React.Component {
                } 
             });
             
-            if(tableData.doac[doacKey]?.note1 !== undefined) {
+            if(tableData.doac[doacKey]?.note1) {
                this.setState({
                   cell: 
                   {
                      ...this.state.cell,
-                     "note1": tableData.doac[doacKey]?.note1,
-                     "note2": tableData.doac[doacKey]?.note2
+                     note1: tableData.doac[doacKey]?.note1,
+                     note2: tableData.doac[doacKey]?.note2
                   }
                });
             }
@@ -1170,20 +1180,20 @@ class Page4 extends React.Component {
          tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header });
          table_data.antiplatelets = tableData.antiplatelets.data;
          if(keyId1 !== '') {
-            if(tableData.antiplatelets.data[0].antiplatelets !== '') {
+            if(keyIdx1 !== -1) {
                this.setState({
                   cell: {
                      ...this.state.cell,
                      [keyId1]: tableData.antiplatelets.data[keyIdx1].antiplatelets
                   } 
                });
-               if(tableData.antiplatelets?.note1 !== undefined) {
+               if(tableData.antiplatelets?.note1) {
                   this.setState({
                      cell: 
                      {
                         ...this.state.cell,
-                        "note1": tableData.antiplatelets?.note1,
-                        "note2": tableData.antiplatelets?.note2
+                        note1: tableData.antiplatelets?.note1,
+                        note2: tableData.antiplatelets?.note2
                      }
                   });
                }
@@ -1194,25 +1204,26 @@ class Page4 extends React.Component {
       } else tableHeader.push({ 'antiplatelets': tableData.antiplatelets.header });
 
       if(tableData.aspirin !== undefined) {
-         let keyIdx1 = tableData.aspirin.data?.findIndex(x => x.aspirin);
+         console.log('aspirin >> ', tableData);
+         let keyIdx1 = tableData.aspirin.data?.findIndex(x => x.aspirin !== "");
          let keyId1 = keyIdx1 !== -1 ? `InptValAspirin${keyIdx1+1}` : '';
          tableHeader.push({ 'aspirin': tableData.aspirin.header });
          table_data.aspirin = tableData.aspirin.data;
          if(keyId1 !== '') {
-            if(tableData.aspirin.data[0].aspirin !== '') {
+            if(keyIdx1 !== -1) {
                this.setState({
                   cell: {
                      ...this.state.cell,
                      [keyId1]: tableData.aspirin.data[keyIdx1].aspirin
                   } 
                });
-               if(tableData.aspirin?.note1 !== undefined) {
+               if(tableData.aspirin?.note1) {
                   this.setState({
                      cell: 
                      {
                         ...this.state.cell,
-                        "note1": tableData.aspirin?.note1,
-                        "note2": tableData.aspirin?.note2
+                        note1: tableData.aspirin?.note1,
+                        note2: tableData.aspirin?.note2
                      }
                   });
                }
@@ -1235,13 +1246,14 @@ class Page4 extends React.Component {
       table_data.headers = tableHeader;
       table_data.date[5].d_0 = this.state.date_of_procedure;
       console.log(Object.keys(tableData.doac));
+      console.log('> Nurse Page 4 => tableData: ', tableData, tableData.lmwh !== undefined, tableData.lmwh, tableData?.iv_heparin);
       this.setState({ 
          table: table_data, 
-         vka_chkBox: tableData.vka?.data[7].warfain !== '' ? true: false,
-         lmwh_chkBox: tableData.lmwh?.data[0].dosage !== '' ? true : false,
+         vka_chkBox: tableData.vka?.data?.findIndex(x => Object.keys(x)[0] === "warfain" && x.warfain !== '') !== -1 ? true: false,
+         lmwh_chkBox: tableData.lmwh?.data.findIndex((x) => x.dosage !== "") !== -1 ? true : false,
          doac_chkBox: Object.keys(tableData.doac)[0] !== "data" ? true : false,
-         antiplatelets_chkBox: tableData.antiplatelets?.data[0].antiplatelets !== '' ? true : false,
-         aspirin_chkBox: tableData.aspirin?.data[0].aspirin !== '' ? true : false,
+         antiplatelets_chkBox: tableData.antiplatelets?.data.findIndex((x) => x.antiplatelets !== "") !== -1 ? true : false,
+         aspirin_chkBox: tableData.aspirin?.data.findIndex((x) => x.aspirin !== "") !== -1 ? true : false,
          iv_heparin_chkBox: tableData?.iv_heparin ? true : false
       });
 
@@ -1851,10 +1863,33 @@ class Page4 extends React.Component {
                                  </tr> : ""
                               }
                               {
-                                 this.state.cell?.note1 ?
+                                 this.state.vka_chkBox && this.state.cell?.labValExtra ?
                                  <tr>
-                                    <td>{this.state.cell?.note1}</td>
-                                    <td>{this.state.cell?.note2}</td>
+                                    <td>{this.state.cell?.extraLab}</td>
+                                    <td>{this.state.cell?.labValExtra}</td>
+                                 </tr> : ""
+                              }
+                              {
+                                 this.state?.tableData?.vka?.note1 || this.state?.tableData?.vka?.note2 ?
+                                 <tr>
+                                    <td>{this.state?.tableData?.vka?.note1}</td>
+                                    <td>{this.state?.tableData?.vka?.note2}</td>
+                                 </tr> : this.state?.tableData?.lmwh?.note1 || this.state?.tableData?.lmwh?.note2 ?
+                                 <tr>
+                                    <td>{this.state?.tableData?.lmwh?.note1}</td>
+                                    <td>{this.state?.tableData?.lmwh?.note2}</td>
+                                 </tr> : this.state?.tableData?.antiplatelets?.note1 || this.state?.tableData?.antiplatelets?.note2 ?
+                                 <tr>
+                                    <td>{this.state?.tableData?.antiplatelets?.note1}</td>
+                                    <td>{this.state?.tableData?.antiplatelets?.note2}</td>
+                                 </tr> : this.state?.tableData?.doac?.note1 || this.state?.tableData?.doac?.note2 ?
+                                 <tr>
+                                    <td>{this.state?.tableData?.doac?.note1}</td>
+                                    <td>{this.state?.tableData?.doac?.note2}</td>
+                                 </tr> : this.state?.tableData?.aspirin?.note1 || this.state?.tableData?.aspirin?.note2 ?
+                                 <tr>
+                                    <td>{this.state?.tableData?.aspirin?.note1}</td>
+                                    <td>{this.state?.tableData?.aspirin?.note2}</td>
                                  </tr> : ""
                               }
                            </table>
